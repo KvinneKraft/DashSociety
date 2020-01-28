@@ -2,6 +2,9 @@
 #
 # Dashies Config File v1.0
 #
+# The format given should be follow when modifying the config, when you do
+# not do this, it will cause the plugin to error!
+#
 
 enabled: true
 
@@ -38,26 +41,22 @@ properties:
             
             rgb-color-range: 
                 - '0,0,0'
-                - '50,50,50'
-                - '150,150,150'
+                - '%all%'
             
-            big-ball: true
-            small-ball: true
-            burst: true
-            creeper: true
-            star: true
-            fade: true
-            flickering: true
-            
-            summon-multiplier: 4
+            summon-multiplier: 1
             
         potions:
             enabled: true
             
+            particles: false
+            ambient: false            
+            icon: false
+            
             effects:
-                - 'CONFUSION 2 10'
-                - 'SLOWNESS 2 10'
-                - 'REGENERATION 2 10'
+                - 'CONFUSION 2 2'
+                - 'SLOW 2 2'
+                - 'REGENERATION 2 2'
+                - 'BLINDNESS 2 2'
     
     # The messages are ordered as follows:
     #
@@ -69,5 +68,5 @@ properties:
     messages:
         - '&eThe player &b%player% &ehas joined for the first time !!'
         - '&6Welcome back &e%player% &6to Dashnarok :D' 
-        - '&cBye Bye, we hope to see you back &4{player} &c;c'
+        - '&cBye Bye, we hope to see you back &4%player% &c;c'
         - '&3The user &a%player% &3has joined silently.'

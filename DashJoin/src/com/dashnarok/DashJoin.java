@@ -27,6 +27,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 class DashCore
 {
@@ -48,15 +50,19 @@ public class DashJoin extends JavaPlugin
     public static FileConfiguration config;    
     public static JavaPlugin plugin;    
     
-    public static Events EventHandler = new Events(); 
+    public static Events EventHandler;
     
     @Override
     public void onEnable()
     {
         xxx.Sys("Enabling ....");
         
-        config = this.getConfig();
-        plugin = (JavaPlugin)this;        
+        saveDefaultConfig();
+        
+        plugin = (JavaPlugin)this;  
+        config = getConfig();
+        
+        EventHandler = new Events();
         
         if(!config.getBoolean("enabled"))
         {
@@ -82,14 +88,14 @@ class CommandHandler implements CommandExecutor
     FileConfiguration config = DashJoin.config;    
     DashCore xxx = new DashCore();
     
-    String Error1 = xxx.transText("&cCorrect syntax: &9/dashnarok set [silent-join|first-join|join|quit] <message>");
-    String Error2 = xxx.transText("&cPlease select one of these: Silent-Join, First-Join, Join or Quit");
-    String Error3 = xxx.transText("&cYou are not supposed to do this, are you?");
-    String Error4 = xxx.transText("&cYou must specify a message like so: /dashnarok set join &aThe player %player% has joined!");
+    final String Error1 = xxx.transText("&cCorrect syntax: &9/dashnarok set [silent-join|first-join|join|quit] <message>");
+    final String Error2 = xxx.transText("&cPlease select one of these: Silent-Join, First-Join, Join or Quit");
+    final String Error3 = xxx.transText("&cYou are not supposed to do this, are you?");
+    final String Error4 = xxx.transText("&cYou must specify a message like so: /dashnarok set join &aThe player %player% has joined!");
     
-    String AdminPermission = config.getString("properties.admin-permission");
+    final String AdminPermission = config.getString("properties.admin-permission");
     
-    List<String> valid_options = Arrays.asList(
+    final List<String> valid_options = Arrays.asList(
         new String[] 
         { 
             "silent-join", "first-join", "join", "quit" 
@@ -144,26 +150,34 @@ class KvinneKraft
 {
     FileConfiguration config = DashJoin.config;
     DashCore xxx = new DashCore();
+
+    final String fw_node = "properties.dash-effects.fireworks.";
+    final List<String> firework_rgbc = config.getStringList(fw_node + "rgb-color-range");
+   
+    final int firework_multiplier = config.getInt(fw_node + "summon-multiplier");    
+    final boolean fireworks_enab = config.getBoolean(fw_node + "enabled");    
+
+    final String po_node = "properties.dash-effects.potions.";
     
-    boolean fireworks = config.getBoolean("properties.dash-effects.fireworks.enabled");    
-    boolean potions = config.getBoolean("properties.dash-effects.potions.enabled");
-  
-    String fw_node = "dash-effects.fireworks.";
+    final List<PotionEffect> potions_effs = new ArrayList<>();    
+    final List<String> potions_raw = config.getStringList(po_node + "effects");
     
-    List<String> rgb_colours = config.getStringList(fw_node + "rgb-color-range");
-    Integer firework_multiplier = config.getInt(fw_node + "summon-multiplier");      
+    final boolean potions_prts = config.getBoolean(po_node + "particles");
+    final boolean potions_ambt = config.getBoolean(po_node + "ambient");
+    final boolean potions_icon = config.getBoolean(po_node + "icon");  
+    final boolean potions_enab = config.getBoolean(po_node + "enabled");
     
     public void Krafter(Player p)
     {
-        if(fireworks)
+        if(fireworks_enab)
         {            
-            Random rand = new Random();
-
-            int i = rand.nextInt(rgb_colours.size());
-            
             for(int m = 0; m < firework_multiplier; m += 1)
-            {
-                String rgb_key = rgb_colours.get(i);
+            {    
+                Random rand = new Random();
+
+                int i = rand.nextInt(firework_rgbc.size());
+            
+                String rgb_key = firework_rgbc.get(i);
             
                 int r = 0, g = 0, b = 0;                       
             
@@ -176,7 +190,7 @@ class KvinneKraft
             
                 else
                 {
-                    String[] f = rgb_colours.get(i).replace(" ", "").split(",");
+                    String[] f = rgb_key.replace(" ", "").split(",");
                 
                     r = Integer.valueOf(f[0]);
                     g = Integer.valueOf(f[1]);
@@ -190,7 +204,9 @@ class KvinneKraft
                 Firework firework = (Firework)location.getWorld().spawnEntity(location, EntityType.FIREWORK);
                 FireworkMeta firework_meta = firework.getFireworkMeta();
             
-                firework_meta.addEffect(FireworkEffect.builder().withColor(firework_color).withFlicker().withTrail().with(FireworkEffect.Type.BURST).flicker(fireworks).build());
+                // To-Do: Add random Effect thingy.
+            
+                firework_meta.addEffect(FireworkEffect.builder().withColor(firework_color).withFlicker().withTrail().with(FireworkEffect.Type.BURST).flicker(true).build());
                 firework.setFireworkMeta(firework_meta);
             
                 p.setInvulnerable(true);
@@ -201,9 +217,24 @@ class KvinneKraft
             };
         };
         
-        if(potions)
-        {
+        if(potions_enab)
+        {               
+            if(potions_effs.size() < 1)
+            {     
+                for(String raw : potions_raw)
+                {
+                    String[] eff = raw.split(" ");
+                    
+                    PotionEffectType effect_type = PotionEffectType.getByName(eff[0]);
+       
+                    int effect_amplifier = Integer.valueOf(eff[1]);
+                    int effect_duration = Integer.valueOf(eff[2])*20; 
+                    
+                    potions_effs.add(new PotionEffect(effect_type, effect_duration, effect_amplifier, potions_ambt, potions_prts, potions_icon));
+                };
+            };  
             
+            p.addPotionEffects(potions_effs);
         };      
     };
 };
@@ -211,10 +242,7 @@ class KvinneKraft
 //
 // To-Do:
 //
-// - Test Plugin
 // - Use Separate Files
-// - Add in Fireworks
-// - Add in Potion Effects
 // - Add in Beginner Kits
 // - Add in Beginner Money
 //
@@ -242,7 +270,7 @@ class Events implements Listener
         Player p = e.getPlayer();
         String m = "none";
         
-        if(p.hasPlayedBefore())
+        if(!p.hasPlayedBefore())
         {
             m = messages.get(ON_FIRST_JOIN);
         }
@@ -275,7 +303,6 @@ class Events implements Listener
             m = m.replace("%player%", p.getName());
         
         Kvinne.Krafter(p);
-        
         e.setJoinMessage(m);
     };
     
@@ -290,7 +317,7 @@ class Events implements Listener
     
     public static void LoadConfig()
     {
-        if(messages.size() < 3)
+        if(messages.size() >= 4)
             return;
         
         messages = config.getStringList("properties.messages");
@@ -301,7 +328,7 @@ class Events implements Listener
     
     public static void UpdateConfig()
     {
-        if(messages.size() < 3)
+        if(messages.size() >= 4)
             return;
         
         config.set("properties.messages", messages);
