@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,6 +53,12 @@ public class DashJoin extends JavaPlugin
     
     public static Events EventHandler;
     
+    // To-Do:
+    //
+    // - Add Kit Functionality.
+    // - Add Money Functionality.
+    // - Check if Vault is installed.
+    
     @Override
     public void onEnable()
     {
@@ -88,17 +95,19 @@ class CommandHandler implements CommandExecutor
     FileConfiguration config = DashJoin.config;    
     DashCore xxx = new DashCore();
     
-    final String Error1 = xxx.transText("&cCorrect syntax: &9/dashnarok set [silent-join|first-join|join|quit] <message>");
+    final String Error1 = xxx.transText("&cCorrect syntax: &7/dashnarok set [silent-join|first-join|join|quit] <message>");
     final String Error2 = xxx.transText("&cPlease select one of these: Silent-Join, First-Join, Join or Quit");
     final String Error3 = xxx.transText("&cYou are not supposed to do this, are you?");
-    final String Error4 = xxx.transText("&cYou must specify a message like so: /dashnarok set join &aThe player %player% has joined!");
+    final String Error4 = xxx.transText("&cYou must specify a message like so:&7/dashnarok set join &aThe player %player% has joined!");
+    
+    final String Success1 = xxx.transText("&7You have changed the &3%t% &7message to &3%n% &7!");    
     
     final String AdminPermission = config.getString("properties.admin-permission");
     
     final List<String> valid_options = Arrays.asList(
         new String[] 
         { 
-            "silent-join", "first-join", "join", "quit" 
+            "first-join", "join", "quit", "silent-join", 
         }
     );
     
@@ -139,9 +148,14 @@ class CommandHandler implements CommandExecutor
             return false;
         };
         
-        DashJoin.EventHandler.messages.set(valid_options.indexOf(option), xxx.transText(args[2]));
+        String newm = xxx.transText(args[2]);
+        
+        DashJoin.EventHandler.LoadConfig();
+        DashJoin.EventHandler.messages.set(valid_options.indexOf(option), newm);
         DashJoin.EventHandler.UpdateConfig();
             
+        p.sendMessage(Success1.replace("%t%", option).replace("%n%", newm));
+        
         return true;
     };
 };
@@ -239,17 +253,6 @@ class KvinneKraft
     };
 };
 
-//
-// To-Do:
-//
-// - Use Separate Files
-// - Add in Beginner Kits
-// - Add in Beginner Money
-//
-// I have written this code on such a crappy laptop...
-// I will have to wait until I get back home from work ;D
-//
-
 class Events implements Listener
 {
     static FileConfiguration config = DashJoin.config;    
@@ -328,9 +331,6 @@ class Events implements Listener
     
     public static void UpdateConfig()
     {
-        if(messages.size() >= 4)
-            return;
-        
         config.set("properties.messages", messages);
         DashJoin.plugin.saveConfig();
     };    

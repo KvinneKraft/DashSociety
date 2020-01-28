@@ -4,6 +4,8 @@
 #
 # The format given should be follow when modifying the config, when you do
 # not do this, it will cause the plugin to error!
+# 
+# This plugin does require vault if you wish to use it fully!
 #
 
 enabled: true
@@ -14,6 +16,25 @@ properties:
     # a custom one by yourself.
     
     admin-permission: "dashnarok.admin"
+    
+    # This addon will allow you to give some standard 
+    # things to newbies when they join, just repeat
+    # the bellow format if you are too afraid of fucking 
+    # this up.
+    
+    newbies:
+        starter-items-enabled: false
+        starter-items:
+            - 'DIAMOND_SWORD 1'
+            - 'IRON_PICKAXE 1'
+            - 'COOKED_BEEF 32'
+            - 'GOLDEN_HELMET 1'
+            - 'LEATHER_CHESTPLATE 1'
+            - 'LEATHER_LEGGINGS 1'
+            - 'GOLDEN_BOOTS 1'
+        
+        starter-money-enabled: false
+        starter-money: 3500
     
     # This addon allows people with the bellow specified
     # permission to join and quit silently, the only people 
