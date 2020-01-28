@@ -39,7 +39,9 @@ public class DashJoin extends JavaPlugin
     DashCore xxx = new DashCore();
     
     public static FileConfiguration config;    
-    public static JavaPlugin plugin;
+    public static JavaPlugin plugin;    
+    
+    public static Events EventHandler = new Events(); 
     
     @Override
     public void onEnable()
@@ -55,7 +57,7 @@ public class DashJoin extends JavaPlugin
             plugin.getPluginLoader().disablePlugin(plugin);
         };
         
-        this.getServer().getPluginManager().registerEvents(new Events(), this);
+        this.getServer().getPluginManager().registerEvents(EventHandler, this);
         plugin.getCommand("dashnarok").setExecutor(new CommandHandler());
         
         xxx.Sys("Plugin is now running!");
@@ -70,9 +72,8 @@ public class DashJoin extends JavaPlugin
 
 class CommandHandler implements CommandExecutor
 {
+    FileConfiguration config = DashJoin.config;    
     DashCore xxx = new DashCore();
-    
-    FileConfiguration config = DashJoin.config;
     
     String Error1 = xxx.transText("&cCorrect syntax: &9/dashnarok set [silent-join|first-join|join|quit] <message>");
     String Error2 = xxx.transText("&cPlease select one of these: Silent-Join, First-Join, Join or Quit");
@@ -125,29 +126,8 @@ class CommandHandler implements CommandExecutor
             return false;
         };
         
-        switch(valid_options.indexOf(option))
-        {
-            case 0:
-            {
-                
-                break;
-            }
-            
-            case 1:
-            {
-                break;
-            }
-            
-            case 2:
-            {
-                break;
-            }
-            
-            case 3:
-            {
-                break;
-            }
-        };
+        DashJoin.EventHandler.messages.set(valid_options.indexOf(option), xxx.transText(args[2]));
+        DashJoin.EventHandler.UpdateConfig();
             
         return true;
     };
@@ -207,16 +187,15 @@ class KvinneKraft
 
 class Events implements Listener
 {
-    FileConfiguration config = DashJoin.config;    
-    DashCore xxx = new DashCore();
+    static FileConfiguration config = DashJoin.config;    
+    static DashCore xxx = new DashCore();
     
-    List<String> messages = new ArrayList<>();
+    static List<String> messages = new ArrayList<>();
 
-    String silentjoinp = config.getString("properties.silent-join.permission");    
+    final String silentjoinp = config.getString("properties.silent-join.permission");    
+    final boolean silentjoin = config.getBoolean("properties.silent-join.enabled");
     
-    boolean silentjoin = config.getBoolean("properties.silent-join.enabled");
-    
-    int ON_FIRST_JOIN = 0, ON_JOIN = 1, ON_SILENT_JOIN = 3;
+    final int ON_FIRST_JOIN = 0, ON_JOIN = 1, ON_SILENT_JOIN = 3;
     @EventHandler
     public void onJoin(PlayerJoinEvent e)
     {
@@ -231,7 +210,7 @@ class Events implements Listener
         }
         
         else
-        if(p.hasPermission(silentjoinp))
+        if((p.hasPermission(silentjoinp)) && (silentjoin))
         {
             m = null;
             
@@ -260,7 +239,7 @@ class Events implements Listener
         e.setJoinMessage(m);
     };
     
-    int ON_QUIT = 2;
+    final int ON_QUIT = 2;
     @EventHandler
     public void onQuit(PlayerQuitEvent e)
     {
@@ -269,7 +248,7 @@ class Events implements Listener
         e.setQuitMessage(messages.get(ON_QUIT).replace("%player%", e.getPlayer().getName()));
     };
     
-    private void LoadConfig()
+    public static void LoadConfig()
     {
         if(messages.size() < 3)
             return;
@@ -280,7 +259,7 @@ class Events implements Listener
             messages.set(id, xxx.transText(messages.get(id)));
     };
     
-    private void UpdateConfig()
+    public static void UpdateConfig()
     {
         if(messages.size() < 3)
             return;
