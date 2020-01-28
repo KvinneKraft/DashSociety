@@ -1,1 +1,30 @@
 
+#
+# Dashies Config File v1.0
+#
+
+enabled: true
+
+properties:
+    
+    # This addon allows people with the bellow specified
+    # permission to join and quit silently, the only people 
+    # knowing about them either joining or quitting are 
+    # the ones with the permission.
+    
+    silent-join:
+        enabled: false
+        permission: 'dashnarok.silentjoin'
+    
+    # The messages are ordered as follows:
+    #
+    # - <First Time Join Message>
+    # - <Regular Join Message>
+    # - <Regular Quit Message>
+    # - <Silent Join Message>
+    
+    messages:
+        - '&eThe player {player} has joined for the first time !!'
+        - '&6Welcome back {player} to Dashnarok :D' 
+        - '&cBye Bye, we hope to see you back {player} ;c'
+        - '&3The user &a{player} &3has joined silently.'
