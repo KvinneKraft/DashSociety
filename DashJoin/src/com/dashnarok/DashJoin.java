@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -53,6 +56,7 @@ public class DashJoin extends JavaPlugin
         };
         
         this.getServer().getPluginManager().registerEvents(new Events(), this);
+        plugin.getCommand("dashnarok").setExecutor(new CommandHandler());
         
         xxx.Sys("Plugin is now running!");
     };
@@ -61,6 +65,91 @@ public class DashJoin extends JavaPlugin
     public void onDisable()
     {
         xxx.Sys("The plugin has now been disabled!");
+    };
+};
+
+class CommandHandler implements CommandExecutor
+{
+    DashCore xxx = new DashCore();
+    
+    FileConfiguration config = DashJoin.config;
+    
+    String Error1 = xxx.transText("&cCorrect syntax: &9/dashnarok set [silent-join|first-join|join|quit] <message>");
+    String Error2 = xxx.transText("&cPlease select one of these: Silent-Join, First-Join, Join or Quit");
+    String Error3 = xxx.transText("&cYou are not supposed to do this, are you?");
+    String Error4 = xxx.transText("&cYou must specify a message like so: /dashnarok set join &aThe player %player% has joined!");
+    
+    String AdminPermission = config.getString("properties.admin-permission");
+    
+    List<String> valid_options = Arrays.asList(
+        new String[] 
+        { 
+            "silent-join", "first-join", "join", "quit" 
+        }
+    );
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
+        if(!(sender instanceof Player))
+        {
+            xxx.Sys("&cI am sorry but you can not execute this command through the console.");
+            return false;
+        }
+        
+        Player p = (Player)sender;
+        
+        if(p.hasPermission(AdminPermission))
+        {
+            p.sendMessage(Error3);
+            return false;
+        }
+        
+        else if(args.length < 2)
+        {
+            p.sendMessage(Error1);
+            return false;
+        }
+        
+        else if(args.length < 3)
+        {
+            p.sendMessage(Error4);
+            return false;
+        };
+        
+        String option = args[1].toLowerCase();
+        
+        if(!valid_options.contains(option))
+        {
+            p.sendMessage(Error2);
+            return false;
+        };
+        
+        switch(valid_options.indexOf(option))
+        {
+            case 0:
+            {
+                
+                break;
+            }
+            
+            case 1:
+            {
+                break;
+            }
+            
+            case 2:
+            {
+                break;
+            }
+            
+            case 3:
+            {
+                break;
+            }
+        };
+            
+        return true;
     };
 };
 
@@ -98,6 +187,8 @@ class KvinneKraft
     Integer fireworksummonamount = config.getInt(fw_node + "summon-multiplier");    
     
     List<String> rgb_colours = config.getStringList(fw_node + "rgb-color-range");
+
+    
 };
 
 //

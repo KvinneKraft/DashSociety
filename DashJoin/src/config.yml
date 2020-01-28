@@ -6,6 +6,11 @@
 enabled: true
 
 properties:
+    # Admin commands such as /dashnarok will require a
+    # permission, you can either use the preset or set
+    # a custom one by yourself.
+    
+    admin-permission: "dashnarok.admin"
     
     # This addon allows people with the bellow specified
     # permission to join and quit silently, the only people 
