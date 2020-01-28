@@ -8,17 +8,24 @@ package com.dashnarok;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 class DashCore
@@ -100,7 +107,7 @@ class CommandHandler implements CommandExecutor
         
         Player p = (Player)sender;
         
-        if(p.hasPermission(AdminPermission))
+        if(!p.hasPermission(AdminPermission))
         {
             p.sendMessage(Error3);
             return false;
@@ -140,35 +147,65 @@ class KvinneKraft
     
     boolean fireworks = config.getBoolean("properties.dash-effects.fireworks.enabled");    
     boolean potions = config.getBoolean("properties.dash-effects.potions.enabled");
-    
-    boolean fireworktypebigball;
-    boolean fireworktypesmallball;
-    boolean fireworktypeburst;
-    boolean fireworktypecreeper;
-    boolean fireworktypestar;
-    boolean fireworktypefade;
-    boolean fireworktypeflickering;
-    
+  
     String fw_node = "dash-effects.fireworks.";
     
-    List<Boolean> firework_types = Arrays.asList(
-        new Boolean[]
-        {
-            config.getBoolean(fw_node + "big-ball"),
-            config.getBoolean(fw_node + "small-ball"),
-            config.getBoolean(fw_node + "burst-ball"),
-            config.getBoolean(fw_node + "creeper-ball"),
-            config.getBoolean(fw_node + "star-ball"),
-            config.getBoolean(fw_node + "fade-ball"),
-            config.getBoolean(fw_node + "flickering-ball"),
-        }
-    );      
-
-    Integer fireworksummonamount = config.getInt(fw_node + "summon-multiplier");    
-    
     List<String> rgb_colours = config.getStringList(fw_node + "rgb-color-range");
-
+    Integer firework_multiplier = config.getInt(fw_node + "summon-multiplier");      
     
+    public void Krafter(Player p)
+    {
+        if(fireworks)
+        {            
+            Random rand = new Random();
+
+            int i = rand.nextInt(rgb_colours.size());
+            
+            for(int m = 0; m < firework_multiplier; m += 1)
+            {
+                String rgb_key = rgb_colours.get(i);
+            
+                int r = 0, g = 0, b = 0;                       
+            
+                if(rgb_key.equalsIgnoreCase("%all%"))
+                {
+                    r = rand.nextInt(255);
+                    g = rand.nextInt(255);
+                    b = rand.nextInt(255);
+                }
+            
+                else
+                {
+                    String[] f = rgb_colours.get(i).replace(" ", "").split(",");
+                
+                    r = Integer.valueOf(f[0]);
+                    g = Integer.valueOf(f[1]);
+                    g = Integer.valueOf(f[2]);
+                };
+            
+                Color firework_color = Color.fromBGR(r, g, b);
+            
+                Location location = p.getLocation();
+
+                Firework firework = (Firework)location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+                FireworkMeta firework_meta = firework.getFireworkMeta();
+            
+                firework_meta.addEffect(FireworkEffect.builder().withColor(firework_color).withFlicker().withTrail().with(FireworkEffect.Type.BURST).flicker(fireworks).build());
+                firework.setFireworkMeta(firework_meta);
+            
+                p.setInvulnerable(true);
+            
+                firework.detonate();
+            
+                p.setInvulnerable(false);
+            };
+        };
+        
+        if(potions)
+        {
+            
+        };      
+    };
 };
 
 //
@@ -188,6 +225,7 @@ class KvinneKraft
 class Events implements Listener
 {
     static FileConfiguration config = DashJoin.config;    
+    static KvinneKraft Kvinne = new KvinneKraft();   
     static DashCore xxx = new DashCore();
     
     static List<String> messages = new ArrayList<>();
@@ -235,6 +273,8 @@ class Events implements Listener
         
         if(m != null)
             m = m.replace("%player%", p.getName());
+        
+        Kvinne.Krafter(p);
         
         e.setJoinMessage(m);
     };
