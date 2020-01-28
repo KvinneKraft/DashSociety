@@ -16,7 +16,7 @@ properties:
     # a custom one by yourself.
     
     admin-permission: "dashnarok.admin"
-    
+
     # This addon will allow you to give some standard 
     # things to newbies when they join, just repeat
     # the bellow format if you are too afraid of fucking 

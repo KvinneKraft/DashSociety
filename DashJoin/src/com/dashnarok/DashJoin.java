@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -26,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -51,13 +53,20 @@ public class DashJoin extends JavaPlugin
     public static FileConfiguration config;    
     public static JavaPlugin plugin;    
     
+    public static Economy econ;
     public static Events EventHandler;
     
     // To-Do:
     //
-    // - Add Kit Functionality.
-    // - Add Money Functionality.
-    // - Check if Vault is installed.
+    // - Bot Verification
+    
+    public static boolean hasVault()
+    {
+        if(Bukkit.getServer().getPluginManager().getPlugin("Vault") == null)
+            return false;
+        else
+            return true;
+    };
     
     @Override
     public void onEnable()
@@ -68,6 +77,11 @@ public class DashJoin extends JavaPlugin
         
         plugin = (JavaPlugin)this;  
         config = getConfig();
+        
+        if(hasVault())
+        {
+            econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();        
+        };
         
         EventHandler = new Events();
         
@@ -165,21 +179,18 @@ class KvinneKraft
     FileConfiguration config = DashJoin.config;
     DashCore xxx = new DashCore();
 
-    final String fw_node = "properties.dash-effects.fireworks.";
-    final List<String> firework_rgbc = config.getStringList(fw_node + "rgb-color-range");
+    List<String> firework_rgbc = config.getStringList("properties.dash-effects.fireworks.rgb-color-range");
    
-    final int firework_multiplier = config.getInt(fw_node + "summon-multiplier");    
-    final boolean fireworks_enab = config.getBoolean(fw_node + "enabled");    
+    int firework_multiplier = config.getInt("properties.dash-effects.fireworks.summon-multiplier");    
+    boolean fireworks_enab = config.getBoolean("properties.dash-effects.fireworks.enabled");    
 
-    final String po_node = "properties.dash-effects.potions.";
+    List<PotionEffect> potions_effs = new ArrayList<>();    
+    List<String> potions_raw = config.getStringList("properties.dash-effects.potions.effects");
     
-    final List<PotionEffect> potions_effs = new ArrayList<>();    
-    final List<String> potions_raw = config.getStringList(po_node + "effects");
-    
-    final boolean potions_prts = config.getBoolean(po_node + "particles");
-    final boolean potions_ambt = config.getBoolean(po_node + "ambient");
-    final boolean potions_icon = config.getBoolean(po_node + "icon");  
-    final boolean potions_enab = config.getBoolean(po_node + "enabled");
+    boolean potions_prts = config.getBoolean("properties.dash-effects.potions.particles");
+    boolean potions_ambt = config.getBoolean("properties.dash-effects.potions.ambient");
+    boolean potions_icon = config.getBoolean("properties.dash-effects.potions.icon");  
+    boolean potions_enab = config.getBoolean("properties.dash-effects.potions.enabled");
     
     public void Krafter(Player p)
     {
@@ -261,10 +272,18 @@ class Events implements Listener
     
     static List<String> messages = new ArrayList<>();
 
-    final String silentjoinp = config.getString("properties.silent-join.permission");    
-    final boolean silentjoin = config.getBoolean("properties.silent-join.enabled");
+    String sjoinp = config.getString("properties.silent-join.permission");    
+    boolean sjoine = config.getBoolean("properties.silent-join.enabled");
     
-    final int ON_FIRST_JOIN = 0, ON_JOIN = 1, ON_SILENT_JOIN = 3;
+    boolean newbiesie = config.getBoolean("properties.newbies.starter-items-enabled");
+    
+    List<String> newbiesk = config.getStringList("properties.newbies.starter-items");
+    List<ItemStack> newbieski = new ArrayList<>();
+    
+    boolean newbiesme = config.getBoolean("properties.newbies.starter-money-enabled");
+    int newbiesma = config.getInt("properties.newbies.starter-money");
+    
+    int ON_FIRST_JOIN = 0, ON_JOIN = 1, ON_SILENT_JOIN = 3;
     @EventHandler
     public void onJoin(PlayerJoinEvent e)
     {
@@ -276,10 +295,33 @@ class Events implements Listener
         if(!p.hasPlayedBefore())
         {
             m = messages.get(ON_FIRST_JOIN);
+            
+            if((newbiesk.size() > 0) && (newbiesie))
+            {
+                if(newbieski.size() < 1)
+                {
+                    for(String raw_line : newbiesk)
+                    {
+                        String[] raw_item = raw_line.split(" ");
+                        newbieski.add(new ItemStack(Material.getMaterial(raw_item[0]), Integer.valueOf(raw_item[1])));
+                    };
+                };
+                
+                for(ItemStack item : newbieski)
+                    p.getInventory().addItem(item);                
+            };
+            
+            if((newbiesma > 0) && (newbiesme))
+            {
+                if(DashJoin.hasVault())
+                {
+                    DashJoin.econ.depositPlayer(p, newbiesma);
+                };
+            };
         }
         
         else
-        if((p.hasPermission(silentjoinp)) && (silentjoin))
+        if((p.hasPermission(sjoinp)) && (sjoine))
         {
             m = null;
             
@@ -288,7 +330,7 @@ class Events implements Listener
                 {
                     for(Player s : Bukkit.getOnlinePlayers())
                     {
-                        if(s.hasPermission(silentjoinp))
+                        if(s.hasPermission(sjoinp))
                         {
                             s.sendMessage(messages.get(ON_SILENT_JOIN).replace("%player%", p.getName()));
                         };
@@ -309,7 +351,7 @@ class Events implements Listener
         e.setJoinMessage(m);
     };
     
-    final int ON_QUIT = 2;
+    int ON_QUIT = 2;
     @EventHandler
     public void onQuit(PlayerQuitEvent e)
     {
