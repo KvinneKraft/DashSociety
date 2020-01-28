@@ -66,7 +66,38 @@ public class DashJoin extends JavaPlugin
 
 class KvinneKraft 
 {
-    // Fancy Effects Class
+    FileConfiguration config = DashJoin.config;
+    DashCore xxx = new DashCore();
+    
+    boolean fireworks = config.getBoolean("properties.dash-effects.fireworks.enabled");    
+    boolean potions = config.getBoolean("properties.dash-effects.potions.enabled");
+    
+    boolean fireworktypebigball;
+    boolean fireworktypesmallball;
+    boolean fireworktypeburst;
+    boolean fireworktypecreeper;
+    boolean fireworktypestar;
+    boolean fireworktypefade;
+    boolean fireworktypeflickering;
+    
+    String fw_node = "dash-effects.fireworks.";
+    
+    List<Boolean> firework_types = Arrays.asList(
+        new Boolean[]
+        {
+            config.getBoolean(fw_node + "big-ball"),
+            config.getBoolean(fw_node + "small-ball"),
+            config.getBoolean(fw_node + "burst-ball"),
+            config.getBoolean(fw_node + "creeper-ball"),
+            config.getBoolean(fw_node + "star-ball"),
+            config.getBoolean(fw_node + "fade-ball"),
+            config.getBoolean(fw_node + "flickering-ball"),
+        }
+    );      
+
+    Integer fireworksummonamount = config.getInt(fw_node + "summon-multiplier");    
+    
+    List<String> rgb_colours = config.getStringList(fw_node + "rgb-color-range");
 };
 
 //
@@ -90,8 +121,9 @@ class Events implements Listener
     
     List<String> messages = new ArrayList<>();
 
+    String silentjoinp = config.getString("properties.silent-join.permission");    
+    
     boolean silentjoin = config.getBoolean("properties.silent-join.enabled");
-    String silentjoinp = config.getString("properties.silent-join.permission");
     
     int ON_FIRST_JOIN = 0, ON_JOIN = 1, ON_SILENT_JOIN = 3;
     @EventHandler
@@ -119,7 +151,7 @@ class Events implements Listener
                     {
                         if(s.hasPermission(silentjoinp))
                         {
-                            s.sendMessage(messages.get(ON_SILENT_JOIN).replace("{player}", p.getName()));
+                            s.sendMessage(messages.get(ON_SILENT_JOIN).replace("%player%", p.getName()));
                         };
                     };
                 }
@@ -132,7 +164,7 @@ class Events implements Listener
         };
         
         if(m != null)
-            m = m.replace("{player}", p.getName());
+            m = m.replace("%player%", p.getName());
         
         e.setJoinMessage(m);
     };
@@ -143,7 +175,7 @@ class Events implements Listener
     {
         LoadConfig();
         
-        e.setQuitMessage(messages.get(ON_QUIT).replace("{player}", e.getPlayer().getName()));
+        e.setQuitMessage(messages.get(ON_QUIT).replace("%player%", e.getPlayer().getName()));
     };
     
     private void LoadConfig()

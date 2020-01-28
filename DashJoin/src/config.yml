@@ -15,6 +15,44 @@ properties:
     silent-join:
         enabled: false
         permission: 'dashnarok.silentjoin'
+        
+    # Fun little neat things for players when they join.
+    #
+    # You can change the rgb-color-range to %all% if you 
+    # so happen to just be in need of all the colours
+    # there are. And I am using RGB because that is both
+    # easier and waaay more varying ;D
+    #
+    # You should follow the given potion format if you are
+    # planning on adding new ones in there by yourself. 
+    # - '%potion_full_name% %amplifier% %duration%'
+    
+    dash-effects:
+        fireworks:
+            enabled: true
+            
+            rgb-color-range: 
+                - '0,0,0'
+                - '50,50,50'
+                - '150,150,150'
+            
+            big-ball: true
+            small-ball: true
+            burst: true
+            creeper: true
+            star: true
+            fade: true
+            flickering: true
+            
+            summon-multiplier: 4
+            
+        potions:
+            enabled: true
+            
+            effects:
+                - 'CONFUSION 2 10'
+                - 'SLOWNESS 2 10'
+                - 'REGENERATION 2 10'
     
     # The messages are ordered as follows:
     #
@@ -24,7 +62,7 @@ properties:
     # - <Silent Join Message>
     
     messages:
-        - '&eThe player {player} has joined for the first time !!'
-        - '&6Welcome back {player} to Dashnarok :D' 
-        - '&cBye Bye, we hope to see you back {player} ;c'
-        - '&3The user &a{player} &3has joined silently.'
+        - '&eThe player &b%player% &ehas joined for the first time !!'
+        - '&6Welcome back &e%player% &6to Dashnarok :D' 
+        - '&cBye Bye, we hope to see you back &4{player} &c;c'
+        - '&3The user &a%player% &3has joined silently.'
