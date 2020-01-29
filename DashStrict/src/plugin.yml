@@ -1,0 +1,12 @@
+
+author: [Dashieee]
+name: DashStrict
+
+version: 1.0
+
+main: com.dashstrict.DashStrict
+
+commands:
+    dashstrict:
+        description: The main command for Dash Strict.
+        aliases: [ds]
