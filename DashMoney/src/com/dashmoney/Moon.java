@@ -5,6 +5,8 @@
 package com.dashmoney;
 
 
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +27,19 @@ public class Moon
     public static JavaPlugin getGlobalPlugin()
     {
         return DashMoney.plugin;
+    };
+    
+    public static Economy getGlobalEconomy()
+    {
+        return DashMoney.econ;
+    };
+    
+    public static boolean hasVault()
+    {
+        if(Bukkit.getServer().getPluginManager().getPlugin("Vault") == null)
+            return false;
+        else
+            return true;
     };
     
     public static void print(String str)
