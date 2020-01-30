@@ -3,11 +3,13 @@ package com.dashstrict.events;
 
 import com.dashstrict.DashStrict;
 import com.dashstrict.CommandBlocker;
+import com.dashstrict.CraftBlocker;
 import com.dashstrict.UseBlocker;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -24,6 +26,18 @@ public class EventHandlers implements Listener
     {
         if(commandBlock)
             commandBlocker.verifyCommand(e);
+        
+        return;
+    };
+    
+    boolean craftBlock = config.getBoolean("craft-blocker.enabled");
+    CraftBlocker craftBlocker = new CraftBlocker();
+    
+    @EventHandler
+    public void onCraft(PrepareItemCraftEvent e)
+    {
+        if(craftBlock)
+            craftBlocker.verifyRecipe(e);
         
         return;
     };

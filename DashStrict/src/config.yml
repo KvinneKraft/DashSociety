@@ -4,10 +4,7 @@
 #
 # (To-Do List):
 #
-# - Command Blocker
-# - Use Blocker
 # - Fall Blocker
-# - Craft Blocker
 # - Message Delay
 # - IP Restrictor
 # - World Blocker
@@ -16,6 +13,19 @@
 # - Command Support rather than Just Config
 # - Make imports look better
 
+
+craft-blocker:
+    enabled: false
+    
+    items:
+        - 'ENCHANTMENT_TABLE'
+        - 'FIRE_CHARGE'
+        - 'ENDER_CHEST' 
+        - 'HOPPER'
+    
+    denied-message: '&cYou do not have access to craft this.'
+    bypass-permission: 'dashstrict.bypass'    
+    
 use-blocker:
     enabled: false
     
@@ -24,8 +34,7 @@ use-blocker:
         - 'BREWING_STAND'
     
     items:
-        - 'ENDERPEARL'
-        - 'ENDER_EYE'
+        - 'ENDER_PEARL'
         
     denied-message: '&cYou do not have access to use this.'
     bypass-permission: 'dashstrict.bypass'
@@ -37,8 +46,8 @@ command-block:
         - '/ver'
         - '/pl'
         - '/about'
-        - '/minecraft:'
-        - '/bukkit:'
+        - '/minecraft'
+        - '/bukkit'
         
     denied-message: '&cYou do not have access to this command.'
     bypass-permission: 'dashstrict.bypass'

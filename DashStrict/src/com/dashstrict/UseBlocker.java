@@ -9,7 +9,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-
 public class UseBlocker
 {
     FileConfiguration config = DashStrict.config;
@@ -30,26 +29,31 @@ public class UseBlocker
         if(e.getPlayer().hasPermission(bypassPermission))
             return;
         
-        Material material;
+        if(badItems.size() < 1)
+            for(String rawItem : badItemsRaw)
+                badItems.add(Material.getMaterial(rawItem));
+        
+        if(badBlocks.size() < 1)
+            for(String rawBlock : badBlocksRaw)
+                badBlocks.add(Material.getMaterial(rawBlock));
+        
         Player player = e.getPlayer();
         
-        if((e.getClickedBlock() != null) && (!e.getClickedBlock().equals(Material.AIR)))
+        if((e.getClickedBlock() == null) && (e.getMaterial() == null))
+            return;
+        
+        if(e.getClickedBlock() != null)
         {
-            material = e.getClickedBlock().getType();
-            
-            if(badBlocks.contains(material))
+            if(badBlocks.contains(e.getClickedBlock().getType()))
             {
                 player.sendMessage(deniedMessage);
                 e.setCancelled(true);
-            };
-        }
+            };            
+        };
         
-        else
-        if((e.getItem() != null) && (!e.getItem().getType().equals(Material.AIR)))
+        if(e.getMaterial() != null)
         {
-            material = e.getItem().getType();
-            
-            if(badItems.contains(material))
+            if(badItems.contains(e.getMaterial()))
             {
                 player.sendMessage(deniedMessage);
                 e.setCancelled(true);
