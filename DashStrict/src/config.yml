@@ -14,3 +14,33 @@
 # - Word Blocker
 # - Block Place Blocker
 # - Command Support rather than Just Config
+# - Make imports look better
+
+use-block:
+    enabled: false
+    
+    blocks:
+        - 'COMMAND_BLOCK'
+        - 'BREWING_STAND'
+    
+    items:
+        - 'ENDERPEARL'
+        - 'ENDER_EYE'
+        
+    denied-message: '&cYou do not have access to use this.'
+    bypass-permission: 'dashstrict.bypass'
+
+command-block:
+    enabled: false
+    
+    commands:
+        - '/ver'
+        - '/pl'
+        - '/about'
+        - '/minecraft:'
+        - '/bukkit:'
+        
+    denied-message: '&cYou do not have access to this command.'
+    bypass-permission: 'dashstrict.bypass'
+
+    
