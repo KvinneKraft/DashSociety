@@ -16,7 +16,7 @@
 # - Command Support rather than Just Config
 # - Make imports look better
 
-use-block:
+use-blocker:
     enabled: false
     
     blocks:

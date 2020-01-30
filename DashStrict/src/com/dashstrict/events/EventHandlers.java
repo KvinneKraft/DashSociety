@@ -28,7 +28,7 @@ public class EventHandlers implements Listener
         return;
     };
     
-    boolean useBlock = config.getBoolean("use-block.enabled");
+    boolean useBlock = config.getBoolean("use-blocker.enabled");
     UseBlocker useBlocker = new UseBlocker();
     
     @EventHandler
