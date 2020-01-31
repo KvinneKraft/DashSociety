@@ -16,9 +16,9 @@ public class DashMoney extends JavaPlugin
     public static FileConfiguration config;
     public static JavaPlugin plugin;
     
-    String Author = "Dashie";
-    String PluginName = "Dash Money";
-    String Version = "1.0";
+    String Author = "Author: Dashie";
+    String PluginName = "Plugin Name: Dash Money";
+    String Version = "Version: 1.0";
     
     public static Economy econ;
     
@@ -40,6 +40,7 @@ public class DashMoney extends JavaPlugin
         {
             Moon.print("Vault could not be found on your server ;c");
             getServer().getPluginManager().disablePlugin(plugin);
+            return;
         };
         
         econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();        

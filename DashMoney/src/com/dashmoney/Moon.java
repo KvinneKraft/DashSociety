@@ -5,6 +5,7 @@
 package com.dashmoney;
 
 
+import java.util.Random;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -40,6 +41,11 @@ public class Moon
             return false;
         else
             return true;
+    };
+    
+    public static Integer getRand(int min, int max)
+    {
+        return new Random().nextInt((max - min) + 1) + min;
     };
     
     public static void print(String str)

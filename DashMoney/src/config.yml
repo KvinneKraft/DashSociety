@@ -8,9 +8,7 @@ properties:
         enabled: true
         
         max-drop: 8
-        min-drop: 1
-        
-        drop-head: false        
+        min-drop: 1   
     
         receive-message: "&aYou have received &b%money%$ &afor killing a &b%entity% &a!"
     
@@ -19,8 +17,6 @@ properties:
         
         max-drop: 20
         min-drop: 1
-        
-        drop-head: false
         
         receive-message: "&aYou have received &b%money%$ &afor killing a &b%entity% &a!"
         
@@ -32,25 +28,5 @@ properties:
 
         drop-head: true       
         
-        receive-message: "&aYou have received &b%money%$ &afor killing a &b%entity% &a!"
-        
-    blocks:
-        place-rewards:
-            enabled: false
-            
-            blocks:
-                - 'DIAMOND_ORE 65'
-                - 'EMERALD_ORE 85'
-                - 'GOLD_ORE 55'
-            
-            receive-message: "&aYou have received &b%money%$ &afor placing a &b%block% &a!"
-            
-        break-rewards:
-            enabled: false
-            
-            blocks:
-                - 'OBSIDIAN 100'
-                - 'DIAMOND_ORE 65'
-                - 'EMERALD_ORE 75'
-        
-            receive-message: "&aYou have received &b%money%$ &afor breaking a &b%block% &a!"
+        receive-message: "&aYou have received &b%money%$ &afor killing a &b%player% &a!"
+        death-message: "&aThe player &e%killer% &a has killed the player &e%victim% &ausing ze &b%item% &a!"
