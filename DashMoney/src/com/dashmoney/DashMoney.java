@@ -5,10 +5,10 @@
 package com.dashmoney;
 
 
+import com.dashmoney.events.EventHandler;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
 
 
 public class DashMoney extends JavaPlugin
@@ -43,7 +43,9 @@ public class DashMoney extends JavaPlugin
         };
         
         econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();        
-            
+        
+        getServer().getPluginManager().registerEvents(new EventHandler(), plugin);
+        
         Moon.print("Plugin is now running!");
     };
     
