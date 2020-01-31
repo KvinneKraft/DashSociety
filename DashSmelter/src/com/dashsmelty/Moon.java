@@ -6,7 +6,6 @@ package com.dashsmelty;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class Moon
 {
@@ -18,11 +17,6 @@ public class Moon
     public static FileConfiguration getGlobalConfig()
     {
         return DashSmelter.config;
-    };
-    
-    public static JavaPlugin getGlobalPlugin()
-    {
-        return DashSmelter.plugin;
     };
     
     public static void print(String str)
