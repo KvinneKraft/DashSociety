@@ -1,5 +1,5 @@
 
-package com.dashcraft;
+package DashSit.src.com.dashcraft;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;

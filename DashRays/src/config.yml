@@ -1,0 +1,28 @@
+
+#
+# Dashies Cunfig
+#
+
+# To-Do:
+# - Notify Players with Perm upon Blacklisted Block Break
+# - Toggle on and Off Command
+# - Add and Remove Property
+
+properties:
+    # When a player with the bellow permission joins the server, should they be
+    # notified about found blocks by default?
+    default-toggle-enabled: true
+    
+    # What permission should a player have in order to be notified?
+    notify-permission: "dashrays.notify"
+    
+    # What message should privileged players receive when a listed block has been 
+    # broken?
+    notify-message: "&aThe player &b%p% &ahas found: &b%b% &a!"
+    
+    # What blocks are notify-worthy? 
+    blocks:
+        - 'ENDER_CHEST'
+        - 'DIAMOND_ORE' 
+        - 'EMERALD_ORE'
+        

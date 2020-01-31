@@ -1,13 +1,11 @@
 
-// Author: Dashie
-// Version: 1.0
+package com.dashrays;
 
-package DashSmelter.src.com.dashsmelty;
-
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class Moon
+public class Luna
 {
     public static String transStr(String str)
     {
@@ -16,11 +14,16 @@ public class Moon
     
     public static FileConfiguration getGlobalConfig()
     {
-        return DashSmelter.config;
+        return DashRays.config;
+    };       
+    
+    public static JavaPlugin getGlobalPlugin()
+    {
+        return DashRays.plugin;
     };
     
     public static void print(String str)
     {
-        System.out.println(transStr("(Dash Smelter): " + str));
+        System.out.println(str);
     };
 };

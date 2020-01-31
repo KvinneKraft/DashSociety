@@ -2,7 +2,7 @@
 // Author: Dashie
 // Version: 1.0
 
-package com.dashcraft;
+package DashSit.src.com.dashcraft;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;

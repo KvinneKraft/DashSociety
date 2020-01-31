@@ -1,5 +1,5 @@
 
-package com.dashcraft;
+package DashSit.src.com.dashcraft;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;

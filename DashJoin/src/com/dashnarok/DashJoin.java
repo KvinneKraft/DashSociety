@@ -2,7 +2,7 @@
 // Author: Dashie
 // Version: 1.0
 
-package com.dashnarok;
+package DashJoin.src.com.dashnarok;
 
 
 import java.util.ArrayList;

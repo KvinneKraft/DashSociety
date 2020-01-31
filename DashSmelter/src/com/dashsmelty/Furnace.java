@@ -2,7 +2,7 @@
 // Author: Dashie
 // Version: 1.0
 
-package com.dashsmelty;
+package DashSmelter.src.com.dashsmelty;
 
 import java.util.List;
 import org.bukkit.Bukkit;
