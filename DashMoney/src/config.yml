@@ -29,4 +29,4 @@ properties:
         drop-head: true       
         
         receive-message: "&aYou have received &b%money%$ &afor killing a &b%player% &a!"
-        death-message: "&aThe player &e%killer% &a has killed the player &e%victim% &ausing ze &b%item% &a!"
+        death-message: "&aThe player &e%killer% &ahas killed the player &e%victim% &ausing ze &b%item% &a!"
