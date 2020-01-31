@@ -50,7 +50,7 @@ public class Players
             ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta playerHeadMeta = (SkullMeta)playerHead.getItemMeta();
             
-            playerHeadMeta.setOwningPlayer(killer);
+            playerHeadMeta.setOwningPlayer((Player)e.getEntity());
             playerHead.setItemMeta(playerHeadMeta);
             
             e.getDrops().add(playerHead);

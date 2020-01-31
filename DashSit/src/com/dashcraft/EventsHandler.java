@@ -38,10 +38,12 @@ public class EventsHandler implements Listener
     
     Luna luna = new Luna();
     
+    boolean stairs = config.getBoolean("right-click-stair-sit");
+    
     @EventHandler
     public void onInteract(PlayerInteractEvent e)
     {
-        if(e.getClickedBlock() == null)
+        if((!stairs) || (e.getClickedBlock() == null))
             return;
         
         if(e.getAction() == Action.RIGHT_CLICK_BLOCK)
