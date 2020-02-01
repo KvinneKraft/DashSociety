@@ -1,11 +1,11 @@
 
-main: com.dashiesxraynotifier.DashRays
+main: com.dashrays.DashRays
 
 author: [Dashie]
 name: DashRays
 
 version: 1.0
-api-version: 1.7
+api-version: 1.13
 
 commands:
     dashrays:

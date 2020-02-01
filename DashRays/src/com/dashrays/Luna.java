@@ -1,4 +1,7 @@
 
+// Author: Dashie 
+// Version: 1.0
+
 package com.dashrays;
 
 import net.md_5.bungee.api.ChatColor;
@@ -25,5 +28,11 @@ public class Luna
     public static void print(String str)
     {
         System.out.println(str);
+    };
+    
+    public static void updateConfig()
+    {
+        getGlobalConfig().set("properties.blocks", EventsHandler.blocks);
+        getGlobalPlugin().saveConfig();
     };
 };
