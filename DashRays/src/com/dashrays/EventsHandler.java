@@ -31,6 +31,7 @@ public class EventsHandler implements Listener
         {
             if(!DashRays.names.contains(e.getPlayer().getName()))
             {
+                if(blocks.contains(e.getBlock().getType().toString()))
                 {
                     for(String name : DashRays.names)
                     {
