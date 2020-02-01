@@ -28,6 +28,6 @@ public class Luna
     
     public static void print(String str)
     {
-        System.out.println(str);
+        System.out.println(transStr("(Dashcaster): " + str));
     };
 };
