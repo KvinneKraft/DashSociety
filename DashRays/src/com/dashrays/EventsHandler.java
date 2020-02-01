@@ -29,16 +29,18 @@ public class EventsHandler implements Listener
     {
         if(e.getBlock() != null)
         {
-            if(blocks.contains(e.getBlock().getType().toString()))
+            if(!DashRays.names.contains(e.getPlayer().getName()))
             {
-                for(String name : DashRays.names)
                 {
-                    if(Bukkit.getPlayerExact(name) != null)
+                    for(String name : DashRays.names)
                     {
-                        Bukkit.getPlayerExact(name).sendMessage(notify_message.replace("%p%", e.getPlayer().getName()).replace("%b%", e.getBlock().getType().toString().toLowerCase()));
+                        if(Bukkit.getPlayerExact(name) != null)
+                        {
+                            Bukkit.getPlayerExact(name).sendMessage(notify_message.replace("%p%", e.getPlayer().getName()).replace("%b%", e.getBlock().getType().toString().toLowerCase()));
+                        };
                     };
                 };
-            };
+            }
         };
     };
     
