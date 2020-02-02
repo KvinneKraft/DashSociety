@@ -11,3 +11,8 @@ meltables:
     - 'GOLDEN_SWORD GOLD_INGOT 2'
     - 'HOPPER IRON_INGOT 4'
     - 'DIAMOND_PICKAXE DIAMOND 3'
+    
+    
+# what permission is required for the use of the commands
+# that are available?
+command-permission: 'dashsmelter.command'

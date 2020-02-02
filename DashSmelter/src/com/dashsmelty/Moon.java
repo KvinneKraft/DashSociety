@@ -28,7 +28,7 @@ public class Moon
     
     public static JavaPlugin getGlobalPlugin()
     {
-        return null;
+        return DashSmelter.plugin;
     };
     
     public void DetonateFirework(Location location, Color mcolor, Color fcolor, FireworkEffect.Type type)
@@ -56,5 +56,10 @@ public class Moon
         plugin.getConfig();
        
         config = plugin.getConfig();             
+    };
+    
+    public static void SaveConfig()
+    {
+        getGlobalPlugin().saveConfig();
     };
 };

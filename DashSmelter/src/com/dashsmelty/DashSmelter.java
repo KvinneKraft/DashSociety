@@ -10,6 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DashSmelter extends JavaPlugin
 {
     public static FileConfiguration config;
+    public static JavaPlugin plugin;
+    public static Furnace furnace;
     
     @Override
     public void onEnable()
@@ -19,6 +21,7 @@ public class DashSmelter extends JavaPlugin
         saveDefaultConfig();
         
         config = getConfig();
+        plugin = this;
         
         Furnace furnace = new Furnace();
         furnace.RegisterRecipes();
