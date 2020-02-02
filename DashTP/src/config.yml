@@ -1,1 +1,31 @@
 
+#
+# Dashies Configuration File
+#
+
+cooldown: 30
+
+coords:
+    max-x: 5000
+    min-x: -5000
+    
+    max-y: 150
+    min-y: 3
+    
+    max-z: 5000
+    min-z: 5000
+
+allowed-worlds:
+    - 'world'
+
+error-messages:
+    - '&cCorrect syntax: &7/dashtp [go | setrange | reload]' # also /rtp and /wild
+    - ''
+    - '' 
+    - ''
+    
+success-messages:
+    - ''
+    - ''
+    - ''
+    - ''

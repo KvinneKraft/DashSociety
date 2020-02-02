@@ -4,7 +4,6 @@
 
 package com.dashness;
 
-import java.util.Arrays;
 import java.util.List;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -47,19 +46,8 @@ public class DashTP extends JavaPlugin
     
     class CommandHandler implements CommandExecutor
     {
-        List<String> msg = Arrays.asList(
-            new String[] 
-            {
-                Moony.transStr(""),
-                Moony.transStr(""),
-                Moony.transStr(""),
-                Moony.transStr(""),
-                Moony.transStr(""),
-                Moony.transStr(""),
-                Moony.transStr(""),
-                Moony.transStr(""),
-            }
-        );
+        List<String> err = config.getStringList("erorr-messages");
+        List<String> scc = config.getStringList("success-messages");
         
         @Override
         public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -67,7 +55,35 @@ public class DashTP extends JavaPlugin
             if(!(s instanceof Player))
                 return false;
             
+            Player p = (Player) s;
             
+            if(as.length < 1)
+            {
+                p.sendMessage(err.get(0));
+                return false;
+            };
+            
+            a = as[0].toLowerCase();
+            
+            if(a.equals("go"))
+            {
+                // teleport
+            }
+            
+            else if(a.equals("reload"))
+            {
+                
+            }
+            
+            else if(a.equals("setrange"))
+            {
+                
+            }
+            
+            else
+            {
+                p.sendMessage(err.get(0));
+            };
             
             return false;
         };
