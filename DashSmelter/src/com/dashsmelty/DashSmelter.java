@@ -12,7 +12,7 @@ public class DashSmelter extends JavaPlugin
     public static FileConfiguration config;
     public static JavaPlugin plugin;
     public static Furnace furnace;
-    
+
     @Override
     public void onEnable()
     {
@@ -20,10 +20,10 @@ public class DashSmelter extends JavaPlugin
         
         saveDefaultConfig();
         
-        config = getConfig();
+        config = (FileConfiguration)this.getConfig();
         plugin = this;
         
-        Furnace furnace = new Furnace();
+        furnace = new Furnace();
         furnace.RegisterRecipes();
         
         getCommand("dashsmelt").setExecutor(new CommandsHandler());

@@ -6,6 +6,7 @@ package com.dashsmelty;
 
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,7 +30,8 @@ public class CommandsHandler implements CommandExecutor
             Moon.transStr("&cThe recipe already exists."),
             Moon.transStr("&aThe recipe has been removed."),
             Moon.transStr("&cThe recipe does not exist."),
-            Moon.transStr("&cYou are not supposed to use this command, huh?")
+            Moon.transStr("&cYou are not supposed to use this command, huh?"),
+            Moon.transStr("&cThe material given is not valid."),
         }
     );
     
@@ -43,7 +45,7 @@ public class CommandsHandler implements CommandExecutor
         
         Player p = (Player)s;
         
-        if(p.hasPermission(command_permission))
+        if(!p.hasPermission(command_permission))
         {
             p.sendMessage(msg.get(7));
             return false;
@@ -60,25 +62,34 @@ public class CommandsHandler implements CommandExecutor
         if(arg.equals("reload"))
         {
             p.sendMessage(msg.get(1));
-            
-            Moon.ReloadConfig();
+        
+            DashSmelter.furnace.RegisterRecipes();
             
             p.sendMessage(msg.get(2));
         }
         
+        // Check if source and result are items.
+        // Check if amount is an integer.
+        // Make it not require _
         else if((arg.equals("add")) && (args.length >= 4))
         {
-            String source = args[1];
+            String source = args[1].toUpperCase();
             
             if(!DashSmelter.furnace.doesSourceExist(source))
             {
-                String result = args[2];
+                String result = args[2].toUpperCase();
                 String amount = args[3];
                 
+                if((Material.getMaterial(source) == null) || (Material.getMaterial(result) == null) || (Integer.valueOf(amount) == null))
+                {
+                    p.sendMessage(msg.get(8));
+                    return false;
+                };
+                    
                 String recipe = source + " " + result + " " + amount;
                 
                 DashSmelter.furnace.raw_melt_recipes.add(recipe);
-                DashSmelter.furnace.updateMeltRecipes();
+                DashSmelter.furnace.SetConfigRecipes();
                 
                 p.sendMessage(msg.get(3));
             }
@@ -89,6 +100,9 @@ public class CommandsHandler implements CommandExecutor
             };
         }
         
+        // Check if source and result are items.
+        // Check if amount is an integer.
+        // Make it not require _
         else if(arg.equals("del") && (args.length >= 2))
         {
             String source = args[1];
@@ -103,7 +117,7 @@ public class CommandsHandler implements CommandExecutor
                 };
                 
                 DashSmelter.furnace.raw_melt_recipes.remove(index);
-                DashSmelter.furnace.updateMeltRecipes();
+                DashSmelter.furnace.SetConfigRecipes();
                 
                 p.sendMessage(msg.get(5));
             }

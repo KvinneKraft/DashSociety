@@ -12,7 +12,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class Moon
 {
@@ -24,11 +23,6 @@ public class Moon
     public static FileConfiguration getGlobalConfig()
     {
         return DashSmelter.config;
-    };
-    
-    public static JavaPlugin getGlobalPlugin()
-    {
-        return DashSmelter.plugin;
     };
     
     public void DetonateFirework(Location location, Color mcolor, Color fcolor, FireworkEffect.Type type)
@@ -47,19 +41,8 @@ public class Moon
         System.out.println(transStr("(Dash Smelter): " + str));
     };
     
-    public static void ReloadConfig()
-    {
-        JavaPlugin plugin = getGlobalPlugin();
-        FileConfiguration config = getGlobalConfig();
-        
-        plugin.reloadConfig();
-        plugin.getConfig();
-       
-        config = plugin.getConfig();             
-    };
-    
     public static void SaveConfig()
     {
-        getGlobalPlugin().saveConfig();
+        DashSmelter.plugin.saveConfig();
     };
 };
