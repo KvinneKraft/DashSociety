@@ -2,7 +2,7 @@
 // Author: Dashie
 // Version: 1.0
 
-package DashSmelter.src.com.dashsmelty;
+package com.dashsmelty;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +14,7 @@ public class DashSmelter extends JavaPlugin
     @Override
     public void onEnable()
     {
-        Moon.print("The plugin is currently being initialized ....");
+        Moon.Print("The plugin is currently being initialized ....");
         
         saveDefaultConfig();
         
@@ -23,12 +23,14 @@ public class DashSmelter extends JavaPlugin
         Furnace furnace = new Furnace();
         furnace.RegisterRecipes();
         
-        Moon.print("The plugin is now running!");
+        getCommand("dashsmelt").setExecutor(new CommandsHandler());
+        
+        Moon.Print("The plugin is now running!");
     };
     
     @Override
     public void onDisable()
     {
-        Moon.print("The plugin has been disabled.");
+        Moon.Print("The plugin has been disabled.");
     };
 };

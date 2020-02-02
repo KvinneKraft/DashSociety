@@ -23,4 +23,9 @@ public class Moony
     {
         System.out.println("(Dashies Phuntumz): " + str);
     };
+    
+    public static String removeLastChar(String str)
+    {
+        return str.substring(0, str.length() - 1);
+    };
 };

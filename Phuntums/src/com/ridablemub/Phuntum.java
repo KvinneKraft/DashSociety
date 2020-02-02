@@ -47,7 +47,7 @@ public class Phuntum extends JavaPlugin
         @EventHandler
         public void onDismount(EntityDismountEvent e)
         {
-            if(e.getDismounted().getMetadata("phuntumz") != null)
+            if(e.getDismounted().hasMetadata("phuntumz"))
             {
                 ((Player)e.getEntity()).sendMessage(success_dismounted.replace("%m%", e.getDismounted().getType().toString().replace("-", " ")));
                 e.getDismounted().remove();            
@@ -86,10 +86,19 @@ public class Phuntum extends JavaPlugin
             else if((args[0].equalsIgnoreCase("ride")) && (args.length > 1))
             {
                 Location location = p.getLocation();
+                String mob = "";
                 
-                if(EntityType.fromName(args[1].toUpperCase()) != null)
+                for (int id = 1; id < args.length; id += 1)
                 {
-                    LivingEntity entity = (LivingEntity)location.getWorld().spawnEntity(location, EntityType.fromName(args[1].toUpperCase()));
+                    mob += args[id] + " ";
+                };
+                
+                mob = Moony.removeLastChar(mob);
+                mob = mob.replace(" ", "_");
+                
+                if(EntityType.fromName(mob) != null)
+                {
+                    LivingEntity entity = (LivingEntity)location.getWorld().spawnEntity(location, EntityType.fromName(mob.toUpperCase()));
                     
                     if((entity instanceof Creature) && (!(entity instanceof Player)) && (entity != null))
                     {

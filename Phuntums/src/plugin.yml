@@ -9,5 +9,5 @@ api-version: 1.13
 
 commands:
     phuntums:
-        aliases: [mobs, phantom, phunt]
+        aliases: [mobs, phantom, phunt, phuntum]
         description: ride a mub
