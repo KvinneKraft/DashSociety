@@ -13,13 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandsHandler implements CommandExecutor
-{
-    // To-Do:
-    //
-    // - Reload Command
-    // - Add Command
-    // - Remove Command
-    
+{   
     List<String> msg = Arrays.asList(
         new String[]
         {
