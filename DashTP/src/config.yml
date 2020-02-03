@@ -18,14 +18,17 @@ coords:
 allowed-worlds:
     - 'world'
 
+admin-permission: 'dashtp.admin'
+teleport-permission: 'dashtp.tp'
+
 error-messages:
-    - '&cCorrect syntax: &7/dashtp [go | setrange | reload]' # also /rtp and /wild
-    - ''
-    - '' 
-    - ''
+    - '&cCorrect syntax: &7/dashtp go' # also /rtp and /wild
+    - '&cCorrect syntax: &7/dashtp [go | setrange | addworld | delworld | reload] [<max-x> <min-x> <max-y> <min-y> <max-z> <min-z> | <world1,world2,world3>]'
+    - '&cYou lack sufficient permissions.' 
+    - '&cExpected an integral value, yet received a none integral value?'
     
 success-messages:
-    - ''
-    - ''
-    - ''
+    - '&aReloading the config ....'
+    - '&aThe config has been reloaded.'
+    - '&a'
     - ''
