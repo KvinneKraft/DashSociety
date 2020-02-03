@@ -4,7 +4,7 @@
 #
 
 # The cost per random teleportation: (set to -1 to disable)
-teleport-cost: 200
+teleport-cost: -1
 
 # Teleportation cooldown in seconds: (set to -1 to disable)
 cooldown: 30
@@ -15,13 +15,13 @@ coords:
     min-x: -5000
     
     max-y: 150
-    min-y: 3
+    min-y: 40
     
     max-z: 5000
-    min-z: 5000
+    min-z: -5000
 
 # What block should be placed in the water or lava if any is found: (set to none to disable)( 
-liquid-block: 'none'
+liquid-block: 'PODZOL'
 
 # Worlds where teleportation is allowed:
 allowed-worlds:
@@ -54,3 +54,5 @@ success-messages:
     - '&aThe world &b%w% &ahas been removed from the config.'
     - '&a%m%$ has been substracted from your account for teleporting.'
     - '&aYou may now use /rtp again.'
+    - '&aYou have been teleported to &eX:%x% Y:%y% Z:%z% &a!'
+    - '&aThe new coordination range has been set!'

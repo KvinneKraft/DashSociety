@@ -6,6 +6,7 @@ package com.dashness;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,7 +42,7 @@ public class DashTP extends JavaPlugin
         config = getConfig();
         plugin = this;
         
-        econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+        //econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
         
         getCommand("dashtp").setExecutor(new CommandHandler());
         
@@ -93,7 +94,14 @@ public class DashTP extends JavaPlugin
             
             config = plugin.getConfig();  
             
-            // Add missing things
+            admin_permission = config.getString("admin-permission");
+            no_cost_permission = config.getString("no-cost-permission");
+            teleport_permission = config.getString("teleport-permission");
+            no_cooldown_permission = config.getString("no-cooldown-permission");
+        
+            teleport_cost = config.getInt("teleport-cost");
+        
+            liquid_block = Material.getMaterial(config.getString("liquid-block"));
             
             worlds = config.getStringList("allowed-worlds");
             
@@ -108,19 +116,21 @@ public class DashTP extends JavaPlugin
             
             cooldown = config.getInt("cooldown");                      
             
+            SetupMessages();
+            
             return;
         };
         
         private void SetupMessages()
         {
             scc = config.getStringList("success-messages");
-            err = config.getStringList("erorr-messages");
+            err = config.getStringList("error-messages");
             
             for(String str : scc)
-                str = Moony.transStr(str);
+                scc.set(scc.indexOf(str), Moony.transStr(str));
             
             for(String str : err)
-                str = Moony.transStr(str);
+                err.set(err.indexOf(str), Moony.transStr(str));
             
             return; 
         };
@@ -142,18 +152,17 @@ public class DashTP extends JavaPlugin
             if(!(s instanceof Player))
                 return false;
             
-            Player p = (Player) s;
+            if((scc == null) || (err == null))
+            {
+                RefreshData();                       
+            };
+            
+            Player p = (Player) s;            
             
             if(as.length < 1)
             {
                 p.sendMessage(err.get(0));
                 return false;
-            }
-            
-            else if((scc == null) || (err == null))
-            {
-                SetupMessages();
-                RefreshData();                
             };
             
             a = as[0].toLowerCase();
@@ -176,9 +185,9 @@ public class DashTP extends JavaPlugin
                             return false;
                         };
                     };
-                }
+                };
                 
-                if(worlds.contains(p.getWorld().getName()))
+                if(!worlds.contains(p.getWorld().getName()))
                 {
                     p.sendMessage(err.get(8));
                     return false;
@@ -199,8 +208,10 @@ public class DashTP extends JavaPlugin
                 
                 double x, y = maxy, z;
                 
-                x = Math.floor(Math.random() * (maxx - minx + 1) + maxx);
-                z = Math.floor(Math.random() * (maxz - minz + 1) + maxz);
+                Random rand = new Random();
+                
+                x = minx + (maxx - minx) * rand.nextDouble();//Math.floor(Math.random() * ((maxx - minx) + 1)) + maxx;
+                z = minz + (maxz - minz) * rand.nextDouble(); //Math.floor(Math.random() * ((maxz - minz) + 1)) + maxz;
                 
                 World world = p.getWorld();
                 Location location = new Location(world, x, y, z);
@@ -339,6 +350,9 @@ public class DashTP extends JavaPlugin
                 minz = coords.get(5);
                 
                 UpdateConfig();
+                RefreshData();
+                
+                p.sendMessage(scc.get(7));
             }
             
             else if((a.equals("addworld")) || (a.equals("delworld")))
@@ -377,7 +391,7 @@ public class DashTP extends JavaPlugin
                     if(a.equals("addworld"))
                     {
                         worlds.add(world);
-                        p.sendMessage(err.get(2).replace("%w%", world));
+                        p.sendMessage(scc.get(2).replace("%w%", world));
                     }
                     
                     else//delworld
@@ -388,6 +402,17 @@ public class DashTP extends JavaPlugin
                 };
                 
                 UpdateConfig();
+            }
+            
+            else if(a.equals("admin"))
+            {
+                if(!p.hasPermission(admin_permission))
+                {
+                    p.sendMessage(err.get(2));
+                    return false;
+                };
+                
+                p.sendMessage(err.get(1));
             }
             
             else
