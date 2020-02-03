@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -90,6 +93,8 @@ public class DashTP extends JavaPlugin
             
             config = plugin.getConfig();  
             
+            // Add missing things
+            
             worlds = config.getStringList("allowed-worlds");
             
             maxx = config.getDouble("coords.max-x");
@@ -121,12 +126,15 @@ public class DashTP extends JavaPlugin
         };
         
         String admin_permission = config.getString("admin-permission");
+        String no_cost_permission = config.getString("no-cost-permission");
         String teleport_permission = config.getString("teleport-permission");
         String no_cooldown_permission = config.getString("no-cooldown-permission");
         
         int teleport_cost = config.getInt("teleport-cost");
         
         List<String> player_cache = new ArrayList<String>();
+        
+        Material liquid_block = Material.getMaterial(config.getString("liquid-block"));
         
         @Override
         public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -150,11 +158,6 @@ public class DashTP extends JavaPlugin
             
             a = as[0].toLowerCase();
             
-            // To-Do:
-            // # check for cooldown
-            // # inject cooldown
-            // # purchasable teleports 
-            
             if(a.equals("go"))
             {
                 if(!p.hasPermission(teleport_permission))
@@ -165,11 +168,14 @@ public class DashTP extends JavaPlugin
                 
                 else if(cooldown > 1)
                 {
-                    if(player_cache.contains(p.getName()))
+                    if(!p.hasPermission(no_cooldown_permission))
                     {
-                        p.sendMessage(err.get(7));
-                        return false;
-                    }
+                        if(player_cache.contains(p.getName()))
+                        {
+                            p.sendMessage(err.get(7).replace("%c%", String.valueOf(cooldown)));
+                            return false;
+                        };
+                    };
                 }
                 
                 if(worlds.contains(p.getWorld().getName()))
@@ -181,43 +187,102 @@ public class DashTP extends JavaPlugin
                 else
                 if(teleport_cost > 0)
                 {
-                    if(!econ.has(p, teleport_cost))
+                    if(!p.hasPermission(no_cost_permission))
                     {
-                        p.sendMessage(err.get(6));
-                        return false;
+                        if(!econ.has(p, teleport_cost))
+                        {
+                            p.sendMessage(err.get(6).replace("%m%", String.valueOf(teleport_cost)));
+                            return false;
+                        };
                     };
                 };
                 
-                // Teleport
+                double x, y = maxy, z;
+                
+                x = Math.floor(Math.random() * (maxx - minx + 1) + maxx);
+                z = Math.floor(Math.random() * (maxz - minz + 1) + maxz);
+                
+                World world = p.getWorld();
+                Location location = new Location(world, x, y, z);
+                
+                boolean isLand = false;
+                
+                while(!isLand)
+                {
+                    if(y <= miny)
+                    {
+                        p.sendMessage(err.get(9));
+                        return false;
+                    };
+                    
+                    location.setY(y);
+                    
+                    if(location.getBlock().getType() != Material.AIR)
+                    {
+                        if((liquid_block != null) && (!liquid_block.toString().toUpperCase().equals("NONE")))
+                        {
+                            Material block_type = location.getBlock().getType();
+                            
+                            if((block_type == Material.WATER) || (block_type == Material.LAVA))
+                            {
+                                location.getBlock().setType(liquid_block);
+                            };
+                        };
+                            
+                        isLand = true;
+                    }
+                    
+                    else y--;
+                };
                 
                 if(cooldown > 1)
                 {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, 
-                        new Runnable()
-                        {
-                            @Override
-                            public void run()
+                    if(!p.hasPermission(no_cooldown_permission))
+                    {
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, 
+                            new Runnable()
                             {
-                                if(player_cache.contains(p.getName()))
+                                @Override
+                                public void run()
                                 {
-                                    player_cache.remove(p.getName());
-                                    
-                                    if(p.isOnline())
+                                    if(player_cache.contains(p.getName()))
                                     {
-                                        p.sendMessage(scc.get(5));
+                                        player_cache.remove(p.getName());
+                                    
+                                        if(p.isOnline())
+                                        {
+                                            p.sendMessage(scc.get(5));
+                                        };
                                     };
                                 };
-                            };
-                        }, 
-                        cooldown * 20
-                    );
+                            }, 
+                            
+                            cooldown * 20
+                        );
+                        
+                        player_cache.add(p.getName());                        
+                    };
                 }
                 
                 if(teleport_cost > 0)
                 {
-                    econ.withdrawPlayer(p, teleport_cost);
-                    p.sendMessage(scc.get(4));                    
+                    if(!p.hasPermission(no_cost_permission))
+                    {
+                        econ.withdrawPlayer(p, teleport_cost);
+                        p.sendMessage(scc.get(4).replace("%m%", String.valueOf(teleport_cost)));                    
+                    };
                 };
+                
+                location.setY(location.getY() + 3);
+                p.teleport(location);
+                
+                String sx, sy, sz;
+                
+                sx = String.valueOf((int)x);
+                sy = String.valueOf((int)y);
+                sz = String.valueOf((int)z);
+                
+                p.sendMessage(scc.get(6).replace("%x%", sx).replace("%y%", sy).replace("%z%", sz));                
             }
             
             else if(a.equals("reload"))

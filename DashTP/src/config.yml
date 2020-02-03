@@ -6,10 +6,10 @@
 # The cost per random teleportation: (set to -1 to disable)
 teleport-cost: 200
 
-# Teleportation Cooldown: (set to -1 to disable)
+# Teleportation cooldown in seconds: (set to -1 to disable)
 cooldown: 30
 
-# Teleportation randomization range:
+# Teleportation randomization range, can be decimals:
 coords:
     max-x: 5000
     min-x: -5000
@@ -20,12 +20,16 @@ coords:
     max-z: 5000
     min-z: 5000
 
+# What block should be placed in the water or lava if any is found: (set to none to disable)( 
+liquid-block: 'none'
+
 # Worlds where teleportation is allowed:
 allowed-worlds:
     - 'world'
 
 # Configurable permission sets:
 admin-permission: 'dashtp.admin'
+no-cost-permission: 'dashtp.tp.nocost'
 teleport-permission: 'dashtp.tp'
 no-cooldown-permission: 'dashtp.tp.nocooldown'
 
@@ -40,6 +44,7 @@ error-messages:
     - '&cYou need at least %m%$ in order to teleport.'
     - '&cYou must at least %c% seconds before teleporting again.'
     - '&cYou may not use this command in this world.'
+    - '&cWe were unable to find a location, please try again.'
     
 # Success Messages:
 success-messages:
