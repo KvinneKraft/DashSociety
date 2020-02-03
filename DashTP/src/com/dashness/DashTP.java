@@ -42,7 +42,7 @@ public class DashTP extends JavaPlugin
         config = getConfig();
         plugin = this;
         
-        //econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+        econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
         
         getCommand("dashtp").setExecutor(new CommandHandler());
         
