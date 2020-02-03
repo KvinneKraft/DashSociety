@@ -122,6 +122,11 @@ public class DashTP extends JavaPlugin
         
         String admin_permission = config.getString("admin-permission");
         String teleport_permission = config.getString("teleport-permission");
+        String no_cooldown_permission = config.getString("no-cooldown-permission");
+        
+        int teleport_cost = config.getInt("teleport-cost");
+        
+        List<String> player_cache = new ArrayList<String>();
         
         @Override
         public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -145,10 +150,74 @@ public class DashTP extends JavaPlugin
             
             a = as[0].toLowerCase();
             
+            // To-Do:
+            // # check for cooldown
+            // # inject cooldown
+            // # purchasable teleports 
+            
             if(a.equals("go"))
             {
-                // check for perm
-                // teleport
+                if(!p.hasPermission(teleport_permission))
+                {
+                    p.sendMessage(err.get(2));
+                    return false;
+                }
+                
+                else if(cooldown > 1)
+                {
+                    if(player_cache.contains(p.getName()))
+                    {
+                        p.sendMessage(err.get(7));
+                        return false;
+                    }
+                }
+                
+                if(worlds.contains(p.getWorld().getName()))
+                {
+                    p.sendMessage(err.get(8));
+                    return false;
+                }
+                
+                else
+                if(teleport_cost > 0)
+                {
+                    if(!econ.has(p, teleport_cost))
+                    {
+                        p.sendMessage(err.get(6));
+                        return false;
+                    };
+                };
+                
+                // Teleport
+                
+                if(cooldown > 1)
+                {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, 
+                        new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                if(player_cache.contains(p.getName()))
+                                {
+                                    player_cache.remove(p.getName());
+                                    
+                                    if(p.isOnline())
+                                    {
+                                        p.sendMessage(scc.get(5));
+                                    };
+                                };
+                            };
+                        }, 
+                        cooldown * 20
+                    );
+                }
+                
+                if(teleport_cost > 0)
+                {
+                    econ.withdrawPlayer(p, teleport_cost);
+                    p.sendMessage(scc.get(4));                    
+                };
             }
             
             else if(a.equals("reload"))
@@ -227,12 +296,14 @@ public class DashTP extends JavaPlugin
                 {
                     if(a.equals("addworld"))
                     {
-                        // World already exists
+                        p.sendMessage(err.get(4).replace("%w%", world));
+                        return false;
                     }
                     
                     else//delworld
                     {
-                        // Remove the world
+                        worlds.remove(world);
+                        p.sendMessage(scc.get(3).replace("%w%", world));
                     };
                 }
                 
@@ -240,14 +311,18 @@ public class DashTP extends JavaPlugin
                 {
                     if(a.equals("addworld"))
                     {
-                        // Add the world
+                        worlds.add(world);
+                        p.sendMessage(err.get(2).replace("%w%", world));
                     }
                     
                     else//delworld
                     {
-                        // World does not exist.
+                        p.sendMessage(err.get(5).replace("%w%", world));
+                        return false;
                     };
                 };
+                
+                UpdateConfig();
             }
             
             else

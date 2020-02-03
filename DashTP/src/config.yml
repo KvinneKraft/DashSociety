@@ -3,8 +3,13 @@
 # Dashies Configuration File
 #
 
+# The cost per random teleportation: (set to -1 to disable)
+teleport-cost: 200
+
+# Teleportation Cooldown: (set to -1 to disable)
 cooldown: 30
 
+# Teleportation randomization range:
 coords:
     max-x: 5000
     min-x: -5000
@@ -15,20 +20,32 @@ coords:
     max-z: 5000
     min-z: 5000
 
+# Worlds where teleportation is allowed:
 allowed-worlds:
     - 'world'
 
+# Configurable permission sets:
 admin-permission: 'dashtp.admin'
 teleport-permission: 'dashtp.tp'
+no-cooldown-permission: 'dashtp.tp.nocooldown'
 
+# Error Messages:
 error-messages:
     - '&cCorrect syntax: &7/dashtp go' # also /rtp and /wild
     - '&cCorrect syntax: &7/dashtp [go | setrange | addworld | delworld | reload] [<max-x> <min-x> <max-y> <min-y> <max-z> <min-z> | <world1,world2,world3>]'
     - '&cYou lack sufficient permissions.' 
     - '&cExpected an integral value, yet received a none integral value?'
+    - '&cThe world &4%w% &cis already in the configuration file.'    
+    - '&cThe world &4%w% &cis not in the configuration file.'
+    - '&cYou need at least %m%$ in order to teleport.'
+    - '&cYou must at least %c% seconds before teleporting again.'
+    - '&cYou may not use this command in this world.'
     
+# Success Messages:
 success-messages:
     - '&aReloading the config ....'
     - '&aThe config has been reloaded.'
-    - '&a'
-    - ''
+    - '&aThe world &b%w% &ahas been added to the config.'
+    - '&aThe world &b%w% &ahas been removed from the config.'
+    - '&a%m%$ has been substracted from your account for teleporting.'
+    - '&aYou may now use /rtp again.'
