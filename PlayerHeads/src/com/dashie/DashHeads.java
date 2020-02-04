@@ -1,13 +1,24 @@
 
 package com.dashie;
 
+import java.util.Arrays;
+import java.util.List;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //(To-Do):
@@ -27,43 +38,155 @@ public class DashHeads extends JavaPlugin
     public FileConfiguration config = getConfig();
     public JavaPlugin plugin = this;
     
+    public Economy econ;
+    
     @Override
     public void onEnable()
     {
-        // Enable Message here
+        Moony.Print("Loading Dash Heads 1.0 ....");
+        
         saveDefaultConfig();
         
-        this.getServer().getPluginManager().registerEvents(new EventsHandler(), plugin);
-        getCommand("dashheads").setExecutor(new CommandsHandler());
-        
-    };
-    
-    class CommandsHandler implements CommandExecutor
-    {
-        // Efficient way to handle Messages here.
-        
-        @Override
-        public boolean onCommand(CommandSender s, Command c, String a, String[] as)
+        if(!hasVault())
         {
-            if(!(s instanceof Player))
-                return false;
-            
-            // Further processing here.
-            
-            return true;
-        };
+            Moony.Print("VAULT could not be found, it is required!");
+            this.getPluginLoader().disablePlugin(this);
+        };        
+        
+        econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+        
+        getServer().getPluginManager().registerEvents(new EventsHandler(), plugin);
+        
+        Moony.Print("Dash Heads 1.0 is now up and running!");
     };
     
     @Override
     public void onDisable()
     {
-        // Disable Message here
+        Moony.Print("Dash Heads 1.0 is now disabled.");
     };
     
     class EventsHandler implements Listener
     {
-        // Event Handlers here (EntityDeath, PlayerDeath ect)
+        String drop_permission = config.getString("head-drop-permission");
+        
+        String victim_message = Moony.transStr(config.getString("victim-message"));        
+        String killer_message = Moony.transStr(config.getString("killer-message"));
+        
+        double reward_percentage = config.getDouble("reward-percentage");
+        double minimum_balance = config.getDouble("minimum-balance");
+        
+        @EventHandler
+        public void onPlayerDeath(PlayerDeathEvent e)
+        {
+            if(!(e.getEntity().getKiller() instanceof Player))
+                return;
+            
+            Player killer = e.getEntity().getKiller();            
+            
+            if(!killer.hasPermission(drop_permission))
+                return;
+            
+            Player victim = e.getEntity();
+            
+            int killer_reward = 0; 
+            
+            if(econ.getBalance(victim) > minimum_balance)
+            {
+                killer_reward = ((int)(econ.getBalance(victim) * reward_percentage));
+                econ.withdrawPlayer(victim, killer_reward);
+            };
+            
+            victim.sendMessage(victim_message.replace("%k%", killer.getName()).replace("%v%", victim.getName()).replace("%m%", String.valueOf((int)killer_reward)));
+            killer.sendMessage(killer_message.replace("%k%", killer.getName()).replace("%v%", victim.getName()).replace("%m%", String.valueOf((int)killer_reward)));
+            
+            killer.getInventory().addItem(HeadItem(killer_reward, killer.getName(), victim));            
+            
+            return;
+        };
+        
+        List<String> head_lore = config.getStringList("player-head-lore");
+        String head_name = Moony.transStr(config.getString("player-head-name"));
+        
+        boolean first_run = true;
+        
+        private ItemStack HeadItem(double killer_reward, String killer_name, Player victim)
+        {
+            ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1);
+            SkullMeta head_meta = (SkullMeta)head.getItemMeta();
+            
+            for(String line : head_lore)
+                head_lore.set(head_lore.indexOf(line), Moony.transStr(line));
+            
+            String name = head_name.replace("%m%", String.valueOf(killer_reward)).replace("%p%", killer_name);                        
+            List<String> lore = head_lore;
+            
+            if(first_run)
+            {
+                for(String line : head_lore)
+                {
+                    head_lore.set(head_lore.indexOf(line), Moony.transStr(line));                
+                };
+                
+                first_run = false;
+            };
+            
+            for(int id = 0; id < lore.size(); id += 1)
+                lore.set(id, lore.get(id).replace("%m%", String.valueOf(killer_reward).replace("%p%", killer_name)));
+           
+            head_meta.setCustomModelData(2020);            
+            head_meta.setOwningPlayer(victim);
+            head_meta.setDisplayName(name);
+            head_meta.setLore(lore);
+            
+            head.setItemMeta(head_meta);
+            
+            return head;
+        };
+        
+        String redeem_message = Moony.transStr(config.getString("redeem-message"));
+        
+        @EventHandler
+        public void onPlayerInteract(PlayerInteractEvent e)
+        {
+            if((e.getAction() != Action.RIGHT_CLICK_AIR) && (e.getAction() != Action.RIGHT_CLICK_BLOCK))
+                return;
+            
+            if((e.getMaterial() == null) || (!e.getItem().hasItemMeta()) || (e.getMaterial() != Material.PLAYER_HEAD) || (e.getItem().getItemMeta().getCustomModelData() != 2020))
+                return;
+            
+            Integer money = null;
+            
+            for(String lore : e.getItem().getItemMeta().getLore())
+            {
+                if(lore.contains("$"))
+                {
+                    money = Integer.valueOf(lore.replaceAll("[^0-9]", ""));
+                    money = money * e.getItem().getAmount();
+                    
+                    break;
+                };
+            };
+            
+            Player p = e.getPlayer();
+                   
+            p.sendMessage(redeem_message.replace("%m%", String.valueOf(money)));
+            p.getInventory().removeItem(e.getItem());
+            
+            econ.depositPlayer(p, money);
+
+            return;
+        };
     };
+    
+    public boolean hasVault()
+    {
+        if(Bukkit.getServer().getPluginManager().getPlugin("Vault") == null)
+            return false;
+        
+        else
+            return true;
+    };    
 };
 
 class Moony

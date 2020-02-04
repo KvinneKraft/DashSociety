@@ -23,14 +23,13 @@ public class EventsHandler implements Listener
     @EventHandler
     public void onFishy(PlayerFishEvent e)
     {
-        if(e.getCaught() == null)
+        if((e.getCaught() == null) || (!e.getPlayer().hasPermission(fishy_permission)))
             return;
         
-        // Implement Random Drops
+        Player p = e.getPlayer();
         
         int reward_id = 0;
         
-        Player p = e.getPlayer();
         p.sendMessage(reward_message.replace("%reward%", reward_materials.get(reward_id).getType().toString()));
         
         return;
