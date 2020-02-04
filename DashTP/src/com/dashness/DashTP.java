@@ -5,6 +5,7 @@
 package com.dashness;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import net.milkbowl.vault.economy.Economy;
@@ -369,20 +370,36 @@ public class DashTP extends JavaPlugin
                     return false;
                 };
                 
-                String world = as[1];
+                List<String> world_order = new ArrayList<>();
+                world_order.addAll(1, Arrays.asList(as[1].split(",")));
                 
-                if(worlds.contains(world))
+                boolean contains_world = false;                
+                
+                for(String world : world_order)
+                {
+                    if(worlds.contains(world))
+                    {
+                        contains_world = true;
+                        break;
+                    };
+                };
+                
+                if(contains_world)
                 {
                     if(a.equals("addworld"))
                     {
-                        p.sendMessage(err.get(4).replace("%w%", world));
+                        p.sendMessage(err.get(4).replace("%w%", as[1]));
                         return false;
                     }
                     
                     else//delworld
                     {
-                        worlds.remove(world);
-                        p.sendMessage(scc.get(3).replace("%w%", world));
+                        for(String world : world_order)
+                        {
+                            worlds.remove(world);               
+                        };
+                        
+                        p.sendMessage(scc.get(3).replace("%w%", as[1]));
                     };
                 }
                 
@@ -390,13 +407,17 @@ public class DashTP extends JavaPlugin
                 {
                     if(a.equals("addworld"))
                     {
-                        worlds.add(world);
-                        p.sendMessage(scc.get(2).replace("%w%", world));
+                        for(String world : world_order)
+                        {
+                            worlds.add(world);
+                        };
+                        
+                        p.sendMessage(scc.get(2).replace("%w%", as[1]));
                     }
                     
                     else//delworld
                     {
-                        p.sendMessage(err.get(5).replace("%w%", world));
+                        p.sendMessage(err.get(5).replace("%w%", as[1]));
                         return false;
                     };
                 };
