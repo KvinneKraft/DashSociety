@@ -60,6 +60,8 @@ public class DashHeads extends JavaPlugin
         Moony.Print("Dash Heads 1.0 is now up and running!");
     };
     
+    public // Add Commands:
+    
     @Override
     public void onDisable()
     {
