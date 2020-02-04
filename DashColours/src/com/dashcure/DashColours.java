@@ -10,7 +10,8 @@ public class DashColours extends JavaPlugin
     @Override
     public void onEnable()
     {
-        
+        //To-Do:
+        //- Coloured Chat per Permission Group
     };
     
     @Override
