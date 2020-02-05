@@ -21,8 +21,7 @@ public class EventsHandler implements Listener
     
     public static List<String> blocks = new ArrayList<String>();
     
-    String notify_message = Luna.transStr(config.getString("properties.notify-message"));
-    String notify_permiss = config.getString("properties.notify-permission");
+    public String notify_message, notify_permission;
     
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e)
@@ -54,7 +53,7 @@ public class EventsHandler implements Listener
     {
         if(default_toggle)
         {
-            if(e.getPlayer().hasPermission(notify_permiss))
+            if(e.getPlayer().hasPermission(notify_permission))
             {
                 Player p = e.getPlayer();
                 

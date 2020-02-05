@@ -6,7 +6,7 @@
 properties:
     # When a player with the bellow permission joins the server, should they be
     # notified about found blocks by default?
-    default-toggle-enabled: true
+    default-toggle-enabled: false
     
     # What message should privileged players receive when the above option has been
     # set to true?
@@ -34,7 +34,7 @@ properties:
     block-found-message: "&cI am sorry but this block is already in the list."
     
     # What message should you receive when invalid syntax has been received?
-    invalid-syntax-message: "&aCorrect Usage: &7/dashrays (toggle | add | del) (block name)"
+    invalid-syntax-message: "&aCorrect Usage: &7/dashrays (reload | toggle | add | del) (block name)"
     
     # What permission should a player have in order to be notified (/dashrays toggle)?
     notify-permission: "dashrays.notify"
@@ -51,4 +51,13 @@ properties:
         - 'ENDER_CHEST'
         - 'DIAMOND_ORE' 
         - 'EMERALD_ORE'
-        
+    
+    # What permission is required for the admin use of this plugin?
+    admin-permission: 'dashrays.admin'
+    
+    # What should be the message shown when permission is denied?
+    permission-denied-message: '&cYou may not use this command!'
+    
+    # What message should be shown when reloading the plugin?
+    reloading-message: '&aReloading Dashrays 1.0 ....'
+    reload-finish-message: '&aDashrays 1.0 has been reloaded!'

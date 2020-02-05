@@ -13,7 +13,8 @@ public class DashRays extends JavaPlugin
     
     public static List<String> names = new ArrayList<String>();    
     
-    public static EventsHandler eventsHandler;
+    public static EventsHandler events_handler;
+    public CommandsHandler commands_handler;
     
     @Override
     public void onEnable()
@@ -25,13 +26,14 @@ public class DashRays extends JavaPlugin
         plugin = this;        
         config = getConfig();
         
-        eventsHandler = new EventsHandler();
+        commands_handler = new CommandsHandler();        
+        events_handler = new EventsHandler();
         
-        if(eventsHandler.blocks.size() < 1)
-            eventsHandler.blocks = config.getStringList("properties.blocks");            
-        
-        getServer().getPluginManager().registerEvents(eventsHandler, this);
-        getCommand("dashrays").setExecutor(new CommandsHandler());
+        events_handler.blocks = config.getStringList("properties.blocks");            
+        commands_handler.refreshData();
+                
+        getServer().getPluginManager().registerEvents(events_handler, this);
+        getCommand("dashrays").setExecutor(commands_handler);
                 
         Luna.print("The Dash Rays plugin has been loaded successfully!");
     };

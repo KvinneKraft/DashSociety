@@ -15,34 +15,59 @@ public class CommandsHandler implements CommandExecutor
 {
     FileConfiguration config = Luna.getGlobalConfig();
     
-    String toggle_on_message = Luna.transStr(config.getString("properties.toggle-on-message"));
-    String toggle_off_message = Luna.transStr(config.getString("properties.toggle-off-message"));
+    String toggle_on_message, toggle_off_message, added_message, deleted_message, block_not_listed_message, 
+           block_is_listed_message, block_nofou_message, invalid_syntax, notify_permission, permission_deny_message,
+           admin_permission, reloading_message, reload_finish_message;
     
-    String added_message = Luna.transStr(config.getString("properties.add-block-message"));
-    String deleted_message = Luna.transStr(config.getString("properties.del-block-message"));
+    boolean f = false, t = true;
     
-    String block_not_listed_message = Luna.transStr(config.getString("properties.block-not-in-list-message"));
-    String block_is_listed_message = Luna.transStr(config.getString("properties.block-found-message"));    
-    String block_nofou_message = Luna.transStr(config.getString("properties.block-not-found-message"));
+    public void refreshData()
+    {
+        toggle_on_message = Luna.transStr(config.getString("properties.toggle-on-message"));
+        toggle_off_message = Luna.transStr(config.getString("properties.toggle-off-message"));
     
-    String invalid_syntax = Luna.transStr(config.getString("properties.invalid-syntax-message"));
-    String notify_permission = config.getString("properties.notify-permission");
+        added_message = Luna.transStr(config.getString("properties.add-block-message"));
+        deleted_message = Luna.transStr(config.getString("properties.del-block-message"));
+    
+        block_not_listed_message = Luna.transStr(config.getString("properties.block-not-in-list-message"));
+        block_is_listed_message = Luna.transStr(config.getString("properties.block-found-message"));    
+        block_nofou_message = Luna.transStr(config.getString("properties.block-not-found-message"));
+    
+        invalid_syntax = Luna.transStr(config.getString("properties.invalid-syntax-message"));
+        notify_permission = config.getString("properties.notify-permission");
+    
+        permission_deny_message = Luna.transStr(config.getString("properties.permission-denied-message"));
+        admin_permission = config.getString("properties.admin-permission");
+    
+        reloading_message = Luna.transStr(config.getString("properties.reloading-message"));
+        reload_finish_message = Luna.transStr(config.getString("properties.reload-finish-message"));
+        
+        DashRays.events_handler.notify_message = Luna.transStr(config.getString("properties.notify-message"));
+        DashRays.events_handler.notify_permission = config.getString("properties.notify-permission");        
+        DashRays.events_handler.blocks = config.getStringList("properties.blocks");
+    };
     
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String arg, String[] args)
+    public boolean onCommand(CommandSender s, Command cmd, String arg, String[] args)
     {
-        if(!(sender instanceof Player))
+        if(!(s instanceof Player))
             return false;
         
-        Player p = (Player) sender;
+        Player p = (Player) s;
         
-        if(args.length < 1)
+        if(!p.hasPermission(admin_permission))
+        {
+            p.sendMessage(permission_deny_message);
+            return f;
+        }
+        
+        else if(args.length < 1)
         {
             p.sendMessage(invalid_syntax);
-            return false;
+            return f;
         };
         
-        arg = args[0];
+        arg = args[0];    
         
         if(arg.equals("toggle"))
         {
@@ -59,57 +84,84 @@ public class CommandsHandler implements CommandExecutor
             };
         }
         
+        else if(arg.equals("reload"))
+        {
+            p.sendMessage(reloading_message);
+            
+            DashRays.plugin.getConfig();
+            DashRays.plugin.reloadConfig();
+            
+            DashRays.config = DashRays.plugin.getConfig();
+            config = DashRays.config;
+            
+            refreshData();
+            
+            p.sendMessage(reload_finish_message);
+        }        
+        
         else if(args.length < 2)
         {
             p.sendMessage(invalid_syntax);
-            return false;
+            return f;
         }
         
         else if((arg.equals("add")) || (arg.equals("del")))
         {
-            Material material = Material.getMaterial(args[1]);
+            String block = "NONE";
+            
+            for(int id = 1; id < args.length; id += 1)
+            {
+                if(block.contains("NONE"))
+                    block = block.replace("NONE", "");
+                
+                block += args[id].toUpperCase() + "_";
+            };
+            
+            block = block.substring(0, block.length() - 1);
+            Material material = Material.getMaterial(block);
             
             if(material == null)
             {
                 p.sendMessage(block_nofou_message);
-                return false;
+                return f;
             }
             
+            // I am optimizing this in the next update:
             if(arg.equals("add"))
             {
-                if(EventsHandler.blocks.contains(material.toString()))
+                if(EventsHandler.blocks.contains(block))
                 {
                     p.sendMessage(block_is_listed_message);
-                    return false;
+                    return f;
                 };
 
-                EventsHandler.blocks.add(material.toString());
+                EventsHandler.blocks.add(block);
                 Luna.updateConfig();
                 
-                p.sendMessage(added_message.replace("%b%", args[1]));
+                p.sendMessage(added_message.replace("%b%", block));
             }
             
             else if(arg.equals("del"))
             {
-                if(!EventsHandler.blocks.contains(material.toString()))
+                if(!EventsHandler.blocks.contains(block))
                 {
-                    p.sendMessage(block_not_listed_message.replace("%b%", args[1]));
-                    return false;
+                    p.sendMessage(block_not_listed_message.replace("%b%", block));
+                    return f;
                 };
                     
-                EventsHandler.blocks.remove(material.toString());
+                EventsHandler.blocks.remove(block);
                 Luna.updateConfig();
                 
-                p.sendMessage(deleted_message.replace("%b%", args[1]));
+                p.sendMessage(deleted_message.replace("%b%", block));
             }
         }
         
         else
         {
             p.sendMessage(invalid_syntax);
-            return false;
+            return f;
         };
             
-        return true;
+        return t;
     };
 };
