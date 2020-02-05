@@ -9,10 +9,12 @@
 # The configurable Player Head name and Player Head lore: 
 player-head-name: '&b(&eHead of &e&l%p%&b)' 
 
+
 player-head-lore: 
     - '&e------------------'
     - '&bWorth: &e%m%$'
     - '&e------------------'
+
 
 # Configurable permissions for this plugin:
 head-drop-permission: 'dashheads.drops'

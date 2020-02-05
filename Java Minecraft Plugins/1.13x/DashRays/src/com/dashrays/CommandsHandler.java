@@ -23,6 +23,12 @@ public class CommandsHandler implements CommandExecutor
     
     public void refreshData()
     {
+        DashRays.plugin.getConfig();
+        DashRays.plugin.reloadConfig();
+            
+        DashRays.config = DashRays.plugin.getConfig();
+        config = DashRays.config;        
+        
         toggle_on_message = Luna.transStr(config.getString("properties.toggle-on-message"));
         toggle_off_message = Luna.transStr(config.getString("properties.toggle-off-message"));
     
@@ -87,12 +93,6 @@ public class CommandsHandler implements CommandExecutor
         else if(arg.equals("reload"))
         {
             p.sendMessage(reloading_message);
-            
-            DashRays.plugin.getConfig();
-            DashRays.plugin.reloadConfig();
-            
-            DashRays.config = DashRays.plugin.getConfig();
-            config = DashRays.config;
             
             refreshData();
             

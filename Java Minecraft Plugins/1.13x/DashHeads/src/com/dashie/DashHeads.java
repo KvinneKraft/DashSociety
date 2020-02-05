@@ -40,6 +40,9 @@ public class DashHeads extends JavaPlugin
     
     public Economy econ;
     
+    EventsHandler events_handler = new EventsHandler();
+    CommandsHandler commands_handler = new CommandsHandler();
+    
     @Override
     public void onEnable()
     {
@@ -53,14 +56,95 @@ public class DashHeads extends JavaPlugin
             this.getPluginLoader().disablePlugin(this);
         };        
         
-        econ = getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+        econ = Bukkit.getServer().getServicesManager().getRegistration(Economy.class).getProvider();
         
-        getServer().getPluginManager().registerEvents(new EventsHandler(), plugin);
+        RefreshData();
+        
+        getServer().getPluginManager().registerEvents(events_handler, plugin);
+        getCommand("dashheads").setExecutor(commands_handler);
         
         Moony.Print("Dash Heads 1.0 is now up and running!");
     };
     
-    public // Add Commands:
+    public void RefreshData()
+    {
+        plugin.getConfig();
+        plugin.reloadConfig();
+      
+        config = plugin.getConfig();
+        
+        commands_handler.permission_denied_message = Moony.transStr("&cYou may not use this command.");
+        commands_handler.correct_syntax_message = Moony.transStr("&aCorrect Syntax: &e/dashheads [reload | info]");
+        commands_handler.information_message = Moony.transStr("&eHi, I &d&lD&5a&d&ls&5h&d&li&5e &eam the Developer of this plugin. See more of my work at &bhttps://github.com/KvinneKraft/Dashnarok");
+        commands_handler.reloading_message = Moony.transStr("&aReloading Dash Heads 1.0 ....");
+        commands_handler.reloaded_message = Moony.transStr("&aDash Heads 1.0 has been reloaded!");        
+        
+        commands_handler.admin_command_permission = config.getString("dashheads.admin");
+    
+        events_handler.drop_permission = config.getString("head-drop-permission");
+        
+        events_handler.victim_message = Moony.transStr(config.getString("victim-message"));        
+        events_handler.killer_message = Moony.transStr(config.getString("killer-message"));
+        
+        events_handler.reward_percentage = config.getDouble("reward-percentage");
+        events_handler.minimum_balance = config.getDouble("minimum-balance");        
+    };
+    
+    class CommandsHandler implements CommandExecutor
+    {
+        boolean t = true, f = false;
+        
+        String admin_command_permission, permission_denied_message, correct_syntax_message, information_message,
+               reloading_message, reloaded_message;
+        
+        @Override
+        public boolean onCommand(CommandSender s, Command c, String a, String[] as)
+        {
+            if(!(s instanceof Player))
+            {
+                Moony.Print("You may only use this command in-game.");
+                return f;
+            }
+            
+            Player p = (Player) s;
+            
+            if(!p.hasPermission(admin_command_permission))
+            {
+                p.sendMessage(permission_denied_message);
+                return f;
+            }
+            
+            else if(as.length < 1)
+            {
+                p.sendMessage(correct_syntax_message);
+                return f;
+            }
+            
+            a = as[0].toLowerCase();
+            
+            if(a.equals("reload"))
+            {
+                p.sendMessage(reloading_message);
+                
+                RefreshData();
+                
+                p.sendMessage(reloaded_message);
+            }
+            
+            else if(a.equals("info"))
+            {
+                p.sendMessage(information_message);
+            }            
+            
+            else
+            {
+                p.sendMessage(correct_syntax_message);
+                return f;
+            };
+                
+            return t;
+        };
+    };
     
     @Override
     public void onDisable()
@@ -70,13 +154,9 @@ public class DashHeads extends JavaPlugin
     
     class EventsHandler implements Listener
     {
-        String drop_permission = config.getString("head-drop-permission");
+        String drop_permission, victim_message, killer_message;
         
-        String victim_message = Moony.transStr(config.getString("victim-message"));        
-        String killer_message = Moony.transStr(config.getString("killer-message"));
-        
-        double reward_percentage = config.getDouble("reward-percentage");
-        double minimum_balance = config.getDouble("minimum-balance");
+        double reward_percentage, minimum_balance;
         
         @EventHandler
         public void onPlayerDeath(PlayerDeathEvent e)
@@ -90,6 +170,9 @@ public class DashHeads extends JavaPlugin
                 return;
             
             Player victim = e.getEntity();
+            
+            if(killer.equals(victim))
+                return;
             
             int killer_reward = 0; 
             
