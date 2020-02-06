@@ -6,7 +6,10 @@ package com.dashcure;
 // Version: 1.0
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,19 +27,27 @@ public class DashColours extends JavaPlugin
     public FileConfiguration config = getConfig();
     public JavaPlugin plugin = this;
     
+    CommandsHandler commands_handler = new CommandsHandler();
+    EventsHandler events_handler = new EventsHandler();
+    
     @Override
     public void onEnable()
     {
         Muun.print("Loading Dash Colors 1.0 ....");
         
         saveDefaultConfig();
+        refreshData();
         
-        
+        getServer().getPluginManager().registerEvents(events_handler, plugin);
+        getCommand("dashcolor").setExecutor(commands_handler);
         
         Muun.print("Dash Colors 1.0 has been loaded!");
     };
     
-    HashMap<String, String> player_db = new HashMap<String, String>();
+    
+    HashMap<String, String> player_db = new HashMap<>();
+    List<String> player_toggle_cache = new ArrayList<>();
+    
     
     class EventsHandler implements Listener
     {
@@ -45,8 +56,8 @@ public class DashColours extends JavaPlugin
         {
             String player_id = e.getPlayer().getUniqueId().toString();
             
-            if(!player_db.containsKey(player_id))
-                return;
+            if((!player_db.containsKey(player_id)) || (!player_toggle_cache.contains(player_id)))
+                return ;
             
             String message = player_db.get(player_id) + e.getMessage();
             
@@ -54,24 +65,60 @@ public class DashColours extends JavaPlugin
         };
     };
     
-    private void LoadColors(String player_id)
+    
+    public void refreshData()
     {
-        Object object = config.get("color-table" + player_id);
-        player_db = (HashMap)object;
+        config = getConfig();
+        
+        commands_handler.admin_permission = config.getString("admin-command-permission");
+        commands_handler.command_permission = config.getString("command-permission");
+        commands_handler.command_magic_permission = config.getString("command-magic-permission");
+         
+        commands_handler.toggle_off_message = Muun.transStr(config.getString("toggle-off-message"));        
+        commands_handler.toggle_on_message = Muun.transStr(config.getString("toggle-on-message"));
+        
+        commands_handler.missing_key_message = Muun.transStr(config.getString("missing-key-message"));
+        commands_handler.correct_syntax = Muun.transStr(config.getString("invalid-syntax-message"));        
+
+        commands_handler.add_message = Muun.transStr(config.getString("player-add-message"));
+        commands_handler.del_message = Muun.transStr(config.getString("player-del-message"));
+        
+        commands_handler.player_offline_message = Muun.transStr(config.getString("player-offline-message"));
+        commands_handler.color_set_message = Muun.transStr(config.getString("color-set-message"));
+        
+        LoadColorData();
     };
     
-    private void SaveColors(String player_id)
-    { 
-        config.set("color-table" + player_id, player_db); 
-        plugin.saveConfig();
+    private void LoadColorData()
+    {
+        Object toggle_cache_obj = config.get("toggle-table");
+        player_toggle_cache = (List)toggle_cache_obj;
         
-        config = getConfig();
+        Object player_db_obj = config.get("color-table");
+        player_db = (HashMap)player_db_obj;
+    };
+    
+    private void SaveColorData()
+    { 
+        config.set("toggle-table", player_toggle_cache);        
+        config.set("color-table", player_db);
+        
+        plugin.saveConfig();
+        config=getConfig();
     };    
-    // Continue tomorrow.
+    
+    
     class CommandsHandler implements CommandExecutor
     {
         boolean t = true, f = false;
         
+        String color_set_message, insufficient_permission_message, player_offline_message, invalid_format_message, add_message, del_message, toggle_on_message, toggle_off_message, admin_permission, command_permission, missing_key_message, command_magic_permission, correct_syntax;
+        
+        String reloading_message = Muun.transStr("&a&lReloading &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a&l....");
+        String reloaded_message = Muun.transStr("&a&lSuccessfully reloaded &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a&l!");
+        
+        String plugin_information_message = Muun.transStr("&eHei, this plugin has been made by Princess_Freyja aka Dashie.\nMore of her work at: &b&lhttps://github.com/KvinneKraft");
+
         @Override
         public boolean onCommand(CommandSender s, Command c, String a, String[] as)
         {
@@ -80,31 +127,150 @@ public class DashColours extends JavaPlugin
             
             Player p = (Player) s;
             
-            if(!p.hasPermission(<Permission>))
+            if((as.length > 0) && (as[0].toLowerCase().equals("info")))
             {
-                // Insufficient Permissions<
+                p.sendMessage(plugin_information_message);
+                return f;
+            }
+                
+            else if(!p.hasPermission(command_permission))
+            {
+                p.sendMessage(insufficient_permission_message);
                 return f;
             }
             
             else if(as.length < 1)
             {
-                // Correct Syntax<
+                p.sendMessage(correct_syntax);
                 return f;
+            };
+            
+            a = as[0];
+            
+            if(!p.hasPermission(admin_permission))
+            {
+                p.sendMessage(insufficient_permission_message);
+            }
+                
+            else if((a.equals("set")) && (as.length >= 2))
+            {
+                String color_code = as[1].toLowerCase();
+                
+                if(Muun.transStr(color_code + "a").equals(color_code + "a"))
+                {
+                    p.sendMessage(invalid_format_message);
+                    return f;
+                };
+                    
+                String unique_id = p.getUniqueId().toString();
+                
+                player_db.put(unique_id, color_code);
+                
+                if(!player_toggle_cache.contains(unique_id))
+                    player_toggle_cache.add(unique_id);
+                
+                p.sendMessage(color_set_message);
+                
+                SaveColorData();
+            }
+            
+            else if(a.equals("toggle"))
+            {
+                String unique_id = p.getUniqueId().toString();
+                
+                if(!player_db.containsKey(unique_id))
+                {
+                    p.sendMessage(missing_key_message);
+                    return f;
+                }
+                    
+                else if(player_toggle_cache.contains(unique_id))
+                {
+                    player_toggle_cache.remove(unique_id);
+                    p.sendMessage(toggle_off_message);
+                }
+                
+                else
+                {
+                    player_toggle_cache.add(unique_id);
+                    p.sendMessage(toggle_on_message);
+                };
+                
+                SaveColorData();
+            }            
+            
+            else if(a.equals("reload"))
+            {
+                p.sendMessage(reloading_message);
+                
+                refreshData();
+                
+                p.sendMessage(reloaded_message);
+            }
+            
+            else if(as.length >= 3)
+            {
+                if((a.equals("set")) || (a.equals("del")))
+                {
+                    Player sp = Bukkit.getPlayerExact(as[1]);                    
+                    
+                    if(sp == null)
+                    {
+                        p.sendMessage(player_offline_message);
+                        return f;
+                    };
+                
+                    String color_code = as[2].toLowerCase();
+                
+                    if(Muun.transStr(color_code + "a").equals(color_code + "a"))
+                    {
+                        p.sendMessage(invalid_format_message);
+                        return f;
+                    };
+                    
+                    String unique_id = sp.getUniqueId().toString();
+                
+                    if(a.equals("add"))
+                    {
+                        player_toggle_cache.add(unique_id);
+                        player_db.put(unique_id, color_code);
+                        
+                        p.sendMessage(del_message);
+                    }
+                
+                    else
+                    {
+                        player_toggle_cache.remove(unique_id);
+                        player_db.remove(unique_id);
+                    
+                        p.sendMessage(add_message);
+                    };
+                    
+                    SaveColorData();
+                }
+                
+                else
+                {
+                    p.sendMessage(correct_syntax);
+                };
+            }
+            
+            else 
+            {
+                p.sendMessage(correct_syntax);
             };
             
             return t;
         };
     };
     
+    
     @Override
     public void onDisable()
     {
         Muun.print("Saving Data ....");
         
-        for(Player player : getServer().getOnlinePlayers())
-        {
-            SaveColors(player.getName());
-        };
+        SaveColorData();
         
         Muun.print("Dash Colors 1.0 has been disabled!");
     };
