@@ -25,7 +25,7 @@ invalid-syntax-message: "&cCorrect Usage: &e/dashcolors [toggle | set | add | de
 missing-key-message: "&cYou must first set a color for yourself."
 
 # The player add message:
-player-add-message: "&aThe player has been added to your color table."
+player-add-message: "&aThe player has been added to the color table."
 
 # The player delete message:
 player-del-message: "&aThe player has been removed from the color table."
@@ -41,6 +41,12 @@ insufficient-permission-message: "&cYou are not supposed to do this, are ya?"
     
 # The invalid format message:
 invalid-format-message: "&cYou are using an invalid color code format."
+
+# The user is already added message:
+exists-message: "&cThe user is already in the list."
+
+# The user is not in the list:
+not-exist-message: "&cThe user could not be found."
 
 # WARNING: DO NOT CHANGE ANY OF THE FOLLOWING UNLESS YOU KNOW
 # WHAT YOU ARE DOING, THE FOLLOWING IS SOMETHING THAT CAN BE

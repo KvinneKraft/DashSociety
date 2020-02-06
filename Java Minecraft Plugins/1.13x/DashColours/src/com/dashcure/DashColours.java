@@ -90,6 +90,9 @@ public class DashColours extends JavaPlugin
         
         commands_handler.invalid_format_message = Muun.transStr(config.getString("invalid-format-message"));
         
+        commands_handler.exist_message = Muun.transStr(config.getString("exists-message"));
+        commands_handler.not_exist_message = Muun.transStr(config.getString("not-exist-message"));
+        
         LoadColorData();
     };
     
@@ -122,7 +125,7 @@ public class DashColours extends JavaPlugin
     {
         boolean t = true, f = false;
         
-        String color_set_message, insufficient_permission_message, player_offline_message, invalid_format_message, add_message, del_message, toggle_on_message, toggle_off_message, admin_permission, command_permission, missing_key_message, command_magic_permission, correct_syntax;
+        String exist_message, not_exist_message, color_set_message, insufficient_permission_message, player_offline_message, invalid_format_message, add_message, del_message, toggle_on_message, toggle_off_message, admin_permission, command_permission, missing_key_message, command_magic_permission, correct_syntax;
         
         String reloading_message = Muun.transStr("&aReloading &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a....");
         String reloaded_message = Muun.transStr("&aSuccessfully reloaded &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a!");
@@ -163,17 +166,18 @@ public class DashColours extends JavaPlugin
         
         public void remove_user(String uuid)
         {            
-            for(String key : player_db)
+            for(int i = 0; i < player_db.size(); i += 1)
             {
-                if(key.length() > 0)
-                {                
-                    if(key.split(":")[0].equals(uuid))
+                String kr = player_db.get(i);                
+                
+                if(kr.length() > 0)
+                {      
+                    if(kr.split(":")[0].equals(uuid))
                     {
-                        getServer().broadcastMessage(key);
-                        player_db.remove(player_db.indexOf(key));
+                        player_db.remove(new String(kr));
                     };
                 };
-            };            
+            };
         };
         
         @Override
@@ -285,34 +289,41 @@ public class DashColours extends JavaPlugin
                     
                     if((a.equals("add")) || (as.length >= 3))
                     {                    
-                        String color_code = as[2].toLowerCase();
-                
+                        if(user_exists(unique_id))
+                        {
+                            p.sendMessage(exist_message);
+                            return f;
+                        };                            
+                        
+                        String color_code = as[2].toLowerCase();                        
+                        
                         if(Muun.transStr(color_code + "a").equals(color_code + "a"))
                         {
                             p.sendMessage(invalid_format_message);
                             return f;
-                        };
-              
-                        player_toggle_cache.add(unique_id);
+                        }          
+                        
+                        if(!player_toggle_cache.contains(unique_id))
+                            player_toggle_cache.add(unique_id);
                         
                         String key = unique_id + ":" + color_code;
-                        
-                        if(player_db.contains(key))
-                        {
-                            player_db.remove(key);
-                        };
-                            
-                        player_db.add(key);
-                        
-                        p.sendMessage(del_message);
+                        p.sendMessage(add_message);
+                    
+                        player_db.add(key);                        
                     }
                 
                     else
                     {
+                        if(!user_exists(unique_id))
+                        {
+                            p.sendMessage(not_exist_message);
+                            return f;
+                        };                         
+                        
                         player_toggle_cache.remove(unique_id);
-                        player_db.remove(unique_id);
+                        remove_user(unique_id);
                     
-                        p.sendMessage(add_message);
+                        p.sendMessage(del_message);
                     };
                     
                     SaveColorData();
