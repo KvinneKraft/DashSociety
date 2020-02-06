@@ -64,8 +64,6 @@ public class Furnace implements Listener
         
         for(String raw_recipe : raw_melt_recipes)
         {
-            Bukkit.broadcastMessage(raw_recipe);
-            
             String[] recipe = raw_recipe.split(" ");
                 
             if(recipe.length < 3)
