@@ -27,8 +27,11 @@ public class DashColours extends JavaPlugin
     public FileConfiguration config = getConfig();
     public JavaPlugin plugin = this;
     
+    List<String> player_toggle_cache; 
+    List<String> player_db;    
+    
     CommandsHandler commands_handler = new CommandsHandler();
-    EventsHandler events_handler = new EventsHandler();
+    EventsHandler events_handler = new EventsHandler();        
     
     @Override
     public void onEnable()
@@ -36,17 +39,13 @@ public class DashColours extends JavaPlugin
         Muun.print("Loading Dash Colors 1.0 ....");
         
         saveDefaultConfig();
-        refreshData();
+        refreshData();  
         
         getServer().getPluginManager().registerEvents(events_handler, plugin);
         getCommand("dashcolor").setExecutor(commands_handler);
         
         Muun.print("Dash Colors 1.0 has been loaded!");
     };
-    
-    
-    HashMap<String, String> player_db = new HashMap<>();
-    List<String> player_toggle_cache = new ArrayList<>();
     
     
     class EventsHandler implements Listener
@@ -56,19 +55,22 @@ public class DashColours extends JavaPlugin
         {
             String player_id = e.getPlayer().getUniqueId().toString();
             
-            if((!player_db.containsKey(player_id)) || (!player_toggle_cache.contains(player_id)))
+            if((!commands_handler.user_exists(player_id)) || (!player_toggle_cache.contains(player_id)))
                 return ;
             
-            String message = player_db.get(player_id) + e.getMessage();
+            String message = commands_handler.get_color(player_id) + e.getMessage();
             
-            e.setMessage(message);
+            e.setMessage(Muun.transStr(message));
         };
     };
     
     
     public void refreshData()
     {
-        config = getConfig();
+        plugin.reloadConfig();
+        plugin.getConfig();
+        
+        config = plugin.getConfig();
         
         commands_handler.admin_permission = config.getString("admin-command-permission");
         commands_handler.command_permission = config.getString("command-permission");
@@ -86,16 +88,24 @@ public class DashColours extends JavaPlugin
         commands_handler.player_offline_message = Muun.transStr(config.getString("player-offline-message"));
         commands_handler.color_set_message = Muun.transStr(config.getString("color-set-message"));
         
+        commands_handler.invalid_format_message = Muun.transStr(config.getString("invalid-format-message"));
+        
         LoadColorData();
     };
     
     private void LoadColorData()
     {
+        if(player_db == null)
+        {
+            player_toggle_cache = new ArrayList<>();                
+            player_db = new ArrayList<>();
+        };               
+        
         Object toggle_cache_obj = config.get("toggle-table");
-        player_toggle_cache = (List)toggle_cache_obj;
+        player_toggle_cache = (List)toggle_cache_obj;     
         
         Object player_db_obj = config.get("color-table");
-        player_db = (HashMap)player_db_obj;
+        player_db = (List)player_db_obj;
     };
     
     private void SaveColorData()
@@ -104,7 +114,7 @@ public class DashColours extends JavaPlugin
         config.set("color-table", player_db);
         
         plugin.saveConfig();
-        config=getConfig();
+        config = plugin.getConfig();
     };    
     
     
@@ -114,11 +124,58 @@ public class DashColours extends JavaPlugin
         
         String color_set_message, insufficient_permission_message, player_offline_message, invalid_format_message, add_message, del_message, toggle_on_message, toggle_off_message, admin_permission, command_permission, missing_key_message, command_magic_permission, correct_syntax;
         
-        String reloading_message = Muun.transStr("&a&lReloading &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a&l....");
-        String reloaded_message = Muun.transStr("&a&lSuccessfully reloaded &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a&l!");
+        String reloading_message = Muun.transStr("&aReloading &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a....");
+        String reloaded_message = Muun.transStr("&aSuccessfully reloaded &d&lD&5&la&d&ls&5&lh&d&lC&5&lo&d&ll&5&lo&d&lr&5&ls &a!");
         
         String plugin_information_message = Muun.transStr("&eHei, this plugin has been made by Princess_Freyja aka Dashie.\nMore of her work at: &b&lhttps://github.com/KvinneKraft");
-
+        
+        private boolean user_exists(String uuid)
+        {
+            for(String key : player_db)
+            {
+                if(key.length() > 0)
+                {
+                    if(key.split(":")[0].equals(uuid))
+                    {
+                        return t;
+                    };
+                };
+            };
+            
+            return f;
+        };
+        
+        private String get_color(String uuid)
+        {
+            for(String key : player_db)
+            {
+                if(key.length() > 0)
+                {
+                    if(key.split(":")[0].equals(uuid))
+                    {
+                        return key.split(":")[1];
+                    };
+                };
+            };
+            
+            return null;
+        };
+        
+        public void remove_user(String uuid)
+        {            
+            for(String key : player_db)
+            {
+                if(key.length() > 0)
+                {                
+                    if(key.split(":")[0].equals(uuid))
+                    {
+                        getServer().broadcastMessage(key);
+                        player_db.remove(player_db.indexOf(key));
+                    };
+                };
+            };            
+        };
+        
         @Override
         public boolean onCommand(CommandSender s, Command c, String a, String[] as)
         {
@@ -163,8 +220,12 @@ public class DashColours extends JavaPlugin
                 };
                     
                 String unique_id = p.getUniqueId().toString();
+                String key = unique_id + ":" + color_code;
                 
-                player_db.put(unique_id, color_code);
+                if(user_exists(unique_id))
+                    remove_user(unique_id);
+                
+                player_db.add(key);                
                 
                 if(!player_toggle_cache.contains(unique_id))
                     player_toggle_cache.add(unique_id);
@@ -178,7 +239,7 @@ public class DashColours extends JavaPlugin
             {
                 String unique_id = p.getUniqueId().toString();
                 
-                if(!player_db.containsKey(unique_id))
+                if((player_db == null) || (!user_exists(unique_id)))
                 {
                     p.sendMessage(missing_key_message);
                     return f;
@@ -208,9 +269,9 @@ public class DashColours extends JavaPlugin
                 p.sendMessage(reloaded_message);
             }
             
-            else if(as.length >= 3)
+            else if(as.length >= 2)
             {
-                if((a.equals("set")) || (a.equals("del")))
+                if((a.equals("add")) || (a.equals("del")))
                 {
                     Player sp = Bukkit.getPlayerExact(as[1]);                    
                     
@@ -219,21 +280,29 @@ public class DashColours extends JavaPlugin
                         p.sendMessage(player_offline_message);
                         return f;
                     };
-                
-                    String color_code = as[2].toLowerCase();
-                
-                    if(Muun.transStr(color_code + "a").equals(color_code + "a"))
-                    {
-                        p.sendMessage(invalid_format_message);
-                        return f;
-                    };
+
+                    String unique_id = sp.getUniqueId().toString();                    
                     
-                    String unique_id = sp.getUniqueId().toString();
+                    if((a.equals("add")) || (as.length >= 3))
+                    {                    
+                        String color_code = as[2].toLowerCase();
                 
-                    if(a.equals("add"))
-                    {
+                        if(Muun.transStr(color_code + "a").equals(color_code + "a"))
+                        {
+                            p.sendMessage(invalid_format_message);
+                            return f;
+                        };
+              
                         player_toggle_cache.add(unique_id);
-                        player_db.put(unique_id, color_code);
+                        
+                        String key = unique_id + ":" + color_code;
+                        
+                        if(player_db.contains(key))
+                        {
+                            player_db.remove(key);
+                        };
+                            
+                        player_db.add(key);
                         
                         p.sendMessage(del_message);
                     }
