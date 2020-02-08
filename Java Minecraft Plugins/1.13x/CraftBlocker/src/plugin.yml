@@ -1,0 +1,12 @@
+
+main: com.dashcraft.CraftBlocker
+
+name: DashCraftBlocker
+author: [Dashie]
+
+version: 1.0
+api-version: 1.13
+
+commands:
+    craftblocker:
+        description: Main command for Dashies Craft Blocker plugin 1.0!

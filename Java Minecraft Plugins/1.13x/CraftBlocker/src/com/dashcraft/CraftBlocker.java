@@ -43,6 +43,9 @@ public class CraftBlocker extends JavaPlugin
         saveDefaultConfig();
         reloadPlugin();
         
+        getServer().getPluginManager().registerEvents(events, plugin);
+        getCommand("craftblocker").setExecutor(commands);
+        
         moon.print("Author: Dashie");
         moon.print("Version: 1.0");
         moon.print("Email: KvinneKraft@protonmail.com");
