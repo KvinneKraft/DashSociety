@@ -1,0 +1,25 @@
+
+# Dash Cunfug:
+
+admin-permission: 'dashcraftblocker.admin'
+
+command-messages:
+    access-denied: "&cYou are not supposed to use this, are ya?"
+    correct-usage: "&7Correct usage: &e/craftblocker [add | del | reload]"
+    
+item-blacklist:
+    - 'HOPPER'
+    - 'SHIELD'
+    - 'ELYTRA'
+    
+blocked-action:
+    message: '&cYou may not craft this'
+    
+    particle-effect-settings: 
+        enabled: true        
+        particle-effect: DRAGON_BREATH
+        
+    sound-effect-settings:
+        enabled: true
+        sound-type: ENTITY_GHAST_HURT
+        
