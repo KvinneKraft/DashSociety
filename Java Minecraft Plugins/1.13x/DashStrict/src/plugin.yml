@@ -1,0 +1,8 @@
+
+main: com.dashstrict.Strict
+
+version: 1.0
+api-version: 1.13
+
+name: DashStrict
+author: [Dashie]
