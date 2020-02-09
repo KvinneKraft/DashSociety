@@ -112,12 +112,13 @@ public class Strict extends JavaPlugin
                 // 2 = <data>
                 
                 a = as[0].toLowerCase();
-                    
+                String tag = as[2].toLowerCase();
+                
                 if(as[1].toLowerCase().equals("command"))
                 {
-                    if(events.low_black_listed_commands.contains(as[2].toLowerCase()))
+                    if(events.low_black_listed_commands.contains(tag))
                     {
-                        int id = events.low_black_listed_commands.indexOf(as[2].toLowerCase());
+                        int id = events.low_black_listed_commands.indexOf(tag);
                         
                         if(a.equals("del"))
                         {
@@ -142,7 +143,7 @@ public class Strict extends JavaPlugin
                        
                         else
                         {
-                            events.low_black_listed_commands.add(as[2].toLowerCase());
+                            events.low_black_listed_commands.add(tag);
                             events.black_listed_commands.add(as[2]);
                             
                             p.sendMessage(successfully_added);
@@ -155,9 +156,9 @@ public class Strict extends JavaPlugin
                 
                 else
                 {
-                    if(events.low_black_listed_words.contains(as[2].toLowerCase()))
+                    if(events.low_black_listed_words.contains(tag))
                     {
-                        int id = events.low_black_listed_words.indexOf(as[2].toLowerCase());
+                        int id = events.low_black_listed_words.indexOf(tag);
                         
                         if(a.equals("del"))
                         {
@@ -182,7 +183,7 @@ public class Strict extends JavaPlugin
                        
                         else
                         {
-                            events.low_black_listed_words.add(as[2].toLowerCase());                            
+                            events.low_black_listed_words.add(tag);                            
                             events.black_listed_words.add(as[2]);
                             
                             p.sendMessage(successfully_added);
