@@ -295,6 +295,8 @@ public class Strict extends JavaPlugin
                         p.sendMessage(word_detect_message);
                         p.sendTitle("", word_detect_message);                        
                         e.setCancelled(true);
+                        
+                        break;
                     };
                 };
             }
@@ -310,6 +312,8 @@ public class Strict extends JavaPlugin
                             p.sendMessage(word_detect_message);
                             p.sendTitle("", word_detect_message);  
                             e.setCancelled(true);
+                            
+                            break;
                         };
                     };
                 };
