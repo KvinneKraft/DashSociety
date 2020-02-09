@@ -90,7 +90,8 @@ public class DashChatCooldown extends JavaPlugin
         
         String bypass_permission, cooldown_message;
         
-        int cooldown_delay;
+        int message_cooldown_delay, command_cooldown_delay;
+        boolean message_cooldowns, command_cooldowns;
         
         public void doReload()
         {
@@ -99,13 +100,18 @@ public class DashChatCooldown extends JavaPlugin
             
             bypass_permission = config.getString("cooldown-bypass-permission");
             cooldown_message = moon.transstr(config.getString("cooldown-message"));           
-            cooldown_delay = config.getInt("cooldown");
             
             if(command_uuid.size() > 0)
                 command_uuid.clear();
             
             if(message_uuid.size() > 0)
                 message_uuid.clear();
+            
+            message_cooldown_delay = config.getInt("message-cooldown");
+            command_cooldown_delay = config.getInt("command-cooldown");            
+            
+            message_cooldowns = config.getBoolean("message-cooldowns");
+            command_cooldowns = config.getBoolean("command-cooldowns");
             
             commands.admin_permission = config.getString("admin-permission");
         };
@@ -115,16 +121,14 @@ public class DashChatCooldown extends JavaPlugin
         {
             Player p = e.getPlayer();
         
-            if(p.hasPermission(bypass_permission))
-            {
+            if((p.hasPermission(bypass_permission)) || (!message_cooldowns))
                 return;
-            }
             
             String unique_id = p.getUniqueId().toString();
             
             if(message_uuid.contains(unique_id))
             {
-                p.sendMessage(cooldown_message.replace("{second}", String.valueOf(cooldown_delay)));
+                p.sendMessage(cooldown_message.replace("{second}", String.valueOf(message_cooldown_delay)));
                 e.setCancelled(true);
                 
                 return;
@@ -145,7 +149,7 @@ public class DashChatCooldown extends JavaPlugin
                     };
                 }, 
                 
-                cooldown_delay * 20
+                message_cooldown_delay * 20
             );
         };
         
@@ -154,16 +158,14 @@ public class DashChatCooldown extends JavaPlugin
         {
             Player p = e.getPlayer();
         
-            if(p.hasPermission(bypass_permission))
-            {
+            if((p.hasPermission(bypass_permission)) || (!command_cooldowns))
                 return;
-            }
             
             String unique_id = p.getUniqueId().toString();
             
             if(command_uuid.contains(unique_id))
             {
-                p.sendMessage(cooldown_message.replace("{second}", String.valueOf(cooldown_delay)));
+                p.sendMessage(cooldown_message.replace("{second}", String.valueOf(command_cooldown_delay)));
                 e.setCancelled(true);
                 
                 return;
@@ -184,7 +186,7 @@ public class DashChatCooldown extends JavaPlugin
                     }; 
                 },
                 
-                cooldown_delay * 20
+                command_cooldown_delay * 20
             );
         };
         
