@@ -58,7 +58,16 @@ public class Strict extends JavaPlugin
         String admin_permission;
         
         String permission_denied = moon.transstr("&cYou are not permitted to use this command, huh?");
-        String invalid_syntax = moon.transstr("&7Correct Syntax: &e/dashchat [add | del | reload]");
+        String invalid_syntax = moon.transstr("&7Correct Syntax: &e/dashchat [add | del | reload] [command | word] <command | word>");
+        
+        String already_exists = moon.transstr("&cThe specified data already exists.");
+        String not_exists = moon.transstr("&cThe specified data does not exist."); 
+        
+        String successfully_added = moon.transstr("&aThe specified data has been added!");
+        String successfully_delet = moon.transstr("&aThe specified data has been deleted!");
+        
+        String reloading_message = moon.transstr("&aReloading the plugin right now ....");
+        String reloaded_message = moon.transstr("&aThe plugin has been reloaded!");
         
         @Override
         public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -80,9 +89,124 @@ public class Strict extends JavaPlugin
                 return f;
             };
             
-            String cmd = as[0].toLowerCase();
+            a = as[0].toLowerCase();
             
+            if((a.equals("del")) || (a.equals("add")))
+            {
+                if(as.length < 3)
+                {
+                    p.sendMessage(invalid_syntax);
+                    return f;
+                };
+                
+                a = as[1].toLowerCase();
+                
+                if((!a.equals("word")) && (!a.equals("command")))
+                {
+                    p.sendMessage(invalid_syntax);
+                    return f;
+                };
+                
+                // 0 = add | del
+                // 1 = command | message
+                // 2 = <data>
+                
+                a = as[0].toLowerCase();
+                    
+                if(as[1].toLowerCase().equals("command"))
+                {
+                    if(events.low_black_listed_commands.contains(as[2].toLowerCase()))
+                    {
+                        int id = events.low_black_listed_commands.indexOf(as[2].toLowerCase());
+                        
+                        if(a.equals("del"))
+                        {
+                            events.low_black_listed_commands.remove(id);                            
+                            events.black_listed_commands.remove(id);
+                            
+                            p.sendMessage(successfully_delet);
+                        }
+                        
+                        else
+                        {
+                            p.sendMessage(already_exists);
+                        };
+                    }
+                    
+                    else
+                    {
+                        if(a.equals("del"))
+                        {
+                            p.sendMessage(not_exists);
+                        }
+                       
+                        else
+                        {
+                            events.low_black_listed_commands.add(as[2].toLowerCase());
+                            events.black_listed_commands.add(as[2]);
+                            
+                            p.sendMessage(successfully_added);
+                        };                        
+                    }
+                    
+                    config.set("command-properties.blacklist", events.black_listed_commands);
+                    plugin.saveConfig();                    
+                }
+                
+                else
+                {
+                    if(events.low_black_listed_words.contains(as[2].toLowerCase()))
+                    {
+                        int id = events.low_black_listed_words.indexOf(as[2].toLowerCase());
+                        
+                        if(a.equals("del"))
+                        {
+                            events.low_black_listed_words.remove(id);                            
+                            events.black_listed_words.remove(id);
+                            
+                            p.sendMessage(successfully_delet);
+                        }
+                        
+                        else
+                        {
+                            p.sendMessage(already_exists);
+                        };
+                    }
+                    
+                    else
+                    {
+                        if(a.equals("del"))
+                        {
+                            p.sendMessage(not_exists);
+                        }
+                       
+                        else
+                        {
+                            events.low_black_listed_words.add(as[2].toLowerCase());                            
+                            events.black_listed_words.add(as[2]);
+                            
+                            p.sendMessage(successfully_added);
+                        };                        
+                    }
+                    
+                    config.set("message-properties.blacklist", events.black_listed_words);
+                    plugin.saveConfig();
+                };
+            }
             
+            else if(a.equals("reload"))
+            {
+                p.sendMessage(reloading_message);
+                
+                ReloadPlugin();
+                
+                p.sendMessage(reloaded_message);
+            }
+            
+            else
+            {
+                p.sendMessage(invalid_syntax);
+            };
             
             return t;
         };
