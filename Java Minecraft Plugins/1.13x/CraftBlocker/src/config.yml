@@ -12,14 +12,4 @@ item-blacklist:
     - 'SHIELD'
     - 'ELYTRA'
     
-blocked-action:
-    message: '&cYou may not craft this'
-    
-    particle-effect-settings: 
-        enabled: true        
-        particle-effect: DRAGON_BREATH
-        
-    sound-effect-settings:
-        enabled: true
-        sound-type: ENTITY_GHAST_HURT
-        
+message: '&c&lYou may not craft this'

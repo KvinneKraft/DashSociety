@@ -7,9 +7,6 @@ package com.dashcraft;
 
 
 import java.util.List;
-import org.bukkit.Sound;
-import org.bukkit.Effect;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
@@ -21,8 +18,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.configuration.file.FileConfiguration;;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 
 
 public class CraftBlocker extends JavaPlugin
@@ -86,14 +83,15 @@ public class CraftBlocker extends JavaPlugin
                 return f;
             }
             
-            a = as[0].toLowerCase();
-            
-            if(as.length < 1)
+            else if(as.length < 1)
             {
                 p.sendMessage(correct_usage_message);
+                return f;
             }
             
-            else if((a.equals("add")) || (a.equals("del")))
+            a = as[0].toLowerCase();
+            
+            if((a.equals("add")) || (a.equals("del")))
             {
                 if(as.length < 2)
                 {
@@ -164,33 +162,7 @@ public class CraftBlocker extends JavaPlugin
         plugin.reloadConfig();
         config = plugin.getConfig();
         
-        events.are_particle_effects = config.getBoolean("blocked-action.particle-effect-settings.enabled");
-        
-        if(events.are_particle_effects)
-        {
-            events.particle = Effect.valueOf(config.getString("blocked-action.particle-effect-settings.particle-effect"));
-            
-            if(events.particle == null)
-            {
-                moon.print("Invalid particle effect specified!");
-                events.are_particle_effects = false;
-            };
-        };
-        
-        events.are_sound_effects = config.getBoolean("blocked-action.particle-effect-settings.enabled");    
-        
-        if(events.are_sound_effects)
-        {
-            events.sound = Sound.valueOf(config.getString("blocked-action.sound-effect-settings.sound-type"));
-            
-            if(events.sound == null)
-            {
-                moon.print("Invalid sound effect specified!");
-                events.are_sound_effects = false;
-            };
-        };
-        
-        events.block_message = moon.transstr(config.getString("blocked-action.message"));        
+        events.block_message = moon.transstr(config.getString("message"));        
         
         if(events.craft_blacklist.size() > 0)
         {
@@ -209,25 +181,25 @@ public class CraftBlocker extends JavaPlugin
             
             events.craft_blacklist.add(material);
         };
+        
+        commands.admin_permission = config.getString("admin-permission");
+        
+        commands.access_denied_message = moon.transstr(config.getString("command-messages.access-denied"));
+        commands.correct_usage_message = moon.transstr(config.getString("command-messages.correct-usage"));
     };
     
     class EventsHandler implements Listener
     {
         public List<Material> craft_blacklist = new ArrayList<>();
-        
-        public boolean are_sound_effects, are_particle_effects;
-        
         public String block_message;
-        public Effect particle;        
-        public Sound sound;
         
         @EventHandler
-        public void onCraft(CraftItemEvent e)
+        public void onCraft(PrepareItemCraftEvent e)
         {
-            if(!(e.getWhoClicked() instanceof Player))
+            if(!(e.getViewers().get(0) instanceof Player))
                 return;
             
-            Player p = (Player) e.getWhoClicked();            
+            Player p = (Player) e.getViewers().get(0);            
             
             if(p.hasPermission(commands.admin_permission))
                 return;
@@ -240,21 +212,10 @@ public class CraftBlocker extends JavaPlugin
                 {
                     item.setType(Material.AIR);
                     
-                    Location p_loc = p.getLocation();
+                    p.sendTitle("", block_message);          
+                    p.sendMessage(block_message);
                     
-                    if(are_sound_effects)
-                    {
-                        p_loc.getWorld().playSound(p_loc, sound, 0, 0);
-                    };
-                    
-                    if(are_particle_effects)
-                    {
-                        p_loc.getWorld().playEffect(p_loc, particle, 40);
-                    };
-                    
-                    p.sendTitle("", block_message, 0, 0, 0);
-                    
-                    e.setCancelled(true);
+                    p.closeInventory();
                 };
             };
         };
