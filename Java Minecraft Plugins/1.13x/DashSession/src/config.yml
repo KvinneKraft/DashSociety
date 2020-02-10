@@ -21,14 +21,25 @@ reward-properties:
     # a reward. 
     reward-interval: 600
     
-    # The message displayed when a player receives a reward.
+    # The message displayed when a player receives a normal reward.
     # Both through chat and on screen title. 
     reward-message: "&aYou have been rewarded for being online!"
     
+    # The message displayed when a player receives a special
+    # reward:
+    special-reward-message: "&aYou got a bonus reward for being online!"
+    
+    # The range as to what to compare the chances to.
+    # The standard is 500 due increased rarity.
+    max-chance: 100    
+    min-chance: 1    
+    
     # Commands to execute along with their probability of being
-    # actually executed (Format: <command> (chance):<chance 0.00000-1)):
+    # actually executed (Format: <command> (chance):<chance 1-100>)):
     rewards:
-        - 'give %player% GOLDEN_APPLE 1 name:&d&lApple (chance):0.001'
-        - 'eco give %player% 500 (chance):0.05'
-        - 'eco give %player% 10 (chance):0.9' 
-        - 'eco give %player% 1000 (chance):0.005'
+        - 'give %player% GOLDEN_APPLE 1 name:&d&lApple (chance):1'
+        - 'eco give %player% 500 (chance)40'
+        - 'eco give %player% 10 (chance):60' 
+        - 'eco give %player% 1000 (chance):5'
+        
+    standard-reward: 'eco give %player% 15'

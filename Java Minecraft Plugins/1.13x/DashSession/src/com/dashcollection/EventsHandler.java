@@ -7,8 +7,9 @@ package com.dashcollection;
 
 import java.util.List;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -22,18 +23,24 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class EventsHandler implements Listener
 {   
-    List<BukkitTask> runnables = new ArrayList<>();    
-    List<String> commands = new ArrayList<>();
-    List<Double> chances = new ArrayList<>();    
+    List<BukkitTask> runnables = new ArrayList<>();
+    List<Integer> chances = new ArrayList<>();      
+    List<String> commands = new ArrayList<>();  
     List<UUID> p_uuid = new ArrayList<>();
     
     Server server = Bukkit.getServer();    
     BukkitScheduler scheduler = server.getScheduler();
     
-    String reward_permission;        
+    String reward_permission;    
+    String standard_command;
+    
+    String reward_lucky_message;    
     String reward_message;
     
     Integer reward_interval;
+    
+    Integer min_chance;
+    Integer max_chance;
     
     public void add_reward_task(Player p, UUID uuid)
     {
@@ -51,12 +58,31 @@ public class EventsHandler implements Listener
                     @Override
                     public void run()
                     {
-                        String command = ""; //randomizer.next().replace("%player%", player);
+                        int rand_num = new Random().nextInt(max_chance + min_chance) + 1;                        
+                        int id = new Random().nextInt(chances.size());
+                        int chance = chances.get(id);
                         
-                        server.dispatchCommand(server.getConsoleSender(), command);
+                        String command = "";                        
                         
-                        p.sendTitle(" ", reward_message, 1, 20, 1);                        
-                        p.sendMessage(reward_message);
+                        if(chance >= rand_num)
+                        {
+                            commands.get(id);                                             
+                            
+                            p.sendTitle(" ", reward_lucky_message);                        
+                            p.sendMessage(reward_lucky_message);   
+                        }
+                            
+                        else
+                        {
+                            command = standard_command;                            
+                            
+                            p.sendTitle(" ", reward_message);                        
+                            p.sendMessage(reward_message);
+                        };
+                        
+                        server.dispatchCommand(server.getConsoleSender(), command.replace("%player%", player));
+                        
+                        System.out.println(command);
                     };
                 },
                 
@@ -85,36 +111,42 @@ public class EventsHandler implements Listener
       
         reward_permission = Session.config.getString("reward-properties.reward-permission");
         reward_interval = Session.config.getInt("reward-properties.reward-interval");       
+        
+        reward_lucky_message = Session.moon.transStr(Session.config.getString("reward-properties.special-reward-message"));
         reward_message = Session.moon.transStr(Session.config.getString("reward-properties.reward-message"));          
-         
+        
+        standard_command = Session.config.getString("reward-properties.standard-reward");
+        
+        min_chance = Session.config.getInt("reward-properties.max-chance");
+        max_chance = Session.config.getInt("reward-properties.min-chance");
+        
         if(commands.size() > 0)
         {
             commands.clear();
             chances.clear();
         };
         
+        // Fix command not loading in issue.
         for(String str : Session.config.getStringList("reward-properties.rewards"))
         {
-            String[] arr = str.split("(chance):");
+            String[] arr = str.replace("(chance):", "~").split("~");
             
-            if(arr.length < 2)
+            if(arr.length < 1)
             {
-                Session.moon.print("Invalid format received (" + arr.toString() + "). Skipping ....");
-                return;
+                Session.moon.print("Invalid format received. Skipping ....");
+                continue;
             };
             
-            Double chance = Double.valueOf(arr[1]);
+            Integer chance = Integer.valueOf(arr[1]);
             
             if(chance == null)
             {
                 Session.moon.print("Invalid chance specified (" + arr[1] + ") in config. Skipping ....");
-                return;
+                continue;
             };
             
-            String command = arr[0];            
-            
-            //commands.add(command);            
-            //chances.add(chance);
+            commands.add(arr[0]);            
+            chances.add(chance);
         };
                
         for(Player p : server.getOnlinePlayers())
