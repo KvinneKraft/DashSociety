@@ -6,6 +6,7 @@ package com.dashcollection;
 
 
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,21 +16,18 @@ import org.bukkit.scheduler.BukkitTask;
 public class Session extends JavaPlugin
 {
     static FileConfiguration config;
-    static JavaPlugin plugin;
+    static JavaPlugin plugin;  
     
-    CommandsHandler commands;    
-    EventsHandler events; 
-    
-    Moony moon = new Moony();
-    
-    // - Events Handler (To handle all the events)
-    // - Commands Handler (To handle all the commands)
+    static CommandsHandler commands;    
+    static EventsHandler events; 
+    static Moony moon;      
     
     @Override
     public void onEnable()
     {
         moon.print("Loading plugin ....");        
         
+        server = getServer();        
         plugin = this;
         
         saveDefaultConfig();
@@ -37,13 +35,17 @@ public class Session extends JavaPlugin
         
         commands = new CommandsHandler();
         events = new EventsHandler();
+        moon = new Moony();
         
         getServer().getPluginManager().registerEvents(events, plugin);
+        getCommand("dashsession").setExecutor(commands);
         
         moon.print("Plugin has been loaded!");
     };
     
-    public void refreshDashData()
+    static Server server;
+    
+    public static void refreshDashData()
     {
         for(BukkitTask runnable : events.runnables)
         {
@@ -84,7 +86,7 @@ public class Session extends JavaPlugin
         events.reward_interval = config.getInt("reward-properties.reward-interval");       
         events.reward_message = moon.transStr(config.getString("reward-properties.reward-message"));          
         
-        for(Player p : getServer().getOnlinePlayers())
+        for(Player p : server.getOnlinePlayers())
         {
             if(!p.hasPermission(events.reward_permission))
             {

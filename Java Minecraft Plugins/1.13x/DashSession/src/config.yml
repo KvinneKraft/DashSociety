@@ -9,6 +9,7 @@ optional-properties:
     
     # Allow people to type /dashsession in order to see who
     # has coded the plugin, this helps me out as a Programmer.
+    # (This will not require a permission in order to work<)
     developer-support: true
 
 reward-properties:
