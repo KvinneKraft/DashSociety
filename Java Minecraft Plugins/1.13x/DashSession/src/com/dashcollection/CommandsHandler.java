@@ -4,17 +4,18 @@
 
 package com.dashcollection;
 
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-class CommandsHandler implements CommandExecutor
+public class CommandsHandler implements CommandExecutor
 {
     Session.Moony moon = Session.moon;    
     
-    String plug_message = moon.transStr("&eHei, me &dDashie&e, also know as &dPrincess_Freyja &ehas coded this entire plugin.\n&eIf you want to get in touch with me or see some more of my work then feel free to visit any of the following links.\n&eGithub: &bhttps://github.com/KvinneKraft \n&eTwitter: &bhttps://twitter.com/KraftKvinne \n&eWebsite: &bhttps://pugpawz.com \n&eSpigot MC: &bhttp://bit.ly/KvinneKraftMC");    
+    String plug_message = moon.transStr("&eHei, me &dDashie&e, also know as &dPrincess_Freyja &ehas coded this entire plugin.\n\n&eIf you want to get in touch with me or see some more of my work then feel free to visit any of the following links.\n\n&eGithub: &bhttps://github.com/KvinneKraft \n&eTwitter: &bhttps://twitter.com/KraftKvinne \n&eWebsite: &bhttps://pugpawz.com \n&eSpigot MC: &bhttp://bit.ly/KvinneKraftMC");    
     String command_permission;
    
     String correct_use = moon.transStr("&cCorrect use: &7/dashsession reload");
@@ -24,6 +25,12 @@ class CommandsHandler implements CommandExecutor
     
     boolean f = false, t = true;
     boolean developer_support; 
+    
+    public void Refresh()
+    {
+        command_permission = Session.config.getString("optional-properties.command-permission");
+        developer_support = Session.config.getBoolean("optional-properties.developer-support");
+    };
     
     @Override
     public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -37,7 +44,7 @@ class CommandsHandler implements CommandExecutor
         
         if(!p.hasPermission(command_permission))
         {
-            if((developer_support) || ((as.length > 0) && (as[0].equalsIgnoreCase("dev"))))
+            if(developer_support) 
             {
                 p.sendMessage(plug_message);
             };

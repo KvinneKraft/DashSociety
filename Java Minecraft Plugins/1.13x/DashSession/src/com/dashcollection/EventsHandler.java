@@ -21,10 +21,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 
 public class EventsHandler implements Listener
-{
-    RandomCollection<String> randomizer = new RandomCollection<String>(); 
-    
+{   
     List<BukkitTask> runnables = new ArrayList<>();    
+    List<String> commands = new ArrayList<>();
+    List<Double> chances = new ArrayList<>();    
     List<UUID> p_uuid = new ArrayList<>();
     
     Server server = Bukkit.getServer();    
@@ -46,10 +46,12 @@ public class EventsHandler implements Listener
             scheduler.runTaskTimerAsynchronously(Session.plugin, 
                 new Runnable()
                 {
+                    String player = p.getName();
+                    
                     @Override
                     public void run()
                     {
-                        String command = randomizer.next().replace("%player%", p.getName());
+                        String command = ""; //randomizer.next().replace("%player%", player);
                         
                         server.dispatchCommand(server.getConsoleSender(), command);
                         
@@ -63,6 +65,67 @@ public class EventsHandler implements Listener
         );
         
         p_uuid.add(uuid);        
+    };
+    
+    public void suspend_all_threads()
+    {
+        for(BukkitTask runnable : runnables)
+        {
+            runnable.cancel();
+        };  
+        
+        runnables.clear();        
+    };
+    
+    public void Refresh()
+    {
+        suspend_all_threads();
+        
+        p_uuid.clear();            
+      
+        reward_permission = Session.config.getString("reward-properties.reward-permission");
+        reward_interval = Session.config.getInt("reward-properties.reward-interval");       
+        reward_message = Session.moon.transStr(Session.config.getString("reward-properties.reward-message"));          
+         
+        if(commands.size() > 0)
+        {
+            commands.clear();
+            chances.clear();
+        };
+        
+        for(String str : Session.config.getStringList("reward-properties.rewards"))
+        {
+            String[] arr = str.split("(chance):");
+            
+            if(arr.length < 2)
+            {
+                Session.moon.print("Invalid format received (" + arr.toString() + "). Skipping ....");
+                return;
+            };
+            
+            Double chance = Double.valueOf(arr[1]);
+            
+            if(chance == null)
+            {
+                Session.moon.print("Invalid chance specified (" + arr[1] + ") in config. Skipping ....");
+                return;
+            };
+            
+            String command = arr[0];            
+            
+            //commands.add(command);            
+            //chances.add(chance);
+        };
+               
+        for(Player p : server.getOnlinePlayers())
+        {
+            if(!p.hasPermission(reward_permission))
+            {
+                return;
+            };
+                
+            add_reward_task(p, p.getUniqueId());
+        };        
     };
     
     @EventHandler

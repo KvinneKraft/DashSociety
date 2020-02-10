@@ -25,17 +25,27 @@ public class Session extends JavaPlugin
     @Override
     public void onEnable()
     {
+        moon = new Moony();        
+        
         moon.print("Loading plugin ....");        
         
         server = getServer();        
         plugin = this;
         
-        saveDefaultConfig();
-        refreshDashData();        
+        saveDefaultConfig();    
         
         commands = new CommandsHandler();
-        events = new EventsHandler();
-        moon = new Moony();
+        events = new EventsHandler();          
+
+        refreshDashData();      
+        
+        if(server.getOnlinePlayers().size() > 0)
+        {
+            for(Player p : server.getOnlinePlayers())
+            {
+                events.add_reward_task(p, p.getUniqueId());
+            };
+        };
         
         getServer().getPluginManager().registerEvents(events, plugin);
         getCommand("dashsession").setExecutor(commands);
@@ -46,61 +56,22 @@ public class Session extends JavaPlugin
     static Server server;
     
     public static void refreshDashData()
-    {
-        for(BukkitTask runnable : events.runnables)
-        {
-            runnable.cancel();
-        };
-        
-        events.runnables.clear();
-        events.p_uuid.clear();
-        
+    {     
         plugin.reloadConfig();
-        config = plugin.getConfig();
-
-        for(String str : config.getStringList("reward-properties.rewards"))
-        {
-            String[] arr = str.split("(chance):");
-            
-            if(arr.length < 2)
-            {
-                moon.print("Invalid format received. Skipping ....");
-                return;
-            };
-            
-            Double chance = Double.valueOf(arr[1]);
-            
-            if(chance == null)
-            {
-                moon.print("Invalid chance specified in config. Skipping ....");
-                return;
-            };
-            
-            String command = arr[0];            
-            
-            events.randomizer.add(chance, command);
-        };
+        config = plugin.getConfig();        
         
-        events.reward_permission = config.getString("reward-properties.reward-permission");
-        events.reward_interval = config.getInt("reward-properties.reward-interval");       
-        events.reward_message = moon.transStr(config.getString("reward-properties.reward-message"));          
-        
-        for(Player p : server.getOnlinePlayers())
-        {
-            if(!p.hasPermission(events.reward_permission))
-            {
-                return;
-            };
-                
-            events.add_reward_task(p, p.getUniqueId());
-        };
-        
-        commands.command_permission = config.getString("optional-properties.command-permission");
+        commands.Refresh();
+        events.Refresh();
     };
     
     @Override
     public void onDisable()
     {
+        if(events != null)
+        {
+            events.suspend_all_threads();
+        };
+        
         moon.print("Plugin has been disabled!");
     };
     
