@@ -78,8 +78,7 @@ public class Session extends JavaPlugin
             
             String command = arr[0];            
             
-            events.commands.add(command);            
-            events.chances.add(chance);   
+            events.randomizer.add(chance, command);
         };
         
         events.reward_permission = config.getString("reward-properties.reward-permission");

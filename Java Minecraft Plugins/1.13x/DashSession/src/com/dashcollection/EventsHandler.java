@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import java.util.ArrayList;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
@@ -20,12 +22,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class EventsHandler implements Listener
 {
+    RandomCollection<String> randomizer = new RandomCollection<String>(); 
+    
     List<BukkitTask> runnables = new ArrayList<>();    
-    List<String> commands = new ArrayList<>();
-    List<Double> chances = new ArrayList<>();
     List<UUID> p_uuid = new ArrayList<>();
     
-    BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+    Server server = Bukkit.getServer();    
+    BukkitScheduler scheduler = server.getScheduler();
     
     String reward_permission;        
     String reward_message;
@@ -46,6 +49,11 @@ public class EventsHandler implements Listener
                     @Override
                     public void run()
                     {
+                        String command = randomizer.next().replace("%player%", p.getName());
+                        
+                        server.dispatchCommand(server.getConsoleSender(), command);
+                        
+                        p.sendTitle(" ", reward_message, 1, 20, 1);                        
                         p.sendMessage(reward_message);
                     };
                 },
