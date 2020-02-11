@@ -126,10 +126,10 @@ public class EventsHandler implements Listener
             chances.clear();
         };
         
-        // Fix command not loading in issue.
         for(String str : Session.config.getStringList("reward-properties.rewards"))
         {
-            String[] arr = str.replace("(chance):", "~").split("~");
+            str = str.replace("(chance):", "`");
+            String[] arr = str.split("`");
             
             if(arr.length < 1)
             {
@@ -139,7 +139,7 @@ public class EventsHandler implements Listener
             
             Integer chance = Integer.valueOf(arr[1]);
             
-            if(chance == null)
+            if(chance < 1)
             {
                 Session.moon.print("Invalid chance specified (" + arr[1] + ") in config. Skipping ....");
                 continue;
