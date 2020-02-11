@@ -18,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.CommandExecutor;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -231,7 +232,7 @@ class CommandsHandler implements CommandExecutor
         reloading_message = KvinneKraft.transStr("&aDash Mobs is now reloading ....");
         reloaded_message = KvinneKraft.transStr("&aDash Mobs has been reloaded!");
         
-        correct_use_message = KvinneKraft.transStr("&cCorrect use: &7/dashmobs [add | del | reload] <mob> <min-price> <max-price>");        
+        correct_use_message = KvinneKraft.transStr("&cCorrect use: &7/dashmobs [add | del | list | reload] <mob> <min-price> <max-price>");        
         developer_message = KvinneKraft.transStr("&eMeow Meow, I am Dashie, the Developer of this Plugin, also known as Princess_Freyja!\n\n&eGithub: &ahttps://github.com/KvinneKraft/ \n&eWebsite: &ahttps://pugpawz.com");
         
         removed_message= KvinneKraft.transStr("&aThe specified rule has been removed from the list.");
@@ -240,13 +241,16 @@ class CommandsHandler implements CommandExecutor
         invalid_entity_message = KvinneKraft.transStr("&cYou have specified an unknown entity!");        
         invalid_range_message = KvinneKraft.transStr("&cThe range from which the prices vary is invalid.");
         
-        already_exists_message = KvinneKraft.transStr("");
-        does_not_exist_message = KvinneKraft.transStr("");
+        already_exists_message = KvinneKraft.transStr("&cThe specified rule already exists.");
+        does_not_exist_message = KvinneKraft.transStr("&cThe specified rule does not exist.");
+        
+        done_loading_list_message = KvinneKraft.transStr("&aLoading list .....");
+        loading_list_message = KvinneKraft.transStr("&aDone!!");
     };
     
     String reloading_message, reloaded_message, developer_message, permission_denied_message, correct_use_message;
     String added_message, removed_message, invalid_entity_message, invalid_range_message, already_exists_message;
-    String does_not_exist_message;
+    String does_not_exist_message, loading_list_message, done_loading_list_message;
     
     @Override
     public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -365,6 +369,34 @@ class CommandsHandler implements CommandExecutor
                 BetterMobs.plugin.saveConfig();
                 BetterMobs.events.refresh();
             }
+        }
+        
+        else if(a.equals("list"))
+        {
+            Bukkit.getScheduler().runTaskAsynchronously(BetterMobs.plugin,
+                new Runnable()
+                {//I know I could optimize this...Stawp buggering mehhh!!
+                    @Override
+                    public void run()
+                    {
+                        p.sendMessage(loading_list_message + "\n");
+                        
+                        for(String str : BetterMobs.events.entities)
+                        {
+                            int id = BetterMobs.events.entities.indexOf(str);
+                            
+                            String max_price = String.valueOf(BetterMobs.events.max_prices.get(id));
+                            String min_price = String.valueOf(BetterMobs.events.min_prices.get(id));
+                            
+                            str = str + " " + min_price + "$ - " + max_price + "$";
+                            
+                            p.sendMessage(KvinneKraft.transStr("&7(index:" + String.valueOf(id) + ")> &e" + str));
+                        };
+                        
+                        p.sendMessage("\n" + done_loading_list_message);
+                    };
+                }
+            );
         }
         
         else 
