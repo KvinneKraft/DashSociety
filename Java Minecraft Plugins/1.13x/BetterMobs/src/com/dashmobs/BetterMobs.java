@@ -23,6 +23,10 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.configuration.file.FileConfiguration;
 
 
+// To-DO:
+// - /dashmobs add command
+// - /dashmobs del command
+
 public class BetterMobs extends JavaPlugin
 {
     public static FileConfiguration config;
@@ -103,6 +107,14 @@ class EventsHandler implements Listener
         reward_permission = BetterMobs.config.getString("price-properties.price-permission");
         reward_message = KvinneKraft.transStr(BetterMobs.config.getString("price-properties.price-message"));
         
+        if(entities.size() > 0)
+        {
+            max_prices.clear();
+            min_prices.clear();            
+            
+            entities.clear();
+        };
+        
         for(String str : BetterMobs.config.getStringList("price-properties.priced-entity-list"))
         {
             String[] arr = str.split(" ");
@@ -115,7 +127,13 @@ class EventsHandler implements Listener
                 
             else if(!Entity.isValid(arr[0].toUpperCase()))
             {
-                KvinneKraft.print("Invalid mob " + arr[0] + ". Skipping ....");
+                KvinneKraft.print("[" + arr[0] + "]: Invalid entity received. Skipping ....");
+                continue;
+            }
+            
+            else if(entities.contains(arr[0].toUpperCase()))
+            {
+                KvinneKraft.print("[" + arr[0] + "]: The entity was already in list. Skipping....");
                 continue;
             };
             
@@ -138,7 +156,7 @@ class EventsHandler implements Listener
             
             min_prices.add(min_price);
             max_prices.add(max_price);
-        
+            
             entities.add(Entity.getValue(arr[0].toUpperCase()));        
         };
     };
@@ -213,11 +231,22 @@ class CommandsHandler implements CommandExecutor
         reloading_message = KvinneKraft.transStr("&aDash Mobs is now reloading ....");
         reloaded_message = KvinneKraft.transStr("&aDash Mobs has been reloaded!");
         
-        correct_use_message = KvinneKraft.transStr("&cCorrect use: &7/dashmobs reload");        
+        correct_use_message = KvinneKraft.transStr("&cCorrect use: &7/dashmobs [add | del | reload] <mob> <min-price> <max-price>");        
         developer_message = KvinneKraft.transStr("&eMeow Meow, I am Dashie, the Developer of this Plugin, also known as Princess_Freyja!\n\n&eGithub: &ahttps://github.com/KvinneKraft/ \n&eWebsite: &ahttps://pugpawz.com");
+        
+        removed_message= KvinneKraft.transStr("&aThe specified rule has been removed from the list.");
+        added_message = KvinneKraft.transStr("&aThe specified rule has been added to the list.");
+        
+        invalid_entity_message = KvinneKraft.transStr("&cYou have specified an unknown entity!");        
+        invalid_range_message = KvinneKraft.transStr("&cThe range from which the prices vary is invalid.");
+        
+        already_exists_message = KvinneKraft.transStr("");
+        does_not_exist_message = KvinneKraft.transStr("");
     };
     
     String reloading_message, reloaded_message, developer_message, permission_denied_message, correct_use_message;
+    String added_message, removed_message, invalid_entity_message, invalid_range_message, already_exists_message;
+    String does_not_exist_message;
     
     @Override
     public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -258,6 +287,84 @@ class CommandsHandler implements CommandExecutor
             refresh();
             
             p.sendMessage(reloaded_message);
+        }
+        
+        else if(as.length >= 2)
+        {
+            if(((a.equals("add"))) || (a.equals("del")))
+            {
+                as[1] = as[1].toUpperCase();
+            
+                if((as.length >= 4) && (a.equals("add")))
+                {
+                    if(!Entity.isValid(as[1]))
+                    {
+                        p.sendMessage(invalid_entity_message);
+                        return f;
+                    }
+                
+                    else if(BetterMobs.events.entities.contains(as[1]))
+                    {
+                        p.sendMessage(already_exists_message);
+                        return f;
+                    };
+                
+                    Integer max_price = Integer.valueOf(as[2]);
+                    Integer min_price = Integer.valueOf(as[3]);
+                
+                    if((min_price > max_price) || (min_price < 1) || (max_price < 1))
+                    {
+                        p.sendMessage(invalid_range_message);
+                        return f;
+                    };
+                
+                    BetterMobs.events.entities.add(as[1]);
+                
+                    BetterMobs.events.max_prices.add(max_price);
+                    BetterMobs.events.min_prices.add(min_price);
+            
+                    p.sendMessage(added_message);
+                }
+            
+                else//del
+                {
+                    if(BetterMobs.events.entities.contains(as[1]))
+                    {
+                        int id = BetterMobs.events.entities.indexOf(as[1]);
+                       
+                        BetterMobs.events.max_prices.remove(id);
+                        BetterMobs.events.min_prices.remove(id);
+                       
+                        BetterMobs.events.entities.remove(id);
+
+                        p.sendMessage(removed_message);
+                    }
+                    
+                    else
+                    {
+                        p.sendMessage(does_not_exist_message);
+                    };
+                };
+                
+                List<String> entity_list = new ArrayList<>();
+                
+                for(String entity : BetterMobs.events.entities)
+                {
+                    int id = BetterMobs.events.entities.indexOf(entity);
+                    
+                    String max_price = String.valueOf(BetterMobs.events.max_prices.get(id));
+                    String min_price = String.valueOf(BetterMobs.events.min_prices.get(id));
+                    
+                    String priced_line = entity + " " + min_price + "-" + max_price;
+                    
+                    entity_list.add(priced_line);
+                };
+                
+                BetterMobs.config.set("price-properties.priced-entity-list", entity_list);
+                
+                BetterMobs.plugin.saveConfig();
+                BetterMobs.events.refresh();
+            }
         }
         
         else 
