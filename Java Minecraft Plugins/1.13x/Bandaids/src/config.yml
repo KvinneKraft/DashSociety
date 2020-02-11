@@ -1,0 +1,26 @@
+
+# Author: Dashie
+# Version: 1.0
+
+bandaid-properties:
+    
+    # The permission that is required in order to make use
+    # of a bandaid:
+    use-permission: 'dashcare.bandaids.use'
+    
+    # The permission that is required in order to give or
+    # do overall admin related things using the integrated
+    # command set of this plugin:
+    admin-permission: 'dashcare.admin'
+    
+    # The effects applied when an user redeems a bandaid.
+    # Keep in mind, this part is tricky, preferably use the
+    # in-game command controls rather than this:
+    effects:
+        - 'DAMAGE_RESISTANCE 2 20'
+        - 'REGENERATION 2 20'
+        
+    # Set any of the following to true or false in order to
+    # toggle between modes. These are some special effects:
+    summon-lightning: false
+    summon-fireworks: false
