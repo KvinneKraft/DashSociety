@@ -37,8 +37,8 @@ reward-properties:
     # Commands to execute along with their probability of being
     # actually executed (Format: <command> (chance):<chance 1-100>)):
     rewards:
-        - 'give %player% GOLDEN_APPLE 1 name:&d&lApple (chance):1'
-        - 'eco give %player% 500 (chance)40'
+        - 'give %player% golden_apple 1 name:&d&lApple (chance):1'
+        - 'eco give %player% 500 (chance):40'
         - 'eco give %player% 10 (chance):60' 
         - 'eco give %player% 1000 (chance):5'
         

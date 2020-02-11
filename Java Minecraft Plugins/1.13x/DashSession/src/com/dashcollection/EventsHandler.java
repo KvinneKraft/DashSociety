@@ -66,7 +66,7 @@ public class EventsHandler implements Listener
                         
                         if(chance >= rand_num)
                         {
-                            commands.get(id);                                             
+                            command = commands.get(id);                                             
                             
                             p.sendTitle(" ", reward_lucky_message);                        
                             p.sendMessage(reward_lucky_message);   
@@ -81,8 +81,6 @@ public class EventsHandler implements Listener
                         };
                         
                         server.dispatchCommand(server.getConsoleSender(), command.replace("%player%", player));
-                        
-                        System.out.println(command);
                     };
                 },
                 
@@ -131,11 +129,13 @@ public class EventsHandler implements Listener
             str = str.replace("(chance):", "`");
             String[] arr = str.split("`");
             
-            if(arr.length < 1)
+            if(arr.length < 2)
             {
                 Session.moon.print("Invalid format received. Skipping ....");
                 continue;
             };
+            
+            System.out.println(arr[0]);
             
             Integer chance = Integer.valueOf(arr[1]);
             

@@ -7,26 +7,22 @@ package com.dashmobs;
 
 import java.util.List;
 import java.util.Random;
+import org.bukkit.Bukkit;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.command.Command;
-import com.sun.tools.doclint.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.CommandExecutor;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.configuration.file.FileConfiguration;
 
-
-// To-DO:
-// - /dashmobs add command
-// - /dashmobs del command
 
 public class BetterMobs extends JavaPlugin
 {
@@ -34,8 +30,8 @@ public class BetterMobs extends JavaPlugin
     public static JavaPlugin plugin;
     public static Economy econ;
     
-    public static CommandsHandler commands;
-    public static EventsHandler events;
+    public static CommandsHandler commands = new CommandsHandler();
+    public static EventsHandler events = new EventsHandler();
     
     private boolean hasVault()
     {
@@ -68,14 +64,14 @@ public class BetterMobs extends JavaPlugin
         {
             KvinneKraft.print("Vault is missing, please install VAULT.");
             getServer().getPluginManager().disablePlugin(plugin);
+            
+            return;
         };
         
-        events = new EventsHandler();
         events.refresh();
         
         getServer().getPluginManager().registerEvents(events, plugin);
         
-        commands = new CommandsHandler();
         commands.refresh();
         
         getCommand("bettermobs").setExecutor(commands);
@@ -126,7 +122,7 @@ class EventsHandler implements Listener
                 continue;
             }
                 
-            else if(!Entity.isValid(arr[0].toUpperCase()))
+            else if(EntityType.fromName(arr[0].toUpperCase()) == null)
             {
                 KvinneKraft.print("[" + arr[0] + "]: Invalid entity received. Skipping ....");
                 continue;
@@ -149,7 +145,7 @@ class EventsHandler implements Listener
             Integer min_price = Integer.valueOf(sarr[0]);
             Integer max_price = Integer.valueOf(sarr[1]);
             
-            if((min_price > max_price) || (min_price < 1))
+            if((min_price > max_price) || (min_price < 0))
             {
                 KvinneKraft.print("[" + sarr[0] + "-" + sarr[1] + "]: Minimum price must be lower than maximum price. Skipping ....");
                 continue;
@@ -158,7 +154,7 @@ class EventsHandler implements Listener
             min_prices.add(min_price);
             max_prices.add(max_price);
             
-            entities.add(Entity.getValue(arr[0].toUpperCase()));        
+            entities.add(arr[0].toUpperCase());        
         };
     };
     
@@ -171,20 +167,21 @@ class EventsHandler implements Listener
         };
         
         Player p = (Player) e.getEntity().getKiller();
+        String entity_type = e.getEntity().getType().toString();
         
-        if((!p.hasPermission(reward_permission)) || (!entities.contains(e.getEntity().getType())))
+        if((!p.hasPermission(reward_permission)) || (!entities.contains(entity_type)))
         {
             return;
-        };
+        };        
         
-        String entity_name = e.getEntity().getType().toString().toLowerCase();
+        String entity_name = entity_type.toLowerCase();
         
         if(e.getEntity() instanceof Player)
         {
             entity_name = ((Player)e.getEntity()).getName();
         };
         
-        int entity_id = entities.indexOf(e.getEntity().getType());
+        int entity_id = entities.indexOf(entity_type);
  
         int max_price = max_prices.get(entity_id);
         int min_price = min_prices.get(entity_id);
@@ -224,18 +221,16 @@ class CommandsHandler implements CommandExecutor
         BetterMobs.plugin.reloadConfig();
         BetterMobs.config = BetterMobs.plugin.getConfig();        
         
-        permission_denied_message = KvinneKraft.transStr("&cYou lack sufficient Permissions!");
-        
         developer_support = BetterMobs.config.getBoolean("optional-properties.developer-support");        
         admin_permission = BetterMobs.config.getString("optional-properties.admin-permission");
-        
+
         reloading_message = KvinneKraft.transStr("&aDash Mobs is now reloading ....");
         reloaded_message = KvinneKraft.transStr("&aDash Mobs has been reloaded!");
         
         correct_use_message = KvinneKraft.transStr("&cCorrect use: &7/dashmobs [add | del | list | reload] <mob> <min-price> <max-price>");        
         developer_message = KvinneKraft.transStr("&eMeow Meow, I am Dashie, the Developer of this Plugin, also known as Princess_Freyja!\n\n&eGithub: &ahttps://github.com/KvinneKraft/ \n&eWebsite: &ahttps://pugpawz.com");
         
-        removed_message= KvinneKraft.transStr("&aThe specified rule has been removed from the list.");
+        removed_message = KvinneKraft.transStr("&aThe specified rule has been removed from the list.");
         added_message = KvinneKraft.transStr("&aThe specified rule has been added to the list.");
         
         invalid_entity_message = KvinneKraft.transStr("&cYou have specified an unknown entity!");        
@@ -244,13 +239,16 @@ class CommandsHandler implements CommandExecutor
         already_exists_message = KvinneKraft.transStr("&cThe specified rule already exists.");
         does_not_exist_message = KvinneKraft.transStr("&cThe specified rule does not exist.");
         
-        done_loading_list_message = KvinneKraft.transStr("&aLoading list .....");
-        loading_list_message = KvinneKraft.transStr("&aDone!!");
+        list_is_empty_message = KvinneKraft.transStr("&cYou should add some items first!");
+        not_numerical_message = KvinneKraft.transStr("&cYou must specify numerical values for the price range.");
+        
+        permission_denied_message = KvinneKraft.transStr("&cYou lack sufficient Permissions!");        
+        
+        done_loading_list_message = KvinneKraft.transStr("&aDone!!");        
+        loading_list_message = KvinneKraft.transStr("&aLoading list .....");
     };
     
-    String reloading_message, reloaded_message, developer_message, permission_denied_message, correct_use_message;
-    String added_message, removed_message, invalid_entity_message, invalid_range_message, already_exists_message;
-    String does_not_exist_message, loading_list_message, done_loading_list_message;
+    String reloading_message, reloaded_message, developer_message, permission_denied_message, correct_use_message, added_message, removed_message, invalid_entity_message, invalid_range_message, already_exists_message, does_not_exist_message, loading_list_message, done_loading_list_message, not_numerical_message, list_is_empty_message;
     
     @Override
     public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -287,8 +285,8 @@ class CommandsHandler implements CommandExecutor
         {
             p.sendMessage(reloading_message);
             
+            BetterMobs.events.refresh();            
             BetterMobs.commands.refresh();
-            refresh();
             
             p.sendMessage(reloaded_message);
         }
@@ -301,24 +299,32 @@ class CommandsHandler implements CommandExecutor
             
                 if((as.length >= 4) && (a.equals("add")))
                 {
-                    if(!Entity.isValid(as[1]))
+                    if(EntityType.fromName(as[1]) == null)
                     {
                         p.sendMessage(invalid_entity_message);
                         return f;
+                    };
+                    
+                    String rx = "\\d+";
+                    
+                    if((!as[3].matches(rx)) || (!as[2].matches(rx)))
+                    {
+                        p.sendMessage(not_numerical_message);
+                        return f;
+                    };
+                    
+                    Integer max_price = Integer.valueOf(as[3]);
+                    Integer min_price = Integer.valueOf(as[2]);
+                    
+                    if((min_price > max_price) || (min_price < 0) || (max_price < 1))
+                    {
+                        p.sendMessage(invalid_range_message);
+                        return f;
                     }
-                
+                    
                     else if(BetterMobs.events.entities.contains(as[1]))
                     {
                         p.sendMessage(already_exists_message);
-                        return f;
-                    };
-                
-                    Integer max_price = Integer.valueOf(as[2]);
-                    Integer min_price = Integer.valueOf(as[3]);
-                
-                    if((min_price > max_price) || (min_price < 1) || (max_price < 1))
-                    {
-                        p.sendMessage(invalid_range_message);
                         return f;
                     };
                 
@@ -330,7 +336,7 @@ class CommandsHandler implements CommandExecutor
                     p.sendMessage(added_message);
                 }
             
-                else//del
+                else if (a.equals("del"))
                 {
                     if(BetterMobs.events.entities.contains(as[1]))
                     {
@@ -348,6 +354,12 @@ class CommandsHandler implements CommandExecutor
                     {
                         p.sendMessage(does_not_exist_message);
                     };
+                }
+                
+                else
+                {
+                    p.sendMessage(correct_use_message);
+                    return f;
                 };
                 
                 List<String> entity_list = new ArrayList<>();
@@ -373,13 +385,19 @@ class CommandsHandler implements CommandExecutor
         
         else if(a.equals("list"))
         {
+            if(BetterMobs.events.entities.size() < 1)
+            {
+                p.sendMessage(list_is_empty_message);
+                return f;
+            };
+            
             Bukkit.getScheduler().runTaskAsynchronously(BetterMobs.plugin,
                 new Runnable()
                 {//I know I could optimize this...Stawp buggering mehhh!!
                     @Override
                     public void run()
                     {
-                        p.sendMessage(loading_list_message + "\n");
+                        p.sendMessage(loading_list_message + "\n \n");
                         
                         for(String str : BetterMobs.events.entities)
                         {
@@ -390,7 +408,7 @@ class CommandsHandler implements CommandExecutor
                             
                             str = str + " " + min_price + "$ - " + max_price + "$";
                             
-                            p.sendMessage(KvinneKraft.transStr("&7(index:" + String.valueOf(id) + ")> &e" + str));
+                            p.sendMessage(KvinneKraft.transStr("&7(index:" + String.valueOf(id) + ") &e" + str));
                         };
                         
                         p.sendMessage("\n" + done_loading_list_message);
@@ -407,3 +425,4 @@ class CommandsHandler implements CommandExecutor
         return t;
     };
 };
+     
