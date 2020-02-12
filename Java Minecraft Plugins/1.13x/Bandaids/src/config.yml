@@ -31,7 +31,7 @@ bandaid-properties:
     # The effects applied when an user redeems a bandaid.
     # Keep in mind, this part is tricky, preferably use the
     # in-game command controls rather than this:
-    effects:
+    bandaid-effects:
         - 'DAMAGE_RESISTANCE 2 20'
         - 'REGENERATION 2 20'
       
