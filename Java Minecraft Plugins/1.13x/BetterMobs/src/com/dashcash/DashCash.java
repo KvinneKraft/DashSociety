@@ -2,7 +2,7 @@
 // Author: Dashie
 // Version: 1.0
 
-package com.dashmobs;
+package com.dashcash;
 
 
 import java.util.List;
@@ -24,7 +24,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.configuration.file.FileConfiguration;
 
 
-public class BetterMobs extends JavaPlugin
+public class DashCash extends JavaPlugin
 {
     public static FileConfiguration config;
     public static JavaPlugin plugin;
@@ -74,7 +74,7 @@ public class BetterMobs extends JavaPlugin
         
         commands.refresh();
         
-        getCommand("bettermobs").setExecutor(commands);
+        getCommand("dashcash").setExecutor(commands);
         
         KvinneKraft.print("Plugin has been loaded!");
     };
@@ -98,11 +98,11 @@ class EventsHandler implements Listener
     
     public void refresh()
     {
-        BetterMobs.plugin.reloadConfig();
-        BetterMobs.config = BetterMobs.plugin.getConfig();        
+        DashCash.plugin.reloadConfig();
+        DashCash.config = DashCash.plugin.getConfig();        
         
-        reward_permission = BetterMobs.config.getString("price-properties.price-permission");
-        reward_message = KvinneKraft.transStr(BetterMobs.config.getString("price-properties.price-message"));
+        reward_permission = DashCash.config.getString("price-properties.price-permission");
+        reward_message = KvinneKraft.transStr(DashCash.config.getString("price-properties.price-message"));
         
         if(entities.size() > 0)
         {
@@ -112,7 +112,7 @@ class EventsHandler implements Listener
             entities.clear();
         };
         
-        for(String str : BetterMobs.config.getStringList("price-properties.priced-entity-list"))
+        for(String str : DashCash.config.getStringList("price-properties.priced-entity-list"))
         {
             String[] arr = str.split(" ");
             
@@ -187,7 +187,7 @@ class EventsHandler implements Listener
         int min_price = min_prices.get(entity_id);
         
         int reward_cash = new Random().nextInt((max_price - min_price) + 1) + min_price;
-        BetterMobs.econ.depositPlayer(p, reward_cash);
+        DashCash.econ.depositPlayer(p, reward_cash);
         
         String message = reward_message.replace("%m%", String.valueOf(reward_cash)).replace("%e%", entity_name);
         p.sendMessage(message);
@@ -199,7 +199,7 @@ class KvinneKraft
 {
     public static void print(String str)
     {
-        System.out.println("(Dash Mobs): " + str);
+        System.out.println("(Dash Cash): " + str);
     };
         
     public static String transStr(String str)
@@ -218,16 +218,16 @@ class CommandsHandler implements CommandExecutor
     
     public void refresh()
     {
-        BetterMobs.plugin.reloadConfig();
-        BetterMobs.config = BetterMobs.plugin.getConfig();        
+        DashCash.plugin.reloadConfig();
+        DashCash.config = DashCash.plugin.getConfig();        
         
-        developer_support = BetterMobs.config.getBoolean("optional-properties.developer-support");        
-        admin_permission = BetterMobs.config.getString("optional-properties.admin-permission");
+        developer_support = DashCash.config.getBoolean("optional-properties.developer-support");        
+        admin_permission = DashCash.config.getString("optional-properties.admin-permission");
 
-        reloading_message = KvinneKraft.transStr("&aDash Mobs is now reloading ....");
-        reloaded_message = KvinneKraft.transStr("&aDash Mobs has been reloaded!");
+        reloading_message = KvinneKraft.transStr("&aDash Cash is now reloading ....");
+        reloaded_message = KvinneKraft.transStr("&aDash Cash has been reloaded!");
         
-        correct_use_message = KvinneKraft.transStr("&cCorrect use: &7/dashmobs [add | del | list | reload] <mob> <min-price> <max-price>");        
+        correct_use_message = KvinneKraft.transStr("&cCorrect use: &7/dashmobs [add | del | list | reload] <entity> <min-price> <max-price>");        
         developer_message = KvinneKraft.transStr("&eMeow Meow, I am Dashie, the Developer of this Plugin, also known as Princess_Freyja!\n\n&eGithub: &ahttps://github.com/KvinneKraft/ \n&eWebsite: &ahttps://pugpawz.com");
         
         removed_message = KvinneKraft.transStr("&aThe specified rule has been removed from the list.");
@@ -285,8 +285,8 @@ class CommandsHandler implements CommandExecutor
         {
             p.sendMessage(reloading_message);
             
-            BetterMobs.events.refresh();            
-            BetterMobs.commands.refresh();
+            DashCash.events.refresh();            
+            DashCash.commands.refresh();
             
             p.sendMessage(reloaded_message);
         }
@@ -322,30 +322,30 @@ class CommandsHandler implements CommandExecutor
                         return f;
                     }
                     
-                    else if(BetterMobs.events.entities.contains(as[1]))
+                    else if(DashCash.events.entities.contains(as[1]))
                     {
                         p.sendMessage(already_exists_message);
                         return f;
                     };
                 
-                    BetterMobs.events.entities.add(as[1]);
+                    DashCash.events.entities.add(as[1]);
                 
-                    BetterMobs.events.max_prices.add(max_price);
-                    BetterMobs.events.min_prices.add(min_price);
+                    DashCash.events.max_prices.add(max_price);
+                    DashCash.events.min_prices.add(min_price);
             
                     p.sendMessage(added_message);
                 }
             
                 else if (a.equals("del"))
                 {
-                    if(BetterMobs.events.entities.contains(as[1]))
+                    if(DashCash.events.entities.contains(as[1]))
                     {
-                        int id = BetterMobs.events.entities.indexOf(as[1]);
+                        int id = DashCash.events.entities.indexOf(as[1]);
                        
-                        BetterMobs.events.max_prices.remove(id);
-                        BetterMobs.events.min_prices.remove(id);
+                        DashCash.events.max_prices.remove(id);
+                        DashCash.events.min_prices.remove(id);
                        
-                        BetterMobs.events.entities.remove(id);
+                        DashCash.events.entities.remove(id);
 
                         p.sendMessage(removed_message);
                     }
@@ -364,34 +364,34 @@ class CommandsHandler implements CommandExecutor
                 
                 List<String> entity_list = new ArrayList<>();
                 
-                for(String entity : BetterMobs.events.entities)
+                for(String entity : DashCash.events.entities)
                 {
-                    int id = BetterMobs.events.entities.indexOf(entity);
+                    int id = DashCash.events.entities.indexOf(entity);
                     
-                    String max_price = String.valueOf(BetterMobs.events.max_prices.get(id));
-                    String min_price = String.valueOf(BetterMobs.events.min_prices.get(id));
+                    String max_price = String.valueOf(DashCash.events.max_prices.get(id));
+                    String min_price = String.valueOf(DashCash.events.min_prices.get(id));
                     
                     String priced_line = entity + " " + min_price + "-" + max_price;
                     
                     entity_list.add(priced_line);
                 };
                 
-                BetterMobs.config.set("price-properties.priced-entity-list", entity_list);
+                DashCash.config.set("price-properties.priced-entity-list", entity_list);
                 
-                BetterMobs.plugin.saveConfig();
-                BetterMobs.events.refresh();
+                DashCash.plugin.saveConfig();
+                DashCash.events.refresh();
             }
         }
         
         else if(a.equals("list"))
         {
-            if(BetterMobs.events.entities.size() < 1)
+            if(DashCash.events.entities.size() < 1)
             {
                 p.sendMessage(list_is_empty_message);
                 return f;
             };
             
-            Bukkit.getScheduler().runTaskAsynchronously(BetterMobs.plugin,
+            Bukkit.getScheduler().runTaskAsynchronously(DashCash.plugin,
                 new Runnable()
                 {//I know I could optimize this...Stawp buggering mehhh!!
                     @Override
@@ -399,12 +399,12 @@ class CommandsHandler implements CommandExecutor
                     {
                         p.sendMessage(loading_list_message + "\n \n");
                         
-                        for(String str : BetterMobs.events.entities)
+                        for(String str : DashCash.events.entities)
                         {
-                            int id = BetterMobs.events.entities.indexOf(str);
+                            int id = DashCash.events.entities.indexOf(str);
                             
-                            String max_price = String.valueOf(BetterMobs.events.max_prices.get(id));
-                            String min_price = String.valueOf(BetterMobs.events.min_prices.get(id));
+                            String max_price = String.valueOf(DashCash.events.max_prices.get(id));
+                            String min_price = String.valueOf(DashCash.events.min_prices.get(id));
                             
                             str = str + " " + min_price + "$ - " + max_price + "$";
                             

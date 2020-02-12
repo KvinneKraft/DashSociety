@@ -15,13 +15,19 @@ bandaid-properties:
     # of a bandaid:
     use-permission: 'dashcare.bandaids.use'
     
+    # The message that will be sent to the player when they
+    # are trying to use a bandaid without permission:
+    permission-deny-message: "&cYou may not use this."
+    
+    # The message that will be sent to the player when they
+    # successfully apply a bandaid:
+    apply-message: "&aYou have applied &d1 &abandaid!"
     
     # The permission that is required in order to give or
     # do overall admin related things using the integrated
     # command set of this plugin:
     admin-permission: 'dashcare.admin'
-    
-    
+      
     # The effects applied when an user redeems a bandaid.
     # Keep in mind, this part is tricky, preferably use the
     # in-game command controls rather than this:
@@ -29,12 +35,17 @@ bandaid-properties:
         - 'DAMAGE_RESISTANCE 2 20'
         - 'REGENERATION 2 20'
       
-        
     # Set any of the following to true or false in order to
     # toggle between modes. These are some special effects:
     summon-lightning: false
     summon-fireworks: false
     
-    
-    # The material that the bandaid will be. 
+    # The material that the bandaid will be: 
     bandaid-material: 'PAPER'
+        
+    # The custom item name of the bandaid:
+    bandaid-name: '&d&l&nD&dash &d&l&nB&dandaid'
+         
+    # The custom lore of the bandaid:
+    bandaid-lore:
+        - '&d&la fluffy bandaid!'
