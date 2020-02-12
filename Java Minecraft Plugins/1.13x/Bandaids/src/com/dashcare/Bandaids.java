@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class Bandaids extends JavaPlugin
@@ -64,7 +65,23 @@ public class Bandaids extends JavaPlugin
     
     public void refresh_data()
     {
-        // Reload Method
+        plugin.reloadConfig();
+        config = plugin.getConfig();
+        
+        bandaid_lore = config.getStringList("bandaid-properties.bandaid-lore");
+        for(Integer id = 0; id < bandaid_lore.size(); id += 1)
+        {
+            bandaid_lore.set(id, Lunaris.colors(bandaid_lore.get(id)));
+        };
+        
+        bandaid_material = Material.getMaterial(config.getString("bandaid-properties.bandaid-material").toUpperCase().replace(" ", "_"));
+        if(bandaid_material == null)
+        {
+            Lunaris.print("The given material is invalid, setting it to PAPER!");
+            bandaid_material = Material.PAPER;
+        };
+        
+        bandaid_name = Lunaris.colors(config.getString("bandaid-properties.bandaid-name"));
     };
     
     public static ItemStack get_bandaid(Integer amount)
@@ -93,7 +110,62 @@ class EventsHandler implements Listener
     
     public void refresh_data()
     {
-        // Reload Method
+        Bandaids.plugin.reloadConfig();;
+        Bandaids.config = Bandaids.plugin.getConfig();
+        
+        summon_lightning = Bandaids.config.getBoolean("bandaid-properties.summon-lightning");
+        summon_fireworks = Bandaids.config.getBoolean("bandaid-properties.summon-fireworks");
+        
+        use_permission = Lunaris.colors(Bandaids.config.getString("bandaid-properties.use-permission"));
+        apply_message = Lunaris.colors(Bandaids.config.getString("bandaid-properties.apply-message"));
+        deny_message = Lunaris.colors(Bandaids.config.getString("bandaid-properties.permission-deny-message"));
+        
+        if(potion_effects.size() > 0)
+        {
+            potion_effects.clear();
+        };
+        
+        for(String str : Bandaids.config.getStringList("bandaid-properties.bandaid-effects"))
+        {
+            String[] arr = str.toUpperCase().split(" ");
+            
+            if(arr.length < 3)
+            {
+                Lunaris.print("Found invalid bandaid effect format, skipping ....");
+                continue;
+            };
+            
+            PotionEffectType effect = PotionEffectType.getByName(arr[0]);
+            
+            if(effect == null)
+            {
+                Lunaris.print("Found invalid bandaid effect type, skipping ....");
+                continue;
+            };
+            
+            Integer amplifier = Integer.valueOf(arr[1]);
+            Integer duration = Integer.valueOf(arr[2]);            
+            
+            if((duration == null) || (amplifier == null))
+            {
+                Lunaris.print("You must specify a correct amplifier and or duration.");
+                continue;
+            }            
+            
+            else if(amplifier < 1)
+            {
+                Lunaris.print("Amplifier for bandaid effect is too low, skipping ....");
+                continue;
+            }
+            
+            else if(duration < 1)
+            {
+                Lunaris.print("The duration is too low, skipping ....");
+                continue;
+            };
+            
+            potion_effects.add(new PotionEffect(effect, amplifier, duration));
+        };
     };
     
     
@@ -113,9 +185,13 @@ class EventsHandler implements Listener
         {
             p.sendMessage(deny_message);
             return;
+        }
+        
+        else if(potion_effects.size() > 0)
+        {
+            p.addPotionEffects(potion_effects);
         };
         
-        p.addPotionEffects(potion_effects);
         p.getInventory().remove(item);        
         
         if((summon_lightning) || (summon_fireworks))
