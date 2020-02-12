@@ -9,3 +9,8 @@ name: DashBandaids
 
 version: 1.0
 api-version: 1.13
+
+commands:
+    bandaids:
+        description: main command for Dashies command plugin.        
+        aliases: [DashBandaids, Dashaids]
