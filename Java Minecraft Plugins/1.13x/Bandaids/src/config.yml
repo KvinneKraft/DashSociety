@@ -7,7 +7,17 @@ optional-properties:
     # Should users without the admin permission be shown 
     # a message that tells them who has coded this plugin?
     dev-support: true
-
+    
+    receive-message: ""
+        
+    give-message: ""
+    
+    get-message: ""
+    
+    # The permission that is required in order to give or
+    # do overall admin related things using the integrated
+    # command set of this plugin:
+    admin-permission: 'dashcare.admin'
 
 bandaid-properties:
     
@@ -22,11 +32,6 @@ bandaid-properties:
     # The message that will be sent to the player when they
     # successfully apply a bandaid:
     apply-message: "&aYou have applied &d1 &abandaid!"
-    
-    # The permission that is required in order to give or
-    # do overall admin related things using the integrated
-    # command set of this plugin:
-    admin-permission: 'dashcare.admin'
       
     # The effects applied when an user redeems a bandaid.
     # Keep in mind, this part is tricky, preferably use the
