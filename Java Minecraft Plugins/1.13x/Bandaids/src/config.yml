@@ -56,6 +56,10 @@ bandaid-properties:
     summon-lightning: false
     summon-fireworks: false
     
+    # The message sent to the player when they have to wait
+    # before using another bandaid:
+    cooldown-message: "&aYou must at least wait 30 seconds before using another one!"
+    
     # The amount of seconds before the user is able to use
     # another bandaid:
     cooldown: 30

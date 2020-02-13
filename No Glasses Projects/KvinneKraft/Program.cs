@@ -125,22 +125,13 @@ namespace KvinneKraft
             Console.Write("h");
 
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("s");
+            Console.Write("I");
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("p");
+            Console.Write("v");
 
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("l");
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("o");
-
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("i");
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("t");
+            Console.Write("y");
 
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write(")");

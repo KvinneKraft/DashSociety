@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -24,6 +25,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -56,6 +58,9 @@ public class Bandaids extends JavaPlugin
         events.refresh_data();
         
         refresh_data();        
+        
+        getServer().getPluginManager().registerEvents(events, plugin);
+        getCommand("bandaids").setExecutor(commands);
         
         Lunaris.print("Plugin has been loaded!");
     };
@@ -103,6 +108,8 @@ public class Bandaids extends JavaPlugin
         bandaid_meta.setDisplayName(bandaid_name);
         bandaid_meta.setLore(bandaid_lore);
         
+        bandaid.setItemMeta(bandaid_meta);
+        
         return bandaid;
     };
 };
@@ -145,7 +152,7 @@ class CommandsHandler implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender s, Command c, String a, String[] as)
     {
-        if((s instanceof Player))
+        if(!(s instanceof Player))
             return f;
         
         Player p = (Player) s;
@@ -214,7 +221,7 @@ class CommandsHandler implements CommandExecutor
             
             else if((a.equals("get")) && (as.length>=2))
             {
-                amount = Integer.valueOf(as[2]);
+                amount = Integer.valueOf(as[1]);
             };
             
             if((amount == null) || (amount < 1))
@@ -260,7 +267,7 @@ class EventsHandler implements Listener
     
     Integer cooldown;
     
-    String use_permission, deny_message, apply_message;
+    String use_permission, deny_message, apply_message, cooldown_message;
     
     
     public void refresh_data()
@@ -270,6 +277,7 @@ class EventsHandler implements Listener
         
         FileConfiguration config = Bandaids.config;
         
+        cooldown_message = Lunaris.colors(config.getString("bandaid-properties.cooldown-message"));
         cooldown = config.getInt("bandaid-properties.cooldown");
         
         if(cooldown < 1)
@@ -330,24 +338,37 @@ class EventsHandler implements Listener
                 continue;
             };
             
-            potion_effects.add(new PotionEffect(effect, amplifier, duration));
+            potion_effects.add(new PotionEffect(effect, duration * 20, amplifier));
         };
     };
     
     
+    List<UUID> uuids = new ArrayList<>();
+    
+    
     @EventHandler
     public void onInteract(PlayerInteractEvent e)
-    {
-        ItemStack item = new ItemStack(e.getItem().getType(), 1);
-        
-        if((item == null) || (!item.hasItemMeta()) || (item.getItemMeta().getCustomModelData() != 2020))
+    {   
+        if((e.getAction() == Action.LEFT_CLICK_BLOCK) || (e.getAction() == Action.RIGHT_CLICK_BLOCK) || (e.getItem() == null) || (!e.getItem().hasItemMeta()))
         {
             return;
-        };
+        }
         
-        Player p = e.getPlayer();
+        else if((e.getItem() == null) || (e.getItem().getItemMeta().getCustomModelData() != 2020))
+        {
+            return;
+        }
         
-        if(!p.hasPermission(use_permission))
+        Player p = e.getPlayer();        
+        UUID uid = p.getUniqueId();
+        
+        if(uuids.contains(uid))
+        {
+            p.sendMessage(cooldown_message);
+            return;
+        }        
+        
+        else if(!p.hasPermission(use_permission))
         {
             p.sendMessage(deny_message);
             return;
@@ -356,9 +377,7 @@ class EventsHandler implements Listener
         else if(potion_effects.size() > 0)
         {
             p.addPotionEffects(potion_effects);
-        };
-        
-        p.getInventory().remove(item);        
+        };    
         
         if((summon_lightning) || (summon_fireworks))
         {
@@ -381,12 +400,32 @@ class EventsHandler implements Listener
             p.setInvulnerable(false);
         };
         
+        e.getItem().setAmount(e.getItem().getAmount() - 1);
+        
         if(send_title)
         {
             p.sendTitle(" ", apply_message);
-        };
+        };        
         
         p.sendMessage(apply_message);
+        
+        uuids.add(uid);
+        
+        Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(Bandaids.plugin,
+            new Runnable() 
+            {
+                @Override
+                public void run()
+                {
+                    if(uuids.contains(uid))
+                    {
+                        uuids.remove(uid);
+                    };
+                };
+            }, 
+            
+            cooldown * 20
+        );
     };
 };
 
