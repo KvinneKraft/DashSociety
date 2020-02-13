@@ -6,16 +6,27 @@ package com.dashcare;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -62,7 +73,7 @@ public class Bandaids extends JavaPlugin
     static String bandaid_name;
     
     
-    public void refresh_data()
+    public static void refresh_data()
     {
         plugin.reloadConfig();
         config = plugin.getConfig();
@@ -97,12 +108,157 @@ public class Bandaids extends JavaPlugin
 };
 
 
+class CommandsHandler implements CommandExecutor
+{
+    boolean t = true, f, developer_support;
+    
+    String reloading_message, reloaded_message, admin_permission, receive_message, give_message, get_message, correct_syntax_message, player_offline_message, invalid_amount_message, plug_message, permission_denied_message;
+    
+    
+    public void refresh_data()
+    {
+        Bandaids.plugin.reloadConfig();
+        Bandaids.config = Bandaids.plugin.getConfig();
+    
+        FileConfiguration config = Bandaids.config;
+        
+        developer_support = config.getBoolean("optional-properties.dev-support");
+        
+        permission_denied_message = Lunaris.colors("&cYou are not allowed to do this.");                
+        player_offline_message = Lunaris.colors("&cThe specified player seems to be offline.");
+        invalid_amount_message = Lunaris.colors("&cYou must specify a valid integral value.");
+        
+        correct_syntax_message = Lunaris.colors("&cCorrect Syntax: &7/bandaids [give | get | reload] <player | amount> <amount>");
+        plug_message = Lunaris.colors("&dThis plugin has been coded by &eDashie &dthe founder of &eKvinne Kraft &dalso known as &eDashies Softwaries&d. \n \n&dFind more of my work at &ehttps://github.com/KvinneKraft/Dashnarok ;\')");        
+        
+        receive_message = Lunaris.colors(config.getString("optional-properties.receive-message"));
+        give_message = Lunaris.colors(config.getString("optional-properties.give-message"));
+        get_message = Lunaris.colors(config.getString("optional-properties.get-message"));        
+    
+        reloading_message = Lunaris.colors("&aReloading Dashies Bandaids 1.0 ....");
+        reloaded_message = Lunaris.colors("&aDashies Bandaids 1.0 has been reloaded!");
+        
+        admin_permission = config.getString("optional-properties.admin-permission");               
+    };
+    
+    
+    @Override
+    public boolean onCommand(CommandSender s, Command c, String a, String[] as)
+    {
+        if((s instanceof Player))
+            return f;
+        
+        Player p = (Player) s;
+        
+        if(!(p.hasPermission(admin_permission)))
+        {
+            if(developer_support)
+            {
+                p.sendMessage(plug_message);
+            }
+            
+            else
+            {
+                p.sendMessage(permission_denied_message);
+            };
+            
+            return f;
+        }
+        
+        else if(as.length < 1)
+        {
+            p.sendMessage(correct_syntax_message);
+            return f;
+        };
+        
+        a = as[0].toLowerCase();
+        
+        // Syntax: /bandaids [get | give] <player> <amount>
+        
+        if(a.equals("reload"))
+        {
+            p.sendMessage(reloading_message);
+            
+            Bandaids.events.refresh_data();
+            Bandaids.refresh_data();
+            refresh_data();
+            
+            p.sendMessage(reloaded_message);
+        }
+        
+        else
+        if((a.equals("get")) || (a.equals("give")))
+        {
+            Player target = p;
+            
+            if((a.equals("give")) && (as.length<3))
+            {
+                p.sendMessage(correct_syntax_message);
+                return f;
+            };
+            
+            Integer amount = 1;
+            
+            if((a.equals("give")) && (as.length>=3))
+            {
+                target = Bukkit.getPlayerExact(as[1]);
+                
+                if(target == null)
+                {
+                    p.sendMessage(player_offline_message);
+                    return f;
+                };
+                
+                amount = Integer.valueOf(as[2]);                
+            }
+            
+            else if((a.equals("get")) && (as.length>=2))
+            {
+                amount = Integer.valueOf(as[2]);
+            };
+            
+            if((amount == null) || (amount < 1))
+            {
+                p.sendMessage(invalid_amount_message);
+                return f;
+            };            
+            
+            ItemStack bandaid = Bandaids.get_bandaid(amount);
+            
+            target.getInventory().addItem(bandaid);
+      
+            String str_a = String.valueOf(amount);
+            
+            if(target != p)
+            {
+                target.sendMessage(receive_message.replace("%a%", str_a));
+                p.sendMessage(give_message.replace("%a%", str_a).replace("%p%", target.getName()));                
+            }
+            
+            else
+            {
+                p.sendMessage(get_message.replace("%a%", str_a));
+            };
+        }
+        
+        else
+        {
+            p.sendMessage(correct_syntax_message);
+            return f;
+        };
+        
+        return t;
+    };
+};
+
 
 class EventsHandler implements Listener
 {
     List<PotionEffect> potion_effects = new ArrayList<>();
     
-    boolean summon_lightning, summon_fireworks;
+    boolean summon_lightning, summon_fireworks, send_title;
+    
+    Integer cooldown;
     
     String use_permission, deny_message, apply_message;
     
@@ -112,19 +268,30 @@ class EventsHandler implements Listener
         Bandaids.plugin.reloadConfig();;
         Bandaids.config = Bandaids.plugin.getConfig();
         
-        summon_lightning = Bandaids.config.getBoolean("bandaid-properties.summon-lightning");
-        summon_fireworks = Bandaids.config.getBoolean("bandaid-properties.summon-fireworks");
+        FileConfiguration config = Bandaids.config;
         
-        use_permission = Lunaris.colors(Bandaids.config.getString("bandaid-properties.use-permission"));
-        apply_message = Lunaris.colors(Bandaids.config.getString("bandaid-properties.apply-message"));
-        deny_message = Lunaris.colors(Bandaids.config.getString("bandaid-properties.permission-deny-message"));
+        cooldown = config.getInt("bandaid-properties.cooldown");
+        
+        if(cooldown < 1)
+        {
+            Lunaris.print("Invalid cooldown specified in config, using default. (30 seconds)");
+            cooldown = 30;
+        };
+        
+        summon_lightning = config.getBoolean("bandaid-properties.summon-lightning");
+        summon_fireworks = config.getBoolean("bandaid-properties.summon-fireworks");
+        send_title = config.getBoolean("bandaid-properties.send-title");
+        
+        use_permission = Lunaris.colors(config.getString("bandaid-properties.use-permission"));
+        apply_message = Lunaris.colors(config.getString("bandaid-properties.apply-message"));
+        deny_message = Lunaris.colors(config.getString("bandaid-properties.permission-deny-message"));
         
         if(potion_effects.size() > 0)
         {
             potion_effects.clear();
         };
         
-        for(String str : Bandaids.config.getStringList("bandaid-properties.bandaid-effects"))
+        for(String str : config.getStringList("bandaid-properties.bandaid-effects"))
         {
             String[] arr = str.toUpperCase().split(" ");
             
@@ -206,10 +373,17 @@ class EventsHandler implements Listener
             
             if(summon_fireworks)
             {
-                //Spawn fireworks<<<
+                Random rand = new Random();
+                
+                Lunaris.dashworks(new Integer[] { rand.nextInt(255), rand.nextInt(255), rand.nextInt(255) }, location);
             };
             
             p.setInvulnerable(false);
+        };
+        
+        if(send_title)
+        {
+            p.sendTitle(" ", apply_message);
         };
         
         p.sendMessage(apply_message);
@@ -229,5 +403,34 @@ class Lunaris
     public static String colors(String str)
     {
         return ChatColor.translateAlternateColorCodes('&', str);
+    };
+    
+    
+    static List<FireworkEffect.Type> firework_effect_types = new ArrayList<>(
+        Arrays.asList(
+            new FireworkEffect.Type[]
+            {
+                FireworkEffect.Type.BALL, 
+                FireworkEffect.Type.BALL_LARGE,
+                FireworkEffect.Type.BURST,
+                FireworkEffect.Type.CREEPER,
+                FireworkEffect.Type.STAR,
+            }
+        )
+    );
+    
+    
+    public static void dashworks(Integer[] rgb, Location location)
+    {
+        Color color = Color.fromRGB(rgb[0], rgb[1], rgb[2]);
+        
+        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        FireworkMeta firework_meta = firework.getFireworkMeta();
+        
+        FireworkEffect.Type firework_effect_type = firework_effect_types.get(new Random().nextInt(firework_effect_types.size()));
+        firework_meta.addEffect(FireworkEffect.builder().withColor(color).withFlicker().withTrail().with(firework_effect_type).flicker(true).build());
+        
+        firework.setFireworkMeta(firework_meta);
+        firework.detonate();
     };
 };
