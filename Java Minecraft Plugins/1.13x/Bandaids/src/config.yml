@@ -8,16 +8,23 @@ optional-properties:
     # a message that tells them who has coded this plugin?
     dev-support: true
     
-    receive-message: ""
-        
-    give-message: ""
+    # The message the user that is being given a bandaid
+    # will receive for such:
+    receive-message: "&aYou have been given &d%a% &abandaids ;D"
+     
+    # The message that the giver will receive when giving
+    # a bandaid:
+    give-message: "&aYou have given &d%p% %a% &abandaids!"
     
-    get-message: ""
+    # The message that the user executing the command 
+    # will receive when giving themselves a bandaid:
+    get-message: "&aYou have given yourself &d%a% &abandaids!"
     
     # The permission that is required in order to give or
     # do overall admin related things using the integrated
     # command set of this plugin:
     admin-permission: 'dashcare.admin'
+
 
 bandaid-properties:
     

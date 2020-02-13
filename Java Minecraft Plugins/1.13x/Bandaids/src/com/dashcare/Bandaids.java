@@ -73,7 +73,7 @@ public class Bandaids extends JavaPlugin
     static String bandaid_name;
     
     
-    public void refresh_data()
+    public static void refresh_data()
     {
         plugin.reloadConfig();
         config = plugin.getConfig();
@@ -112,7 +112,7 @@ class CommandsHandler implements CommandExecutor
 {
     boolean t = true, f, developer_support;
     
-    String admin_permission, receive_message, give_message, get_message, correct_syntax_message, player_offline_message, invalid_amount_message, plug_message, permission_denied_message;
+    String reloading_message, reloaded_message, admin_permission, receive_message, give_message, get_message, correct_syntax_message, player_offline_message, invalid_amount_message, plug_message, permission_denied_message;
     
     
     public void refresh_data()
@@ -124,18 +124,20 @@ class CommandsHandler implements CommandExecutor
         
         developer_support = config.getBoolean("optional-properties.dev-support");
         
-        // Work on dis \/ <---
-        permission_denied_message = Lunaris.colors("");                
-        player_offline_message = Lunaris.colors("");
-        invalid_amount_message = Lunaris.colors("");
+        permission_denied_message = Lunaris.colors("&cYou are not allowed to do this.");                
+        player_offline_message = Lunaris.colors("&cThe specified player seems to be offline.");
+        invalid_amount_message = Lunaris.colors("&cYou must specify a valid integral value.");
         
-        correct_syntax_message = Lunaris.colors("");
-        plug_message = Lunaris.colors("");        
+        correct_syntax_message = Lunaris.colors("&cCorrect Syntax: &7/bandaids [give | get | reload] <player | amount> <amount>");
+        plug_message = Lunaris.colors("&dThis plugin has been coded by &eDashie &dthe founder of &eKvinne Kraft &dalso known as &eDashies Softwaries&d. \n \n&dFind more of my work at &ehttps://github.com/KvinneKraft/Dashnarok ;\')");        
         
-        receive_message = Lunaris.colors(config.getString("optional-properties."));
-        give_message = Lunaris.colors(config.getString("optional-properties."));
-        get_message = Lunaris.colors(config.getString("optional-properties."));        
+        receive_message = Lunaris.colors(config.getString("optional-properties.receive-message"));
+        give_message = Lunaris.colors(config.getString("optional-properties.give-message"));
+        get_message = Lunaris.colors(config.getString("optional-properties.get-message"));        
     
+        reloading_message = Lunaris.colors("&aReloading Dashies Bandaids 1.0 ....");
+        reloaded_message = Lunaris.colors("&aDashies Bandaids 1.0 has been reloaded!");
+        
         admin_permission = config.getString("optional-properties.admin-permission");               
     };
     
@@ -173,6 +175,18 @@ class CommandsHandler implements CommandExecutor
         
         // Syntax: /bandaids [get | give] <player> <amount>
         
+        if(a.equals("reload"))
+        {
+            p.sendMessage(reloading_message);
+            
+            Bandaids.events.refresh_data();
+            Bandaids.refresh_data();
+            refresh_data();
+            
+            p.sendMessage(reloaded_message);
+        }
+        
+        else
         if((a.equals("get")) || (a.equals("give")))
         {
             Player target = p;
@@ -210,17 +224,20 @@ class CommandsHandler implements CommandExecutor
             };            
             
             ItemStack bandaid = Bandaids.get_bandaid(amount);
+            
             target.getInventory().addItem(bandaid);
+      
+            String str_a = String.valueOf(amount);
             
             if(target != p)
             {
-                target.sendMessage(receive_message);
-                p.sendMessage(give_message);                
+                target.sendMessage(receive_message.replace("%a%", str_a));
+                p.sendMessage(give_message.replace("%a%", str_a).replace("%p%", target.getName()));                
             }
             
             else
             {
-                p.sendMessage(get_message);
+                p.sendMessage(get_message.replace("%a%", str_a));
             };
         }
         
