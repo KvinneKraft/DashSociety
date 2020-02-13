@@ -256,7 +256,9 @@ class EventsHandler implements Listener
 {
     List<PotionEffect> potion_effects = new ArrayList<>();
     
-    boolean summon_lightning, summon_fireworks;
+    boolean summon_lightning, summon_fireworks, send_title;
+    
+    Integer cooldown;
     
     String use_permission, deny_message, apply_message;
     
@@ -268,8 +270,17 @@ class EventsHandler implements Listener
         
         FileConfiguration config = Bandaids.config;
         
+        cooldown = config.getInt("bandaid-properties.cooldown");
+        
+        if(cooldown < 1)
+        {
+            Lunaris.print("Invalid cooldown specified in config, using default. (30 seconds)");
+            cooldown = 30;
+        };
+        
         summon_lightning = config.getBoolean("bandaid-properties.summon-lightning");
         summon_fireworks = config.getBoolean("bandaid-properties.summon-fireworks");
+        send_title = config.getBoolean("bandaid-properties.send-title");
         
         use_permission = Lunaris.colors(config.getString("bandaid-properties.use-permission"));
         apply_message = Lunaris.colors(config.getString("bandaid-properties.apply-message"));
@@ -368,6 +379,11 @@ class EventsHandler implements Listener
             };
             
             p.setInvulnerable(false);
+        };
+        
+        if(send_title)
+        {
+            p.sendTitle(" ", apply_message);
         };
         
         p.sendMessage(apply_message);
