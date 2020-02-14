@@ -1,0 +1,32 @@
+E:\Purr Net\Dashies Gate\obj\Release\backdoor server.csprojAssemblyReference.cache
+E:\Purr Net\Dashies Gate\obj\Release\backdoor server.csproj.CoreCompileInputs.cache
+E:\Purr Net\Dashies Gate\obj\Release\Dashies Gate.exe
+E:\Purr Net\Dashies Gate\obj\Release\Dashies Gate.pdb
+E:\Purr Net\Dashies Gate\Dashies Gate.exe.config
+E:\Purr Net\Dashies Gate\Dashies Gate.exe
+E:\Purr Net\Dashies Gate\Dashies Gate.pdb
+F:\Purr Net\cs proj\Dashies Gate\backdoor server\Dashies Gate.exe.config
+F:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\Dashies Gate.exe
+F:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\Dashies Gate.pdb
+F:\Purr Net\cs proj\Dashies Gate\backdoor server\Dashies Gate.exe
+F:\Purr Net\cs proj\Dashies Gate\backdoor server\Dashies Gate.pdb
+F:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor server.csprojAssemblyReference.cache
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor server.csprojAssemblyReference.cache
+E:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor server.csprojAssemblyReference.cache
+E:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor server.csproj.CoreCompileInputs.cache
+E:\Purr Net\cs proj\Dashies Gate\backdoor server\backdoor.exe.config
+E:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor.exe
+E:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor.pdb
+E:\Purr Net\cs proj\Dashies Gate\backdoor server\backdoor.exe
+E:\Purr Net\cs proj\Dashies Gate\backdoor server\backdoor.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor server\backdoor.exe.config
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Release\backdoor.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor server\backdoor.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor server\backdoor.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor server\obj\Release\backdoor server.csprojAssemblyReference.cache
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor server\backdoor.exe.config
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor server\obj\Release\backdoor.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor server\obj\Release\backdoor.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor server\backdoor.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor server\backdoor.pdb

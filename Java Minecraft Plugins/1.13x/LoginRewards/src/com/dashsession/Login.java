@@ -15,6 +15,11 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +37,8 @@ public class Login extends JavaPlugin
         plugin = this;
         plugin.saveDefaultConfig();
         
+        
+        
         Lunaris.print("Author: Dashie");
         Lunaris.print("Version: 1.0");
         Lunaris.print("Email: KvinneKraft@protonmail.com");
@@ -48,6 +55,37 @@ public class Login extends JavaPlugin
     };    
 };
 
+
+class EventsHandler implements Listener
+{
+    String required_permission, reward_message;
+    
+    boolean summon_fireworks, summon_lightning, send_title;
+    
+    @EventHandler
+    public void onPlayerConnect(PlayerJoinEvent e)
+    {
+        Player p = e.getPlayer();
+        
+        if(!p.hasPermission(required_permission))
+        {
+            return;
+        };
+        
+        if(send_title)
+        {
+            p.sendTitle("", reward_message);
+        };
+        
+        p.sendMessage(reward_message);
+    };
+    
+    @EventHandler
+    public void onPlayerDisconnect(PlayerQuitEvent e)
+    {
+        
+    };
+};
 
 
 class Lunaris

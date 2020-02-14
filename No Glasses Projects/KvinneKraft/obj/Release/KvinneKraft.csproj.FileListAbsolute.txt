@@ -1,7 +1,0 @@
-C:\Users\Administrator\Desktop\GitHub\Dashnarok\No Glasses Projects\KvinneKraft\dist\KvinneKraft.exe.config
-C:\Users\Administrator\Desktop\GitHub\Dashnarok\No Glasses Projects\KvinneKraft\dist\KvinneKraft.exe
-C:\Users\Administrator\Desktop\GitHub\Dashnarok\No Glasses Projects\KvinneKraft\dist\KvinneKraft.pdb
-C:\Users\Administrator\Desktop\GitHub\Dashnarok\No Glasses Projects\KvinneKraft\obj\Release\KvinneKraft.csprojAssemblyReference.cache
-C:\Users\Administrator\Desktop\GitHub\Dashnarok\No Glasses Projects\KvinneKraft\obj\Release\KvinneKraft.csproj.CoreCompileInputs.cache
-C:\Users\Administrator\Desktop\GitHub\Dashnarok\No Glasses Projects\KvinneKraft\obj\Release\KvinneKraft.exe
-C:\Users\Administrator\Desktop\GitHub\Dashnarok\No Glasses Projects\KvinneKraft\obj\Release\KvinneKraft.pdb

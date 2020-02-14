@@ -1,0 +1,38 @@
+E:\Purr Net\backdoor control\obj\Release\backdoor control.csprojAssemblyReference.cache
+E:\Purr Net\backdoor control\obj\Release\backdoor control.csproj.CoreCompileInputs.cache
+E:\Purr Net\backdoor control\obj\Release\backdoor control.exe
+E:\Purr Net\backdoor control\obj\Release\backdoor control.pdb
+E:\Purr Net\backdoor control\backdoor control.exe.config
+E:\Purr Net\backdoor control\backdoor control.exe
+E:\Purr Net\backdoor control\backdoor control.pdb
+F:\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.csprojAssemblyReference.cache
+F:\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.exe.config
+F:\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.exe
+F:\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.pdb
+F:\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.exe
+F:\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.csprojAssemblyReference.cache
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.exe.config
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.pdb
+E:\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.csprojAssemblyReference.cache
+E:\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.csproj.CoreCompileInputs.cache
+E:\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.exe.config
+E:\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.exe
+E:\Purr Net\cs proj\Dashies Gate\backdoor control\obj\Release\backdoor control.pdb
+E:\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.exe
+E:\Purr Net\cs proj\Dashies Gate\backdoor control\backdoor control.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor control\obj\Release\backdoor control.csprojAssemblyReference.cache
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor control\backdoor control.exe.config
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor control\obj\Release\backdoor control.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor control\obj\Release\backdoor control.pdb
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor control\backdoor control.exe
+C:\Users\Dashie Lunare\Desktop\Purr Net\cs proj\dashies backdoor\backdoor control\backdoor control.pdb
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\DashIvyGate\backdoor control\obj\Release\backdoor control.csprojAssemblyReference.cache
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\DashIvyGate\backdoor control\backdoor control.exe.config
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\DashIvyGate\backdoor control\obj\Release\backdoor control.exe
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\DashIvyGate\backdoor control\obj\Release\backdoor control.pdb
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\DashIvyGate\backdoor control\backdoor control.exe
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\DashIvyGate\backdoor control\backdoor control.pdb
