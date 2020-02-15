@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -55,6 +56,9 @@ public class ItemDisplay extends JavaPlugin
         
         saveDefaultConfig();
         plugin = this;
+        
+        commands.refresh_data();
+        events.refresh_data();
         
         getServer().getPluginManager().registerEvents(events, plugin);
         getCommand("itemdisplay").setExecutor(commands);
@@ -101,6 +105,7 @@ class DisplayItem implements Listener
         };
         
         permission_denied_message = Moon.colors(config.getString("display-item-properties.messages.permission-denied"));
+        display_format = Moon.colors(config.getString("display-item-properties.messages.display-format"));
         
         colour_permission = config.getString("display-item-properties.permissions.color-permission");
         use_permission = config.getString("display-item-properties.permissions.use-permission");
@@ -111,7 +116,7 @@ class DisplayItem implements Listener
     
     List<Player> players = new ArrayList<>();
     
-    String use_permission, colour_permission, permission_denied_message;
+    String display_format, use_permission, colour_permission, permission_denied_message;
     Integer cooldown;
     
     
@@ -121,14 +126,14 @@ class DisplayItem implements Listener
         Player p = e.getPlayer();
         
         boolean has_command = false;
-        String command = null;
+        //String command;
         
         for(String str : e.getMessage().split(" "))
         {
             if(commands.contains(str.toUpperCase()))
             {
                 has_command = true;
-                command = commands.get(commands.indexOf(str));
+                //command = commands.get(commands.indexOf(str.toUpperCase()));
                         
                 break;
             };
@@ -147,50 +152,64 @@ class DisplayItem implements Listener
             return;
         };
         
-        ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
-        String name = item.getType().toString().toLowerCase().replace("_", " ");
+        ItemStack item = p.getInventory().getItemInMainHand();
+        String name = p.getCustomName() + Moon.colors("\'s &7&ohand!");
         
-        if((item.hasItemMeta()) && (item.getItemMeta().hasDisplayName()))
+        if((name.contains("null")) || (name.length() < 4))
         {
-            name = item.getItemMeta().getDisplayName();
-        
-            if(!p.hasPermission(colour_permission) && (!ChatColor.stripColor(name).equals(name)))
-            {
-                name = ChatColor.stripColor(name);
-            };        
+            name = Moon.colors("&e" + p.getName() + "\'s &7&ohand!");
         };
-        
-        TextComponent message = new TextComponent(e.getMessage().replace(command, name));
-        String data = name;
-        
-        if(item.hasItemMeta())
+            
+        if(item.getType() != Material.AIR)
         {
-            ItemMeta meta = item.getItemMeta();
+            name = item.getType().toString().toLowerCase().replace("_", " ");
+            name = display_format.replace("%i%", name).replace("%c%", String.valueOf(item.getAmount()));
             
-            if(meta.hasEnchants())
+            /*if((item.hasItemMeta()) && (item.getItemMeta().hasDisplayName()))
             {
-                for(int id = 0; id < meta.getEnchants().size(); id += 1)
+                name = item.getItemMeta().getDisplayName();
+        
+                if(!p.hasPermission(colour_permission) && (!ChatColor.stripColor(name).equals(name)))
                 {
-                    name += "\n" + meta.getEnchants().get(id).toString();
-                };
+                    name = ChatColor.stripColor(name);
+                };        
             };
-            
-            if(meta.hasLore())
+        
+            if(item.hasItemMeta())
             {
-                for(int id = 0; id < meta.getLore().size(); id += 1)
+                ItemMeta meta = item.getItemMeta();
+            
+                if(meta.hasEnchants())
                 {
-                    if((meta.hasEnchants()) && (id == 0))
+                    for(int id = 0; id < meta.getEnchants().size(); id += 1)
                     {
-                        name += "\n \n" + meta.getLore().get(0);
-                        continue;
-                    };
+                        if(id == 0)
+                        {
+                            name += "\n \n" + meta.getLore().get(0);
+                            continue;
+                        };                    
                     
-                    name += "\n" + meta.getLore().get(id);
+                        name += "\n" + meta.getEnchants().get(id).toString();
+                    };
                 };
-            };
+            
+                if(meta.hasLore())
+                {
+                    for(int id = 0; id < meta.getLore().size(); id += 1)
+                    {
+                        if((meta.hasEnchants()) && (id == 0))
+                        {
+                            name += "\n \n" + meta.getLore().get(0);
+                            continue;
+                        };
+                    
+                        name += "\n" + meta.getLore().get(id);
+                    };
+                };
+            };*/
         };
         
-        message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(data).create()));
+        //.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(data).create()));
         
         Bukkit.getScheduler().runTaskLaterAsynchronously(ItemDisplay.plugin,
             new Runnable()
@@ -208,9 +227,12 @@ class DisplayItem implements Listener
             cooldown
         );
         
-        players.add(p);
+        if(!p.isOp())
+        {
+            players.add(p);
+        };
         
-        e.setMessage("" + message);
+        e.setMessage(name);
     };
 };
 

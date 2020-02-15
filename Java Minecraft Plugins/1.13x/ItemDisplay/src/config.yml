@@ -17,11 +17,13 @@ display-item-properties:
         
         # What permission should be required in order to reload the plugin
         # and use the other functionality that the commands that come with
-        # this plugin have to offer?
+        # this plugin have to offer:
+        
         admin-permission: 'dashdisplay.admin'
         
         # What permission should be required in order to use the admin side
         # of this plugin:
+            
         permission-denied: '&cYou may not use this command.'
         
         
@@ -35,6 +37,11 @@ display-item-properties:
         # is not permitted to use [i], [item] etc:
         
         permission-denied: '&cYou are not allowed to display your item in chat!'
+        
+        # The format that will be shown when printing out the user
+        # their item name:
+        
+        display-format: '&7[&b%i% x%c%&7]'
         
     
     # Oh yes, we have custom commands blyad, what command
@@ -51,6 +58,7 @@ display-item-properties:
     # The amount of seconds a player has to wait before using
     # this piece of functionality again. (Raw text will be printed
     # rather than the item name)
+    
     command-cooldown: 30
     
     
@@ -61,8 +69,10 @@ display-item-properties:
         
         # What permission should be required in order to display
         # colour codes like &a, &e etc:
+            
         color-permission: 'displayitem.colors'
             
         # What permission should be required in order to use any
         # of the specified commands in display-items-properties.commands:
+            
         use-permission: 'displayitem.use'
