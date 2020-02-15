@@ -204,7 +204,7 @@ public class CraftBlocker extends JavaPlugin
             if(p.hasPermission(commands.admin_permission))
                 return;
             
-            if(e.getRecipe().getResult() != null)
+            if((e.getRecipe() != null) && (e.getRecipe().getResult() != null))
             {
                 ItemStack item = e.getRecipe().getResult();
                 
@@ -214,8 +214,6 @@ public class CraftBlocker extends JavaPlugin
                     
                     p.sendTitle("", block_message);          
                     p.sendMessage(block_message);
-                    
-                    p.closeInventory();
                 };
             };
         };
