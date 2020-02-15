@@ -91,8 +91,6 @@ public class DashTP extends JavaPlugin
         private void RefreshData()
         {
             plugin.reloadConfig();
-            plugin.getConfig();
-            
             config = plugin.getConfig();  
             
             admin_permission = config.getString("admin-permission");
@@ -115,6 +113,7 @@ public class DashTP extends JavaPlugin
             maxz = config.getDouble("coords.max-z");
             minz = config.getDouble("coords.min-z");
             
+            send_title = config.getBoolean("send-title");
             cooldown = config.getInt("cooldown");                      
             
             SetupMessages();
@@ -135,6 +134,8 @@ public class DashTP extends JavaPlugin
             
             return; 
         };
+        
+        boolean send_title = config.getBoolean("send-title");
         
         String admin_permission = config.getString("admin-permission");
         String no_cost_permission = config.getString("no-cost-permission");
@@ -294,7 +295,17 @@ public class DashTP extends JavaPlugin
                 sy = String.valueOf((int)y);
                 sz = String.valueOf((int)z);
                 
-                p.sendMessage(scc.get(6).replace("%x%", sx).replace("%y%", sy).replace("%z%", sz));                
+                String message = scc.get(6).replace("%x%", sx).replace("%y%", sy).replace("%z%", sz);
+                
+                if(send_title)
+                {
+                    p.sendTitle("", message);
+                }
+                
+                else
+                {
+                    p.sendMessage(message);
+                };
             }
             
             else if(a.equals("reload"))
