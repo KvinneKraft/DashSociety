@@ -29,14 +29,14 @@ public class Ivy
                 
                 @Override
                 public void run()
-                {                    
-                    while(true)
+                {    
+                    try
                     {
-                        try
+                        ServerSocket dash_socks = new ServerSocket(3333);      
+                    
+                        while(true)
                         {
-                            System.out.println("Waiting ....");
-
-                            ServerSocket dash_socks = new ServerSocket(3333);                               
+                            System.out.println("Waiting ....");                         
                             Socket dash_ear = dash_socks.accept();
                             
                             BufferedReader received = new BufferedReader(new InputStreamReader(dash_ear.getInputStream()));
@@ -59,13 +59,12 @@ public class Ivy
                                 
                             };
                             
-                            dash_socks.close();
                             dash_ear.close();
-                        }
-                        
-                        catch (Exception e) 
-                        { };
+                        }    
                     }
+                    
+                    catch (Exception e) 
+                    { System.out.println(e.toString()); };
                 };
             }
         );
