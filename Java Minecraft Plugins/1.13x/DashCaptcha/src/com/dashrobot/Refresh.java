@@ -1,6 +1,6 @@
 
-//
-//
+// Author: Dashie
+// Version: 1.0
 
 
 package com.dashrobot;

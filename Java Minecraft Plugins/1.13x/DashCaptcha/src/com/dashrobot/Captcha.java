@@ -9,6 +9,7 @@ package com.dashrobot;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 
 
 //---//
@@ -20,6 +21,8 @@ public class Captcha extends JavaPlugin
     public static FileConfiguration config;
     public static JavaPlugin plugin;
     
+    public static Events events = new Events();
+    
     
     //---//
     //---// Core Methods: 
@@ -30,7 +33,15 @@ public class Captcha extends JavaPlugin
     {
         print("The plugin is being enabled ....");
         
+        saveDefaultConfig();
         
+        config = (FileConfiguration) getConfig();
+        plugin = (JavaPlugin) this;
+        
+        if(config.getBoolean("dash-captcha.enabled"))
+        {
+            getServer().getPluginManager().registerEvents(events, plugin);
+        };
         
         print("The plugin has been enabled!");
     };

@@ -1,1 +1,16 @@
 
+# Author: Dashie
+# Version: 1.0
+
+dash-captcha:
+    enabled: true
+    
+    messages:
+        timeout-kick-message:
+        too-many-tries-kick-message:
+        
+    properties:
+        inventory-slots:
+        verification-timeout:
+        maximum-attempts:
+            
