@@ -1,0 +1,16 @@
+
+# Author: Dashie
+# Verrsion: 1.0
+
+main: com.dashredeem.MCMMO
+
+name: DashRedeemables
+author: [Dashie]
+
+version: 1.0
+api-version: 1.13
+
+commands:
+    dashredeem:
+        aliases: [dashmcmmo, mcmmoredeem, redeemmcmmo]
+        description: Dashies redeem main command.
