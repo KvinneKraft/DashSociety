@@ -19,6 +19,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.Material;
 import org.bukkit.Bukkit;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.Arrays;
+import java.util.List;
 
 
 //---//
@@ -32,15 +35,31 @@ public class Events implements Listener
     //---// Dash GUI Methods:
     //---//
     
+    List<Material> materials = Arrays.asList(Material.values());
+    
+    
+    public ItemStack get_random_item()
+    {
+        Material material = materials.get(new Random().nextInt(materials.size()));
+        
+        if(material.equals(Material.APPLE))
+        {
+            material = Material.EMERALD_BLOCK;
+        };
+        
+        return new ItemStack(material, 1);
+    };
+    
+    
     public Inventory open_captcha_dialog(Player p)
     {
         Inventory captcha_dialog = Bukkit.getServer().createInventory(p, 9, Captcha.color("&c&lClick the Apple:"));
         
         for(int id = 1; id <= inventory_slots; id += 1)//Not indexes?
         {
-            ItemStack item = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
+            ItemStack item = get_random_item();
             
-            if(id != 5)
+            if(id != (int)((inventory_slots - 1) / 2))
             {
                 item.setType(Material.APPLE);
                 continue;

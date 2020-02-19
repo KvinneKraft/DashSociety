@@ -9,7 +9,6 @@ package com.dashrobot;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 
 
 //---//

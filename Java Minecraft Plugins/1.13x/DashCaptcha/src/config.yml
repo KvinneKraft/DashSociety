@@ -3,14 +3,45 @@
 # Version: 1.0
 
 dash-captcha:
+    
+    # Should Dash Captcha be enabled?
+
     enabled: true
+
+
+    # Here you can configure the messages that the
+    # player may receive when this plugin is active:
     
     messages:
-        timeout-kick-message:
-        too-many-tries-kick-message:
+        
+        # The kick reason for when a player has not solved
+        # the given captcha with in the time given:
+        
+        timeout-kick-message: ""
+        
+        # The kick reason for when a player fails to solve
+        # the captcha too many times:
+        
+        too-many-tries-kick-message: ""
+     
+        
+    # Here you can configure some things related to
+    # the captcha itself:
         
     properties:
-        inventory-slots:
-        verification-timeout:
-        maximum-attempts:
+        
+        # The amount of slots the Captcha Dialog should
+        # actually have:
+        
+        inventory-slots: 9
+        
+        # The amount of seconds before the user gets kicked
+        # when the captcha has not yet been solved:
+        
+        verification-timeout: 10
+        
+        # The maximum of attempts a user may make before getting
+        # kicked due too many attempts:
+        
+        maximum-attempts: 2
             
