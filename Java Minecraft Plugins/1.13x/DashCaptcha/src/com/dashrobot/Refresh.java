@@ -15,19 +15,18 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Refresh
 {
-    public void Action()
+    public static void reload_action()
     {
         Captcha.plugin.reloadConfig();
         Captcha.config = Captcha.plugin.getConfig();
         
         FileConfiguration config = Captcha.config;
-        Events events = Captcha.events;
+
+        Captcha.events.timeout_kick_message = config.getString("dash-captcha.messages.timeout-kick-message");
+        Captcha.events.maximum_succeed_message = config.getString("dash-captcha.messages.too-many-tries-kick-message");
         
-        events.timeout_kick_message = config.getString("dash-captcha.messages.timeout-kick-message");
-        events.maximum_succeed_message = config.getString("dash-captcha.messages.too-many-tries-kick-message");
-        
-        events.inventory_slots = config.getInt("dash-captcha.properties.inventory-slots");
-        events.verification_timeout = config.getInt("dash-captcha.properties.verification-timeout");
-        events.maximum_attempts = config.getInt("dash-captcha.properties.maximum-attempts");
+        Captcha.events.inventory_slots = config.getInt("dash-captcha.properties.inventory-slots");
+        Captcha.events.verification_timeout = config.getInt("dash-captcha.properties.verification-timeout");
+        Captcha.events.maximum_attempts = config.getInt("dash-captcha.properties.maximum-attempts");
     };
 };

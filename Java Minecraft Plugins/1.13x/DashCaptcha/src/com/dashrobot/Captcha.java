@@ -42,6 +42,10 @@ public class Captcha extends JavaPlugin
             getServer().getPluginManager().registerEvents(events, plugin);
         };
         
+        Refresh.reload_action();
+        
+        getServer().getPluginManager().registerEvents(events, plugin);
+        
         print("The plugin has been enabled!");
     };
     

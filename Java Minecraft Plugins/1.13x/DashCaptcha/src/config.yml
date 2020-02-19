@@ -17,12 +17,12 @@ dash-captcha:
         # The kick reason for when a player has not solved
         # the given captcha with in the time given:
         
-        timeout-kick-message: ""
+        timeout-kick-message: "&cIt took you too long to solve the Captcha, please relog."
         
         # The kick reason for when a player fails to solve
         # the captcha too many times:
         
-        too-many-tries-kick-message: ""
+        too-many-tries-kick-message: "&cYou have given the wrong answer too many times, please relog."
      
         
     # Here you can configure some things related to
@@ -45,3 +45,7 @@ dash-captcha:
         
         maximum-attempts: 2
             
+            
+# this configuration file just assumes that you follow the corresponding
+# format, the expected format, which is basically that what is above this
+# very text, thank you for using Dash Captcha, blessed be ) o (
