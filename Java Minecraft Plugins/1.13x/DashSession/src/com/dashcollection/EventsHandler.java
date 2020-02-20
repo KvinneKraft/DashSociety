@@ -50,7 +50,7 @@ public class EventsHandler implements Listener
         };
         
         runnables.add(
-            scheduler.runTaskTimerAsynchronously(Session.plugin, 
+            scheduler.runTaskTimer(Session.plugin, 
                 new Runnable()
                 {
                     String player = p.getName();
@@ -80,7 +80,7 @@ public class EventsHandler implements Listener
                             p.sendMessage(reward_message);
                         };
                         
-                        server.dispatchCommand(server.getConsoleSender(), command.replace("%player%", player));
+                        server.dispatchCommand(server.getConsoleSender(), command.replace("%player%", player));//
                     };
                 },
                 
@@ -134,8 +134,6 @@ public class EventsHandler implements Listener
                 Session.moon.print("Invalid format received. Skipping ....");
                 continue;
             };
-            
-            System.out.println(arr[0]);
             
             Integer chance = Integer.valueOf(arr[1]);
             

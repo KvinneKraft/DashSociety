@@ -23,7 +23,17 @@ dash-captcha:
         # the captcha too many times:
         
         too-many-tries-kick-message: "&cYou have given the wrong answer too many times, please relog."
-     
+        
+        # The title displayed when the captcha is thrown into
+        # someone their face: 
+        
+        captcha-title: "&8Click the &b%item% &8!"
+        
+        # The message thrown at the player when the player has
+        # completed the given captcha:
+        
+        captcha-complete-message: "&aYou may now play!"
+        
         
     # Here you can configure some things related to
     # the captcha itself:
@@ -44,6 +54,56 @@ dash-captcha:
         # kicked due too many attempts:
         
         maximum-attempts: 2
+
+        # Do you want the captcha completion message to be sent
+        # as a fancy on screen title:
+        
+        send-as-title: true
+        
+        # When the player has passed its captcha, would you like
+        # to summon a small little firework:
+        
+        summon-fireworks: true
+        
+        # Just like above, when the player has passed the given 
+        # captcha, would you like to summon a bit of lightning:
+        
+        summon-lightning: true     
+     
+        
+    # What items should be used for the Captcha pattern:
+    
+    # Note: Make sure that they are not in the Key items
+    #       list, this may cause odd behaviour!
+    
+    captcha-items:
+        - 'DIAMOND_BLOCK'
+        - 'EMERALD_BLOCK'
+        - 'GOLD_BLOCK'
+        - 'REDSTONE_BLOCK'
+        - 'IRON_BLOCK' 
+        - 'COAL_BLOCK'
+        - 'OAK_PLANKS'
+        - 'COBBLESTONE'
+        - 'STONE'
+        - 'IRON_ORE'
+        - 'DIAMOND_ORE'
+        - 'GOLD_ORE'
+        - 'COAL_ORE'
+        
+        
+    # What items should have a chance at being chosen
+    # to be a key item:
+     
+    # Note: Make sure they are not in the Captcha items
+    #       list, this may cause odd behaviour!
+        
+    key-items:
+        - 'DIAMOND'
+        - 'IRON_INGOT'
+        - 'GOLD_INGOT'
+        - 'COAL'
+        - 'REDSTONE'
             
             
 # this configuration file just assumes that you follow the corresponding
