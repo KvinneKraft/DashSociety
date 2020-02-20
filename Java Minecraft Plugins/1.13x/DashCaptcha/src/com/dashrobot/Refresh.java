@@ -35,6 +35,9 @@ public class Refresh
         Captcha.events.send_as_title = config.getBoolean("dash-captcha.properties.send-as-title");
         Captcha.events.summon_fireworks = config.getBoolean("dash-captcha.properties.summon-fireworks");
         Captcha.events.summon_lightning = config.getBoolean("dash-captcha.properties.summon-lightning");
+        Captcha.events.wither_sound = config.getBoolean("dash-captcha.properties.wither-sound");
+        Captcha.events.apply_blind_effect = config.getBoolean("dash-captcha.properties.apply-blind-effect");
+        Captcha.events.block_movement = config.getBoolean("dash-captcha.properties.block-movement");
         
         if((Captcha.events.pattern_items != null) && (Captcha.events.pattern_items.size() > 0)) 
         {

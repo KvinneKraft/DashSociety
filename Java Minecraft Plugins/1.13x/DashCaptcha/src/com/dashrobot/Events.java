@@ -28,6 +28,10 @@ import java.util.HashMap;
 import java.util.Random;
 import org.bukkit.Color;
 import java.util.List;
+import org.bukkit.Sound;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 //---//
@@ -55,21 +59,31 @@ public class Events implements Listener
     
     
     List<Player> inventory_cache = new ArrayList<>();
-    
     String captcha_title;
+
     
+    private void new_key(Player p)
+    {
+        Material material = key_items.get(new Random().nextInt(key_items.size()));
+        
+        if(verification_cache.containsKey(p))
+        {
+            verification_cache.remove(p);
+        };
+        
+        verification_cache.put(p, material);          
+    };
+
     
     public void open_captcha_dialog(Player p)
     {
-        if((!verification_cache.containsKey(p)) || (inventory_cache.contains(p)))
+        if(inventory_cache.contains(p))
         {
-            if(inventory_cache.contains(p))
-            {
-                inventory_cache.remove(p);
-            };
-            
+            inventory_cache.remove(p);
             return;
-        };
+        };    
+        
+        new_key(p);        
         
         String str = captcha_title.replace("%item%", verification_cache.get(p).toString().replace("_", " ").toLowerCase());
         
@@ -125,21 +139,22 @@ public class Events implements Listener
                 @Override
                 public void run()
                 {
-                    if((captcha_cache.containsKey(p)) && (verification_cache.containsKey(p)))
+                    if(verification_cache.containsKey(p))
                     {
+                        clear_essence(p);                        
                         p.kickPlayer(timeout_kick_message);
-                        clear_essence(p);
                         return;
                     };
                 };
             }, 
             
-            verification_timeout //* 20
-        );   
-        
-        Material material = key_items.get(new Random().nextInt(key_items.size()));
-        
-        verification_cache.put(p, material);
+            verification_timeout * 20
+        );
+
+        if(apply_blind_effect)
+        {
+            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 222222, 222222));        
+        };
         
         open_captcha_dialog(p);
     };
@@ -153,8 +168,8 @@ public class Events implements Listener
     
     @EventHandler
     public void onPlayerCloseInventory(InventoryCloseEvent e)
-    {
-        if((e.getViewers() == null) || (e.getViewers().size() < 1) || (e.getInventory().getContents().length != inventory_slots))
+    {        
+        if((e.getInventory().getContents().length != inventory_slots))
         {
             return;
         };
@@ -180,14 +195,22 @@ public class Events implements Listener
                     };
                 }, 
                 
-                5
+                2
             );
         };
     };
     
-    
-    boolean summon_fireworks, summon_lightning, send_as_title;
-    String captcha_complete_message;
+    @EventHandler
+    public void onPlayerMovement(PlayerMoveEvent e)
+    {
+        if(verification_cache.containsKey(e.getPlayer()))
+        {
+            if(block_movement)
+            {
+                e.setCancelled(block_movement);
+            };
+        };
+    };
     
     
     private void clear_essence(Player p)
@@ -200,15 +223,30 @@ public class Events implements Listener
         if(captcha_cache.containsKey(p))
         {
             captcha_cache.remove(p);
+        };  
+        
+        if(inventory_cache.contains(p))
+        {
+            inventory_cache.remove(p);
+        };
+        
+        if(apply_blind_effect)
+        {
+            if(p.hasPotionEffect(PotionEffectType.BLINDNESS))
+            {
+                p.removePotionEffect(PotionEffectType.BLINDNESS);
+            };
         };        
     };
     
     
+    boolean summon_fireworks, summon_lightning, send_as_title, wither_sound, apply_blind_effect, block_movement;
+    String captcha_complete_message;    
+    
+    
     private void grant_access(Player p)
-    {
-        clear_essence(p);
-        
-        if((summon_fireworks) || (summon_lightning))
+    {   
+        if((summon_fireworks) || (summon_lightning) || (wither_sound))
         {
             Location location = p.getLocation();
             
@@ -238,6 +276,11 @@ public class Events implements Listener
                 location.getWorld().strikeLightningEffect(location);
             };
             
+            if(wither_sound)
+            {
+                p.playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 30, 30);
+            };
+            
             p.setInvulnerable(false);
         };
         
@@ -258,16 +301,17 @@ public class Events implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e)
     {
-        Player p = (Player) e.getWhoClicked();
+        Player p = (Player) e.getWhoClicked();        
         
         if(captcha_cache.containsKey(p))
         {
             if(captcha_cache.get(p) > maximum_attempts)
             {
+                clear_essence(p);                
                 p.kickPlayer(maximum_succeed_message);
-                clear_essence(p);
+                
                 return;
-            };
+            };  
         };
         
         ItemStack i = e.getCurrentItem();
@@ -277,15 +321,16 @@ public class Events implements Listener
             return;
         }
         
-        e.setCancelled(true);        
-        
         if(i.getType().equals(verification_cache.get(p)))
-        {
+        {   
+            clear_essence(p);            
             grant_access(p);
-            return ;
+            
+            return;
         };
-        
-        Integer new_count = 1;
+                       
+        Integer new_count = 1;     
+        e.setCancelled(true);                        
         
         if(captcha_cache.containsKey(p))
         {
@@ -299,7 +344,6 @@ public class Events implements Listener
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e)
     {
-        Player p = e.getPlayer();
-        clear_essence(p);
+        clear_essence(e.getPlayer());
     };
 };

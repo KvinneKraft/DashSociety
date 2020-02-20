@@ -9,6 +9,7 @@ dash-captcha:
     enabled: true
 
 
+
     # Here you can configure the messages that the
     # player may receive when this plugin is active:
     
@@ -33,6 +34,7 @@ dash-captcha:
         # completed the given captcha:
         
         captcha-complete-message: "&aYou may now play!"
+        
         
         
     # Here you can configure some things related to
@@ -69,6 +71,22 @@ dash-captcha:
         # captcha, would you like to summon a bit of lightning:
         
         summon-lightning: true     
+        
+        # Spawn in some sound effect when the player passed the
+        # given captcha:
+        
+        wither-sound: true
+        
+        # Apply blindness to the player while they are fixing the
+        # captcha:
+        
+        apply-blind-effect: true
+        
+        # Disallow movement while the player is attempting to fix
+        # the given captcha:
+        
+        block-movement: true
+        
      
         
     # What items should be used for the Captcha pattern:
@@ -92,6 +110,7 @@ dash-captcha:
         - 'COAL_ORE'
         
         
+        
     # What items should have a chance at being chosen
     # to be a key item:
      
@@ -104,6 +123,7 @@ dash-captcha:
         - 'GOLD_INGOT'
         - 'COAL'
         - 'REDSTONE'
+            
             
             
 # this configuration file just assumes that you follow the corresponding
