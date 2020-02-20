@@ -38,6 +38,8 @@ public class Refresh
         Captcha.events.wither_sound = config.getBoolean("dash-captcha.properties.wither-sound");
         Captcha.events.apply_blind_effect = config.getBoolean("dash-captcha.properties.apply-blind-effect");
         Captcha.events.block_movement = config.getBoolean("dash-captcha.properties.block-movement");
+        Captcha.events.block_chat = config.getBoolean("dash-captcha.properties.block-chat");
+        Captcha.events.block_command = config.getBoolean("dash-captcha.properties.block-command");
         
         if((Captcha.events.pattern_items != null) && (Captcha.events.pattern_items.size() > 0)) 
         {
@@ -46,7 +48,7 @@ public class Refresh
         
         for(String item : config.getStringList("dash-captcha.captcha-items"))
         {
-            Material material = Material.getMaterial(item);
+            Material material = Material.getMaterial(item.toUpperCase().replace(" ", "_"));
             
             if(material == null)
             {
@@ -64,7 +66,7 @@ public class Refresh
         
         for(String item : config.getStringList("dash-captcha.key-items"))
         {
-            Material material = Material.getMaterial(item);
+            Material material = Material.getMaterial(item.toUpperCase().replace(" ", "_"));
             
             if(material == null)
             {
@@ -75,6 +77,13 @@ public class Refresh
             Captcha.events.key_items.add(material);            
         };
         
-        // send_as_title, captcha_complete_message, summon_fireworks, summon_lightning;
+        Captcha.events.dash_join = config.getBoolean("dash-join.enabled");
+        
+        Captcha.events.join_message = Captcha.color(config.getString("dash-join.messages.join"));
+        Captcha.events.first_join_message = Captcha.color(config.getString("dash-join.messages.first-join"));
+        Captcha.events.quit_message = Captcha.color(config.getString("dash-join.messages.quit"));
+        
+        Captcha.commands.admin_permission = config.getString("dash-captcha.commands.admin-permission");
+        Captcha.commands.developer_support = config.getBoolean("dash-captcha.commands.developer-support");
     };
 };

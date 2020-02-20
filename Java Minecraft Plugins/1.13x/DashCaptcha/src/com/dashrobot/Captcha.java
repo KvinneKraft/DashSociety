@@ -20,6 +20,7 @@ public class Captcha extends JavaPlugin
     public static FileConfiguration config;
     public static JavaPlugin plugin;
     
+    public static Commands commands = new Commands();
     public static Events events = new Events();
     
     
@@ -45,6 +46,7 @@ public class Captcha extends JavaPlugin
         Refresh.reload_action();
         
         getServer().getPluginManager().registerEvents(events, plugin);
+        getCommand("dashcaptcha").setExecutor(commands);
         
         print("The plugin has been enabled!");
     };

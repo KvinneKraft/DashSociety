@@ -6,14 +6,20 @@
 package com.dashrobot;
 
 
+
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.event.EventHandler;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -25,13 +31,10 @@ import org.bukkit.Material;
 import org.bukkit.Location;
 import org.bukkit.Bukkit;
 import java.util.HashMap;
+import org.bukkit.Sound;
 import java.util.Random;
 import org.bukkit.Color;
 import java.util.List;
-import org.bukkit.Sound;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 
 //---//
@@ -123,16 +126,31 @@ public class Events implements Listener
     List<Material> pattern_items = new ArrayList<Material>();    
     List<Material> key_items = new ArrayList<>();
     
-    String timeout_kick_message;
+    String timeout_kick_message, join_message, first_join_message, quit_message;
     
     int inventory_slots, verification_timeout;
+    
+    boolean dash_join;
     
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e)
     {
         Player p = e.getPlayer();
-
+        
+        if(dash_join)
+        {
+            if(p.hasPlayedBefore())
+            {
+                e.setJoinMessage(join_message.replace("%player%", p.getName()));
+            }
+            
+            else
+            {
+                e.setJoinMessage(first_join_message.replace("%player%", p.getName()));
+            };
+        };
+        
         Bukkit.getScheduler().scheduleSyncDelayedTask(Captcha.plugin, 
             new Runnable()
             {
@@ -200,6 +218,33 @@ public class Events implements Listener
         };
     };
     
+    
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent e)
+    {
+        if(verification_cache.containsKey(e.getPlayer()))
+        {        
+            if(block_chat)
+            {
+                e.setCancelled(block_chat);
+            };
+        };
+    };
+    
+    
+    @EventHandler
+    public void onPlayerCommand(PlayerCommandPreprocessEvent e)
+    {
+        if(verification_cache.containsKey(e.getPlayer()))
+        {        
+            if(block_command)
+            {
+                e.setCancelled(block_command);
+            };
+        };
+    };
+    
+    
     @EventHandler
     public void onPlayerMovement(PlayerMoveEvent e)
     {
@@ -240,7 +285,7 @@ public class Events implements Listener
     };
     
     
-    boolean summon_fireworks, summon_lightning, send_as_title, wither_sound, apply_blind_effect, block_movement;
+    boolean summon_fireworks, summon_lightning, send_as_title, wither_sound, apply_blind_effect, block_chat, block_command, block_movement;
     String captcha_complete_message;    
     
     
@@ -345,5 +390,10 @@ public class Events implements Listener
     public void onPlayerQuit(PlayerQuitEvent e)
     {
         clear_essence(e.getPlayer());
+        
+        if(dash_join)
+        {
+            e.setQuitMessage(quit_message.replace("%player%", e.getPlayer().getName()));
+        };
     };
 };
