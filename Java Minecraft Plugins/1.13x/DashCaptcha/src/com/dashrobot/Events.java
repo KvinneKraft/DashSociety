@@ -6,7 +6,6 @@
 package com.dashrobot;
 
 
-
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -35,6 +34,7 @@ import org.bukkit.Sound;
 import java.util.Random;
 import org.bukkit.Color;
 import java.util.List;
+import org.bukkit.inventory.ItemFlag;
 
 
 //---//
@@ -90,8 +90,8 @@ public class Events implements Listener
         
         String str = captcha_title.replace("%item%", verification_cache.get(p).toString().replace("_", " ").toLowerCase());
         
-        Inventory captcha_dialog = Bukkit.getServer().createInventory(p, 9, str);
-        Integer key_index = new Random().nextInt(inventory_slots) + 1;
+        Inventory captcha_dialog = Bukkit.getServer().createInventory(p, inventory_slots, str);
+        Integer key_index = new Random().nextInt(inventory_slots);
         
         for(int id = 0; id < inventory_slots; id += 1)
         {
@@ -102,10 +102,10 @@ public class Events implements Listener
                 item.setType(verification_cache.get(p));
             };
             
-            ItemMeta item_meta = item.getItemMeta();
-            
-            item_meta.setCustomModelData(2020);
-            item.setItemMeta(item_meta);
+            //ItemMeta item_meta = item.getItemMeta();
+            //item.setTypeId(2020);
+            //item_meta.setCustomModelData(2020);
+            //item.setItemMeta(item_meta);
             
             captcha_dialog.setItem(id, item);
         };
@@ -187,35 +187,25 @@ public class Events implements Listener
     @EventHandler
     public void onPlayerCloseInventory(InventoryCloseEvent e)
     {        
-        if((e.getInventory().getContents().length != inventory_slots))
-        {
-            return;
-        };
-            
-        ItemStack i = e.getInventory().getItem(0);
+        Player p = (Player)e.getPlayer();        
         
-        if((i == null) || (!i.hasItemMeta()) || (!i.getItemMeta().hasCustomModelData()) || (i.getItemMeta().getCustomModelData() != (2020)))
+        if((!verification_cache.containsKey(p)) || (e.getInventory().getContents().length != inventory_slots))
         {
             return;
         };
         
-        Player p = (Player)e.getPlayer();
-        
-        if(verification_cache.containsKey(p))
-        {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Captcha.plugin, 
-                new Runnable() 
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Captcha.plugin, 
+            new Runnable() 
+            {
+                @Override
+                public void run()
                 {
-                    @Override
-                    public void run()
-                    {
-                        open_captcha_dialog(p);       
-                    };
-                }, 
+                    open_captcha_dialog(p);       
+                };
+            }, 
                 
-                2
-            );
-        };
+            2
+        );
     };
     
     
@@ -326,7 +316,18 @@ public class Events implements Listener
                 p.playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 30, 30);
             };
             
-            p.setInvulnerable(false);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Captcha.plugin, 
+                new Runnable() 
+                {
+                    @Override
+                    public void run()
+                    {
+                        p.setInvulnerable(false);                        
+                    };
+                },
+                
+                20
+            );
         };
         
         p.closeInventory();              
@@ -348,7 +349,12 @@ public class Events implements Listener
     {
         Player p = (Player) e.getWhoClicked();        
         
-        if(captcha_cache.containsKey(p))
+        if(!verification_cache.containsKey(p))
+        {
+            return;
+        }
+       
+        else if(captcha_cache.containsKey(p))
         {
             if(captcha_cache.get(p) > maximum_attempts)
             {
@@ -360,11 +366,6 @@ public class Events implements Listener
         };
         
         ItemStack i = e.getCurrentItem();
-        
-        if((i == null) || (!i.hasItemMeta()) || (!i.getItemMeta().hasCustomModelData()) || (i.getItemMeta().getCustomModelData() != (2020)))
-        {
-            return;
-        }
         
         if(i.getType().equals(verification_cache.get(p)))
         {   

@@ -4,6 +4,7 @@
 
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 
@@ -27,9 +28,35 @@ namespace Mail_Ph1sher
 
     public partial class Ph1sher : Form
     {
+        private void Layout()
+        {
+            Size client_size = new Size();
+
+            Size = client_size;
+            MaximumSize = client_size;
+            MinimumSize = client_size;
+
+            MinimizeBox = false;
+            MaximizeBox = false;
+
+            //Icon = (Icon) Properties.Resources.Icon;
+
+            StartPosition = FormStartPosition.CenterScreen;
+
+            return;
+        }
+
+
         public Ph1sher()
         {
-            
+                
         }
+    };
+
+
+
+    public static class Moon
+    { 
+
     };
 };
