@@ -1,0 +1,9 @@
+C:\Mail Ph1sher.exe.config
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\Mail Ph1sher\obj\Release\Mail Ph1sher.csprojAssemblyReference.cache
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\Mail Ph1sher\obj\Release\Mail_Ph1sher.Properties.Resources.resources
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\Mail Ph1sher\obj\Release\Mail Ph1sher.csproj.GenerateResource.cache
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\Mail Ph1sher\obj\Release\Mail Ph1sher.exe
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\Mail Ph1sher\obj\Release\Mail Ph1sher.pdb
+C:\Mail Ph1sher.exe
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\Mail Ph1sher\Mail Ph1sher.exe
+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\No Glasses Projects\Mail Ph1sher\Mail Ph1sher.pdb
