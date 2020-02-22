@@ -29,6 +29,8 @@ public class HarderMobs extends JavaPlugin
         config = (FileConfiguration) getConfig();
         plugin = (JavaPlugin) this;
         
+        DashManager.reload_plugin();
+        
         getServer().getPluginManager().registerEvents(events, plugin);
         getCommand("hardermobs").setExecutor(commands);
         

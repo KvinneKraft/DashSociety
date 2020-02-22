@@ -8,12 +8,12 @@ package com.dashmobs;
 
 
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import java.util.Random;
-import org.bukkit.enchantments.Enchantment;
 
 
 public class Events implements Listener
@@ -75,13 +75,10 @@ public class Events implements Listener
         Random rand = new Random();
         
         for(int key_id = 0; key_id < rand.nextInt(md.max_enchants.get(type)) + 1; key_id += 1)
-        {
-            Enchantment etype = md.enchantments.get(type).get(rand.nextInt(md.enchantments.get(type).size()));
-            
-            int max_level = md.level_range.get(type).get(1);
-            int min_level = md.level_range.get(type).get(0);
-            
-            Integer elevel = rand.nextInt((max_level - min_level) + 1) + min_level;
+        {//Make it so it does not apply the same enchant twice.
+            Integer key = rand.nextInt(md.enchantments.get(type).size());                        
+            Integer elevel = md.levels.get(type).get(key);
+            Enchantment etype = md.enchantments.get(type).get(key);
             
             item.addUnsafeEnchantment(etype, elevel);
         };        
