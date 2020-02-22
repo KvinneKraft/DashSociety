@@ -52,7 +52,7 @@ harder-mobs:
             custom-tag: '&c&lMorphed &a&lMob'
             
             # What is the chance an overpowered
-            # mob can spawn:
+            # mob can spawn (on a scale from 1 - 500):
             
             morphed-chance: 4
             
@@ -76,6 +76,15 @@ harder-mobs:
         # mobs their gear may spawn with:
         
         enchantments:
+            
+            # Here you can specify the maximum amount of
+            # enchantments the gear may get:
+            max-enchantments:
+                helmets: 2
+                chestplates: 2
+                leggings: 2
+                boots: 2
+                weapons: 4
             
             # Here you can specify all of the enchantments
             # mobs their armour may spawn with:
