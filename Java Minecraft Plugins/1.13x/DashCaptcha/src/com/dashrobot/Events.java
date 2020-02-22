@@ -60,7 +60,7 @@ public class Events implements Listener
     };
     
     
-    List<Player> inventory_cache = new ArrayList<>();
+    //List<Player> inventory_cache = new ArrayList<>();
     String captcha_title;
 
     
@@ -79,11 +79,11 @@ public class Events implements Listener
     
     public void open_captcha_dialog(Player p)
     {
-        if(inventory_cache.contains(p))
-        {
-            inventory_cache.remove(p);
-            return;
-        };    
+        //if(inventory_cache.contains(p))
+        //{
+        //    inventory_cache.remove(p);
+        //    return;
+        //};    
         
         new_key(p);        
         
@@ -111,7 +111,7 @@ public class Events implements Listener
 
         p.openInventory(captcha_dialog);
        
-        inventory_cache.add(p);
+        //inventory_cache.add(p);
     };    
     
     
@@ -270,10 +270,10 @@ public class Events implements Listener
             captcha_cache.remove(p);
         };  
         
-        if(inventory_cache.contains(p))
-        {
-            inventory_cache.remove(p);
-        };
+        //if(inventory_cache.contains(p))
+        //{
+        //    inventory_cache.remove(p);
+        //};
         
         if(apply_blind_effect)
         {
