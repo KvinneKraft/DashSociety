@@ -41,13 +41,13 @@ public class Events implements Listener
         final ItemStack chestplate = md.gears.get("chestplates").get(rand.nextInt(md.gears.get("chestplates").size()));
         final ItemStack legging = md.gears.get("leggings").get(rand.nextInt(md.gears.get("leggings").size()));
         final ItemStack boot = md.gears.get("boots").get(rand.nextInt(md.gears.get("boots").size()));
-        final ItemStack sword = md.gears.get("swords").get(rand.nextInt(md.gears.get("swords").size()));
+        final ItemStack sword = md.gears.get("weapons").get(rand.nextInt(md.gears.get("weapons").size()));
         
         addEnchantments("helmets", helmet);
         addEnchantments("chestplates", chestplate);
         addEnchantments("leggings", legging);
         addEnchantments("boots", boot);
-        addEnchantments("swords", sword);
+        addEnchantments("weapons", sword);
         
         moby.getEquipment().setHelmet(helmet);
         moby.getEquipment().setChestplate(chestplate);
@@ -55,9 +55,18 @@ public class Events implements Listener
         moby.getEquipment().setBoots(boot);
         moby.getEquipment().setItemInMainHand(sword);
         
-        // Add potion effects
-        // Add random health
-        // Add name tag
+        if(md.effects.size() > 0)
+        {
+            moby.addPotionEffects(md.effects);
+        };
+        
+        final int health = rand.nextInt((md.max_health - md.min_health) + 1) + md.min_health;
+        
+        moby.setMaxHealth(health);//I know it is Deprecated, but whatever.
+        moby.setHealth(health);
+        
+        moby.setCustomNameVisible(true);
+        moby.setCustomName(md.custom_tag);
     };
     
     

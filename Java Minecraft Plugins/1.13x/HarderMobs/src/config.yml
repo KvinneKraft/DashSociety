@@ -89,7 +89,7 @@ harder-mobs:
             # Here you can specify all of the enchantments
             # mobs their armour may spawn with:
             
-            armour:
+            gear:
                 
                 # Here you can specify what enchantments
                 # mobs their helmets may spawn with: 
@@ -101,14 +101,14 @@ harder-mobs:
                 # Here you can specify what enchantments
                 # mobs their chestplates may spawn with:
                 
-                chestplate:
-                    - 'PROJECTION_ENVIRONMENTAL 1-4'
+                chestplates:
+                    - 'PROTECTION_ENVIRONMENTAL 1-4'
                     
                 
                 # Here you can specify what enchantments
                 # mobs their leggings may spawn with:
                 
-                legging:
+                leggings:
                     - 'PROTECTION_PROJECTILE 1-4'
                     
                 
@@ -119,12 +119,13 @@ harder-mobs:
                     - 'PROTECTION_FALL 1-4'
              
                 
-            # Here you can specify what enchantments
-            # mobs their weapons may spawn with:
+                # Here you can specify what enchantments
+                # mobs their weapons may spawn with:
             
-            weapons:
-                - 'SHARPNESS 1-6'
-                - 'FIREASPECT 1-6'
+                weapons:
+                    - 'SHARPNESS 1-6'
+                    - 'FIREASPECT 1-6'
+        
         
         # Here you can specify what potion effects
         # the mobs may spawn with: (The outcome is random)

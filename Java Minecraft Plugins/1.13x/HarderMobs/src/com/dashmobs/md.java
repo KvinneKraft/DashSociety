@@ -20,9 +20,9 @@ import java.util.List;
 public class md
 {
     static HashMap<String, List<Enchantment>> enchantments = new HashMap<>();
+    static HashMap<String, List<Integer>> levels = new HashMap<>();//mob.addEnchantment(enchantments.get("helmets").get(rand), levels.get("helmets").get(rand));
+    
     static HashMap<String, List<ItemStack>> gears = new HashMap<>();
-    static HashMap<String, List<Integer>> level_range = new HashMap<>();
-  
     static HashMap<String, Integer> max_enchants = new HashMap<>();    
     
     static List<PotionEffect> effects = new ArrayList<>();            
@@ -30,4 +30,5 @@ public class md
     static List<World> allowed_worlds = new ArrayList<>();
     
     static Integer spawn_chance, max_health, min_health;
+    static String custom_tag;
 };
