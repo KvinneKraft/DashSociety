@@ -38,14 +38,13 @@ public class Captcha extends JavaPlugin
         config = (FileConfiguration) getConfig();
         plugin = (JavaPlugin) this;
         
+        Refresh.reload_action();        
+        
         if(config.getBoolean("dash-captcha.enabled"))
         {
-            getServer().getPluginManager().registerEvents(events, plugin);
+            getServer().getPluginManager().registerEvents(events, this);
         };
         
-        Refresh.reload_action();
-        
-        getServer().getPluginManager().registerEvents(events, plugin);
         getCommand("dashcaptcha").setExecutor(commands);
         
         print("The plugin has been enabled!");

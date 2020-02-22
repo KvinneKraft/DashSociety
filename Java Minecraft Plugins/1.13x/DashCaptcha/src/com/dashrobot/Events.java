@@ -34,7 +34,6 @@ import org.bukkit.Sound;
 import java.util.Random;
 import org.bukkit.Color;
 import java.util.List;
-import org.bukkit.inventory.ItemFlag;
 
 
 //---//
@@ -167,14 +166,25 @@ public class Events implements Listener
             }, 
             
             verification_timeout * 20
-        );
-
-        if(apply_blind_effect)
-        {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 222222, 222222));        
-        };
+        );        
         
-        open_captcha_dialog(p);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Captcha.plugin,
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if(apply_blind_effect)
+                    {
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 222222, 222222));        
+                    };
+        
+                    open_captcha_dialog(p);
+                };
+            },
+            
+            5
+        );
     };
     
     
@@ -189,7 +199,7 @@ public class Events implements Listener
     {        
         Player p = (Player)e.getPlayer();        
         
-        if((!verification_cache.containsKey(p)) || (e.getInventory().getContents().length != inventory_slots))
+        if(!verification_cache.containsKey(p))
         {
             return;
         };
@@ -204,7 +214,7 @@ public class Events implements Listener
                 };
             }, 
                 
-            2
+            4
         );
     };
     
