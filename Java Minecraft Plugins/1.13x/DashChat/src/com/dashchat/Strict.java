@@ -107,10 +107,6 @@ public class Strict extends JavaPlugin
                     return f;
                 };
                 
-                // 0 = add | del
-                // 1 = command | message
-                // 2 = <data>
-                
                 a = as[0].toLowerCase();
                 String tag = as[2].toLowerCase();
                 
@@ -220,12 +216,14 @@ public class Strict extends JavaPlugin
         config = plugin.getConfig();
         
         events.black_listed_commands = config.getStringList("command-properties.blacklist");
+        
         for(String str : events.black_listed_commands)
         {
             events.low_black_listed_commands.add(str.toLowerCase());
         };
         
         events.black_listed_words = config.getStringList("message-properties.blacklist");//Future update make it so it only loads this if enabled.
+        
         for(String str : events.black_listed_words)
         {
             events.low_black_listed_words.add(str.toLowerCase());
