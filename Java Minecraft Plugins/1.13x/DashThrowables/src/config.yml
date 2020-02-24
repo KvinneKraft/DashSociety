@@ -24,6 +24,9 @@ dash-throwables:
         # The delay between fireball throws:
         cooldown: 10
         
+        # The speed of the projectile:
+        velocity: 1.5        
+        
         # Explosion Adjustables:
         explosion:
             
@@ -45,6 +48,9 @@ dash-throwables:
             
         # The delay between wither skull throws:
         cooldown: 10
+            
+        # The speed of the projectile:
+        velocity: 1.5
             
         # Explosion Adjustables:
         explosion:

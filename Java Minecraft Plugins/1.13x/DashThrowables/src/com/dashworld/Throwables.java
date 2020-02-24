@@ -18,13 +18,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -127,6 +128,7 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
     
     private boolean has_fireballs, fireball_fire, fireball_terrain, has_witherskulls, witherskull_fire, witherskull_terrain;
     private int fireball_cooldown, fireball_radius, witherskull_cooldown, witherskull_radius;
+    private double fireball_velocity, witherskull_velocity;
     
     
     private final String witherskull_cooldown_message = color("&cCalm down, you must wait a bit before throwing another one.");    
@@ -144,7 +146,9 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
         fireball_terrain = config.getBoolean("dash-throwables.firecharges.explosion.terrain");        
         has_fireballs = config.getBoolean("dash-throwables.firecharges.enabled");
         fireball_fire = config.getBoolean("dash-throwables.firecharges.explosion.fire");
-
+        
+        fireball_velocity = config.getDouble("dash-throwables.firecharges.velocity");
+        
         fireball_cooldown = config.getInt("dash-throwables.firecharges.cooldown");        
         fireball_radius = config.getInt("dash-throwables.firecharges.explosion.radius"); 
         
@@ -153,6 +157,8 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
         witherskull_terrain = config.getBoolean("dash-throwables.witherskulls.explosion.terrain");
         has_witherskulls = config.getBoolean("dash-throwables.witherskulls.enabled");
         witherskull_fire = config.getBoolean("dash-throwables.witherskulls.explosion.fire");
+        
+        witherskull_velocity = config.getDouble("dash-throwables.witherskulls.velocity");
         
         witherskull_cooldown = config.getInt("dash-throwables.witherskulls.explosion.enabled");
         witherskull_radius = config.getInt("dash-throwables.witherskulls.explosion.radius");
@@ -176,39 +182,37 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
             
             worlds.add(world);
         };
+        
+        admin_permission = config.getString("dash-throwables.admin-permission");
     };
     
     
-    @EventHandler public void onEntityHit(ProjectileHitEvent e)
+    @EventHandler public void onEntityExplode(EntityExplodeEvent e)
     {
         Entity entity = e.getEntity();
-        
-        if(!(entity instanceof Fireball) && !(entity instanceof WitherSkull))
-        {
-            return;
-        };
-        
         Location location = entity.getLocation();
         
-        if(entity instanceof Fireball)
+        if(entity.getType().equals(EntityType.FIREBALL))
         {
-            Fireball fireball = (Fireball) entity;
+            //Fireball fireball = (Fireball) entity;
         
-            if(fireball.getName().equals("dashball"))
-            {
+            //if(fireball.getName().equals("dashball"))
+            //{
                 location.getWorld().createExplosion(location, fireball_radius, fireball_fire, fireball_terrain);
-            };
+                e.setCancelled(fireball_terrain != true);
+            //};
         }
         
-        else if(entity instanceof WitherSkull)
+        else if (entity.getType().equals(EntityType.WITHER_SKULL))
         {
-            WitherSkull witherskull = (WitherSkull) entity;
+            //WitherSkull witherskull = (WitherSkull) entity;
             
-            if(witherskull.getName().equals("dashskull"))
-            {
+            //if(witherskull.getName().equals("dashskull"))
+            //{
                 location.getWorld().createExplosion(location, witherskull_radius, witherskull_fire, witherskull_terrain);
-            };
-        };
+                e.setCancelled(witherskull_terrain != true);
+            //};
+        };        
     };
     
     
@@ -216,13 +220,18 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
     {
         Player p = e.getPlayer();
         
-        if(worlds.contains(p.getWorld()))
+        if(!worlds.contains(p.getWorld()))
         {
             return;
         };
         
         ItemStack item = e.getItem();
         
+        if(item == null)
+        {
+            return;
+        }
+            
         if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)
         {
             if(has_fireballs && item.getType().equals(Material.FIRE_CHARGE) && p.hasPermission(fireball_permission))
@@ -235,10 +244,10 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
                
                Fireball fireball = p.launchProjectile(Fireball.class);
 
-               fireball.setVelocity(p.getLocation().getDirection().multiply(1.5));
+               fireball.setVelocity(p.getLocation().getDirection().multiply(fireball_velocity));
                fireball.setIsIncendiary(fireball_fire);               
-               fireball.setCustomName("dashball");
-               fireball.setCustomNameVisible(false);
+               //fireball.setCustomName("dashball");
+               //fireball.setCustomNameVisible(false);
                
                if(p.isOp())
                {
@@ -275,10 +284,10 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
                 
                 WitherSkull witherskull = p.launchProjectile(WitherSkull.class);
                 
-                witherskull.setVelocity(p.getLocation().getDirection().multiply(1.5));
+                witherskull.setVelocity(p.getLocation().getDirection().multiply(witherskull_velocity));
                 witherskull.setIsIncendiary(witherskull_fire);
-                witherskull.setCustomName("dashskull");
-                witherskull.setCustomNameVisible(false);
+                //witherskull.setCustomName("dashskull");
+                //witherskull.setCustomNameVisible(false);
                 
                 if(p.isOp())
                 {

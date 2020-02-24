@@ -132,7 +132,7 @@ class EventsHandler implements Listener
         
         final ItemStack item = e.getItem();
         
-        if((item == null) || (item.getType().equals(Material.AIR)) || (item.getItemMeta().getCustomModelData() != 2020))
+        if((item == null) || (item.getType().equals(Material.AIR)) || (!item.hasItemMeta()) || (!item.getItemMeta().hasCustomModelData()) || (item.getItemMeta().getCustomModelData() != 2020))
         {
             return;
         }
