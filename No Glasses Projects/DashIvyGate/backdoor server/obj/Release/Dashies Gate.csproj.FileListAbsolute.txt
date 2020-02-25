@@ -1,7 +1,0 @@
-E:\Purr Net\Dashies Gate\bin\Release\Dashies Gate.exe.config
-E:\Purr Net\Dashies Gate\bin\Release\Dashies Gate.exe
-E:\Purr Net\Dashies Gate\bin\Release\Dashies Gate.pdb
-E:\Purr Net\Dashies Gate\obj\Release\Dashies Gate.csprojAssemblyReference.cache
-E:\Purr Net\Dashies Gate\obj\Release\Dashies Gate.csproj.CoreCompileInputs.cache
-E:\Purr Net\Dashies Gate\obj\Release\Dashies Gate.exe
-E:\Purr Net\Dashies Gate\obj\Release\Dashies Gate.pdb

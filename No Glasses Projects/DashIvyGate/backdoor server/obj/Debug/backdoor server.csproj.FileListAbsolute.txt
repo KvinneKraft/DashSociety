@@ -1,6 +1,0 @@
-F:\Purr Net\cs proj\Dashies Gate\backdoor server\bin\Debug\Dashies Gate.exe.config
-F:\Purr Net\cs proj\Dashies Gate\backdoor server\bin\Debug\Dashies Gate.exe
-F:\Purr Net\cs proj\Dashies Gate\backdoor server\bin\Debug\Dashies Gate.pdb
-F:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Debug\backdoor server.csprojAssemblyReference.cache
-F:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Debug\Dashies Gate.exe
-F:\Purr Net\cs proj\Dashies Gate\backdoor server\obj\Debug\Dashies Gate.pdb
