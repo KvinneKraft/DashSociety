@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29001.49
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dash IP Stresser", "Dash IP Stresser.csproj", "{914C1C76-99E1-4C52-84A6-A7BEAB22B6FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{914C1C76-99E1-4C52-84A6-A7BEAB22B6FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{914C1C76-99E1-4C52-84A6-A7BEAB22B6FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{914C1C76-99E1-4C52-84A6-A7BEAB22B6FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{914C1C76-99E1-4C52-84A6-A7BEAB22B6FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56FDC2BC-B3EB-4AC5-B9CE-A0465F5E315F}
+	EndGlobalSection
+EndGlobal
