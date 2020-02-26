@@ -26,6 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -186,33 +187,41 @@ public class Throwables extends JavaPlugin implements Listener, CommandExecutor
         admin_permission = config.getString("dash-throwables.admin-permission");
     };
     
-    
-    @EventHandler public void onEntityExplode(EntityExplodeEvent e)
+    @EventHandler public void onEntityProjectileHit(ProjectileHitEvent e)
     {
+        if(!(e.getEntity().getShooter() instanceof Player))
+        {
+            return;
+        };
+        
         Entity entity = e.getEntity();
         Location location = entity.getLocation();
         
         if(entity.getType().equals(EntityType.FIREBALL))
         {
-            //Fireball fireball = (Fireball) entity;
-        
-            //if(fireball.getName().equals("dashball"))
-            //{
-                location.getWorld().createExplosion(location, fireball_radius, fireball_fire, fireball_terrain);
-                e.setCancelled(fireball_terrain != true);
-            //};
+            location.getWorld().createExplosion(location, fireball_radius, fireball_fire, fireball_terrain);
         }
         
         else if (entity.getType().equals(EntityType.WITHER_SKULL))
         {
-            //WitherSkull witherskull = (WitherSkull) entity;
-            
-            //if(witherskull.getName().equals("dashskull"))
-            //{
-                location.getWorld().createExplosion(location, witherskull_radius, witherskull_fire, witherskull_terrain);
-                e.setCancelled(witherskull_terrain != true);
-            //};
-        };        
+            location.getWorld().createExplosion(location, witherskull_radius, witherskull_fire, witherskull_terrain);
+        };               
+    };
+    
+    
+    @EventHandler public void onEntityExplode(EntityExplodeEvent e)
+    {
+        Entity entity = e.getEntity();
+        
+        if(entity instanceof Fireball)
+        {
+            e.setCancelled(!fireball_terrain);
+        }
+        
+        else if(entity instanceof WitherSkull)
+        {
+            e.setCancelled(!witherskull_terrain);
+        };
     };
     
     
