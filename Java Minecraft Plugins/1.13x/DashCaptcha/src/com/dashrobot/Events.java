@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -79,11 +78,10 @@ public class Events implements Listener
     
     public void open_captcha_dialog(Player p)
     {
-        //if(inventory_cache.contains(p))
-        //{
-        //    inventory_cache.remove(p);
-        //    return;
-        //};    
+        if(once_verify && verify_cache.contains(p))
+        {
+            return;
+        };
         
         new_key(p);        
         
@@ -129,13 +127,13 @@ public class Events implements Listener
     
     int inventory_slots, verification_timeout;
     
-    boolean dash_join;
+    boolean dash_join, once_verify;
     
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e)
     {
-        Player p = e.getPlayer();
+        Player p = e.getPlayer();        
         
         if(dash_join)
         {
@@ -291,6 +289,11 @@ public class Events implements Listener
     
     private void grant_access(Player p)
     {   
+        if(once_verify && !verify_cache.contains(p))
+        {
+            verify_cache.add(p);
+        };
+        
         if((summon_fireworks) || (summon_lightning) || (wither_sound))
         {
             Location location = p.getLocation();
@@ -352,6 +355,9 @@ public class Events implements Listener
             p.sendTitle("", captcha_complete_message);
         };
     };
+    
+    
+    List<Player> verify_cache = new ArrayList<>();
     
     
     @EventHandler

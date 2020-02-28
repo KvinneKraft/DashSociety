@@ -116,6 +116,9 @@ dash-captcha:
             
         block-command: true
         
+        # Only verify an user once per server up-time:
+        
+        verify-once: false
      
         
     # What items should be used for the Captcha pattern:
