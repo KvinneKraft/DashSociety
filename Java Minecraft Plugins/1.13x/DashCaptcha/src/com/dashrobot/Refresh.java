@@ -41,6 +41,11 @@ public class Refresh
         Captcha.events.block_chat = config.getBoolean("dash-captcha.properties.block-chat");
         Captcha.events.block_command = config.getBoolean("dash-captcha.properties.block-command");
         
+        if(Captcha.events.verify_cache.size() > 0)
+        {
+            Captcha.events.verify_cache.clear();
+        };
+        
         Captcha.events.once_verify = config.getBoolean("dash-captcha.properties.verify-once");
         
         if((Captcha.events.pattern_items != null) && (Captcha.events.pattern_items.size() > 0)) 

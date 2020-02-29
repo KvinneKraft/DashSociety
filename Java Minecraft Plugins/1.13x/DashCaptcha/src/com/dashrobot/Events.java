@@ -78,7 +78,7 @@ public class Events implements Listener
     
     public void open_captcha_dialog(Player p)
     {
-        if(once_verify && verify_cache.contains(p))
+        if(verify_cache.contains(p))
         {
             return;
         };
@@ -123,6 +123,8 @@ public class Events implements Listener
     List<Material> pattern_items = new ArrayList<Material>();    
     List<Material> key_items = new ArrayList<>();
     
+    List<String> verify_cache = new ArrayList<>();    
+    
     String timeout_kick_message, join_message, first_join_message, quit_message;
     
     int inventory_slots, verification_timeout;
@@ -148,6 +150,12 @@ public class Events implements Listener
             };
         };
         
+        if(verify_cache.contains(p.getName()))
+        {
+            System.out.println("Hey");
+            return;
+        };
+            
         Bukkit.getScheduler().scheduleSyncDelayedTask(Captcha.plugin, 
             new Runnable()
             {
@@ -289,9 +297,9 @@ public class Events implements Listener
     
     private void grant_access(Player p)
     {   
-        if(once_verify && !verify_cache.contains(p))
+        if(!verify_cache.contains(p.getName()))
         {
-            verify_cache.add(p);
+            verify_cache.add(p.getName());
         };
         
         if((summon_fireworks) || (summon_lightning) || (wither_sound))
@@ -355,9 +363,6 @@ public class Events implements Listener
             p.sendTitle("", captcha_complete_message);
         };
     };
-    
-    
-    List<Player> verify_cache = new ArrayList<>();
     
     
     @EventHandler
