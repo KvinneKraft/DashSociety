@@ -1,0 +1,14 @@
+F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\obj\Release\Reverse Shell.csprojAssemblyReference.cache
+F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\Reverse Shell.exe.config
+F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\obj\Release\Reverse Shell.exe
+F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\obj\Release\Reverse Shell.pdb
+F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\Reverse Shell.exe
+F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\Reverse Shell.pdb
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Release\Reverse Shell.csprojAssemblyReference.cache
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\Reverse Shell.exe.config
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Release\Reverse Shell.exe
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Release\Reverse Shell.pdb
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\Reverse Shell.exe
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\Reverse Shell.pdb
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Release\Reverse_Shell.resources.resources
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Release\Reverse Shell.csproj.GenerateResource.cache

@@ -1,0 +1,6 @@
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\bin\Debug\Reverse Shell.exe.config
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\bin\Debug\Reverse Shell.exe
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\bin\Debug\Reverse Shell.pdb
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Debug\Reverse Shell.csprojAssemblyReference.cache
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Debug\Reverse Shell.exe
+F:\Programming\Dashies Code\No Glasses Projects\Reverse Shell\2.0-mc\obj\Debug\Reverse Shell.pdb
