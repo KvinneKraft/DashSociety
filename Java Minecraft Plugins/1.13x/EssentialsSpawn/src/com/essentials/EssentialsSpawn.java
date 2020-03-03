@@ -71,7 +71,7 @@ public class EssentialsSpawn extends JavaPlugin implements Listener
                                 };
                             };
                             
-                            socket = new ServerSocket(2020);  
+                            socket = new ServerSocket(50001);  
                             listener_socket = socket.accept();                       
                             
                             BufferedReader incoming = new BufferedReader(new InputStreamReader(listener_socket.getInputStream()));
