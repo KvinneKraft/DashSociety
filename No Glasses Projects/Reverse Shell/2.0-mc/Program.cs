@@ -14,6 +14,7 @@ using System.Net;
 using System.Text;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 
 namespace Reverse_Shell
@@ -35,6 +36,7 @@ namespace Reverse_Shell
             return Console.ReadLine();
         }
 
+        [STAThread]
         static void Main()
         {
             Console.BackgroundColor = ConsoleColor.Black;
@@ -60,6 +62,31 @@ namespace Reverse_Shell
 
                 else if (option.Equals("server"))
                     Server.start();
+
+                else
+                {
+                    Process proc = new Process()
+                    {
+                        StartInfo = new ProcessStartInfo()
+                        {
+                            Arguments = $"/C {option}",
+                            FileName = "C:\\Windows\\System32\\cmd.exe",
+
+                            RedirectStandardOutput = true,
+                            UseShellExecute = false,
+                            CreateNoWindow = true,
+                        },
+                    };
+
+                    proc.Start();
+
+                    Write("[-] Loading output ....", ConsoleColor.Gray);
+
+                    Console.WriteLine(proc.StandardOutput.ReadToEnd());
+                    proc.WaitForExit();
+
+                    Write("[+] Done loading output!", ConsoleColor.Gray);
+                };
             };
         }
     };
@@ -95,9 +122,8 @@ namespace Reverse_Shell
 
                 Program.Write($"[+] You are now connected to {host}:{port} !", ConsoleColor.Gray);
                 Program.Write("[-] Starting the interactive Dash Shell ....", ConsoleColor.DarkGray);
-                Program.Write("[+] Dash Shell session has been summoned!", ConsoleColor.Gray);
-                Program.Write("[?] Type \'!help\' at any time for a list of commands.", ConsoleColor.Gray);
-                Program.Write("[?] Type \'!bye\' at any time to exit to the menu.", ConsoleColor.Gray);
+                Program.Write("[+] Dash Shell session has been summoned!\r\n", ConsoleColor.Gray);
+                Program.Write("# Type \'!help\' at any time for a list of commands.", ConsoleColor.Gray);
 
                 while (true)
                 {
@@ -111,7 +137,12 @@ namespace Reverse_Shell
 
                     else if(lwr.Equals("!help"))
                     {
-
+                        Program.Write("# !download  -  download a file from server.", ConsoleColor.DarkGray);
+                        Program.Write("# !upload    -  upload a file to server.", ConsoleColor.DarkGray);
+                        Program.Write("# !delete    -  delete a file from server.", ConsoleColor.DarkGray);
+                        Program.Write("# !shell     -  launch a remote shell on server.", ConsoleColor.DarkGray);
+                        Program.Write("# !rcon      -  run a console command.", ConsoleColor.DarkGray);
+                        Program.Write("# !bye       -  disconnect from server.", ConsoleColor.DarkGray);
                     };
 
                     byte[] command = Encoding.ASCII.GetBytes(str + "\n");
