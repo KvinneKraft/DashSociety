@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="features.txt" />
+    <None Include="Properties\resx\program icon.png" />
     <None Include="Properties\resx\program icon.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -65,5 +65,37 @@ namespace Dash_IP_Stresser
                 c.Region = new Region(graphics_path);
             };
         }
+
+
+        public static void install_menubar(Control frame, Control soil)
+        {
+            Size frame_size = new Size(soil.Width, 28);
+
+            frame.Size = frame_size;
+            frame.MinimumSize = frame_size;
+            frame.MaximumSize = frame_size;
+
+            drag_material(frame, soil);
+
+            frame.BackColor = Color.FromArgb(8, 8, 8);
+
+            soil.Controls.Add(frame);
+        }
+
+
+        public static void add_image(Control soil, PictureBox picturebox, Image image, Size image_size, Point image_point)
+        {
+            picturebox.Size = image_size;
+            picturebox.MinimumSize = image_size;
+            picturebox.MaximumSize = image_size;
+
+            picturebox.BackColor = Color.FromArgb(0, 0, 0, 255);
+            picturebox.BorderStyle = BorderStyle.None;
+
+            picturebox.Location = image_point;
+            picturebox.Image = image;
+
+            soil.Controls.Add(picturebox);
+        }
     };
 };

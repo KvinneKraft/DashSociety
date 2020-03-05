@@ -17,7 +17,11 @@ namespace Dash_IP_Stresser
 {
     class Apple : Form
     {
+        public PictureBox menu_bar_icon = new PictureBox();
+        public PictureBox menu_bar = new PictureBox();
+
         public TextBox packets_sent = new TextBox();
+
 
         private void ClientLayout()
         {
@@ -43,14 +47,19 @@ namespace Dash_IP_Stresser
 
             Paint += (s, e) =>
             {
-                MOON.paint_border(e, Color.FromArgb(1, 1, 1), 2, client_size, new Point(0, 0));
+                MOON.paint_border(e, Color.FromArgb(8, 8, 8), 2, client_size, new Point(0, 0));
+                MOON.install_menubar(menu_bar, this);
             };
+
+            //Image icon_image = Bitmap.FromHicon(new Icon(Properties.resources.program_icon, new Size(28, 26)).Handle);
+            MOON.add_image(menu_bar, menu_bar_icon, Properties.resources.menu_bar_icon, new Size(28, 26), new Point(1, 1));
 
             Show();
         }
 
         public Apple()
         {
+            ClientLayout();
 
         }
     };
