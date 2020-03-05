@@ -4,3 +4,5 @@ F:\Programming\Dashies Code\No Glasses Projects\Dash IP Stresser\obj\Release\Das
 F:\Programming\Dashies Code\No Glasses Projects\Dash IP Stresser\obj\Release\Dash IP Stresser.pdb
 F:\Programming\Dashies Code\No Glasses Projects\Dash IP Stresser\Dash IP Stresser.exe
 F:\Programming\Dashies Code\No Glasses Projects\Dash IP Stresser\Dash IP Stresser.pdb
+F:\Programming\Dashies Code\No Glasses Projects\Dash IP Stresser\obj\Release\Dash_IP_Stresser.Properties.resources.resources
+F:\Programming\Dashies Code\No Glasses Projects\Dash IP Stresser\obj\Release\Dash IP Stresser.csproj.GenerateResource.cache

@@ -1,8 +1,13 @@
-﻿using System;
-using System.Net;
+﻿
+
+// Author: Dashie
+// Version: 1.0
+
+
+using System;
 using System.Linq;
 using System.Text;
-using System.Net.Sockets;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -10,98 +15,39 @@ using System.Collections.Generic;
 
 namespace Dash_IP_Stresser
 {
-    static class Socks
-    {
-        static class Types
-        {
-            public const int HTTP = 0;
-            public const int ICMP = 1;
-            public const int TCP = 2;
-            public const int UDP = 3;
-        };
-
-        static class Techniques
-        {
-            /*[Add in some techniques, Firewall Bypassing and other things]*/
-        };
-
-
-        static void SendPacket(string target, int port, string data, int timeout, int requests, int type, int technique /*[Optional HTTP Parameters]*/)
-        {
-            ProtocolType protocol_type;
-            SocketType sock_type;
-
-            switch (type)
-            {
-                case Types.HTTP:
-                case Types.TCP:
-                {
-                    protocol_type = ProtocolType.Tcp;
-                    sock_type = SocketType.Stream;
-
-                    break;
-                };
-
-                case Types.ICMP:
-                {
-                    protocol_type = ProtocolType.Icmp;
-                    sock_type = SocketType.Stream;
-
-                    break;
-                };
-
-                case Types.UDP:
-                {
-                    protocol_type = ProtocolType.Udp;
-                    sock_type = SocketType.Dgram;
-
-                    break;
-                };
-
-                default:
-                {
-                    protocol_type = ProtocolType.Unknown;
-                    sock_type = SocketType.Unknown;
-
-                    break;
-                };
-            };
-
-            byte[] bytes = Encoding.ASCII.GetBytes(data);
-
-            for (int request = 0; request < requests; request += 1)
-            {
-                Socket socket = new Socket(AddressFamily.InterNetwork, sock_type, protocol_type)
-                {
-                    SendBufferSize = bytes.Length,
-                    SendTimeout = 0,
-                };
-
-                IAsyncResult result = socket.BeginConnect(IPAddress.Parse(target), port, null, null);
-                result.AsyncWaitHandle.WaitOne(timeout, true);
-
-                if (socket.Connected)
-                {
-                    socket.Send(bytes);
-                    socket.EndConnect(result);
-
-                    Program.apple.packets_sent.Text = (int.Parse(Program.apple.packets_sent.Text) + 1).ToString();
-                }
-
-                else
-                {
-                    // Target is not responding, may be down?
-                };
-
-                socket.Close();
-            };
-        }
-    };
-
-
     class Apple : Form
     {
         public TextBox packets_sent = new TextBox();
+
+        private void ClientLayout()
+        {
+            Hide();
+            BringToFront();
+
+            Size client_size = new Size(350, 350);
+
+            Size = client_size;
+            MaximumSize = client_size;
+            MinimumSize = client_size;
+
+            MaximizeBox = false;
+            MinimizeBox = false;
+
+            Icon = Properties.resources.program_icon;
+
+            StartPosition = FormStartPosition.CenterScreen;
+            FormBorderStyle = FormBorderStyle.None;
+
+            BackColor = Color.FromArgb(24, 24, 24);
+            Text = " Dashies Fluffy IP Stresser ☽⛤☾";
+
+            Paint += (s, e) =>
+            {
+                MOON.paint_border(e, Color.FromArgb(1, 1, 1), 2, client_size, new Point(0, 0));
+            };
+
+            Show();
+        }
 
         public Apple()
         {
@@ -113,7 +59,9 @@ namespace Dash_IP_Stresser
     static class Program
     {
         public static Apple apple;
+        
 
+        [STAThread]
         static void Main(string[] args)
         {
             //- HTTP, TCP, UDP and ICMPv4 support!

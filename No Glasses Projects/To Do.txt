@@ -1,6 +1,0 @@
-- Dash IP Stresser v7.0 with a fancy GUI and more power! LAUNCH ZE SHELLS!
-- Simple C# Bypassing Reverse-Shell
-- Simple LUA Bypassing Reverse-Shell
-- Dash Terminal C++ v4.0 (Custom GUI)
-
-// Note for ze Deshieee
