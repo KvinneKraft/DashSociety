@@ -97,5 +97,32 @@ namespace Dash_IP_Stresser
 
             soil.Controls.Add(picturebox);
         }
+
+
+        public static void add_button(Control soil, Button button, string button_tag, int button_text_size, Color[] button_colors, int button_border_size, Size button_size, Point button_point)
+        {
+            button.Size = button_size;
+            button.MinimumSize = button_size;
+            button.MaximumSize = button_size;
+
+            button.Font = new Font("Modern", button_text_size, FontStyle.Regular);
+            button.Text = button_tag;
+
+            button.BackColor = button_colors[0];
+            button.ForeColor = button_colors[1];
+
+            if(button_border_size > 0)
+            {
+                border_control(button);
+            };
+
+            button.FlatAppearance.BorderColor = Color.FromArgb(0, 0, 0, 255);
+            button.FlatAppearance.BorderSize = 0;
+
+            button.FlatStyle = FlatStyle.Flat;
+            button.Location = button_point;
+
+            soil.Controls.Add(button);
+        }
     };
 };
