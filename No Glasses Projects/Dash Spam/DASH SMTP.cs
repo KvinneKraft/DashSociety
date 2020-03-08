@@ -13,17 +13,15 @@ using System.Reflection;
 
 public class DashSMTP
 {
-    public readonly static string dash_subject = ("Dash Society - Meet the Team! ");
+    public readonly static string dash_subject = ("Dash Society");
 
-    private static string get_body()
+    /*private static string get_body()
     {
         ResourceManager resource_grab = new ResourceManager("Dash_Spam.Properties.mail", Assembly.GetExecutingAssembly());
         return resource_grab.GetString("body");
-    }
+    }*/
 
-    public readonly static string dash_body = get_body();
-
-    private bool send_mail(string destination, string sender_email, string sender_password, bool verbose_output)
+    private bool send_mail(string destination, string body, string sender_email, string sender_password, bool verbose_output)
     {
         try
         {
@@ -45,8 +43,8 @@ public class DashSMTP
                     message.From = mail_address;
                     message.IsBodyHtml = true;
 
-                    message.Subject = $"{dash_subject}" + "#" + new Random().Next(99999).ToString();
-                    message.Body = $"{dash_body}";
+                    message.Subject = $"{dash_subject} #{new Random().Next(99999).ToString()}";
+                    message.Body = $"{body}";
 
                     message.To.Add(destination);
                     smtp_client.Send(message);

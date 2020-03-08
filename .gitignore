@@ -143,3 +143,16 @@ No Glasses Projects/Dash IP Stresser/.vs/Dash IP Stresser/v16/.suo
 *.config
 *.lock
 *.sln
+*.testlog
+*.ipch
+*.db
+*.manifest
+C and C++ Projects/WelshMussuge/.vs/WelshMussuge/v16/.suo
+*.log
+*.obj
+*.res
+*.tlog
+*.aps
+*.iobj
+*.ipdb
+*.filters
