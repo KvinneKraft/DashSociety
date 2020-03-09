@@ -156,3 +156,5 @@ C and C++ Projects/WelshMussuge/.vs/WelshMussuge/v16/.suo
 *.iobj
 *.ipdb
 *.filters
+*.xml
+*.properties

@@ -21,7 +21,7 @@ public class DashSMTP
         return resource_grab.GetString("body");
     }*/
 
-    private bool send_mail(string destination, string body, string sender_email, string sender_password, bool verbose_output)
+    public bool send_mail(string destination, string body, string sender_email, string sender_password, bool verbose_output)
     {
         try
         {
