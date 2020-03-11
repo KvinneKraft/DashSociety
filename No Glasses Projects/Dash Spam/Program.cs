@@ -1,56 +1,65 @@
-﻿using System;
+﻿
+// Author: Dashie
+// Version: 1.0
 
+using System;
 
-namespace Dash_Spam
+namespace MailSpammer
 {
-    class Program
+    public class Program
     {
-        static ConsoleColor CHOICE = ConsoleColor.Yellow;
-        static ConsoleColor ERROR = ConsoleColor.Red;
-        static ConsoleColor INFO = ConsoleColor.DarkCyan;
-        static ConsoleColor LINE = ConsoleColor.Cyan;
+        readonly static ConsoleColor DarkGray = ConsoleColor.DarkGray;
+        readonly static ConsoleColor Gray = ConsoleColor.Gray;
+        readonly static ConsoleColor White = ConsoleColor.White;
+        readonly static ConsoleColor Yellow = ConsoleColor.Yellow;
+        readonly static ConsoleColor DarkYellow = ConsoleColor.DarkYellow;
+        readonly static ConsoleColor Red = ConsoleColor.Red;
 
 
-        static void Main(string[] args)
+        [STAThread]
+        public static void Main()
         {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
+            Dash.BackColor(ConsoleColor.Black);
+            Dash.ForeColor(ConsoleColor.Yellow);
 
-            Console.Clear();
+            Dash.Clear();
+            Login.AuthenticateUser();
 
-            write("-[-=-=-=-=-=-=-=-=-====-=-=-=-=-=]-\r\n", LINE);
-            write(" |                               | \r\n", INFO);
-            write(" |  (1) Use the dash spammer.    | \r\n", INFO);
-            write(" |  (2) About the dash spammer.  | \r\n", INFO);
-            write(" |  (3) quit this runtime.       | \r\n", INFO);
-            write(" |                               | \r\n", INFO);
-            write("-[-=-=-=-=-=-=-=-=-====-=-=-=-=-=]-\r\n\r\n", LINE);
+            Dash.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\r\n\r\n", DarkYellow);
+
+            // Some epic TEXT LOGO right here <<<
+
+            Dash.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\r\n\r\n", DarkYellow);
+
+            Dash.WriteLine(" (a)    -===>    Go and make use of this user-friendly application.\r\n", Yellow);
+            Dash.WriteLine(" (b)    -===>    Contact me, Dashie, I has sum urls, yas!\r\n", Yellow);
+            Dash.WriteLine(" (c)    -===>    Get some insight of this application.\r\n", Yellow);
+            Dash.WriteLine(" (d)    -===>    Close down this application.\r\n", Yellow);
+
+            Dash.WriteLine("\r\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\r\n\r\n", DarkYellow);
 
         retype:
 
-            string command = input("Option").ToLower();
+            string option = Dash.ReadLine("Option").ToLower();
 
-            if(command.Equals("1"))
-            {
-                string username, password, target, body;
-                int threads, mails;
-
-                username = input("Username");
-                password = input("Password");
-                target = input("Target");
-
-                DashSMTP smtp = new DashSMTP();
-
-            }
-
-            else if(command.Equals("2"))
+            if (option.Equals("a"))
             {
 
             }
 
-            else if(command.Equals("3"))
+            else if (option.Equals("b"))
             {
 
+            }
+
+            else if (option.Equals("c"))
+            {
+
+            }
+
+            else if (option.Equals("d"))
+            {
+                // Are you sure? Environment.Exit(-1);
             }
 
             else
@@ -58,45 +67,5 @@ namespace Dash_Spam
                 goto retype;
             };
         }
-
-
-        static string input(string str)
-        {
-            ConsoleColor old_bgcolor = Console.BackgroundColor;
-            ConsoleColor old_frcolor = Console.ForegroundColor;
-
-            // (/DashSociety/Spammer/Option):>  
-
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write("(");
-
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write($"/DashSociety/Spammer/{str}");
-
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write("):> ");
-
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            string cache = Console.ReadLine();
-
-            Console.BackgroundColor = old_bgcolor;
-            Console.ForegroundColor = old_frcolor;
-
-            return cache;
-        }
-
-        static void write(string str, ConsoleColor color)
-        {
-            ConsoleColor old_bgcolor = Console.BackgroundColor;
-            ConsoleColor old_frcolor = Console.ForegroundColor;
-
-            Console.ForegroundColor = color;
-            Console.Write(str);
-
-            Console.BackgroundColor = old_bgcolor;
-            Console.ForegroundColor = old_frcolor;
-        }
     };
 };
- 
