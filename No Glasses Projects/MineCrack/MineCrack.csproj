@@ -49,8 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="lib\DashSociety.cs" />
-    <Compile Include="lib\injector.cs" />
+    <Compile Include="lib\DashSociety.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="lib\Injector.cs" />
     <Compile Include="Program.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

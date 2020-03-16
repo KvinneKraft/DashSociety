@@ -10,15 +10,35 @@ using System.Collections.Generic;
 
 namespace MineCrack
 {
-    public static class Moon
+    public class Moon : Form
     {
-        public static void Image()
+        public void Image(Control obj, PictureBox img, Image image, Size size, Point location)
         {
+            img.Size = size;
+            img.MinimumSize = size;
+            img.MaximumSize = size;
 
+            img.BorderStyle = BorderStyle.None;
+            img.BackColor = Color.FromArgb(0, 0, 0, 255);
+
+            if (location.X < 0)
+            {
+                location.X = (obj.Width - size.Width) / 2;
+            };
+
+            if (location.Y < 0)
+            {
+                location.Y = (obj.Height - size.Height) / 2;
+            };
+
+            img.Location = location;
+
+            if(image != null) img.Image = image;
+
+            obj.Controls.Add(img);
         }
 
-
-        public static void TextBox(Form obj, TextBox box, string text, int points, Size size, Point location, Color bgcolor, Color frcolor)
+        public void TextBox(Control obj, TextBox box, string text, int points, Size size, Point location, Color bgcolor, Color frcolor)
         {
             box.Size = size;
             box.MinimumSize = size;
@@ -48,8 +68,7 @@ namespace MineCrack
             obj.Controls.Add(box);
         }
 
-
-        public static void Label(Form obj, Label label, string text, int points, Size size, Point location, Color color)
+        public void Label(Control obj, Label label, string text, int points, Size size, Point location, Color color)
         {
             label.Size = size;
             label.MinimumSize = size;
@@ -76,8 +95,7 @@ namespace MineCrack
             obj.Controls.Add(label);
         }
 
-
-        public static void Button(Form obj, Button button, string text, int points, Size size, Point location, Color bgcolor, Color frcolor)
+        public void Button(Control obj, Button button, string text, int points, Size size, Point location, Color bgcolor, Color frcolor, int border_radius)
         {
             button.Size = size;
             button.MinimumSize = size;
@@ -104,13 +122,42 @@ namespace MineCrack
             button.FlatAppearance.BorderColor = Color.FromArgb(0, 0, 0, 255);
             button.FlatAppearance.BorderSize = 0;
 
+            button.TextAlign = ContentAlignment.MiddleCenter;
             button.FlatStyle = FlatStyle.Flat;
+
+            if (border_radius > 0)
+            {
+                button.Paint += (s, e) =>
+                {
+                    try
+                    {
+                        e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+
+                        base.OnPaint(e);
+
+                        Rectangle rectum = new Rectangle(0, 0, button.Width, button.Height);
+
+                        GraphicsPath graphics_path = new GraphicsPath();
+
+                        int radius = (border_radius) * 2;
+
+                        graphics_path.AddArc(rectum.X, rectum.Y, radius, radius, 170, 90);
+                        graphics_path.AddArc((rectum.X + rectum.Width - radius), rectum.Y, radius, radius, 270, 90);
+                        graphics_path.AddArc((rectum.X + rectum.Width - radius), (rectum.Y + rectum.Height - radius), radius, radius, 0, 90);
+                        graphics_path.AddArc(rectum.X, (rectum.Y + rectum.Height - radius), radius, radius, 90, 90);
+
+                        Region reg = new Region(graphics_path);
+                        button.Region = reg;
+                    }
+
+                    catch { };
+                };
+            };
 
             obj.Controls.Add(button);
         }
 
-
-        public static void drag_material(Control t, Control d)
+        public void drag_material(Control t, Control d)
         {
             Point point = Point.Empty;
 
@@ -131,8 +178,7 @@ namespace MineCrack
             };
         }
 
-
-        public static void paint_border(PaintEventArgs e, Color color, float width, Size size, Point point)
+        public void paint_border(PaintEventArgs e, Color color, float width, Size size, Point point)
         {
             Graphics graphics = e.Graphics;
 
@@ -142,11 +188,9 @@ namespace MineCrack
             };
         }
 
+        private List<ContainerControl> containers = new List<ContainerControl>();
 
-        private static List<ContainerControl> containers = new List<ContainerControl>();
-
-
-        public static void setup_container()
+        public void setup_container()
         {
             Color container_color = Color.FromArgb(16, 16, 16);
             Point container_point = new Point(5, 5);
@@ -165,7 +209,7 @@ namespace MineCrack
             int container_key = containers.Count - 1;
 
             containers[container_key].Paint += (s, e) =>
-                Moon.paint_border(e, Color.FromArgb(1, 1, 1), 2, containers[container_key].Size, Point.Empty);
+                paint_border(e, Color.FromArgb(1, 1, 1), 2, containers[container_key].Size, Point.Empty);
 
             KvinneKraft.
                 ActiveForm.
@@ -173,8 +217,7 @@ namespace MineCrack
                         Add(containers[container_key]);
         }
 
-
-        public static void border_control(Control ctrl)
+        public void border_control(Control ctrl)
         {
             ctrl.Paint += (s, e) =>
             {
