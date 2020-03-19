@@ -70,7 +70,7 @@ namespace MineCrack
 
 	    int button_left = (Width - 150) / 2;
 
-	    Dash.Button(this, generate, "Generate", 10, new Size(150, 22), new Point(button_left, 60), Color.FromArgb(37, 69, 54), Color.FromArgb(255, 255, 255), 10);
+	    Dash.Button(this, generate, "Generate", 10, new Size(150, 22), new Point(button_left, 60), Color.FromArgb(53, 84, 66), Color.FromArgb(255, 255, 255), 10);
 
 	    generate.Click += (s, e) =>
 	    {
