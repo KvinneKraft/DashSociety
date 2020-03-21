@@ -64,7 +64,7 @@ public class AutoBroadcaster extends JavaPlugin implements CommandExecutor
     {
         if( messages.size() > 0 ) messages.clear();
         
-        for(String message : config.getStringList("properties.messages"))
+        for( String message : config.getStringList("properties.messages") )
         {
             messages.add(color(message));
         };
