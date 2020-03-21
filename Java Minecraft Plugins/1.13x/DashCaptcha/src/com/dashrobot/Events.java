@@ -369,8 +369,10 @@ public class Events implements Listener
     public void onInventoryClick(InventoryClickEvent e)
     {
         Player p = (Player) e.getWhoClicked();        
+        ItemStack i = e.getCurrentItem();
+
         
-        if(!verification_cache.containsKey(p))
+        if((i == null) || (!verification_cache.containsKey(p)))
         {
             return;
         }
@@ -385,8 +387,6 @@ public class Events implements Listener
                 return;
             };  
         };
-        
-        ItemStack i = e.getCurrentItem();
         
         if(i.getType().equals(verification_cache.get(p)))
         {   
