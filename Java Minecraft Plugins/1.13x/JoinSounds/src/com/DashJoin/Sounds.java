@@ -20,72 +20,80 @@ import java.util.List;
 
 public class Sounds extends JavaPlugin implements Listener
 {
-    FileConfiguration config = getConfig();
-    
+    FileConfiguration config;// = getConfig();
+    Events events;
     
     @Override
     public void onEnable()
     {
         Kvinne.print("Loading the plugin ....");
         
-        getServer().getPluginManager().registerEvents(this, this);
+        saveDefaultConfig();
+        
+        config = (FileConfiguration) getConfig();
+        events = new Events();
+        
+        getServer().getPluginManager().registerEvents(events, this);
         
         Kvinne.print("Done loading the plugin!");
     };
     
     
-    List<Player> players = new ArrayList<>();
-
-    
-    Sound sound = Sound.valueOf(config.getString("sound_effect").replace(".", "_").replace(" ", "_").toUpperCase());    
-
-    
-    String trigger_permission = config.getString("trigger-permission-node");    
-    String notify_permission = config.getString("notify-permission-node");
-    
-    
-    @EventHandler
-    void onPlayerConnect(PlayerJoinEvent e)
+    class Events implements Listener
     {
-        Player p = e.getPlayer();
-        
-        if(p.hasPermission(notify_permission))
+        List<Player> players = new ArrayList<>();
+
+
+        Sound sound = Sound.valueOf(config.getString("sound_effect").replace(".", "_").replace(" ", "_").toUpperCase());    
+
+
+        String trigger_permission = config.getString("trigger-permission-node");    
+        String notify_permission = config.getString("notify-permission-node");
+
+
+        @EventHandler
+        void onPlayerConnect(PlayerJoinEvent e)
         {
-            if(!players.contains(p))
+            Player p = e.getPlayer();
+
+            if(p.hasPermission(notify_permission))
             {
-                players.add(p);
-            };
-        };        
-        
-        if(p.hasPermission(trigger_permission))
-        {
-            if(players.size() > 0)
-            {
-                for(Player sp : players)
+                if(!players.contains(p))
                 {
-                    if((sp.isOnline()) && (sp != p))
-                    {
-                        sp.playSound(sp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 30, 30);
-                    };
+                    players.add(p);
                 };
             };        
+
+            if(p.hasPermission(trigger_permission))
+            {
+                if(players.size() > 0)
+                {
+                    for(Player sp : players)
+                    {
+                        if((sp.isOnline()) && (sp != p))
+                        {
+                            sp.playSound(sp.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 30, 30);
+                        };
+                    };
+                };        
+            };
+
+            return;
         };
-        
-        return;
-    };
-    
-    
-    @EventHandler
-    void onPlayerDisconnect(PlayerQuitEvent e)
-    {
-        Player p = e.getPlayer();
-        
-        if(players.contains(p))
+
+
+        @EventHandler
+        void onPlayerDisconnect(PlayerQuitEvent e)
         {
-            players.remove(p);
+            Player p = e.getPlayer();
+
+            if(players.contains(p))
+            {
+                players.remove(p);
+            };
+
+            return;
         };
-        
-        return;
     };
     
     
