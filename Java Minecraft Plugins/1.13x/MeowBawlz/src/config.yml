@@ -21,3 +21,9 @@ properties:
         
         wand-lore:
             - '&eShoot meow bawlz at your enemies!'
+            
+    # /meow meow command <<<
+    meowiez:
+        meow-permission: "meow.meow"        
+        meower-message: "&aYou have meowed!"
+        meow-cooldown: 30

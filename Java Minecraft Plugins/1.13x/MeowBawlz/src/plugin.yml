@@ -12,4 +12,4 @@ api-version: 1.13
 
 commands:
     meowballs:
-        aliases: [meowbawlz, meowbollz, meowballs, meowbolls, mb, meow, meowmeow, meowpurrpurr, meowmeowpurrpurr]
+        aliases: [meow, meowbawlz, meowbollz, meowballs, meowbolls, mb, meow, meowmeow, meowpurrpurr, meowmeowpurrpurr]

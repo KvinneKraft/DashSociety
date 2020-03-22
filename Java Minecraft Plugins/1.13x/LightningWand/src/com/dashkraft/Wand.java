@@ -118,13 +118,7 @@ class EventsHandler implements Listener
     {
         final Player p = e.getPlayer();
         
-        if(!p.hasPermission(use_permission))
-        {
-            p.sendMessage(denied_message);
-            return;
-        }
-        
-        else if(pdb.contains(p))
+        if(pdb.contains(p))
         {
             p.sendMessage(cooldown_message);
             return;
@@ -134,6 +128,12 @@ class EventsHandler implements Listener
         
         if((item == null) || (item.getType().equals(Material.AIR)) || (!item.hasItemMeta()) || (!item.getItemMeta().hasCustomModelData()) || (item.getItemMeta().getCustomModelData() != 2020))
         {
+            return;
+        }
+        
+        else if(!p.hasPermission(use_permission))
+        {
+            p.sendMessage(denied_message);
             return;
         }
         
