@@ -91,8 +91,16 @@ public class DashHat extends JavaPlugin implements CommandExecutor
                 return false;
             };
             
+            p.getInventory().removeItem(item);            
+            
+            if(p.getInventory().getHelmet() != null)
+            {
+                p.getInventory().addItem(p.getInventory().getHelmet());
+            };
+                        
             p.getInventory().setHelmet(item);
-            p.sendMessage("&aThere ye go, your custom head!");
+            
+            p.sendMessage(color("&aThere ye go, your custom head!"));
         }
         
         else
