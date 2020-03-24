@@ -4,4 +4,6 @@
 
 properties:
     admin-permission: "dashhats.admin"
+    
+    hat-others-permission: "dashhats.hat.others"
     hat-permission: "dashhats.hat"

@@ -7,6 +7,7 @@
 package com.dashcraft;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -54,7 +55,7 @@ public class DashHat extends JavaPlugin implements CommandExecutor
         print("Plugin has now been disabled.");
     };
     
-    private String admin_permission, hat_permission;
+    private String admin_permission, hat_permission, hat_others_permission;
     
     private void load()
     {
@@ -62,6 +63,8 @@ public class DashHat extends JavaPlugin implements CommandExecutor
         config = plugin.getConfig();
         
         admin_permission = config.getString("properties.admin-permission");        
+        
+        hat_others_permission = config.getString("properties.hat-others-permission");
         hat_permission = config.getString("properties.hat-permission");
     };
     
@@ -91,16 +94,34 @@ public class DashHat extends JavaPlugin implements CommandExecutor
                 return false;
             };
             
-            p.getInventory().removeItem(item);            
+            Player t = p;
             
-            if(p.getInventory().getHelmet() != null)
+            if(as.length >= 1 && p.hasPermission(hat_others_permission))
             {
-                p.getInventory().addItem(p.getInventory().getHelmet());
+                t = Bukkit.getPlayerExact(as[0]);
+                
+                if(t == null)
+                {
+                    p.sendMessage(color("&cThe specified player must be online."));
+                    return false;
+                };
+            };
+            
+            t.getInventory().removeItem(item);            
+            
+            if(t.getInventory().getHelmet() != null)
+            {
+                t.getInventory().addItem(p.getInventory().getHelmet());
             };
                         
-            p.getInventory().setHelmet(item);
+            t.getInventory().setHelmet(item);
             
-            p.sendMessage(color("&aThere ye go, your custom head!"));
+            if(t != p)
+            {
+                p.sendMessage(color("&aYou have given &e" + t.getName() + " &ayour custom head!"));
+            };
+            
+            t.sendMessage(color("&aThere ye go, your custom head!"));
         }
         
         else
