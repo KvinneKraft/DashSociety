@@ -274,9 +274,13 @@ namespace DNSChanger
 
                 tools.Click += (s, e) =>
                 {
-                    if(!tools_dialog.Visible)
+                    if (!tools_dialog.Visible)
                     {
-
+                        new Thread(() => 
+                        { 
+                            tools_dialog.ShowDialog(); 
+                        })
+                        { IsBackground = true }.Start();
                     };
                 };
             }
@@ -301,9 +305,40 @@ namespace DNSChanger
 
     public class ToolsDialog : Form
     {
+        private readonly Size client_size = new Size(285, 180);
+
+        private void layout(Form obj)
+        {
+            obj.FormBorderStyle = FormBorderStyle.None;
+            obj.StartPosition = FormStartPosition.CenterScreen;
+
+            obj.Size = client_size;
+            obj.MinimumSize = client_size;
+            obj.MaximumSize = client_size;
+
+            obj.MinimizeBox = false;
+            obj.MaximizeBox = false;
+
+            obj.BackColor = Color.FromArgb(18, 18, 18);
+            obj.Text = ("Dash DNS Spoofer 3.0");
+
+            obj.ShowInTaskbar = false;
+        }
+
+        private readonly Button port_scanner = new Button();
+        private readonly Button pinger = new Button();
+        private readonly Button okay = new Button();
+
         public ToolsDialog()
         {
+            layout(this);
 
+            Moon mon = new Moon();
+
+            Paint += (s, e) =>
+            {
+                mon.paint_border(e, Color.FromArgb(8, 8, 8), 2, Size, Point.Empty);
+            };
         }
     };
 
