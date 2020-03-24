@@ -9,8 +9,10 @@ package com.deatheffects;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.server.v1_15_R1.SoundEffect;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,117 +20,117 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
-class DeathEvents implements Listener
+public class DeathEffects extends JavaPlugin implements Listener, CommandExecutor
 {
-  boolean hasDeathMoney = false;
-  boolean takeMoneyFromVictim = false;
-  boolean hasDeathSounds = false;
-  boolean hasDeathZombie = false;
-  boolean hasDeathLightning = false;
-  boolean hasHeadDrops = false;
-  boolean hasDeathEffects = false;
-
-  int takeMoneyPercentage;
-
-  List<PotionEffect> potionEffects = new ArrayList<>();
-
-  SoundEffect deathSound = null;
-
-  @EventHandler
-  public void onPlayerDeath(PlayerDeathEvent e)
-  {
-    if(!(e.getEntity().getKiller() instanceof Player))
-    {
-      return;
-    }
-
-    Player k = e.getEntity().getKiller();
-    Player v = e.getEntity();
+    private String color(String str) { return ChatColor.translateAlternateColorCodes('&', str); };
+    private void print(String str) { System.out.println("(Death Events): " + str); };
     
+    private FileConfiguration config;
+    private JavaPlugin plugin;
     
-  };
-};
-
-public class DeathEffects extends JavaPlugin
-{
-  public static FileConfiguration config;
-  public static JavaPlugin plugin;
-
-  public static DeathEvents events = new DeathEvents();
-
-  @Override public void onEnable()
-  {
-    Kvinne.print("Plugin is being enabled ....");
-
-    saveDefaultConfig();
-
-    config = (FileConfiguration) this.getConfig();
-    plugin = (JavaPlugin) this;
-
-    String[] arr = new String[] { "Author: Dashie", "Version: 1.0", "Github: https://github.com/KvinneKraft/", "Website: https://pugpawz.com/" };
-
-    for(String str : arr)
-      System.out.println(str);
-
-    Kvinne.print("Plugin has been enabled!");
-  };
-
-  public static void load_config()
-  {
-    plugin.reloadConfig();
-    config = plugin.getConfig();
-
-    events.hasDeathMoney = config.getBoolean("properties.death-money.enabled");
-
-    if(events.hasDeathMoney)
+    @Override public void onEnable()
     {
-      events.takeMoneyFromVictim = config.getBoolean("properties.death-money.take-from-victim");
-
-      if(events.takeMoneyFromVictim)
-      {
-        events.takeMoneyPercentage = config.getInt("properties.death-money.take-percentage");
-      };
-
-      // Check for VAULT, if not, turn this option off;
+        print("The plugin is loading ....");
+        
+        saveDefaultConfig();
+        
+        config = (FileConfiguration) getConfig();
+        plugin = (JavaPlugin) this;
+        
+        load();
+        
+        getServer().getPluginManager().registerEvents(this, plugin);
+        getCommand("dashiesdeath").setExecutor(this);
+        
+        print("The plugin has been enabled.");
     };
-
-    events.hasDeathEffects   = config.getBoolean("properties.death-effects.enabled");
-
-    if(events.hasDeathEffects)
+    
+    private List<PotionEffect> potion_effects = new ArrayList<>();
+    private String effect_permission, admin_permission;
+    
+    @EventHandler public void onPlayerDeathEvent(PlayerDeathEvent e)
     {
-      // Format effects in config and see if they are valid;
+        if(!(e.getEntity().getKiller() instanceof Player) || e.getEntity().getKiller() == e.getEntity())
+        {
+            return;
+        };
+        
+        Player klr = (Player) e.getEntity().getKiller();
+        
+        if (!klr.hasPermission(effect_permission))
+        {
+            return;
+        };
+        
+        klr.addPotionEffects(potion_effects);
+        klr.sendMessage(color("&eYou have been given a boost for killing " + e.getEntity().getName() + "!"));
     };
-
-    events.hasDeathSounds = config.getBoolean("properties.death-sounds.enabled");
-
-    if(events.hasDeathSounds)
+    
+    private boolean isInteger(String str) { try { Integer.parseInt(str); return true; } catch (NumberFormatException e) { return false; } };
+    private boolean isPotionEffectType(String str) { try { PotionEffectType.getByName(str); return true; } catch (NumberFormatException e) { return false; } };
+    
+    private void load()
     {
-      // Check if sound in config is valid;
+        plugin.reloadConfig();
+        config = plugin.getConfig();
+        
+        effect_permission = config.getString("properties.effect-permission");
+        admin_permission = config.getString("properties.admin-permission");
+        
+        for (String str : config.getStringList("properties.effect-list"))
+        {
+            String[] arr = str.split(" ");
+            
+            if(arr.length < 3 || arr.length > 3 || !isPotionEffectType(arr[0]) || !isInteger(arr[1]) || !isInteger(arr[2]))
+            {
+                print("Invalid potion value {" + str + "} received, skipping!");
+                continue;
+            };
+            
+            potion_effects.add
+            (
+                new PotionEffect
+                (
+                    PotionEffectType.getByName(arr[0].toUpperCase()),
+                    Integer.parseInt(arr[1]) * 20, Integer.parseInt(arr[2])
+                )
+            );
+        };
     };
-
-    events.hasDeathZombie    = config.getBoolean("properties.death-zombie.enabled");
-    events.hasDeathLightning = config.getBoolean("properties.death-lightning.enabled");
-    events.hasHeadDrops      = config.getBoolean("properties.head-drops.enabled");
-  };
-
-  @Override public void onDisable()
-  {
-    Kvinne.print("Plugin has been disabled!");
-  };
-};
-
-class Kvinne
-{
-  public static void print(String str)
-  {
-    System.out.println("(DeathEffects): " + str);
-  };
-
-  public static String color(String str)
-  {
-    return ChatColor.translateAlternateColorCodes('&', str);
-  };
+    
+    @Override public boolean onCommand(CommandSender s, Command c, String a, String[] as)
+    {
+        if(!(s instanceof Player))
+        {
+            print("Only in-game players with the right permission(s) may use this command.");
+            return false;
+        };
+        
+        Player p = (Player) s;
+        
+        if(as.length >= 1 && as[0].equalsIgnoreCase("reload") && p.hasPermission(admin_permission))
+        {
+            p.sendMessage(color("&e&l>>> &a&lReloading ...."));
+            
+            load();
+             
+            p.sendMessage(color("&e&l>>> &a&lDone!"));
+        }
+        
+        else
+        {
+            p.sendMessage(color("&cDid you mean &4reload &cor are you just prohibited from using this?"));
+        };
+        
+        return true;
+    };
+    
+    @Override public void onDisable()
+    {
+        print("The plugin has been disabled.");
+    };
 };
 
