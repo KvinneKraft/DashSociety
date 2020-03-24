@@ -193,32 +193,31 @@ namespace DNSChanger
                     ManagementClass MC = new ManagementClass("Win32_NetworkAdapterConfiguration");
                     ManagementObjectCollection MOC = MC.GetInstances();
 
+                    if(MOC.Count < 1)
+                    {
+                        return false;
+                    };
+
                     foreach ( ManagementObject obj in MOC )
                     {
                         if ( ( bool ) obj["IPEnabled"] )
                         {
                             ManagementBaseObject dns_obj = obj.GetMethodParameters("SetDNSServerSearchOrder");
 
-                            if (dns_obj == null)
+                            if ( dns_obj != null )
                             {
-                                return false;
+                                dns_obj["DNSServerSearchOrder"] = new string[] { ip1, ip2 };
+                                obj.InvokeMethod("SetDNSServerSearchOrder", dns_obj, null);
                             }
 
                             else
                             {
-                                string[] Servers =
-                                { 
-                                    ip1, 
-                                    ip2, 
-                                };
+                                return false;
+                            };
+                        };
+                    };
 
-                                dns_obj["DNSServerSearchOrder"] = Servers;
-                                obj.InvokeMethod("SetDNSServerSearchOrder", dns_obj, null);
-                            }
-                        }
-                    }
-
-                    return false;
+                    return true;
                 }
             };
 
@@ -236,6 +235,8 @@ namespace DNSChanger
                 };
             }
 
+            ToolsDialog tools_dialog = new ToolsDialog();
+
             public void events()
             {
                 spoof.Click += (s, e) =>
@@ -248,19 +249,47 @@ namespace DNSChanger
                             return;
                         };
 
+                        new Thread(() =>
+                        {
+                            spoof.Text = "Working ....";
 
+                            if (dns.ChangeDNS(ip1i.Text, ip2i.Text))
+                            {
+                                MessageBox.Show("Your DNS Servers have been changed, you may have to restart your system if none of the changes were applied yet.", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            else
+                            {
+                                MessageBox.Show("There was an issue while attempting to change your DNS servers.\r\n\r\nPlease retry, if the issue persists, perhaps try to contact us at KvinneKraft@protonmail.com", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            };
+
+                            spoof.Text = "Spoof It";
+                        })
+
+                        { IsBackground = false }.Start();
+
+                        return;
                     };
                 };
 
                 tools.Click += (s, e) =>
                 {
+                    if(!tools_dialog.Visible)
+                    {
 
+                    };
                 };
             }
         };
 
 	public Interface()
 	{
+            if(!mon.isAdministrator())
+            {
+                MessageBox.Show($"It has got to me that I do not have the rights to access your network devices. \r\n\r\nPlease restart this application as an administrator, it may just solve ye issue {Environment.UserName}!", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
+            };
+
             init inity = new init();
 
             inity.layout(this);
@@ -268,6 +297,15 @@ namespace DNSChanger
             inity.events();
 	}
     }
+
+
+    public class ToolsDialog : Form
+    {
+        public ToolsDialog()
+        {
+
+        }
+    };
 
 
     public class Moon : Form
