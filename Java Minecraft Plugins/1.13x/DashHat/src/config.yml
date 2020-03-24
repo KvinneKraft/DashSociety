@@ -1,0 +1,6 @@
+
+properties:
+    admin-permission: "dashhats.admin"
+    
+    hat-permission: "dashhats.hat"
+    hat-cooldown: 30
