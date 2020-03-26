@@ -45,10 +45,10 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         
         saveDefaultConfig();
         
-        load();
-        
         config = (FileConfiguration) getConfig();
         plugin = (JavaPlugin) this;
+        
+        load();        
         
         getServer().getPluginManager().registerEvents(this, plugin);
         getCommand("crossbow").setExecutor(this);
@@ -148,17 +148,17 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         
         final List<PotionEffect> potion_effects = new ArrayList<>();
         
-        if(poison && rand.nextInt(poison_chance) > poison_chance)
+        if(poison && rand.nextInt(100) > poison_chance)
         {
             potion_effects.add(new PotionEffect(PotionEffectType.POISON, 10 * 20, 3, true, false, false));
         }
         
-        else if(wither && rand.nextInt(wither_chance) > wither_chance)
+        else if(wither && rand.nextInt(100) > wither_chance)
         {
             potion_effects.add(new PotionEffect(PotionEffectType.WITHER, 10 * 20, 3, true, false, false));
         }
         
-        else if(hunger && rand.nextInt(hunger_chance) > hunger_chance)
+        else if(hunger && rand.nextInt(100) > hunger_chance)
         {
             potion_effects.add(new PotionEffect(PotionEffectType.HUNGER, 10 * 20, 3, true, false, false));
         };    
@@ -175,8 +175,8 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         
         Player p = (Player) e.getEntity().getShooter();
         
-        if (!p.hasPermission(use_permission) || p.getInventory().getItemInMainHand() != bow_item)
-        {
+        if (!p.hasPermission(use_permission) || !p.getInventory().getItemInMainHand().equals(bow_item))
+        {       
             return;
         };
         
@@ -185,17 +185,17 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         
         final Random rand = new Random();
         
-        if(lightning && rand.nextInt(lightning_chance) > lightning_chance)
+        if(lightning && rand.nextInt(100) > lightning_chance)
         {
             world.strikeLightning(location);
         };
         
-        if(explosion && rand.nextInt(explosion_chance) > explosion_chance)
+        if(explosion && rand.nextInt(100) > explosion_chance)
         {
-            world.createExplosion(location, 2, explosion_blockbreak);
+            world.createExplosion(location, 2, false, explosion_blockbreak);
         };
         
-        if(fireworks && rand.nextInt(fireworks_chance) > fireworks_chance)
+        if(fireworks && rand.nextInt(100) > fireworks_chance)
         {
             Color main1 = Color.BLACK;
             Color sub1 = Color.BLACK;
@@ -213,7 +213,7 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
             DetonateFirework(location, main3, sub3, FireworkEffect.Type.BURST);
         };
         
-        if(rat && rand.nextInt(rat_chance) > rat_chance)
+        if(rat && rand.nextInt(100) > rat_chance)
         {
             Silverfish silver_fish = (Silverfish) world.spawnEntity(location, EntityType.SILVERFISH);
             
@@ -224,7 +224,7 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
             silver_fish.damage(5);
             
             silver_fish.setCustomNameVisible(rat);
-        };            
+        };  
     };
     
     private final List<Player> players = new ArrayList<>();
