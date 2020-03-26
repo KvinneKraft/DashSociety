@@ -1,0 +1,12 @@
+
+main: com.dashcraft.Main
+
+version: 1.0
+api-version: 1.13
+
+name: DashCraft
+author: [Dashie]
+
+commands:
+    dashcraft:
+        aliases: [dc]
