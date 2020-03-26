@@ -4,13 +4,16 @@ package com.crossbow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -25,6 +28,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
 {
@@ -51,6 +56,72 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         print("Plugin is done loading!");
     };
     
+    @Override public boolean onCommand(CommandSender s, Command c, String a, String[] as)
+    {
+        if(!(s instanceof Player))
+        {
+            print("You may only use this command as a player.");
+            return false;
+        };
+        
+        final Player p = (Player) s;
+        
+        if(as.length >= 1 && p.hasPermission(admin_permission))
+        {
+            if(as[0].equalsIgnoreCase("reload"))
+            {
+                p.sendMessage(color("&e&l>>> &aReloading ...."));
+                
+                load();
+                
+                p.sendMessage(color("&e&l>>> &aDone!"));
+            }
+            
+            else if(as[0].equalsIgnoreCase("give"))
+            {
+                Player r = p;
+                
+                if(as.length >= 2)
+                {
+                    Player t = Bukkit.getPlayerExact(as[1]);
+                    
+                    if(t == null)
+                    {
+                        p.sendMessage(color("&cThis player appears to be offline."));
+                        return false;
+                    };
+                    
+                    r = t;
+                };
+                
+                r.getInventory().addItem(bow_item);
+                
+                if(p == r)
+                {
+                    p.sendMessage(color("&aYou have given yourself a " + display_name + " &a!"));
+                }
+                
+                else
+                {
+                    p.sendMessage(color("&aYou have given " + r.getName() + " &aa " + display_name + " &a!"));
+                    r.sendMessage(color("&aYou have received a " + display_name + " &a!"));
+                };
+            }
+            
+            else
+            {
+                p.sendMessage(color("&cCorrect syntax: &7/dashbowz [give | reload] <player>"));
+            };
+        }
+        
+        else
+        {
+            p.sendMessage(color("&cDid you mean &4reload &cor &4give&c? Or are do you lack the right permissions?"));
+        };
+        
+        return true;
+    };
+    
     private boolean lightning, explosion, explosion_blockbreak, fireworks, poison, wither, hunger, rat;
     private int lightning_chance, explosion_chance, fireworks_chance, poison_chance, wither_chance, hunger_chance, rat_chance, shoot_cooldown;
     
@@ -75,20 +146,24 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         final Random rand = new Random();
         final Player p = (Player) e.getDamager();
         
+        final List<PotionEffect> potion_effects = new ArrayList<>();
+        
         if(poison && rand.nextInt(poison_chance) > poison_chance)
         {
-            
+            potion_effects.add(new PotionEffect(PotionEffectType.POISON, 10 * 20, 3, true, false, false));
         }
         
         else if(wither && rand.nextInt(wither_chance) > wither_chance)
         {
-            
+            potion_effects.add(new PotionEffect(PotionEffectType.WITHER, 10 * 20, 3, true, false, false));
         }
         
         else if(hunger && rand.nextInt(hunger_chance) > hunger_chance)
         {
-            
+            potion_effects.add(new PotionEffect(PotionEffectType.HUNGER, 10 * 20, 3, true, false, false));
         };    
+        
+        p.addPotionEffects(potion_effects);
     };
     
     @EventHandler public void onProjectileHit(ProjectileHitEvent e)

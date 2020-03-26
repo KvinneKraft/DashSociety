@@ -8,26 +8,26 @@ properties:
         admin-permission: 'dashbowz.admin'
     
     effects:
-        lightning-chance: 0.5
+        lightning-chance: 50
         lightning: true
         
-        explosion-chance: 0.5
+        explosion-chance: 50
         explosion-break-blocks: false
         explosion: true
         
-        fireworks-chance: 0.5
+        fireworks-chance: 50
         fireworks: true
         
-        poison-chance: 0.5
+        poison-chance: 50
         poison: true
         
-        wither-chance: 0.5
+        wither-chance: 50
         wither: true
         
-        hunger-chance: 0.5
+        hunger-chance: 50
         hunger: true
         
-        rat-chance: 0.5
+        rat-chance: 50
         rat: true
         
     bow-meta:
@@ -35,4 +35,4 @@ properties:
             - '&aA bow of mighty power!'
             
         display-name: '&e&lC&eross-&e&lB&eow'
-            
+        shoot-cooldown: 30
