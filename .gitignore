@@ -191,3 +191,6 @@ No Glasses Projects/Dash Ftp/.vs/DashCore/v16/.suo
 *.jar
 /Java Minecraft Plugins/1.13x/Cross-Bow/build/
 /Java Minecraft Plugins/1.13x/Cross-Bow/dist/
+/Dash Schooling/Java/EventPlugin/nbproject/private/
+/Dash Schooling/Java/EventPlugin/build/
+/Dash Schooling/Java/EventPlugin/dist/
