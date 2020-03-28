@@ -1,0 +1,13 @@
+
+main: com.configplugin.ConfigPlugin
+
+version: 1.0
+api-version: 1.13
+
+name: ConfigPlugin
+author: [Dashie]
+
+commands:
+    luis:
+        description: "It is a command!"
+        aliases: [luis, dashie, dash]
