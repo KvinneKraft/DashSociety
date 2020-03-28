@@ -34,9 +34,77 @@ namespace Login_Form
 
     public partial class LoginInterface : Form
     {
+	private readonly PictureBox menu_bar = new PictureBox();
+	private readonly PictureBox logo = new PictureBox();
+
+	private readonly Button quit = new Button();
+
+	private readonly Label title = new Label();
+
+	private readonly Moon mon = new Moon();
+
+	private void SetupLayout()
+	{
+	    mon.drag_material(menu_bar, this);
+	    mon.drag_material(title, this);
+	    mon.drag_material(logo, this);
+
+	    Size size = new Size(300, 200);
+
+	    Size = size;
+	    MinimumSize = size;
+	    MaximumSize = size;
+
+	    mon.Image(this, menu_bar, null, new Size(Width - 2, 26), new Point(1, 0));
+
+	    menu_bar.BackColor = Color.FromArgb(0, 3, 41);
+
+	    FormBorderStyle = FormBorderStyle.None;
+	    StartPosition = FormStartPosition.CenterScreen;
+
+	    Text = ("Login Authentication");
+	    BackColor = Color.FromArgb(11, 16, 71);
+
+	    Icon = Properties.Resources.icon;
+
+	    Paint += (s, e) =>
+	    {
+		mon.paint_border(e, Color.FromArgb(0, 3, 41), 2, Size, Point.Empty);
+	    };
+	    
+	    mon.Image(menu_bar, logo, Properties.Resources.logo, new Size(24, 24), new Point(0, 1));
+	    mon.Label(menu_bar, title, Text, 9, Point.Empty, Color.FromArgb(25, 197, 0));
+
+	    title.Location = new Point((menu_bar.Width - title.Width) / 2, (menu_bar.Height - title.Height) / 2);
+
+	    mon.Button(menu_bar, quit, "X", 10, new Size(50, 24), new Point(menu_bar.Width - 51, 1), menu_bar.BackColor, Color.FromArgb(67, 220, 0), 0);
+
+	    quit.Click += (s, e) =>
+	    {
+		Environment.Exit(-1);
+	    };
+	}
+
+	private readonly TextBox username = new TextBox();
+	private readonly TextBox password = new TextBox();
+
+	private readonly Label username_l = new Label();
+	private readonly Label password_l = new Label();
+
 	public LoginInterface()
 	{
+	    SetupLayout();
 
+	    Color textbox_fcolor = Color.FromArgb(0, 249, 173);
+	    Color textbox_bcolor = Color.FromArgb(17, 0, 71);
+
+	    Color label_fcolor = Color.FromArgb(255, 255, 255);
+
+	    mon.Label(this, username_l, "Username: ", 10, new Point(10, 39), label_fcolor);
+	    mon.TextBox(this, username, "", 14, new Size(150, 24), new Point(username_l.Left + username_l.Width + 1, username_l.Top - 3), textbox_bcolor, textbox_fcolor);
+
+	    mon.Label(this, password_l, "Password: ", 10, new Point(username_l.Left, username_l.Top + username_l.Height + 20), label_fcolor);
+	    mon.TextBox(this, password, "", 14, username.Size, new Point(username.Left, password_l.Top - 3), textbox_bcolor, textbox_fcolor);
 	}
     };
 
@@ -114,8 +182,19 @@ namespace Login_Form
 	    obj.Controls.Add(box);
 	}
 
-	public void Label(Control obj, Label label, string text, int points, Size size, Point location, Color color)
+	public Size CalculateFontThing(string text, Font font)
 	{
+	    Size modify_size = TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue));
+	    return new Size(modify_size.Width + (text.Length - text.Count()), modify_size.Height);
+	}
+
+	public void Label(Control obj, Label label, string text, int points, Point location, Color color)
+	{
+	    label.Font = FlubbyFont(points, false); //new Font("Modern", points);
+	    label.Text = text;
+
+	    Size size = CalculateFontThing(text, label.Font);
+
 	    label.Size = size;
 	    label.MinimumSize = size;
 	    label.MaximumSize = size;
@@ -131,9 +210,6 @@ namespace Login_Form
 	    };
 
 	    label.Location = location;
-
-	    label.Font = FlubbyFont(points, false); //new Font("Modern", points);
-	    label.Text = text;
 
 	    label.BackColor = Color.FromArgb(0, 0, 0, 255);
 	    label.ForeColor = color;

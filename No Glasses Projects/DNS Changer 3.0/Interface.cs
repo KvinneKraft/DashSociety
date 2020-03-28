@@ -431,7 +431,13 @@ namespace DNSChanger
             obj.Controls.Add(box);
         }
 
-        public void Label(Control obj, Label label, string text, int points, Point location, Color color)
+	public Size CalculateFontThing(string text, Font font)
+	{
+	    Size modify_size = TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue));
+	    return new Size(modify_size.Width + (text.Length - text.Count(char.IsLetter)), modify_size.Height);
+	}
+
+	public void Label(Control obj, Label label, string text, int points, Point location, Color color)
         {
 	    if (location.X < 0)
             {
@@ -451,9 +457,11 @@ namespace DNSChanger
             label.BackColor = Color.FromArgb(0, 0, 0, 255);
             label.ForeColor = color;
 
-	    label.Size = label.PreferredSize;
-	    label.MinimumSize = label.PreferredSize;
-	    label.MaximumSize = label.PreferredSize;
+	    Size size = CalculateFontThing(text, label.Font);
+
+	    label.Size = size;
+	    label.MinimumSize = size;
+	    label.MaximumSize = size;
 
 	    obj.Controls.Add(label);
         }
