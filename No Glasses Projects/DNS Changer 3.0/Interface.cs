@@ -82,11 +82,7 @@ namespace DNSChanger
                 quit.MouseLeave += (s, e) => quit.BackColor = menu_bar.BackColor;
                 quit.Click += (s, e) => Environment.Exit(-1);
 
-                mon.Label(menu_bar, title, "Dash DNS Spoofer 3.0", 9, new Size(0, 0), Point.Empty, Color.FromArgb(255, 255, 255));
-
-                title.Size = title.PreferredSize;
-                title.MinimumSize = title.PreferredSize;
-                title.MaximumSize = title.PreferredSize;
+                mon.Label(menu_bar, title, "Dash DNS Spoofer 3.0", 9, Point.Empty, Color.FromArgb(255, 255, 255));
 
                 title.Location = new Point((menu_bar.Width - title.Width) / 2, (menu_bar.Height - title.Height) / 2);
 
@@ -123,11 +119,7 @@ namespace DNSChanger
                     mon.paint_border(e, Color.FromArgb(8, 8, 8), 2, container.Size, container.Location);
                 };
 
-                mon.Label(container, ip1t, "IPv4 (1):", 11, new Size(0, 0), Point.Empty, Color.FromArgb(255, 255, 255));
-
-                ip1t.Size = ip1t.PreferredSize;
-                ip1t.MinimumSize = ip1t.PreferredSize;
-                ip1t.MaximumSize = ip1t.PreferredSize;
+                mon.Label(container, ip1t, "IPv4 (1):", 11, Point.Empty, Color.FromArgb(255, 255, 255));
 
                 ip1t.Location = new Point(8, 8);
 
@@ -135,11 +127,7 @@ namespace DNSChanger
 
                 ip1i.TextAlign = HorizontalAlignment.Center;
 
-                mon.Label(container, ip2t, "IPv4 (2):", 11, new Size(0, 0), Point.Empty, Color.FromArgb(255, 255, 255));
-
-                ip2t.Size = ip2t.PreferredSize;
-                ip2t.MinimumSize = ip2t.PreferredSize;
-                ip2t.MaximumSize = ip2t.PreferredSize;
+                mon.Label(container, ip2t, "IPv4 (2):", 11, Point.Empty, Color.FromArgb(255, 255, 255));
 
                 ip2t.Location = new Point(8, ip1t.Height + ip1t.Top + 12);
 
@@ -161,11 +149,7 @@ namespace DNSChanger
                 tools.MouseLeave += (s, e) => tools.BackColor = Color.FromArgb(40, 43, 69);
                 tools.MouseEnter += (s, e) => tools.BackColor = Color.FromArgb(50, 54, 87);
 
-                mon.Label(container, water_mark, ("Dashies ☽⛤☾ Softwaries"), 6, new Size(0, 0), Point.Empty, Color.FromArgb(255, 255, 255));
-
-                water_mark.Size = water_mark.PreferredSize;
-                water_mark.MinimumSize = water_mark.PreferredSize;
-                water_mark.MaximumSize = water_mark.PreferredSize;
+                mon.Label(container, water_mark, ("Dashies ☽⛤☾ Softwaries"), 6, Point.Empty, Color.FromArgb(255, 255, 255));
 
                 water_mark.Location = new Point(((container.Width - water_mark.Width) / 2), container.Height - water_mark.Height - 6);
             }
@@ -288,7 +272,9 @@ namespace DNSChanger
 
 	public Interface()
 	{
-            if(!mon.isAdministrator())
+	    MessageBox.Show("Renable Administrator Check");
+
+            if(mon.isAdministrator())
             {
                 MessageBox.Show($"It has got to me that I do not have the rights to access your network devices. \r\n\r\nPlease restart this application as an administrator, it may just solve ye issue {Environment.UserName}!", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);
@@ -324,16 +310,45 @@ namespace DNSChanger
 
             obj.ShowInTaskbar = false;
         }
+	
+	private readonly Label port_scanner = new Label();
+	private readonly Label pinger = new Label();
 
-        private readonly Button port_scanner = new Button();
-        private readonly Button pinger = new Button();
-        private readonly Button okay = new Button();
+	private readonly Button owkay = new Button();
 
         public ToolsDialog()
         {
             layout(this);
 
             Moon mon = new Moon();
+
+	    Color fr_color = Color.FromArgb(255, 255, 255);
+	    
+	    mon.Label(this, port_scanner, "Scan Ports", 12, Point.Empty, fr_color);
+
+	    port_scanner.Location = new Point((Width - port_scanner.Width) / 2, 20);
+
+	    port_scanner.Click += (s, e) =>
+	    {
+		/*Nothing Yet*/
+	    };
+
+	    mon.Label(this, pinger, "Ping Hosts", 12, Point.Empty, fr_color);
+
+	    pinger.MinimumSize = pinger.PreferredSize;
+	    pinger.MaximumSize = pinger.PreferredSize;
+	    pinger.Size = pinger.PreferredSize;
+
+	    pinger.Location = new Point(pinger.Left, pinger.Height + pinger.Top + 8);
+
+	    pinger.Click += (s, e) =>
+	    {
+		/*Nothing Yet*/
+	    };
+
+	    mon.Button(this, owkay, "Owkay", 12, new Size(150, 26), new Point((Width - 150) / 2, Height - 34), Color.FromArgb(8, 8, 8), fr_color, 8);
+
+	    owkay.Click += (s, e) => Environment.Exit(-1);
 
             Paint += (s, e) =>
             {
@@ -416,20 +431,16 @@ namespace DNSChanger
             obj.Controls.Add(box);
         }
 
-        public void Label(Control obj, Label label, string text, int points, Size size, Point location, Color color)
+        public void Label(Control obj, Label label, string text, int points, Point location, Color color)
         {
-            label.Size = size;
-            label.MinimumSize = size;
-            label.MaximumSize = size;
-
-            if (location.X < 0)
+	    if (location.X < 0)
             {
-                location.X = (obj.Width - size.Width) / 2;
+                location.X = (obj.Width - label.Size.Width) / 2;
             };
 
             if (location.Y < 0)
             {
-                location.Y = (obj.Height - size.Height) / 2;
+                location.Y = (obj.Height - label.Size.Height) / 2;
             };
 
             label.Location = location;
@@ -440,7 +451,11 @@ namespace DNSChanger
             label.BackColor = Color.FromArgb(0, 0, 0, 255);
             label.ForeColor = color;
 
-            obj.Controls.Add(label);
+	    label.Size = label.PreferredSize;
+	    label.MinimumSize = label.PreferredSize;
+	    label.MaximumSize = label.PreferredSize;
+
+	    obj.Controls.Add(label);
         }
 
         public void Button(Control obj, Button button, string text, int points, Size size, Point location, Color bgcolor, Color frcolor, int border_radius)
