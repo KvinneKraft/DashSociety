@@ -15,14 +15,14 @@ vector<thread> threads = { };
 
 vector<LPCSTR> messages =
 {
-    "Message 1",
-    "Message 2",
+    "You got dashed!",
+    "Spammmyyyyyy",
 };
 
 vector<LPCSTR> titles =
 {
-    "Titles 1",
-    "Titles 2",
+    "I am a title!",
+    "Fukka yeyyyyyy",
 };
 
 int main(void)
@@ -46,7 +46,8 @@ int main(void)
 
     srand((unsigned int) time(NULL));
 
-    while (true)
+    //while (true)
+    for ( int popup = 0; popup < 8; popup += 1 )
     {
 	threads.push_back
 	(
@@ -54,16 +55,21 @@ int main(void)
 	    (
 		[]()
 		{
-		    for ( ; ; )
+		    for ( int i = 0 ; i < 1 ; i += 1 )
 		    {
 			LPCSTR message = messages[rand() % messages.size()];
-			LPCSTR title = titles[rand() % messages.size()];
+			LPCSTR title = titles[rand() % titles.size()];
 
 			MessageBox(NULL, message, title, MB_OK | MB_APPLMODAL | MB_ICONERROR);
 		    };
 		}
 	    )
 	);
+    };
+
+    for (thread &t : threads)
+    {
+	t.join();
     };
 
     return -1;
