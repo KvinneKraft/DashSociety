@@ -49,7 +49,7 @@ namespace Login_Form
 	    mon.drag_material(title, this);
 	    mon.drag_material(logo, this);
 
-	    Size size = new Size(300, 200);
+	    Size size = new Size(300, 150);
 
 	    Size = size;
 	    MinimumSize = size;
@@ -91,20 +91,65 @@ namespace Login_Form
 	private readonly Label username_l = new Label();
 	private readonly Label password_l = new Label();
 
+	private readonly Button login = new Button();
+
+	private readonly PictureBox container_u1 = new PictureBox();
+	private readonly PictureBox container_u2 = new PictureBox();
+
+	private void resize_full(Control obj, Size size)
+	{
+	    obj.MaximumSize = size;
+	    obj.MinimumSize = size;
+	    obj.Size = size;
+	}
+
+	private readonly PictureBox container_m = new PictureBox();
+
 	public LoginInterface()
 	{
 	    SetupLayout();
+
+	    mon.Image(this, container_m, null, Size.Empty, Point.Empty);
+
+	    resize_full(container_m, new Size(240, 120));
+	    container_m.Location = new Point((Width - container_m.Width) / 2, 26);
 
 	    Color textbox_fcolor = Color.FromArgb(0, 249, 173);
 	    Color textbox_bcolor = Color.FromArgb(17, 0, 71);
 
 	    Color label_fcolor = Color.FromArgb(255, 255, 255);
 
-	    mon.Label(this, username_l, "Username: ", 10, new Point(10, 39), label_fcolor);
-	    mon.TextBox(this, username, "", 14, new Size(150, 24), new Point(username_l.Left + username_l.Width + 1, username_l.Top - 3), textbox_bcolor, textbox_fcolor);
+	    Size container_size = new Size(150, 24);
 
-	    mon.Label(this, password_l, "Password: ", 10, new Point(username_l.Left, username_l.Top + username_l.Height + 20), label_fcolor);
-	    mon.TextBox(this, password, "", 14, username.Size, new Point(username.Left, password_l.Top - 3), textbox_bcolor, textbox_fcolor);
+	    mon.Label(container_m, username_l, "Username: ", 10, new Point(0, 15), label_fcolor);
+	    mon.Image(container_m, container_u1, null, container_size, new Point(username_l.Left + username_l.Width, username_l.Top - 3));
+
+	    container_u1.BackColor = textbox_bcolor;
+	    resize_full(container_u1, container_size);
+
+	    mon.TextBox(container_u1, username, "Dashie", 10, Size.Empty, Point.Empty, textbox_bcolor, textbox_fcolor);
+	    resize_full(username, new Size(146, username.PreferredHeight));
+	    username.Location = new Point((container_u1.Width - username.Width) / 2, (container_u1.Height - username.Height) / 2);
+
+	    mon.Label(container_m, password_l, "Password: ", 10, new Point(username_l.Left, username_l.Top + username_l.Height + 20), label_fcolor);
+	    mon.Image(container_m, container_u2, null, container_size, new Point(container_u1.Left, password_l.Top - 3));
+
+	    container_u2.BackColor = textbox_bcolor;
+	    resize_full(container_u2, container_size);
+
+	    password.PasswordChar = '*';
+
+	    mon.TextBox(container_u2, password, "Dashie", 18, Size.Empty, Point.Empty, textbox_bcolor, textbox_fcolor);
+	    resize_full(password, new Size(146, password.PreferredHeight));
+	    password.Location = new Point((container_u2.Width - password.Width) / 2, (container_u2.Height - password.Height) / 2);
+
+	    container_m.Paint += (s, e) =>
+	    {
+		mon.paint_border(e, menu_bar.BackColor, 2, container_u1.Size, container_u1.Location);
+		mon.paint_border(e, menu_bar.BackColor, 2, container_u2.Size, container_u2.Location);
+	    };
+
+	    mon.Button(container_m, login, "Login", 12, new Size(150, 26), new Point((container_m.Width - 150) / 2, container_m.Height - 34), Color.FromArgb(148, 0, 218), Color.FromArgb(255, 255, 255), 8);
 	}
     };
 
