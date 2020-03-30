@@ -31,6 +31,7 @@ public class Thor extends JavaPlugin implements Listener, CommandExecutor
         print("Plugin is loading ....");
         
         getServer().getPluginManager().registerEvents(this, this);
+        getCommand("lightning").setExecutor(this);
         
         loadData();
         
