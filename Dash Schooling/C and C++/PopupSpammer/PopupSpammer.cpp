@@ -17,6 +17,12 @@ vector<LPCSTR> messages =
 {
     "You got dashed!",
     "Spammmyyyyyy",
+    "You got dashed!",
+    "Spammmyyyyyy",
+    "ou got dashed!",
+    "Spammmyyyyyy",
+    "You got dashed!",
+    "Spammmyyyyyy",
 };
 
 vector<LPCSTR> titles =
@@ -44,10 +50,7 @@ int main(void)
 	};
     };
 
-    srand((unsigned int) time(NULL));
-
-    //while (true)
-    for ( int popup = 0; popup < 8; popup += 1 )
+    while (true)
     {
 	threads.push_back
 	(
@@ -55,12 +58,14 @@ int main(void)
 	    (
 		[]()
 		{
-		    for ( int i = 0 ; i < 1 ; i += 1 )
+	    	    srand((unsigned int)time(NULL));
+
+		    for ( ;; )
 		    {
 			LPCSTR message = messages[rand() % messages.size()];
 			LPCSTR title = titles[rand() % titles.size()];
 
-			MessageBox(NULL, message, title, MB_OK | MB_APPLMODAL | MB_ICONERROR);
+			MessageBox(NULL, message, title, MB_OK | MB_ICONERROR);
 		    };
 		}
 	    )
