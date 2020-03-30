@@ -8,7 +8,9 @@ import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +40,7 @@ public class Thor extends JavaPlugin implements Listener, CommandExecutor
     {
         ItemMeta item_meta = hammer_item.getItemMeta();
         
-        item_meta.setDisplayName(color("&b&l&nT&b&lhor's &3&l&nH&3&lammer"));
+        item_meta.setDisplayName(color("&b&l&nT&b&lhor\'s &3&l&nH&3&lammer"));
         
         item_meta.setLore
         (
@@ -81,6 +83,38 @@ public class Thor extends JavaPlugin implements Listener, CommandExecutor
         location.getWorld().createExplosion(location, 32);
         
         p.sendMessage(color("&6You have called upon Thor, lightning has been struck down from the sky!"));
+    };
+    
+    private final String permission = "com.permission.use";
+    
+    @Override public boolean onCommand(CommandSender s, Command c, String a, String[] as)
+    {
+        if(!(s instanceof Player))
+        {
+            print("You may only use this in-game!");
+            return false;
+        };
+        
+        final Player p = (Player) s;
+        
+        if(!p.hasPermission(permission))
+        {
+            p.sendMessage(color("&cYou may not use this command."));
+            return false;
+        }
+        
+        else if(as.length >= 1 && as[0].equalsIgnoreCase("give"))
+        {
+            //....
+        }
+        
+        else
+        {
+            p.sendMessage(color("Proper usage: /lightning give <player>"));
+            return false;
+        };
+        
+        return true;
     };
     
     @Override public void onDisable()
