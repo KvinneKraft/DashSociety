@@ -6,8 +6,11 @@ package com.dashwands;
 
 import java.util.Arrays;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -15,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Thor extends JavaPlugin implements Listener
+public class Thor extends JavaPlugin implements Listener, CommandExecutor
 {
     private String color(String str) { return ChatColor.translateAlternateColorCodes('&', str); };
     private void print(String str) { System.out.println("(Lightning): " + str); };
@@ -66,7 +69,18 @@ public class Thor extends JavaPlugin implements Listener
     
     @EventHandler public void onPlayerInteract(PlayerInteractEvent e)
     {
+        if(e.getItem() == null || !e.getItem().equals(hammer_item))
+        {
+            return;
+        };
         
+        final Player p = (Player) e.getPlayer();
+        final Location location = p.getTargetBlock(null, 60).getLocation();
+        
+        location.getWorld().strikeLightning(location);
+        location.getWorld().createExplosion(location, 32);
+        
+        p.sendMessage(color("&6You have called upon Thor, lightning has been struck down from the sky!"));
     };
     
     @Override public void onDisable()
