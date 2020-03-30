@@ -4,7 +4,9 @@
 
 package com.dashwands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -79,14 +81,51 @@ public class Thor extends JavaPlugin implements Listener, CommandExecutor
         };
         
         final Player p = (Player) e.getPlayer();
+        
+        if(!p.isOp() && players.contains(p))
+        {
+            p.sendMessage(color("&cYou are on cooldown!"));
+            e.setCancelled(true);
+            return;
+        }
+        
+        else if(!p.isOp())
+        {
+            players.add(p);
+        };
+        
         final Location location = p.getTargetBlock(null, 60).getLocation();
         
         location.getWorld().strikeLightning(location);
-        location.getWorld().createExplosion(location, 32);
+        location.getWorld().createExplosion(location, 6);
         
         p.sendMessage(color("&6You have called upon Thor, lightning has been struck down from the sky!"));
+        
+        getServer().getScheduler().runTaskLaterAsynchronously
+        (
+            this,
+            
+            new Runnable()
+            {
+                @Override public void run()
+                {
+                    if (players.contains(p))
+                    {
+                        if(p.isOnline())
+                        {
+                            p.sendMessage(color("&aYe may now summon Thor\'s Lightning again!"));
+                        };
+                        
+                        players.remove(p);
+                    };
+                };
+            }, 
+            
+            120 * 20
+        );
     };
     
+    private final List<Player> players = new ArrayList<>(); 
     private final String permission = "com.permission.use";
     
     @Override public boolean onCommand(CommandSender s, Command c, String a, String[] as)
@@ -98,7 +137,7 @@ public class Thor extends JavaPlugin implements Listener, CommandExecutor
         };
         
         final Player p = (Player) s;
-        
+
         if(!p.hasPermission(permission))
         {
             p.sendMessage(color("&cYou may not use this command."));
@@ -118,25 +157,25 @@ public class Thor extends JavaPlugin implements Listener, CommandExecutor
                     p.sendMessage(color("&cThe player specified must be online!"));
                     return false;
                 };
-                
-                r.getInventory().addItem(hammer_item);
-                
-                if(r.equals(p))
-                {
-                    p.sendMessage(color("&aYou have successfully given yourself a Thor\'s Hammer!"));
-                }
-                
-                else
-                {
-                    p.sendMessage(color("&aYou have given " + r.getName() + " a Thor\'s Hammer!"));
-                    r.sendMessage(color("&aYou have received a Thor\'s Hammer!"));
-                };
             };
+            
+            r.getInventory().addItem(hammer_item);
+
+            if(r.equals(p))
+            {
+                p.sendMessage(color("&aYou have successfully given yourself a Thor\'s Hammer!"));
+            }
+
+            else
+            {
+                p.sendMessage(color("&aYou have given " + r.getName() + " a Thor\'s Hammer!"));
+                r.sendMessage(color("&aYou have received a Thor\'s Hammer!"));
+            };                
         }
         
         else
         {
-            p.sendMessage(color("Proper usage: /lightning give <player>"));
+            p.sendMessage(color("&cProper usage: &7/lightning give <player>"));
             return false;
         };
         
