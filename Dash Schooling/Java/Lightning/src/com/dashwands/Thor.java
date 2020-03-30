@@ -5,6 +5,7 @@
 package com.dashwands;
 
 import java.util.Arrays;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -105,7 +106,31 @@ public class Thor extends JavaPlugin implements Listener, CommandExecutor
         
         else if(as.length >= 1 && as[0].equalsIgnoreCase("give"))
         {
-            //....
+            Player r = p;
+            
+            if(as.length >= 2)
+            {
+                r = Bukkit.getPlayerExact(as[1]);
+                
+                if(r == null || !r.isOnline())
+                {
+                    p.sendMessage(color("&cThe player specified must be online!"));
+                    return false;
+                };
+                
+                r.getInventory().addItem(hammer_item);
+                
+                if(r.equals(p))
+                {
+                    p.sendMessage(color("&aYou have successfully given yourself a Thor\'s Hammer!"));
+                }
+                
+                else
+                {
+                    p.sendMessage(color("&aYou have given " + r.getName() + " a Thor\'s Hammer!"));
+                    r.sendMessage(color("&aYou have received a Thor\'s Hammer!"));
+                };
+            };
         }
         
         else
