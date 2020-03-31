@@ -227,43 +227,52 @@ namespace DNSChanger
                 {
                     if (spoof.Text.ToLower() != "Working ....")
                     {
-                        if ((!isIP(ip1i.Text) || !isIP(ip2i.Text)) || (ip1i.Text.Length > 15 || ip2i.Text.Length > 15) || (ip1i.Text.Length < 7 && ip2i.Text.Length < 7))
-                        {
-                            MessageBox.Show("It appears that you have given us an invalid IP Address in either the IPv4 1 input box or the IPv4 2 input box. \r\n\r\nPlease recheck your input and retry, if this problem persists, contact us at KvinneKraft@protonmail.com", "DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        };
+			if ((!isIP(ip1i.Text) || !isIP(ip2i.Text)) || (ip1i.Text.Length > 15 || ip2i.Text.Length > 15) || (ip1i.Text.Length < 7 && ip2i.Text.Length < 7))
+			{
+			    MessageBox.Show("It appears that you have given us an invalid IP Address in either the IPv4 1 input box or the IPv4 2 input box. \r\n\r\nPlease recheck your input and retry, if this problem persists, contact us at KvinneKraft@protonmail.com", "DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 
-                        new Thread(() =>
-                        {
-                            spoof.Text = "Working ....";
+			else
+			{
+			    new Thread
+			    (
+				() =>
+				{
+				    spoof.Text = "Working ....";
 
-                            if (dns.ChangeDNS(ip1i.Text, ip2i.Text))
-                            {
-                                MessageBox.Show("Your DNS Servers have been changed, you may have to restart your system if none of the changes were applied yet.", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
+				    if (dns.ChangeDNS(ip1i.Text, ip2i.Text))
+				    {
+					MessageBox.Show("Your DNS Servers have been changed, you may have to restart your system if none of the changes were applied yet.", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				    }
 
-                            else
-                            {
-                                MessageBox.Show("There was an issue while attempting to change your DNS servers.\r\n\r\nPlease retry, if the issue persists, perhaps try to contact us at KvinneKraft@protonmail.com", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            };
+				    else
+				    {
+					MessageBox.Show("There was an issue while attempting to change your DNS servers.\r\n\r\nPlease retry, if the issue persists, perhaps try to contact us at KvinneKraft@protonmail.com", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				    };
 
-                            spoof.Text = "Spoof It";
-                        })
+				    spoof.Text = "Spoof It";
+				}
+			    )
 
-                        { IsBackground = false }.Start();
-
-                        return;
+			    { IsBackground = false }.Start();
+			};
                     };
-                };
+
+		    return;
+		};
 
                 tools.Click += (s, e) =>
                 {
                     if (!tools_dialog.Visible)
                     {
-                        new Thread(() => 
-                        { 
-                            tools_dialog.ShowDialog(); 
-                        })
+                        new Thread
+			(
+			    () => 
+			    { 
+				tools_dialog.ShowDialog(); 
+			    }
+			)
+
                         { IsBackground = true }.Start();
                     };
                 };
@@ -291,7 +300,7 @@ namespace DNSChanger
 
     public class ToolsDialog : Form
     {
-        private readonly Size client_size = new Size(285, 180);
+        private readonly Size client_size = new Size(225, 67);
 
         private void layout(Form obj)
         {
@@ -311,10 +320,13 @@ namespace DNSChanger
             obj.ShowInTaskbar = false;
         }
 	
-	private readonly Label port_scanner = new Label();
-	private readonly Label pinger = new Label();
+	private readonly Button port_scanner = new Button();
+	private readonly Button pinger = new Button();
+	private readonly Button quit = new Button();
 
-	private readonly Button owkay = new Button();
+	private readonly PictureBox menu_bar = new PictureBox();
+
+	private readonly Label menu_bar_title = new Label();
 
         public ToolsDialog()
         {
@@ -322,37 +334,42 @@ namespace DNSChanger
 
             Moon mon = new Moon();
 
-	    Color fr_color = Color.FromArgb(255, 255, 255);
-	    
-	    mon.Label(this, port_scanner, "Scan Ports", 12, Point.Empty, fr_color);
+	    mon.Image(this, menu_bar, null, new Size(Width - 2, 22), new Point(1, 1));
+	    menu_bar.BackColor = Color.FromArgb(8, 8, 8);
 
-	    port_scanner.Location = new Point((Width - port_scanner.Width) / 2, 20);
+	    mon.drag_material(menu_bar, this);
+
+	    Color fr_color = Color.FromArgb(255, 255, 255);
+
+	    mon.Button(this, port_scanner, "Port Scanner", 8, new Size(95, 24), new Point(13, 32), Color.FromArgb(1, 1, 1), Color.FromArgb(255, 255, 255), 8);
 
 	    port_scanner.Click += (s, e) =>
 	    {
 		/*Nothing Yet*/
 	    };
 
-	    mon.Label(this, pinger, "Ping Hosts", 12, Point.Empty, fr_color);
-
-	    pinger.MinimumSize = pinger.PreferredSize;
-	    pinger.MaximumSize = pinger.PreferredSize;
-	    pinger.Size = pinger.PreferredSize;
-
-	    pinger.Location = new Point(pinger.Left, pinger.Height + pinger.Top + 8);
+	    mon.Button(this, pinger, "Host Pinger", 8, new Size(95, 24), new Point(port_scanner.Left + port_scanner.Width + 8, port_scanner.Top), Color.FromArgb(1, 1, 1), Color.FromArgb(255, 255, 255), 8);
 
 	    pinger.Click += (s, e) =>
 	    {
 		/*Nothing Yet*/
 	    };
 
-	    mon.Button(this, owkay, "Owkay", 12, new Size(150, 26), new Point((Width - 150) / 2, Height - 34), Color.FromArgb(8, 8, 8), fr_color, 8);
+	    mon.Button(menu_bar, quit, "X", 10, new Size(48, 22), new Point(menu_bar.Width - 48, 0), menu_bar.BackColor, Color.FromArgb(255, 255, 255), 0);
 
-	    owkay.Click += (s, e) => Environment.Exit(-1);
+	    quit.Click += (s, e) =>
+	    {
+		Close();
+	    };
+
+	    mon.Label(menu_bar, menu_bar_title, "Dash Tool Menu", 7, Point.Empty, Color.FromArgb(255, 255, 255));
+	    menu_bar_title.Location = new Point((menu_bar.Width - menu_bar_title.Width) / 2, (menu_bar.Height - menu_bar_title.Height) / 2);
+
+	    mon.drag_material(menu_bar_title, this);
 
             Paint += (s, e) =>
             {
-                mon.paint_border(e, Color.FromArgb(8, 8, 8), 2, Size, Point.Empty);
+                mon.paint_border(e, menu_bar.BackColor, 2, Size, Point.Empty);
             };
         }
     };
