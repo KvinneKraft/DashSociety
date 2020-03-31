@@ -28,7 +28,7 @@ namespace Quiz
 	{
 	    int score = 0;
 
-	    for ( int key = 0; key < questions.Count; key += 1)
+	    for ( int key = 0; key < questions.Count; key += 1 )
 	    {
 		Console.WriteLine(questions[key]);
 		Console.Write($"(Answer): ");
@@ -47,7 +47,7 @@ namespace Quiz
 	    Console.WriteLine($"Score: {score.ToString()}/{questions.Count}");
 	    Console.WriteLine("================================\r\n");
 
-	    for ( int key = 0; key < questions.Count; key += 1)
+	    for ( int key = 0; key < questions.Count; key += 1 )
 	    {
 		Console.WriteLine($">>> Question ({key.ToString()}): {questions[key]} \r\n>>> Your Answer ({key.ToString()}): {replies[key]} \r\n>>> Correct Answer ({key.ToString()}): {answers[key]}\r\n\r\n");
 	    };
