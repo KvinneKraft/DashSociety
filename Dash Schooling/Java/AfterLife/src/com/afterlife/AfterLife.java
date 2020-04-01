@@ -5,13 +5,22 @@
 package com.afterlife;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class AfterLife extends JavaPlugin implements CommandExecutor, Listener
 {
@@ -37,7 +46,7 @@ public class AfterLife extends JavaPlugin implements CommandExecutor, Listener
     };
     
     private String admin_permission, use_permission, afterlife_message, name_tag;
-    private Boolean lightning, potion_buffs, isEnabled;
+    private Boolean lightning, potion_buffs, isEnabled = true;
     
     @Override public void onEnable() 
     {
@@ -49,10 +58,56 @@ public class AfterLife extends JavaPlugin implements CommandExecutor, Listener
         
         loadConfiguration();
         
+        getServer().getPluginManager().registerEvents(this, plugin);
+        getCommand("afterlife").setExecutor(plugin);
+        
         print("Plugin has been loaded!");
     };
     
-    @Override public boolean onCommand(CommandSender s, Command c, String a, String[] as)
+    @EventHandler public void onPlayerDeath(final PlayerDeathEvent e)
+    {
+        final Player p = (Player) e.getEntity();
+        
+        if ( !isEnabled || !p.hasPermission(use_permission) )
+        {
+            return;
+        };
+        
+        final Location l = p.getLocation();
+        final World w = p.getWorld();
+        
+        if ( lightning )
+        {
+            w.strikeLightningEffect(l);
+        };
+        
+        final Zombie zombie = (Zombie) w.spawnEntity(l, EntityType.ZOMBIE);        
+        
+        if ( potion_buffs )
+        {
+            zombie.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 30 * 20, 2));
+            zombie.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30 * 20, 2));
+            zombie.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30 * 20, 2));
+        };
+        
+        zombie.setCustomNameVisible(true);        
+        zombie.setCustomName(name_tag.replace("%p%", p.getName()));
+        
+        final ItemStack i = p.getInventory().getItemInMainHand();
+        
+        if(i != null)
+        {
+           zombie.getEquipment().setItemInMainHand(i);
+           zombie.getEquipment().setItemInMainHandDropChance(50);
+        };
+        
+        zombie.setMaxHealth(40);
+        zombie.setHealth(40);
+        
+        return;
+    };
+    
+    @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
     {
         if ( !(s instanceof Player) )
         {
@@ -60,7 +115,7 @@ public class AfterLife extends JavaPlugin implements CommandExecutor, Listener
             return false;
         };
         
-        Player p = (Player) s;
+        final Player p = (Player) s;
         
         if ( !p.hasPermission(admin_permission) )
         {
