@@ -1,8 +1,0 @@
-
-# Author: Dashie
-# Version: 1.0
-
-properties:
-    permissions:
-        admin-permission: "dashkush.admin" 
-        consume-permission: "dashkush.consume"
