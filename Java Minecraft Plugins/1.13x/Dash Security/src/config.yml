@@ -3,6 +3,8 @@
 # Version: 1.0
 
 properties:
+    operator-bypass: false
+    
     interact-properties:
         block-breaking:
             prohibit: false

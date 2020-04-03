@@ -2,7 +2,7 @@
 // Author: Dashie
 // Version: 1.0
 
-package com.dash.society;
+package com.dash.security;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -12,6 +12,9 @@ public class DashSecurity extends JavaPlugin
     public static FileConfiguration config;
     public static JavaPlugin plugin;
     
+    public static CommandHandler commandhandler = new CommandHandler();    
+    public static EventListener listener = new EventListener();
+    
     
     @Override public void onEnable()
     {
@@ -22,7 +25,8 @@ public class DashSecurity extends JavaPlugin
         config = (FileConfiguration) getConfig();
         plugin = (JavaPlugin) this;
         
-        
+        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+        plugin.getCommand("dashsecurity").setExecutor(commandhandler);
         
         DashUtility.print("Plugin has been loaded!");
     };
