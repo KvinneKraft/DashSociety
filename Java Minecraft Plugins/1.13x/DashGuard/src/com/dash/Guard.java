@@ -27,8 +27,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
     @Override public void onEnable()
     {
         print("Loading Dash Guard 1.0 ....");
-        
-        saveDefaultConfig();
+
         loadConfig();
         
         getServer().getPluginManager().registerEvents(this, plugin);
@@ -94,7 +93,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
         
         final Player p = (Player) e.getPlayer();
         
-        if(p.hasPermission(bypass_break_permission))
+        if(p.hasPermission(bypass_break_permission) || !break_blacklist.contains(e.getBlock().getType()))
         {
             return;
         };
@@ -104,7 +103,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
             notifier(p, 1, e.getBlock().getType());
         };
         
-        p.sendMessage(color("&d(&d&lDash &5&lGuard&d): &cYou may not place this block!"));
+        p.sendMessage(color("&d(&d&lDash &5&lGuard&d): &cYou may not break this block!"));
         e.setCancelled(true);        
     };
     
@@ -117,7 +116,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
         
         final Player p = (Player) e.getPlayer();
         
-        if(p.hasPermission(bypass_place_permission))
+        if(p.hasPermission(bypass_place_permission) || !place_blacklist.contains(e.getBlock().getType()))
         {
             return;
         };
@@ -127,23 +126,26 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
             notifier(p, 2, e.getBlock().getType());
         };
         
-        p.sendMessage(color("&d(&d&lDash &5&lGuard&d): &cYou may not break this block!"));
+        p.sendMessage(color("&d(&d&lDash &5&lGuard&d): &cYou may not place this block!"));
         e.setCancelled(true);
     };
     
     private String bypass_place_permission, bypass_break_permission, admin_command_permission, notify_permission;
     private boolean notify_staff, toggle_break = false, toggle_place = false;
     
-    private final List<Material> break_blacklist = new ArrayList<>();
-    private final List<Material> place_blacklist = new ArrayList<>();
+    private final ArrayList<Material> break_blacklist = new ArrayList<Material>();
+    private final ArrayList<Material> place_blacklist = new ArrayList<Material>();
     
     private void loadConfig()
     {
+        plugin.saveDefaultConfig();
+        plugin.getConfig().options().copyDefaults(false);        
         plugin.reloadConfig();
+        
         config = (FileConfiguration) plugin.getConfig();
         
-        bypass_place_permission = config.getString("properties.block-placement.bypass-permission");
-        bypass_break_permission = config.getString("properties.block-breaking.bypass-permission");
+        bypass_place_permission = config.getString("properties.block-placement.bypass-permission-a");
+        bypass_break_permission = config.getString("properties.block-breaking.bypass-permission-b");
         
         admin_command_permission = config.getString("properties.admin.command-permission");
         
@@ -156,7 +158,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
             place_blacklist.clear();
         };
             
-        for ( final String str : config.getStringList("properties.block-placement.blacklist") )
+        for ( final String str : config.getStringList("properties.block-placement.blacklist-a") )
         {
             final Material mate = Material.getMaterial(str.toUpperCase().replace(" ", "_"));
             
@@ -169,7 +171,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
             place_blacklist.add(mate);
         };
         
-        for ( final String str : config.getStringList("properties.block-breaking.blacklist") )
+        for ( final String str : config.getStringList("properties.block-breaking.blacklist-b") )
         {
             final Material mate = Material.getMaterial(str.toUpperCase().replace(" ", "_"));
             
@@ -195,22 +197,26 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
     
     private void saveDConfig()
     {
-        final List<String> cache = new ArrayList<>();
+        config = (FileConfiguration) plugin.getConfig();
         
-        for ( Material mate : break_blacklist ) cache.add(mate.toString());
-        config.set("properties.block-breaking.blacklist", cache);
+        final List<String> tmp_a = new ArrayList<>();
         
-        cache.clear();
+        for(Material mate : place_blacklist)
+        {
+            tmp_a.add(mate.toString().toUpperCase());
+        };
         
-        for ( Material mate : place_blacklist ) cache.add(mate.toString());
-        config.set("properties.block-placement.blacklist", cache);
+        final List<String> tmp_b = new ArrayList<>();
         
-        cache.clear();
+        for(Material mate : break_blacklist)
+        {
+            tmp_b.add(mate.toString().toUpperCase());
+        };        
+        
+        config.set("properties.block-placement.blacklist-a", tmp_a);
+        config.set("properties.block-breaking.blacklist-b", tmp_b);
         
         plugin.saveConfig();
-        plugin.reloadConfig();
-        
-        config = (FileConfiguration) plugin.getConfig();
     };
     
     @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
@@ -230,8 +236,6 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
         
         if(as.length >= 1)
         {
-            // toggle-break | toggle-place | add-place | del-place | add-break | del-break
-            
             final String v = as[0].toLowerCase();
             
             if(v.equals("reload"))
@@ -281,9 +285,9 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
                 return true;
             }
             
-            else if(v.equals("add-place") || v.equals("del-place") && as.length >= 2)
+            else if((v.equals("add-place") || v.equals("del-place")) && as.length >= 2)
             {
-                final Material mate = Material.getMaterial(as[1]);
+                final Material mate = Material.getMaterial(as[1].toUpperCase());
                 
                 if(mate == null)
                 {
@@ -311,7 +315,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
                         return false;
                     };
                     
-                    place_blacklist.add(mate);
+                    place_blacklist.remove(mate);
                     p.sendMessage(color("&e>>> &aThe item has been removed from the list!"));
                 };
                 
@@ -319,9 +323,9 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
                 return true;
             }
                 
-            else if(v.equals("add-break") || v.equals("del-break") && as.length >= 2)
+            else if((v.equals("add-break") || v.equals("del-break")) && as.length >= 2)
             {
-                final Material mate = Material.getMaterial(as[1]);
+                final Material mate = Material.getMaterial(as[1].toUpperCase());
                 
                 if(mate == null)
                 {
@@ -349,7 +353,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
                         return false;
                     };
                     
-                    break_blacklist.add(mate);
+                    break_blacklist.remove(mate);
                     p.sendMessage(color("&e>>> &aThe item has been removed from the list!"));
                 };
                 

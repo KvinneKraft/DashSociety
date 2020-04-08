@@ -9,25 +9,25 @@ properties:
     block-placement:
         
         # What blocks should be prohibited from placing?
-        blacklist:
-            - 'dIamOnD_bLocK'
-            - 'TNT'
-            - 'LAVA_BUCKET'        
+        blacklist-a:
+        - dIamOnD_bLocK
+        - TNT
+        - LAVA_BUCKET        
         
         # Whatp ermission should grant people a bypass?
-        bypass-permission: "dashguard.bypass-place-restriction"
+        bypass-permission-a: "dashguard.bypass-place-restriction"
     
     # Prevent breaking of the by you specified blocks:
     block-breaking:
         
         # What blocks should be prohibited from breaking?
-        blacklist:
-            - 'cHeSt'
-            - 'FuRnaCe'
-            - 'CrAfTinG_TaBlE'
+        blacklist-b:
+        - cHeSt
+        - FuRnaCe
+        - CrAfTinG_TaBlE
         
         # What permission should grant people a bypass?
-        bypass-permission: "dashguard.bypass-break-restriction"
+        bypass-permission-b: "dashguard.bypass-break-restriction"
         
     # Some options for the use of the plugin:
     admin:
