@@ -1,23 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+// Author: Dashie
+// Version: 1.0
+
 package com.dash;
 
-/**
- *
- * @author Dashie Lunare
- */
-public class Guard
-{
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args)
+public class Guard extends JavaPlugin implements Listener, CommandExecutor
+{
+    @Override public void onEnable()
     {
-        // TODO code application logic here
-    }
+        
+    };
     
-}
+    @Override public void onDisable()
+    {
+        
+    };
+};
