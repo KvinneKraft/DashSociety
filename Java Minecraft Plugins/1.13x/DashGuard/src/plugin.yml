@@ -9,3 +9,7 @@ version: 1.0
 
 author: [Dashie]
 name: DashGuard
+
+commands:
+    dashguard:
+        aliases: [dashg, dg, guardian, guard, griefprevent, preventgrief]
