@@ -87,7 +87,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
     
     @EventHandler public void onBlockBreak(BlockBreakEvent e)
     {
-        if(e.getPlayer() == null)
+        if(e.getPlayer() == null || toggle_break)
         {
             return;
         };
@@ -110,7 +110,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
     
     @EventHandler public void onBlockPlace(BlockPlaceEvent e)
     {
-        if(e.getPlayer() == null)
+        if(e.getPlayer() == null || toggle_place)
         {
             return;
         };
@@ -132,7 +132,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
     };
     
     private String bypass_place_permission, bypass_break_permission, admin_command_permission, notify_permission;
-    private boolean notify_staff;
+    private boolean notify_staff, toggle_break = false, toggle_place = false;
     
     private final List<Material> break_blacklist = new ArrayList<>();
     private final List<Material> place_blacklist = new ArrayList<>();
@@ -173,7 +173,7 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
         {
             final Material mate = Material.getMaterial(str.toUpperCase().replace(" ", "_"));
             
-            if (mate == null)
+            if(mate == null)
             {
                 print("Invalid material found in the BREAK_BLACKLIST! [" + str + "]");
                 continue;
@@ -191,6 +191,26 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
     private void print(final String str)
     {
         System.out.println("(Dash Guard): " + str);
+    };
+    
+    private void saveDConfig()
+    {
+        final List<String> cache = new ArrayList<>();
+        
+        for ( Material mate : break_blacklist ) cache.add(mate.toString());
+        config.set("properties.block-breaking.blacklist", cache);
+        
+        cache.clear();
+        
+        for ( Material mate : place_blacklist ) cache.add(mate.toString());
+        config.set("properties.block-placement.blacklist", cache);
+        
+        cache.clear();
+        
+        plugin.saveConfig();
+        plugin.reloadConfig();
+        
+        config = (FileConfiguration) plugin.getConfig();
     };
     
     @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
@@ -212,14 +232,133 @@ public class Guard extends JavaPlugin implements Listener, CommandExecutor
         {
             // toggle-break | toggle-place | add-place | del-place | add-break | del-break
             
-        }
-        
-        else
-        {
-            p.sendMessage(color("&d(&d&lDash &5&lGuard&d): &cCorrect usage of this command: &7/dashguard [toggle-break | toggle-place | add-place | del-place | add-break | del-break]"));
-            return false;
+            final String v = as[0].toLowerCase();
+            
+            if(v.equals("reload"))
+            {
+                p.sendMessage(color("&e>>> &aReloading ...."));
+                loadConfig();
+                p.sendMessage(color("&e>>> &aDone!"));
+                
+                return true;
+            }
+            
+            else if(v.equals("toggle-break") || v.equals("toggle-place"))
+            {
+                String action = null;
+                
+                if(v.equals("toggle-break"))
+                {
+                    if(toggle_break)
+                    {
+                        action = "block breaking on";
+                        toggle_break = false;
+                    }
+                    
+                    else
+                    {
+                        action = "block breaking off";
+                        toggle_break = true;
+                    };
+                }
+                
+                else if(v.equals("toggle-place"))
+                {
+                    if(toggle_place)
+                    {
+                        action = "block placement on";
+                        toggle_place = false;
+                    }
+                    
+                    else
+                    {
+                        action = "block placement off";
+                        toggle_place = true;
+                    };
+                };
+                
+                p.sendMessage(color("&e>>> &aYou have turned &b" + action + "&a!"));
+                return true;
+            }
+            
+            else if(v.equals("add-place") || v.equals("del-place") && as.length >= 2)
+            {
+                final Material mate = Material.getMaterial(as[1]);
+                
+                if(mate == null)
+                {
+                    p.sendMessage(color("&e>>> &cThe specified material is not convertable!"));
+                    return false;
+                }
+                
+                else if (v.equals("add-place"))
+                {
+                    if(place_blacklist.contains(mate))
+                    {
+                        p.sendMessage(color("&e>>> &cI am sorry but this material is already in the list!"));
+                        return false;
+                    };
+                    
+                    place_blacklist.add(mate);
+                    p.sendMessage(color("&e>>> &aThe item has been added to the list!"));
+                }
+                
+                else if (v.equals("del-place"))
+                {
+                    if(!place_blacklist.contains(mate))
+                    {
+                        p.sendMessage(color("&e>>> &cI am sorry but this material is not in the list!"));
+                        return false;
+                    };
+                    
+                    place_blacklist.add(mate);
+                    p.sendMessage(color("&e>>> &aThe item has been removed from the list!"));
+                };
+                
+                saveDConfig();
+                return true;
+            }
+                
+            else if(v.equals("add-break") || v.equals("del-break") && as.length >= 2)
+            {
+                final Material mate = Material.getMaterial(as[1]);
+                
+                if(mate == null)
+                {
+                    p.sendMessage(color("&e>>> &cThe specified material is not convertable!"));
+                    return false;
+                }
+                
+                else if (v.equals("add-break"))
+                {
+                    if(break_blacklist.contains(mate))
+                    {
+                        p.sendMessage(color("&e>>> &cI am sorry but this material is already in the list!"));
+                        return false;
+                    };
+                    
+                    break_blacklist.add(mate);
+                    p.sendMessage(color("&e>>> &aThe item has been added to the list!"));
+                }
+                
+                else if (v.equals("del-break"))
+                {
+                    if(!break_blacklist.contains(mate))
+                    {
+                        p.sendMessage(color("&e>>> &cI am sorry but this material is not in the list!"));
+                        return false;
+                    };
+                    
+                    break_blacklist.add(mate);
+                    p.sendMessage(color("&e>>> &aThe item has been removed from the list!"));
+                };
+                
+                saveDConfig();
+                return true;
+            };
         };
         
-        return true;
+        p.sendMessage(color("&d(&d&lDash &5&lGuard&d): &cCorrect usage of this command: &7/dashguard [reload | toggle-break | toggle-place | add-place | del-place | add-break | del-break]"));
+        return false;
     };
 };
