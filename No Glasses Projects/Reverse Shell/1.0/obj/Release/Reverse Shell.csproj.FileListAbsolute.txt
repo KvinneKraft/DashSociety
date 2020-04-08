@@ -1,6 +1,0 @@
-F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\obj\Release\Reverse Shell.csprojAssemblyReference.cache
-F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\Reverse Shell.exe.config
-F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\obj\Release\Reverse Shell.exe
-F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\obj\Release\Reverse Shell.pdb
-F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\Reverse Shell.exe
-F:\Programming\Dashnarok\No Glasses Projects\Reverse Shell\Reverse Shell.pdb

@@ -1,0 +1,4 @@
+
+properties:
+    permission: "dashie.permission"
+    message: "&cThis is a config.yml message!"

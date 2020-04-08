@@ -1,0 +1,19 @@
+
+# Author: Dashie
+# Version: 1.0
+
+# My very own configuration file.
+
+
+parasites:
+    permissions:
+        admin-permission: "parasites.admin"
+        use-permission: "parasites.use" 
+    
+    messages:
+        afterlife-message: "&aYou may have died but a zombie remains!"
+
+    meta-info:
+        lightning: true
+        potion-buffs: true
+        name-tag: "&c%p%'s &aZombie"

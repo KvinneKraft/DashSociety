@@ -1,3 +1,0 @@
-INDEX VERSION 1.131+F:\Programming\MC Server\Minecraft Plugins\Dashnarok\.metadata\.plugins\org.eclipse.jdt.core
-3379423854.index
-117774581.index
