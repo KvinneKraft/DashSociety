@@ -1,23 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+// Author: Dashie
+// Version: 1.0
+
 package com.dash;
 
-/**
- *
- * @author Dashie Lunare
- */
-public class Fluff
-{
+import org.bukkit.ChatColor;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args)
+public class Fluff extends JavaPlugin implements Listener
+{
+    @Override public void onEnable()
     {
-        // TODO code application logic here
-    }
+        print("Loading plugin ....");
+        
+        getServer().getPluginManager().registerEvents(this, this);
+        
+        print("Plugin has been loaded!");
+    };
     
-}
+    @Override public void onDisable()
+    {
+        print("Plugin has been disabled!");
+    };
+    
+    private void print(final String str)
+    {
+        System.out.println("(CDM): " + str);
+    };
+    
+    private String color(final String str)
+    {
+        return ChatColor.translateAlternateColorCodes('&', str);
+    };
+};
