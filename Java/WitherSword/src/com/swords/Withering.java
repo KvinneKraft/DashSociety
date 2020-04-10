@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,7 +38,7 @@ public class Withering extends JavaPlugin implements Listener, CommandExecutor
         admin_permission = config.getString("command-permission");
         
         amplifier = config.getInt("potion-amplifier");        
-        duration = config.getInt("potion-duration");
+        duration = config.getInt("potion-duration") * 20;
     };
     
     @Override public boolean onCommand(final CommandSender s, final Command c, String a, final String[] as)
@@ -55,10 +56,10 @@ public class Withering extends JavaPlugin implements Listener, CommandExecutor
             return false;
         }
         
-        a = as[0].toLowerCase();
-        
-        if(as.length >= 1)
+        else if(as.length >= 1)
         {
+            a = as[0].toLowerCase();
+            
             if(a.equals("give"))
             {
                 Player g = p;
@@ -90,18 +91,18 @@ public class Withering extends JavaPlugin implements Listener, CommandExecutor
                 };
 
                 return true;                
-            };
-        }
-        
-        else if(a.equals("reload"))
-        {
-            p.sendMessage(color("&e>>> &aReloading ...."));
+            }
             
-            loadConfigData();
-            
-            p.sendMessage(color("&e>>> &aDone!"));
-            
-            return true;
+            else if(a.equals("reload"))
+            {
+                p.sendMessage(color("&e>>> &aReloading ...."));
+
+                loadConfigData();
+
+                p.sendMessage(color("&e>>> &aDone!"));
+
+                return true;
+            };            
         };
         
         p.sendMessage(color("&cThe correct syntax is as follows: &7/withersword [reload | give] <player>"));
@@ -109,7 +110,7 @@ public class Withering extends JavaPlugin implements Listener, CommandExecutor
     };
     
     private FileConfiguration config = (FileConfiguration) null;
-    private JavaPlugin plugin = (JavaPlugin) null;
+    private JavaPlugin plugin = (JavaPlugin) this;
     
     @Override public void onEnable()
     {
@@ -121,7 +122,18 @@ public class Withering extends JavaPlugin implements Listener, CommandExecutor
         ItemMeta sword_meta = sword_item.getItemMeta();
         
         sword_meta.setDisplayName(color("&8Sword O\' Withering"));
-        sword_meta.setLore(Arrays.asList(new String[] { "&7&oWither your enemies away!" }));
+        sword_meta.setUnbreakable(true);        
+        
+        sword_meta.setLore
+        (
+            Arrays.asList
+            (
+                new String[] 
+                { 
+                    color("&7&oWither your enemies away!") 
+                }
+            )
+        );
         
         sword_item.setItemMeta(sword_meta);
         
@@ -140,14 +152,20 @@ public class Withering extends JavaPlugin implements Listener, CommandExecutor
     
     @EventHandler public void onEntityDamage(EntityDamageByEntityEvent e)
     {
-        final Entity entity = e.getDamager();
-        
-        if(!(entity instanceof Player) || !(e.getEntity() instanceof LivingEntity))
+        if(!(e.getDamager() instanceof Player) || !(e.getEntity() instanceof LivingEntity))
         {
             return;
         };
         
-        final LivingEntity living_entity = (LivingEntity) entity;
+        final Player p = (Player) e.getDamager();
+
+        if (p.getInventory() == null || p.getInventory().getItemInMainHand() == null || !p.getInventory().getItemInMainHand().equals(sword_item))
+        {
+            print("Errur");
+            return;
+        };
+            
+        final LivingEntity living_entity = (LivingEntity) e.getEntity();
         
         living_entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration, amplifier));        
         living_entity.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, amplifier));
