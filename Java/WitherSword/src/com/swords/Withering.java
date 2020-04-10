@@ -7,7 +7,9 @@ package com.swords;
 import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -36,6 +38,74 @@ public class Withering extends JavaPlugin implements Listener, CommandExecutor
         
         amplifier = config.getInt("potion-amplifier");        
         duration = config.getInt("potion-duration");
+    };
+    
+    @Override public boolean onCommand(final CommandSender s, final Command c, String a, final String[] as)
+    {
+        if (!(s instanceof Player))
+        {
+            return false;
+        };
+        
+        Player p = (Player) s;
+        
+        if(!(p.hasPermission(admin_permission)))
+        {
+            p.sendMessage(color("&cYou may not use this command!"));
+            return false;
+        }
+        
+        a = as[0].toLowerCase();
+        
+        if(as.length >= 1)
+        {
+            if(a.equals("give"))
+            {
+                Player g = p;
+                
+                if(as.length >= 2)
+                {
+                    g = getServer().getPlayerExact(as[1]);
+                    
+                    if(g == null)
+                    {
+                        p.sendMessage(color("&cThe player specified must be online."));
+                        return false;
+                    };
+                };
+                
+                g.getInventory().addItem(sword_item);
+
+                final String sword_name = sword_item.getItemMeta().getDisplayName();
+                
+                if(g.equals(p))
+                {
+                    g.sendMessage(color("&aYou have given yourself a " + sword_name + "&a!"));
+                }
+
+                else
+                {
+                    p.sendMessage(color("&aYou have given &b" + g.getName() + " &aa " + sword_name + "&a!"));
+                    g.sendMessage(color("&aYou have received a " + sword_name + "&a!"));
+                };
+
+                return true;                
+            };
+        }
+        
+        else if(a.equals("reload"))
+        {
+            p.sendMessage(color("&e>>> &aReloading ...."));
+            
+            loadConfigData();
+            
+            p.sendMessage(color("&e>>> &aDone!"));
+            
+            return true;
+        };
+        
+        p.sendMessage(color("&cThe correct syntax is as follows: &7/withersword [reload | give] <player>"));
+        return false;
     };
     
     private FileConfiguration config = (FileConfiguration) null;
