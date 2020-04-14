@@ -147,7 +147,7 @@ namespace Dash_IP_Fluffer
 	    Button qut = Get.quit_button;
 	    Label ttl = Get.title;
 
-	    RuImage(obj, mbr, (Image) null, new Size(obj.Width, 26), new Point(1, 1));
+	    RuImage(obj, mbr, (Image) null, new Size(obj.Width, 26), new Point(1, 0));
 
 	    mbr.BackColor = Color.FromArgb(19, 8, 43);
 
@@ -156,8 +156,10 @@ namespace Dash_IP_Fluffer
 		Rectangle(e, mbr.BackColor, 2, obj.Size, Point.Empty);
 	    };
 
-	    Add.ThaLabel(mbr, ttl, new Point(-1, -1), Color.FromArgb(255, 255, 255), "Dashies IP Fluffer", 8);
-	    Add.AButton(mbr, qut, new Size(66, 25), new Point(mbr.Width - 67, 0), mbr.BackColor, Color.FromArgb(255, 255, 255), "X", 10);
+	    Add.ThaLabel(mbr, ttl, new Point(-1, -1), Color.FromArgb(255, 255, 255), "P ♥ n y     I P     F l u f f e r", 10);
+	    
+	    Add.AButton(mbr, qut, new Size(66, 26), new Point(mbr.Width - 67, 0), mbr.BackColor, Color.FromArgb(255, 255, 255), "X", 10);
+	    Add.ControlBorder((Button) qut, 4);
 
 	    qut.Click += (s, e) =>
 	    {
@@ -182,25 +184,38 @@ namespace Dash_IP_Fluffer
 	    };
 	}
 
-	public static void ControlBorder(Control control)
+	private static External ext = new External();
+
+	public static void ControlBorder(Control control, int border_radius)
 	{
 	    control.Paint += (s, e) =>
 	    {
+		ext.LemonSquish(e);
+
+		Rectangle rectum = new Rectangle(0, 0, control.Width, control.Height);
 		GraphicsPath graphics_path = new GraphicsPath();
-		Rectangle rectangle = control.ClientRectangle;
 
-		rectangle.Inflate(10, 8);
+		int radius = (border_radius) * 3;
 
-		e.Graphics.DrawEllipse(Pens.Transparent, rectangle);
+		graphics_path.AddArc(rectum.X, rectum.Y, radius, radius, 180, 90);
+		graphics_path.AddArc((rectum.X + rectum.Width - radius), rectum.Y, radius, radius, 270, 90);
+		graphics_path.AddArc((rectum.X + rectum.Width - radius), (rectum.Y + rectum.Height - radius), radius, radius, 0, 90);
+		graphics_path.AddArc(rectum.X, (rectum.Y + rectum.Height - radius), radius, radius, 90, 90);
 
-		rectangle.Inflate(-1, -1);
-		graphics_path.AddEllipse(rectangle);
-
-		control.Region = new Region(graphics_path);
+		Region reg = new Region(graphics_path);
+		control.Region = reg;
 	    };
 	}
     };
 
+    public class External : Form
+    {
+	public void LemonSquish(PaintEventArgs e)
+	{
+	    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+	    base.OnPaint(e);
+	}
+    };
 
     public static class Set
     {
