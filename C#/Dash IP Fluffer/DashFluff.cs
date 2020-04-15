@@ -4,10 +4,15 @@
 // Version: 1.0
 
 
+// Add Dark and or Light Borders to Objects
+// 
+
+
 using System;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 
 namespace Dash_IP_Fluffer
@@ -112,6 +117,8 @@ namespace Dash_IP_Fluffer
 
 	private static int current_method = 0;
 
+	private readonly Dictionary<int, List<Control>> option_controls = new Dictionary<int, List<Control>>();
+	
 	private void InitializeSettingsMenus()
 	{
 	    Size size = new Size(((Width - info_log.Width) - 25) / 2, 153);
@@ -132,7 +139,8 @@ namespace Dash_IP_Fluffer
 	    Add.ControlBorder((PictureBox) settings_container, 6);
 	    Add.ControlBorder((PictureBox) module_container, 6);
 
-
+	    // Add TCP, UDP and HTTP options by list to option_controls, 0 = TCP, 1 = UDP and 2 = HTTP;
+	    // option_controls[current_method] = new List<Button>() { new Button(), new Button() ... };
 	}
     };
 };
