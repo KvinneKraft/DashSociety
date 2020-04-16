@@ -78,6 +78,11 @@ public class GreaterCreepers extends JavaPlugin implements Listener
         
         final Location location = (Location) e.getEntity().getLocation();
         
+        if(explosionflames)
+        {
+            location.getWorld().createExplosion(location, explosionradius, explosionflames, false);
+        };        
+        
         if(summonfireworks)
         {
             Firework firework = (Firework)location.getWorld().spawnEntity(location, EntityType.FIREWORK);
@@ -100,11 +105,6 @@ public class GreaterCreepers extends JavaPlugin implements Listener
         if(summonlightning)
         {
             location.getWorld().strikeLightning(location);
-        };
-        
-        if(explosionflames)
-        {
-            location.getWorld().createExplosion(location, explosionradius, explosionflames, false);
         };
     };
     
