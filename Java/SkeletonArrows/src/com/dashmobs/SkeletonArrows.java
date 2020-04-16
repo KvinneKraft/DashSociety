@@ -9,12 +9,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Stray;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -124,29 +128,39 @@ public class SkeletonArrows extends JavaPlugin implements Listener
     private final List<EntityType> mobs = new ArrayList<>();    
     
     private int probability;
+    // Check hit entity
     
-    @EventHandler public void EntityHitByEntity(ProjectileHitEvent e)
+    @EventHandler public void onEntityDamageByEntity(final EntityDamageByEntityEvent e)
     {
-        if(e.getEntity() == null || (!(e.getEntity() instanceof Player)) || e.getEntity().getShooter() == null || !mobs.contains(e.getEntity().getShooter()))
+        if((!(e.getDamager() instanceof Arrow)) || (!(e.getEntity() instanceof Player)))
         {
             return;
         };
         
+        final Arrow arrow = (Arrow) e.getDamager();
+        
+        if((!(arrow.getShooter() instanceof Stray)) && (!(arrow.getShooter() instanceof Skeleton)))
+        {
+            return;
+        };
+     
+        //final Location location = arrow.getLocation();        
+        final Player p = (Player) e.getEntity();
+        
         if(new Random().nextInt(101) <= probability)
         {
-            final Player p = (Player) e.getEntity().getShooter();
             p.addPotionEffect(effects.get(new Random().nextInt(effects.size())));
         };
     };
     
     @Override public void onDisable() { print("Plugin has been disabled!"); };
     
-    private String color(String str)
+    /*private String color(final String str)
     {
         return ChatColor.translateAlternateColorCodes('&', str);
-    };
+    };*/
     
-    private void print(String str)
+    private void print(final String str)
     {
         System.out.println("(Skeleton Arrows): " + str);
     };

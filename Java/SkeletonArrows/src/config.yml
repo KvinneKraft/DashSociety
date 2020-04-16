@@ -8,7 +8,7 @@ properties:
     possibilities:
         - 'WITHER 2 16'
         - 'POISON 2 16'
-        - 'SLOWNESS 2 16'
+        - 'SLOW 2 16'
         - 'CONFUSION 2 16'
         - 'HUNGER 2 16'
     # The probability that one of the above effects may be chosen to be
