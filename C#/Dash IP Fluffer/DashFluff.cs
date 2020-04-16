@@ -113,7 +113,7 @@ namespace Dash_IP_Fluffer
 	}
 
 	private readonly PictureBox settings_container = new PictureBox();
-	private readonly PictureBox module_container = new PictureBox();
+	private readonly PictureBox method_container = new PictureBox();
 
 	private static int current_method = 0;
 
@@ -123,24 +123,52 @@ namespace Dash_IP_Fluffer
 	{
 	    Size size = new Size(((Width - info_log.Width) - 25) / 2, 153);
 
-	    Add.RuImage(this, settings_container, null, size, new Point(10, Get.menu_bar.Height + 58)); settings_container.BackColor = ip_addr.BackColor;
-	    Add.RuImage(this, module_container, null, size, new Point(settings_container.Left + settings_container.Width + 5, settings_container.Top)); module_container.BackColor = port.BackColor;
+	    Add.RuImage(this, method_container, null, size, new Point(10, Get.menu_bar.Height + 58)); settings_container.BackColor = ip_addr.BackColor;
+	    Add.RuImage(this, settings_container, null, size, new Point(settings_container.Left + settings_container.Width + 5, settings_container.Top)); module_container.BackColor = port.BackColor;
 
 	    settings_container.Paint += (s, e) =>
 	    {
 		Add.Rectangle(e, Get.menu_bar.BackColor, 2, size, Point.Empty);
 	    };
 
-	    module_container.Paint += (s, e) =>
+	    method_container.Paint += (s, e) =>
 	    {
 		Add.Rectangle(e, Get.menu_bar.BackColor, 2, size, Point.Empty);
 	    };
 
 	    Add.ControlBorder((PictureBox) settings_container, 6);
-	    Add.ControlBorder((PictureBox) module_container, 6);
+	    Add.ControlBorder((PictureBox) method_container, 6);
+
+	    foreach(Control control in method_container.Controls)
+	    {
+		control.Click += (s, e) =>
+		{
+		    settings_selector(s);
+		};
+	    };
 
 	    // Add TCP, UDP and HTTP options by list to option_controls, 0 = TCP, 1 = UDP and 2 = HTTP;
 	    // option_controls[current_method] = new List<Button>() { new Button(), new Button() ... };
+	}
+
+	private void settings_selector(object obj)
+	{
+	    string sid = ((Control)obj).Text.ToLower();  
+
+	    if(sid == "")
+	    {
+		// TCP
+	    }
+
+	    else if(sid == "")
+	    {
+		// UDP
+	    }
+
+	    else if(sid == "")
+	    {
+		// HTTP
+	    };
 	}
     };
 };
