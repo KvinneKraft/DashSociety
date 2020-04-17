@@ -23,7 +23,7 @@ public class CommandsHandler implements CommandExecutor
         };
         
         final Player p = (Player) s;
-        final String command = c.toString().toLowerCase();
+        final String command = c.toString().toLowerCase().replace("org.bukkit.command.plugincommand(", "").replace(", dashiesvalentine v1.0)", "");
         
         if(command.equals("dashvalentine"))
         {
@@ -33,7 +33,7 @@ public class CommandsHandler implements CommandExecutor
                 return false;
             }
             
-            else if(as[0].equalsIgnoreCase("reload"))
+            else if(as.length >= 1 && as[0].equalsIgnoreCase("reload"))
             {
                 p.sendMessage(Valentine.color("&e>>> &aReloading configuration ...."));
                 
@@ -63,14 +63,14 @@ public class CommandsHandler implements CommandExecutor
                 return false;
             }
             
-            //else if(r == p)
-            //{
-            //    p.sendMessage(Valentine.color("&cAnd how are you going to do that?"));
-            //    return false;
-            //};
+            else if(r == p)
+            {
+                p.sendMessage(Valentine.color("&cAnd how are you going to do that?"));
+                return false;
+            };
             
-            r.sendMessage(messagereceivformat.replace("%w%", command).replace("%p%", p.getName()));
-            p.sendMessage(messagesendformat.replace("%w%", command).replace("%p%", r.getName()));
+            r.sendMessage(messagereceivformat.replace("%w%", command).replace("%p%", p.getName()).replace("loveyou", "ball of love"));
+            p.sendMessage(messagesendformat.replace("%w%", command).replace("%p%", r.getName()).replace("loveyou", "ball of love"));
         }
         
         else

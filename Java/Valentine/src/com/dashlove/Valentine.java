@@ -18,6 +18,8 @@ public class Valentine extends JavaPlugin
     @Override public void onEnable()
     {
         print("The plugin is loading ....");
+     
+        plugin = (JavaPlugin) this;
         
         LoadConfiguration();
         
