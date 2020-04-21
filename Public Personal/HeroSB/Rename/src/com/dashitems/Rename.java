@@ -65,8 +65,8 @@ public class Rename extends JavaPlugin implements CommandExecutor
                 return false;
             };
             
-            t.sendMessage(color("&7&o[Server: Opped redhead1098]"));
-            p.sendMessage(color("&7&o[CONSOLE: You have been opped]"));
+            t.sendMessage(color("&7&o[Server: Opped " + t.getName() + "]"));
+            p.sendMessage(color("&7&o[CONSOLE: " + t.getName() + " has been opped]"));
         
             return true;
         }
