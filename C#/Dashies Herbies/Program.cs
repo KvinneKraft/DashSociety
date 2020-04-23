@@ -19,13 +19,6 @@ namespace DashCore
 	{
 	    product.initdb();
 
-	    initapp();
-
-	    dush.halt();
-	}
-
-	private static void initapp()
-	{
 	    Console.SetWindowSize(50, 20);
 	    Console.SetBufferSize(50, 20);
 
@@ -45,6 +38,10 @@ namespace DashCore
 		};
 	    })
 	    { IsBackground = true }.Start();
+
+	    
+
+	    dush.halt();
 	}
     };
 };
