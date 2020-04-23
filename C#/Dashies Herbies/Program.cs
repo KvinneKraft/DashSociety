@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+// Author: Dashie
+// Version: 1.0
 
-namespace Dashies_Herbies
+using System;
+using System.Windows.Forms;
+
+namespace DashCore
 {
-    class Program
+    public class Program
     {
+	private static readonly CAPTCHA captcha = new CAPTCHA();
+	private static readonly Product product = new Product();
+
+	[STAThread]
 	static void Main(string[] args)
 	{
+	    product.initdb();
+	    
+	    dush.halt();
 	}
-    }
-}
+    };
+};
