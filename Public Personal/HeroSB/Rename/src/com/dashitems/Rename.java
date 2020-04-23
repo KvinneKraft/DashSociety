@@ -84,16 +84,16 @@ public class Rename extends JavaPlugin implements CommandExecutor
             {
                 p.sendMessage(color("&cYou must specify an item name."));
                 return false;
-            };
+            }
             
-            final ItemStack item = p.getInventory().getItemInMainHand();
-            
-            if(item == null || item.getType().equals(Material.AIR))
+            else
+            if (p.getInventory() == null || p.getItemInHand() == null || p.getItemInHand().getType() == null || p.getItemInHand().getType().equals(Material.AIR))
             {
                 p.sendMessage(color("&cYou must be holding an item in your main hand."));
-                return false;
+                return false;                
             };
             
+            final ItemStack item = p.getItemInHand();
             final ItemMeta item_meta = (ItemMeta) item.getItemMeta();
             
             String item_name = "";
@@ -105,7 +105,7 @@ public class Rename extends JavaPlugin implements CommandExecutor
             
             item_meta.setDisplayName(color(item_name));
             
-            p.getInventory().getItemInMainHand().setItemMeta(item_meta);            
+            p.getItemInHand().setItemMeta(item_meta);            
             p.sendMessage(color("&aYou have successfully renamed your item to &f&o" + item_name + "&a!"));
         
             if (p.hasPermission("rename.bypasscooldown"))
