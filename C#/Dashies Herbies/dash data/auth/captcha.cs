@@ -6,7 +6,7 @@ using System;
 
 namespace DashCore
 {
-    public class CAPTCHA
+    public class Captcha
     {
 	private readonly string charset = ("qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM");
 	private readonly int caplen = 8;

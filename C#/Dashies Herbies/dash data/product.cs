@@ -62,7 +62,7 @@ namespace DashCore
 		};
 	    }
 
-	    catch (Exception e)
+	    catch
 	    {
 		dush.say("# The configuration file is corrupt.\n");
 		dush.say("# Press any key to exit.");
