@@ -7,15 +7,15 @@ main: com.philosophy.Consilience
 author: [Dashie]
 name: DashConsilience
 
-api-version: 1.8
+api-version: 1.13
 version: 1.0
 
 commands:
     spawn:
         aliases: [spon, worldspawn, spwn, sp]
         
-    staff:
-        aliases: [dev, mod, admin, list]
+    github:
+        aliases: [dev, developer]
         
     discord:
         aliases: [disc]

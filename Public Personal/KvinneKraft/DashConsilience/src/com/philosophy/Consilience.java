@@ -7,6 +7,7 @@
 
 package com.philosophy;
 
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,16 +15,24 @@ public class Consilience extends JavaPlugin
 {
     public static FileConfiguration config = (FileConfiguration) null;
     public static JavaPlugin plugin = (JavaPlugin) null;
+    public static Economy econ = (Economy) null;
     
     @Override public void onEnable()
     {
         Freya.print("Doing some necessities ....");
         
+        plugin = (JavaPlugin) this;
+        econ = (Economy) getServer().getServicesManager().getRegistration(Economy.class).getProvider();
+        
         Fundamentals.LoadConfiguration();
         
-        getCommand("spawn");
-        getCommand("staff");
-        getCommand("discord");
+        final Socials socials = new Socials();
+        
+        getCommand("github").setExecutor(socials);
+        getCommand("discord").setExecutor(socials);        
+        getCommand("spawn").setExecutor(new Spawn());        
+        
+        getServer().getPluginManager().registerEvents(new Authenticate(), plugin);
         
         Freya.print("Done!");
     };

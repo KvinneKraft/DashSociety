@@ -12,7 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class Fundamentals 
 {
     public static void LoadConfiguration()
-    {
+    {   
         Consilience.plugin.reloadConfig();
         Consilience.config = (FileConfiguration) Consilience.plugin.getConfig();
         

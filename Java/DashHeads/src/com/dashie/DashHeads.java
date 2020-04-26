@@ -203,7 +203,7 @@ public class DashHeads extends JavaPlugin
             for(String line : head_lore)
                 head_lore.set(head_lore.indexOf(line), Moony.transStr(line));
             
-            String name = head_name.replace("%m%", String.valueOf(killer_reward)).replace("%p%", killer_name);                        
+            String name = head_name.replace("%m%", String.valueOf(killer_reward)).replace("%p%", victim.getName());                        
             List<String> lore = head_lore;
             
             if(first_run)
@@ -237,7 +237,7 @@ public class DashHeads extends JavaPlugin
             if((e.getAction() != Action.RIGHT_CLICK_AIR) && (e.getAction() != Action.RIGHT_CLICK_BLOCK))
                 return;
             
-            if((e.getMaterial() == null) || (!e.getItem().hasItemMeta()) || (e.getMaterial() != Material.PLAYER_HEAD) || (e.getItem().getItemMeta().getCustomModelData() != 2020))
+            if((e.getItem() == null) || (e.getMaterial() == null) || (!e.getItem().hasItemMeta()) || (e.getMaterial() != Material.PLAYER_HEAD) || (e.getItem().getItemMeta().getCustomModelData() != 2020))
                 return;
             
             Integer money = null;
