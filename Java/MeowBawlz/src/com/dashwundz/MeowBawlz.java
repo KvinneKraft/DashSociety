@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -252,8 +251,17 @@ public class MeowBawlz extends JavaPlugin
         {
             if(!(s instanceof Player))
             {
-                print("Ye must run dis command in-game!");
-                return false;
+                final Player r = (Player) getServer().getPlayerExact(as[1]);
+                
+                if (r == null)
+                {
+                    return false;
+                };
+                
+                r.sendMessage(color("&aYou have received a " + wand_name + " &acongratulations!"));
+                r.getInventory().addItem(wand_item);
+                
+                return true;
             };
             
             final Player p = (Player) s;

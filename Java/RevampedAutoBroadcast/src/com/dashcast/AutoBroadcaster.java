@@ -41,6 +41,7 @@ public class AutoBroadcaster extends JavaPlugin implements CommandExecutor
         configuration_data();
         
         getCommand("dashcaster").setExecutor(plugin);
+        getCommand("bc").setExecutor(plugin);
         
         start_cast();
         
@@ -170,6 +171,19 @@ public class AutoBroadcaster extends JavaPlugin implements CommandExecutor
     
     @Override public boolean onCommand(CommandSender s, Command c, String a, String[] as)
     {
+        if(!(s instanceof Player) && c.toString().toLowerCase().contains("bc"))
+        {
+            String message = "";
+            
+            for (final String line : as)
+            {
+                message += line;
+            };
+            
+            getServer().broadcastMessage(color(message));
+            return false;
+        };
+        
         if(!(s instanceof Player)) return false;
         
         Player p = (Player) s;

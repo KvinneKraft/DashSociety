@@ -13,3 +13,5 @@ author: [Dashie]
 commands:
     dashcaster:
         aliases: [broadcast, bc, broadcaster, dashcast, dashcaster]
+    bc:
+        aliases: [broadcast]

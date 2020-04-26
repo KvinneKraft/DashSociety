@@ -15,6 +15,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -60,8 +61,17 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
     {
         if(!(s instanceof Player))
         {
-            print("You may only use this command as a player.");
-            return false;
+            final Player r = (Player) getServer().getPlayer(as[1]);
+            
+            if (r == null)
+            {
+                return false;
+            };
+            
+            r.sendMessage(color("&aYou have been given a " + bow_item.getItemMeta().getDisplayName() + " &acongratulations!"));
+            r.getInventory().addItem(bow_item);
+            
+            return true;
         };
         
         final Player p = (Player) s;
@@ -185,17 +195,17 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         
         final Random rand = new Random();
         
-        if(lightning && rand.nextInt(100) > lightning_chance)
+        if(lightning && rand.nextInt(100) <= lightning_chance)
         {
             world.strikeLightning(location);
         };
         
-        if(explosion && rand.nextInt(100) > explosion_chance)
+        if(explosion && rand.nextInt(100) <= explosion_chance)
         {
             world.createExplosion(location, 2, false, explosion_blockbreak);
         };
         
-        if(fireworks && rand.nextInt(100) > fireworks_chance)
+        if(fireworks && rand.nextInt(100) <= fireworks_chance)
         {
             Color main1 = Color.BLACK;
             Color sub1 = Color.BLACK;
@@ -213,7 +223,7 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
             DetonateFirework(location, main3, sub3, FireworkEffect.Type.BURST);
         };
         
-        if(rat && rand.nextInt(100) > rat_chance)
+        if(rat && rand.nextInt(100) <= rat_chance)
         {
             Silverfish silver_fish = (Silverfish) world.spawnEntity(location, EntityType.SILVERFISH);
             
@@ -320,9 +330,14 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         ItemMeta meta = bow_item.getItemMeta();
         
         meta.setDisplayName(display_name);
+        meta.setUnbreakable(true);
         meta.setLore(bow_lore);
         
         bow_item.setItemMeta(meta);
+        
+        bow_item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 8);
+        bow_item.addUnsafeEnchantment(Enchantment.ARROW_FIRE, 10);
+        bow_item.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, 2);
         
         shoot_cooldown = config.getInt("properties.bow-meta.shoot-cooldown") * 20;
     };
