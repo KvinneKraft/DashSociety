@@ -11,12 +11,12 @@ using System.Runtime.InteropServices;
 
 
 [assembly: AssemblyTitle("Authentication Form")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Authenticate your life.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Dashies Softwaries")]
 [assembly: AssemblyProduct("Authentication Form")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © Dashies Softwaries 2020")]
+[assembly: AssemblyTrademark("Dashies Softwaries")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("564422a1-4d5b-45e4-9523-82912de52f8c")]
