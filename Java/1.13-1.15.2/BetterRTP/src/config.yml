@@ -1,0 +1,27 @@
+
+# Author: Dashie
+# Version: 1.0
+
+coordinates:
+    max-x: 2500
+    min-x: -2500
+    max-z: 2500
+    min-z: -2500
+permissions:
+    teleportation-permission: 'default'    
+    admin-permission: 'admin'
+optionals:
+    potion-effects:
+        enabled: true
+        effects: 
+            - 'CONFUSION 2 8'
+    firework-effects:
+        enabled: true
+    sound-effects:
+        enabled: true
+        sound-effect: ENTITY_SLIME_SQUISH
+    world-whitelist:
+        - 'world'
+    teleportation-cooldown: 60
+    send_title: true
+    
