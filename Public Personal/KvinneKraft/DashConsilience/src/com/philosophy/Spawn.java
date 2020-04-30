@@ -12,12 +12,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class Spawn implements CommandExecutor
 {
     public static final double x = 246.490, y = 71.48689, z = -236.497;
     private final List<Player> players = new ArrayList<>();
-    
     
     @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
     {
@@ -78,5 +78,10 @@ public class Spawn implements CommandExecutor
         );
         
         return true;
+    };
+    
+    public static void onPlayerRespawn(PlayerRespawnEvent e)
+    {
+        e.setRespawnLocation(new Location(e.getPlayer().getWorld(), x, y, z));
     };
 };

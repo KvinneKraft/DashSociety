@@ -234,7 +234,7 @@ public class DashHeads extends JavaPlugin
         @EventHandler
         public void onPlayerInteract(PlayerInteractEvent e)
         {
-            if((e.getAction() != Action.RIGHT_CLICK_AIR) && (e.getAction() != Action.RIGHT_CLICK_BLOCK))
+            if((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK))
                 return;
             
             if((e.getItem() == null) || (e.getMaterial() == null) || (!e.getItem().hasItemMeta()) || (e.getMaterial() != Material.PLAYER_HEAD) || (e.getItem().getItemMeta().getCustomModelData() != 2020))

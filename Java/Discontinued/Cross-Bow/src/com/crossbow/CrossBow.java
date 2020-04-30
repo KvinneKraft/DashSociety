@@ -158,19 +158,20 @@ public class CrossBow extends JavaPlugin implements Listener, CommandExecutor
         
         final List<PotionEffect> potion_effects = new ArrayList<>();
         
-        if(poison && rand.nextInt(100) > poison_chance)
+        if(poison && rand.nextInt(100) < poison_chance)
         {
             potion_effects.add(new PotionEffect(PotionEffectType.POISON, 10 * 20, 3, true, false, false));
         }
         
-        else if(wither && rand.nextInt(100) > wither_chance)
+        if(wither && rand.nextInt(100) < wither_chance)
         {
             potion_effects.add(new PotionEffect(PotionEffectType.WITHER, 10 * 20, 3, true, false, false));
         }
         
-        else if(hunger && rand.nextInt(100) > hunger_chance)
+        if(hunger && rand.nextInt(100) < hunger_chance)
         {
             potion_effects.add(new PotionEffect(PotionEffectType.HUNGER, 10 * 20, 3, true, false, false));
+            potion_effects.add(new PotionEffect(PotionEffectType.CONFUSION, 10 * 20, 3, true, false, false));
         };    
         
         p.addPotionEffects(potion_effects);

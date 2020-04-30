@@ -9,7 +9,7 @@ package com.philosophy;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class Fundamentals 
+public class Configuration 
 {
     public static void LoadConfiguration()
     {   

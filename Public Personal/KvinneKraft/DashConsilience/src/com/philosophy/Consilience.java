@@ -24,15 +24,16 @@ public class Consilience extends JavaPlugin
         plugin = (JavaPlugin) this;
         econ = (Economy) getServer().getServicesManager().getRegistration(Economy.class).getProvider();
         
-        Fundamentals.LoadConfiguration();
+        Configuration.LoadConfiguration();
         
         final Socials socials = new Socials();
         
-        getCommand("github").setExecutor(socials);
-        getCommand("discord").setExecutor(socials);        
+        getCommand("discord").setExecutor(socials);              
+        getCommand("github").setExecutor(socials); 
+        
         getCommand("spawn").setExecutor(new Spawn());        
         
-        getServer().getPluginManager().registerEvents(new Authenticate(), plugin);
+        getServer().getPluginManager().registerEvents(new EventsHandler(), plugin);
         
         Freya.print("Done!");
     };
