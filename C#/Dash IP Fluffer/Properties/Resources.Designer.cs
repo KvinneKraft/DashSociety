@@ -63,9 +63,9 @@ namespace Dash_IP_Fluffer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] font {
+        internal static byte[] cute {
             get {
-                object obj = ResourceManager.GetObject("font", resourceCulture);
+                object obj = ResourceManager.GetObject("cute", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -87,6 +87,16 @@ namespace Dash_IP_Fluffer.Properties {
             get {
                 object obj = ResourceManager.GetObject("logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] main {
+            get {
+                object obj = ResourceManager.GetObject("main", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

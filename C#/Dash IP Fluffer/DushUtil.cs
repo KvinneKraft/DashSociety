@@ -19,7 +19,7 @@ namespace Dash_IP_Fluffer
 {
     public static class Add
     {
-	public static void AButton(Control srf, Button obj, Size siz, Point loc, Color bcl, Color fcl, String tex, Int32 pts)
+	public static void AButton(Control srf, Button obj, Size siz, Point loc, Color bcl, Color fcl, String tex, Int32 type, Int32 pts)
 	{
 	    obj.Size = siz;
 	    obj.MinimumSize = siz;
@@ -37,7 +37,7 @@ namespace Dash_IP_Fluffer
 
 	    obj.Location = loc;
 
-	    obj.Font = Get.CustomFont(pts);
+	    obj.Font = Get.CustomFont(pts, type);
 	    obj.Text = tex;
 
 	    obj.BackColor = bcl;
@@ -50,9 +50,9 @@ namespace Dash_IP_Fluffer
 	    srf.Controls.Add(obj);
 	}
 
-	public static void ThaLabel(Control srf, Label obj, Point loc, Color fcl, String tex, Int32 pts)
+	public static void ThaLabel(Control srf, Label obj, Point loc, Color fcl, String tex, Int32 type, Int32 pts)
 	{
-	    obj.Font = Get.CustomFont(pts);
+	    obj.Font = Get.CustomFont(pts, type);
 	    obj.Text = tex;
 
 	    Size siz = Get.FontSize(tex, obj.Font);
@@ -82,9 +82,9 @@ namespace Dash_IP_Fluffer
 	    srf.Controls.Add(obj);
 	}
 
-	public static void ZeTextBox(Control srf, TextBox obj, Size siz, Point loc, Color fcl, Color bcl, String tex, Int32 pts)
+	public static void ZeTextBox(Control srf, TextBox obj, Size siz, Point loc, Color fcl, Color bcl, String tex, Int32 type, Int32 pts)
 	{
-	    obj.Font = Get.CustomFont(pts);
+	    obj.Font = Get.CustomFont(pts, type);
 	    obj.Text = tex;
 
 	    obj.Size = siz;
@@ -147,31 +147,31 @@ namespace Dash_IP_Fluffer
 	    Button qut = Get.quit_button;
 	    Label ttl = Get.title;
 
-	    RuImage(obj, mbr, (Image) null, new Size(obj.Width, 26), new Point(1, 0));
+	    RuImage(obj, mbr, (Image)null, new Size(obj.Width, 26), new Point(1, 0));
+	    mbr.BackColor = Color.FromArgb(217, 145, 181);
 
-	    mbr.BackColor = Color.FromArgb(19, 8, 43);
-
-	    obj.Paint += (s, e) =>
-	    {
-		Rectangle(e, mbr.BackColor, 2, obj.Size, Point.Empty);
-	    };
-
-	    Add.ThaLabel(mbr, ttl, new Point(-1, -1), Color.FromArgb(255, 255, 255), "P ♥ n y     I P     F l u f f e r", 10);
-	    
-	    Add.AButton(mbr, qut, new Size(66, 26), new Point(mbr.Width - 67, 0), mbr.BackColor, Color.FromArgb(255, 255, 255), "X", 10);
-	    Add.ControlBorder((Button) qut, 4);
+	    Add.ThaLabel(mbr, ttl, new Point(-1, -1), Color.FromArgb(255, 255, 255), "P o n y     I P     F l u f f e r", 0, 11);
+	    Add.AButton(mbr, qut, new Size(66, 26), new Point(mbr.Width - 67, 0), mbr.BackColor, Color.FromArgb(255, 255, 255), "X", 1, 10);
 
 	    qut.Click += (s, e) =>
 	    {
 		Environment.Exit(-1);
 	    };
 
-	    Add.RuImage(mbr, log, Properties.Resources.logo, new Size(23, 25), new Point(0, 1));
+	    Add.RuImage(mbr, log, Properties.Resources.logo, new Size(28, 45), new Point(2, 2));
+	    Add.RuImage(obj, new PictureBox(), log.Image, log.Size, log.Location);
+
+	    log.BackColor = Color.FromArgb(0, 0, 0, 255);
 
 	    Set.Draggable(log, obj);
 	    Set.Draggable(qut, obj);
 	    Set.Draggable(ttl, obj);
 	    Set.Draggable(mbr, obj);
+	    
+	    obj.Paint += (s, e) =>
+	    {
+		Rectangle(e, mbr.BackColor, 2, obj.Size, Point.Empty);
+	    };
 	}
 
 	public static void Rectangle(PaintEventArgs e, Color color, float width, Size size, Point point)
@@ -288,22 +288,47 @@ namespace Dash_IP_Fluffer
 	private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
 
 	private static readonly PrivateFontCollection FontCollection = new PrivateFontCollection();
-	private static readonly Byte[] external_font_data = (byte[])Properties.Resources.font;
 
-	public static Font CustomFont(int points)
+	private static readonly List<Byte[]> fonts = new List<Byte[]>()
 	{
-	    if (FontCollection.Families.Length < 1)
+	    (byte[])Properties.Resources.cute,
+	    (byte[])Properties.Resources.main
+	};
+
+	public static readonly int FONT_TYPE_CUTE = 0;
+	public static readonly int FONT_TYPE_MAIN = 1;
+
+	public static Font CustomFont(int points, int type)
+	{
+	    Byte[] external_font_data = null;
+
+	    if (FontCollection.Families.Length < 2)
 	    {
-		IntPtr pointer = Marshal.AllocCoTaskMem(external_font_data.Length);
-		Marshal.Copy(external_font_data, 0, pointer, external_font_data.Length);
+		foreach (Byte[] bytes in fonts)
+		{
+		    external_font_data = bytes;
 
-		uint cache_size = 0;
+		    IntPtr pointer = Marshal.AllocCoTaskMem(external_font_data.Length);
+		    Marshal.Copy(external_font_data, 0, pointer, external_font_data.Length);
 
-		AddFontMemResourceEx(pointer, (uint)external_font_data.Length, IntPtr.Zero, ref cache_size);
-		FontCollection.AddMemoryFont(pointer, external_font_data.Length);
+		    uint cache_size = 0;
+
+		    AddFontMemResourceEx(pointer, (uint)external_font_data.Length, IntPtr.Zero, ref cache_size);
+		    FontCollection.AddMemoryFont(pointer, external_font_data.Length);
+		};
 	    };
 
-	    return new Font(FontCollection.Families[0], points, FontStyle.Regular);
+	    if (type == 0)
+	    {
+		external_font_data = fonts[type];
+	    }
+
+	    else
+	    {
+		external_font_data = fonts[type];
+	    };
+
+	    return new Font(FontCollection.Families[type], points, FontStyle.Regular);
 	}
     };
 };
