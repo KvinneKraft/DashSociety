@@ -4,12 +4,13 @@
 
 package com.philosophy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Socials implements CommandExecutor
+public class SimplisticHandler implements CommandExecutor
 {
     @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
     {
@@ -24,6 +25,11 @@ public class Socials implements CommandExecutor
         if(l.contains("github"))
         {
             p.sendMessage(Freya.color("&eHey there, you can find some of my work at &dhttps://github.com/KvinneKraft &e!"));
+        }
+        
+        else if (l.contains("shop"))
+        {
+            p.chat("/warp shop");
         }
         
         else

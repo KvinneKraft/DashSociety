@@ -26,10 +26,11 @@ public class Consilience extends JavaPlugin
         
         Configuration.LoadConfiguration();
         
-        final Socials socials = new Socials();
+        final SimplisticHandler simplistic = new SimplisticHandler();
         
-        getCommand("discord").setExecutor(socials);              
-        getCommand("github").setExecutor(socials); 
+        getCommand("discord").setExecutor(simplistic);              
+        getCommand("github").setExecutor(simplistic); 
+        getCommand("shop").setExecutor(simplistic);
         
         getCommand("spawn").setExecutor(new Spawn());        
         
