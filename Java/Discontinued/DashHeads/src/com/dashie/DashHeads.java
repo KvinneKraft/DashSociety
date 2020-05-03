@@ -240,13 +240,13 @@ public class DashHeads extends JavaPlugin
             if((e.getItem() == null) || (e.getMaterial() == null) || (!e.getItem().hasItemMeta()) || (e.getMaterial() != Material.PLAYER_HEAD) || (e.getItem().getItemMeta().getCustomModelData() != 2020))
                 return;
             
-            Integer money = null;
+            double money = 0;
             
             for(String lore : e.getItem().getItemMeta().getLore())
             {
                 if(lore.contains("$"))
                 {
-                    money = Integer.valueOf(lore.replaceAll("[^0-9]", ""));
+                    money = Double.valueOf(lore.replaceAll("[^\\d.]", ""));
                     money = money * e.getItem().getAmount();
                     
                     break;

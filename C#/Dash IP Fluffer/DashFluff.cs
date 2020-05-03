@@ -44,8 +44,7 @@ namespace Dash_IP_Fluffer
 	    Size = siz;
 	    MinimumSize = siz;
 	    MaximumSize = siz;
-
-	    //Add.ControlBorder((Form)this, 10);
+	    
 	    Add.InteractiveToolBar(this);
 	}
 
