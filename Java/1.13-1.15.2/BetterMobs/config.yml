@@ -1,0 +1,51 @@
+
+# Author: Dashie
+# Version: 1.0
+
+better-mobs:
+  silverfish:
+    endermite-companion: true
+    endermite-companion-chance: 15
+    instant-damage: true
+    instant-damage-max: 10
+    instant-damage-min: 2
+    instant-damage-chance: 35
+  creepers:
+    charged-possible: true
+    charged-possible-chance: 40  
+  skeletons:
+    poisonous-tips: true
+    poisonous-chance: 75
+    explosive-tips: true
+    explosive-chance: 5
+    lightning-tips: true
+    lightning-chance: 20
+  ghasts:
+    bigger-fireballs: true
+    bigger-chance: 80
+  blazes:
+    explosive-fireballs: true
+    explosive-fireballs-chance: 20
+    explosive-fireballs-radius: 1
+  zombies:
+    hunger-touch: true
+    hunger-chance: 35
+    poisonous-touch: true
+    poisonous-chance: 35
+    slowness-touch: true
+    slowness-chance: 30
+  eggs:
+    poisonous-eggs: true
+    poisonous-chance: 15
+  snowballs:
+    slowness-balls: true
+    slowness-chance: 40
+  enderpearls:
+    no-damage: true
+    no-damage-chance: 15
+  fire-charge:
+    throwable: true
+    explosion: true
+    explosion-radius: 2
+    explosion-chance: 50
+    explosion-fire: true
