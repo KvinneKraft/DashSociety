@@ -258,7 +258,7 @@ public class Strict extends JavaPlugin
             if((!command_blocker_enabled) || (p.hasPermission(commands.admin_permission)))
                 return;
             
-            String cmd = e.getMessage().split(" ")[0].toLowerCase();
+            String cmd = e.getMessage().replace(":", " ").split(" ")[0].toLowerCase();
             
             if(low_black_listed_commands.contains(cmd))
             {

@@ -4,7 +4,9 @@
 
 package com.philosophy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -40,6 +42,22 @@ public class Authenticate
         };
         
         p.sendMessage(welcome_message);
+        
+        Bukkit.getServer().getScheduler().runTaskAsynchronously
+        (
+            Consilience.plugin, 
+                
+            new Runnable() 
+            { 
+                @Override public void run()
+                {
+                    for (final Player _p : Bukkit.getServer().getOnlinePlayers())
+                    {
+                        _p.playSound(_p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 30, 30);
+                    };
+                };
+            }
+        );
     };
     
     public static void onPlayerQuit(PlayerQuitEvent e)
