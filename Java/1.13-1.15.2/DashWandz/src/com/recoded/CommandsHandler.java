@@ -75,6 +75,7 @@ public class CommandsHandler implements CommandExecutor
                     return false;
                 };
                 
+                final String name = item.getItemMeta().getDisplayName();
                 Player _p = p;
                 
                 if (as.length > 2)
@@ -87,13 +88,13 @@ public class CommandsHandler implements CommandExecutor
                         return false;
                     };
                     
-                    _p.sendMessage(Kvinne.color("&aYou have been given a " + item.getItemMeta().getDisplayName() + "&a!"));
-                    p.sendMessage(Kvinne.color("&aYou have given &e" + _p.getName() + " &aa " + item.getItemMeta().getDisplayName() + "&a!"));
+                    _p.sendMessage(Kvinne.color("&aYou have been given a &r" + name + "&a!"));
+                    p.sendMessage(Kvinne.color("&aYou have given &e" + _p.getName() + " &aa &r" + name + "&a!"));
                 }
                 
                 else
                 {
-                    _p.sendMessage(Kvinne.color("&aYou have given yourself a " + item.getItemMeta().getDisplayName() + "&a!"));
+                    _p.sendMessage(Kvinne.color("&aYou have given yourself a &r" + name + "&a!"));
                 };
                 
                 _p.getInventory().addItem(item);

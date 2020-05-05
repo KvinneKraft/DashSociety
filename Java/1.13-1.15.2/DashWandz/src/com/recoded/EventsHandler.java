@@ -6,13 +6,22 @@ package com.recoded;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 public class EventsHandler implements Listener
 {
@@ -22,6 +31,43 @@ public class EventsHandler implements Listener
     public static String bypass_permission;
     
     private final List<Player> players = new ArrayList<>();
+    
+    public void DetonateFirework(Location location, Color mcolor, Color fcolor, FireworkEffect.Type type)
+    {
+        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        FireworkMeta firework_meta = firework.getFireworkMeta();
+        
+        firework_meta.addEffect(FireworkEffect.builder().withColor(mcolor).with(type).flicker(true).withFlicker().withTrail().withFade(fcolor).trail(true).build());
+        
+        firework.setFireworkMeta(firework_meta);
+        firework.detonate();
+    };        
+    
+    @EventHandler public void onProjectileHit(final ProjectileHitEvent e)
+    {
+        if (e.getEntity() instanceof Arrow)
+        {
+            final Arrow arrow = (Arrow) e.getEntity();
+            
+            if (arrow.getShooter() instanceof Player)
+            {
+                final Player p = (Player) arrow.getShooter();
+                final ItemStack item = (ItemStack) p.getInventory().getItemInMainHand();
+                
+                if (DashWandz.wands.contains(item))
+                {
+                    final Location location = (Location) p.getTargetBlockExact(100).getLocation();
+                    final Random r = new Random();
+                    
+                    DetonateFirework(location, Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), FireworkEffect.Type.BALL_LARGE);
+                    DetonateFirework(location, Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), FireworkEffect.Type.BALL);
+                    DetonateFirework(location, Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), FireworkEffect.Type.BURST);
+                
+                    e.getEntity().remove();
+                };
+            };
+        };
+    };
     
     @EventHandler public void onInteraction(final PlayerInteractEvent e)
     {
@@ -54,7 +100,15 @@ public class EventsHandler implements Listener
         
         else if (wand.equals(DashWandz.wands.get(0)))/*Firework Wand*/
         {
-            
+            Arrow arrow = (Arrow) p.launchProjectile(Arrow.class);
+
+            arrow.setVelocity(p.getLocation().getDirection().multiply(1.2));
+            arrow.setKnockbackStrength(5);
+            arrow.setColor(Color.PURPLE);          
+            arrow.setPierceLevel(100);
+            arrow.setCritical(true);  
+            arrow.setFireTicks(60);            
+            arrow.setDamage(20);            
         }
         
         else if (wand.equals(DashWandz.wands.get(1)))/*Lightning Wand*/

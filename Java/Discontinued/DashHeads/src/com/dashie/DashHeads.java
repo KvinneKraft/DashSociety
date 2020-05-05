@@ -164,12 +164,12 @@ public class DashHeads extends JavaPlugin
             if(!(e.getEntity().getKiller() instanceof Player))
                 return;
             
-            Player killer = e.getEntity().getKiller();            
+            final Player killer = e.getEntity().getKiller();            
             
             if(!killer.hasPermission(drop_permission))
                 return;
             
-            Player victim = e.getEntity();
+            final Player victim = e.getEntity();
             
             if(killer.equals(victim))
                 return;
@@ -178,7 +178,9 @@ public class DashHeads extends JavaPlugin
             
             if(econ.getBalance(victim) > minimum_balance)
             {
-                killer_reward = ((int)(econ.getBalance(victim) * reward_percentage));
+                final double balance = econ.getBalance(victim);
+                
+                killer_reward = (int)((balance / 100) * 8);
                 econ.withdrawPlayer(victim, killer_reward);
             };
             
