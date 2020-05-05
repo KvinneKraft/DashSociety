@@ -10,7 +10,7 @@ public class Kvinne
 {
     public static void print(String line)
     {
-        System.out.println("(Better RTP): " + line);
+        System.out.println("(Dash Wandz): " + line);
     };
     
     public static String color(String line)

@@ -38,6 +38,7 @@ public class DashWandz extends JavaPlugin
         LoadConfiguration();
         
         getServer().getPluginManager().registerEvents(new EventsHandler(), plugin);
+        getCommand("wandz").setExecutor(new CommandsHandler());
         
         Kvinne.print("Plugin has been enabled.");
     };
@@ -49,6 +50,8 @@ public class DashWandz extends JavaPlugin
     {
         plugin.reloadConfig();
         config = (FileConfiguration) plugin.getConfig();
+        
+        CommandsHandler.command_permission = config.getString("dash-wands.command-permission");
         
         if (!wands.get(FIREWORK).hasItemMeta())
         {
@@ -87,6 +90,40 @@ public class DashWandz extends JavaPlugin
                 wands.get(id).setItemMeta(meta);
             };
         };
+        
+        if (EventsHandler.perms.size() > 0)
+        {
+            EventsHandler.perms.clear();
+        };
+        
+        if (EventsHandler.cooldowns.size() > 0)
+        {
+            EventsHandler.cooldowns.clear();
+        };
+        
+        final String[] nodes = new String[]
+        {
+            "firework-wand", "lightning-wand", "wither-wand", "fireball-wand"
+        };
+        
+        for (final String node : nodes)
+        {
+            try
+            {
+                final int cooldown = config.getInt("dash-wands." + node + ".cooldown"); 
+                EventsHandler.cooldowns.add(cooldown);
+                
+                final String permission = config.getString("dash-wands." + node + ".use-permission");
+                EventsHandler.perms.add(permission);
+            }
+            
+            catch (final Exception e)
+            {
+                continue;
+            }
+        };
+        
+        EventsHandler.bypass_permission = config.getString("dash-wands.bypass-permission");
     };
     
     @Override public void onDisable()

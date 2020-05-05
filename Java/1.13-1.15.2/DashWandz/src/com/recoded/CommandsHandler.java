@@ -101,7 +101,7 @@ public class CommandsHandler implements CommandExecutor
             
             else if (ar.equals("list"))
             {
-                p.sendMessage(Kvinne.color("&bAvailable Wands: &efirework, lightning, wither, fireball."));
+                p.sendMessage(Kvinne.color("&bAvailable Wands: &efirework, lightning, wither and fireball."));
             }
             
             else
