@@ -5,6 +5,7 @@
 package com.philosophy;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,8 @@ import org.bukkit.entity.Player;
 
 public class SimplisticHandler implements CommandExecutor
 {
+    private final Location staff_house_location = new Location(Bukkit.getWorld("world"), 232.864, 71.50000, -256.045);
+    
     @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
     {
         if (!(s instanceof Player))
@@ -30,6 +33,12 @@ public class SimplisticHandler implements CommandExecutor
         else if (l.contains("shop"))
         {
             p.chat("/warp shop");
+        }
+        
+        else if (l.contains("staff"))
+        {
+            p.sendMessage(Freya.color("&aYou have been teleported to the &estaff house&a!"));
+            p.teleport(staff_house_location);
         }
         
         else

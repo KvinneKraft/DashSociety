@@ -51,6 +51,10 @@ namespace Dash_IP_Fluffer
 	public Interfuce()
 	{
 	    SetupLayout();
+
+	    Label l = new Label();
+
+	    Add.ThaLabel(this, l, new Point(-1, -1), Color.FromArgb(0, 0, 0), "You know this looks fancy ;)", Get.FONT_TYPE_CUTE, 16);
 	}
     };
 };

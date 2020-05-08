@@ -26,15 +26,21 @@ public class Consilience extends JavaPlugin
         
         Configuration.LoadConfiguration();
         
-        final SimplisticHandler simplistic = new SimplisticHandler();
+        getServer().getPluginManager().registerEvents(new EventsHandler(), plugin);        
         
-        getCommand("discord").setExecutor(simplistic);              
-        getCommand("github").setExecutor(simplistic); 
-        getCommand("shop").setExecutor(simplistic);
+        final String[] commands = new String[] 
+        { 
+            "discord", "github", "shop", "staff"
+        };
+       
+        final SimplisticHandler simplistic = new SimplisticHandler();        
+        
+        for (String command : commands)
+        {
+            getCommand(command).setExecutor(simplistic);
+        };
         
         getCommand("spawn").setExecutor(new Spawn());        
-        
-        getServer().getPluginManager().registerEvents(new EventsHandler(), plugin);
         
         Freya.print("Done!");
     };

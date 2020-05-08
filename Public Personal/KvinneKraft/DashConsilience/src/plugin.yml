@@ -22,4 +22,7 @@ commands:
         
     shop:
         aliases: [shp]
+        
+    staff:
+        aliases: [ranks]
 

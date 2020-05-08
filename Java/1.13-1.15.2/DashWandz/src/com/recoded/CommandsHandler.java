@@ -60,7 +60,7 @@ public class CommandsHandler implements CommandExecutor
                 }
                 
                 else if (supposed_wand.equals("wither"))
-                {
+                { 
                     item = DashWandz.wands.get(DashWandz.WITHER);
                 }
 
@@ -87,14 +87,17 @@ public class CommandsHandler implements CommandExecutor
                         p.sendMessage(Kvinne.color("&cThe player specified must be online!"));
                         return false;
                     };
-                    
-                    _p.sendMessage(Kvinne.color("&aYou have been given a &r" + name + "&a!"));
-                    p.sendMessage(Kvinne.color("&aYou have given &e" + _p.getName() + " &aa &r" + name + "&a!"));
+                }
+                
+                if (_p.equals(p))
+                {
+                    _p.sendMessage(Kvinne.color("&aYou have given yourself a &r" + name + "&a!"));
                 }
                 
                 else
                 {
-                    _p.sendMessage(Kvinne.color("&aYou have given yourself a &r" + name + "&a!"));
+                    _p.sendMessage(Kvinne.color("&aYou have been given a &r" + name + "&a!"));
+                    p.sendMessage(Kvinne.color("&aYou have given &e" + _p.getName() + " &aa &r" + name + "&a!"));                    
                 };
                 
                 _p.getInventory().addItem(item);

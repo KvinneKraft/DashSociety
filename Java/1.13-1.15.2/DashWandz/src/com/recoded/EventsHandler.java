@@ -7,6 +7,8 @@ package com.recoded;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -16,6 +18,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -56,7 +59,7 @@ public class EventsHandler implements Listener
                 
                 if (DashWandz.wands.contains(item))
                 {
-                    final Location location = (Location) p.getTargetBlockExact(100).getLocation();
+                    final Location location = (Location) arrow.getLocation();
                     final Random r = new Random();
                     
                     DetonateFirework(location, Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), FireworkEffect.Type.BALL_LARGE);
@@ -143,14 +146,101 @@ public class EventsHandler implements Listener
             );
         }
         
-        else if (wand.equals(DashWandz.wands.get(2)))/*Wither Wand*/
-        {
-            
-        }
-        
         else if (wand.equals(DashWandz.wands.get(3)))/*Fireball Wand*/
         {
-            
+            Bukkit.getServer().getScheduler().runTaskAsynchronously
+            (
+                DashWandz.plugin,
+                    
+                new Runnable()
+                {
+                    @Override public void run()
+                    {
+                        for (int fwb = 0; fwb < 6; fwb += 1)
+                        {
+                            Bukkit.getServer().getScheduler().runTask
+                            (
+                                DashWandz.plugin,
+                                    
+                                new Runnable()
+                                {
+                                    @Override public void run()
+                                    {
+                                        Fireball fireball = (Fireball) p.launchProjectile(Fireball.class);
+
+                                        fireball.setVelocity(p.getLocation().getDirection().multiply(1.5));
+                                        fireball.setFallDistance(120);            
+                                        fireball.setFireTicks(60);
+                                    };
+                                }
+                            );
+                            
+                            try
+                            {
+                                Thread.sleep(200);
+                            } 
+                            
+                            catch (InterruptedException ex)
+                            {
+                                // Why is this even required? It is so annoying ....
+                            }
+                        };
+                    };
+                }
+            );
+        }
+        
+        else if (wand.equals(DashWandz.wands.get(2)))/*Wither Wand*/
+        {
+            Bukkit.getServer().getScheduler().runTaskAsynchronously
+            (
+                DashWandz.plugin,
+                    
+                new Runnable()
+                {
+                    @Override public void run()
+                    {
+                        final Random r = new Random();
+                        
+                        for (int fwb = 0; fwb < 6; fwb += 1)
+                        {
+                            Bukkit.getServer().getScheduler().runTask
+                            (
+                                DashWandz.plugin,
+                                    
+                                new Runnable()
+                                {
+                                    @Override public void run()
+                                    {
+                                        WitherSkull witherskull = (WitherSkull) p.launchProjectile(WitherSkull.class);
+
+                                        witherskull.setVelocity(p.getLocation().getDirection().multiply(1.5));
+                                        witherskull.setFallDistance(120);            
+                                        witherskull.setFireTicks(60);
+                                        
+                                        witherskull.setIsIncendiary(true);      
+                                        
+                                        if (r.nextInt(100) > 75)
+                                        {
+                                            witherskull.setCharged(true);
+                                        };
+                                    };
+                                }
+                            );
+                            
+                            try
+                            {
+                                Thread.sleep(200);
+                            } 
+                            
+                            catch (InterruptedException ex)
+                            {
+                                // Why is this even required? It is so annoying ....
+                            }
+                        };
+                    };
+                }
+            );
         }
         
         else
