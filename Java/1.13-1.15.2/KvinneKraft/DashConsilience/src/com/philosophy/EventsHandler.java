@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -37,11 +38,16 @@ public class EventsHandler implements Listener
     
     @EventHandler public void onEntityDamageByEntity(final EntityDamageByEntityEvent e)
     {
-        Organisms.onEntityAttackSkelly(e);
+        Organisms.onEntityAttack(e);
     };
     
     @EventHandler public void onCreatureSpawn(final CreatureSpawnEvent e)
     {
         Organisms.onEntitySpawn(e);
+    };
+    
+    @EventHandler public void onCreatureTarget(final EntityTargetEvent e)
+    {
+        Organisms.onEntityTarget(e);
     };
 };

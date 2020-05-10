@@ -22,7 +22,7 @@ public class DashHeads
     public static void onDeath(PlayerDeathEvent e)
     {
         final Player p = (Player) e.getEntity();        
-        final double min_price = 20;        
+        final double min_price = 2500;        
         
         double take_price = min_price;
         
@@ -52,7 +52,7 @@ public class DashHeads
             
             k.sendMessage(Freya.color("&eYou have been given &6&l" + take_price + "&6$ &efor killing &6" + p.getName() + "&e!"));
             
-            if (r.nextInt() > 80)
+            if (r.nextInt() < 40)
             {
                 final ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
                 final SkullMeta meta = (SkullMeta) item.getItemMeta();
@@ -70,7 +70,12 @@ public class DashHeads
                                 "&e&oYou have been given this as a trophy!", 
                                 "&7&oYou sure as heck know what is creepy >.<",
                                 "&8&oOh my goddess, did you just really keep this head?",
-                                "&e&lFIRST ROUND DECAPITATION, YEHHH!!!"
+                                "&e&lFIRST ROUND DECAPITATION, YEHHH!!!",
+                                "&dJust drink the bloody insides ;)",
+                                "&dHe loved you ;c",
+                                "&dShe loved you ;c",
+                                "&dWhy this person?",
+                                "&dMwhahahaha, you did great, you earned it!",
                             }
                         )
                     );
@@ -93,7 +98,7 @@ public class DashHeads
                 k.getInventory().addItem(item);
             };
             
-            Consilience.econ.depositPlayer(k, take_price);             
+            Consilience.econ.depositPlayer(k, 150);             
         };
         
         if (Consilience.econ.getBalance(p) > 0)

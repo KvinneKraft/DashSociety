@@ -30,7 +30,7 @@ public class Consilience extends JavaPlugin
         
         final String[] commands = new String[] 
         { 
-            "discord", "github", "shop", "staff"
+            "discord", "github", "shop", "staff", "rules", "bee"
         };
        
         final SimplisticHandler simplistic = new SimplisticHandler();        

@@ -26,3 +26,8 @@ commands:
     staff:
         aliases: [ranks]
 
+    rules:
+        aliases: [laws]
+        
+    bee:
+        aliases: [beething]

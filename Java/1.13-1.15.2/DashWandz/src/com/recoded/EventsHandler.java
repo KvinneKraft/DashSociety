@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
@@ -65,7 +66,9 @@ public class EventsHandler implements Listener
                     DetonateFirework(location, Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), FireworkEffect.Type.BALL_LARGE);
                     DetonateFirework(location, Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), FireworkEffect.Type.BALL);
                     DetonateFirework(location, Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255)), FireworkEffect.Type.BURST);
-                
+                    
+                    arrow.getWorld().createExplosion(arrow.getLocation(), 1, true, true);
+                    
                     e.getEntity().remove();
                 };
             };
@@ -103,15 +106,52 @@ public class EventsHandler implements Listener
         
         else if (wand.equals(DashWandz.wands.get(0)))/*Firework Wand*/
         {
-            Arrow arrow = (Arrow) p.launchProjectile(Arrow.class);
+            Bukkit.getServer().getScheduler().runTaskAsynchronously
+            (
+                DashWandz.plugin,
+                
+                new Runnable()
+                {
+                    @Override public void run()
+                    {
+                        for (int arrow = 0; arrow < 8; arrow += 1)
+                        {
+                            Bukkit.getServer().getScheduler().runTask
+                            (
+                                DashWandz.plugin,
+                                
+                                new Runnable()
+                                {
+                                    @Override public void run()
+                                    {            
+                                        Arrow arrow = (Arrow) p.launchProjectile(Arrow.class);
 
-            arrow.setVelocity(p.getLocation().getDirection().multiply(1.2));
-            arrow.setKnockbackStrength(5);
-            arrow.setColor(Color.PURPLE);          
-            arrow.setPierceLevel(100);
-            arrow.setCritical(true);  
-            arrow.setFireTicks(60);            
-            arrow.setDamage(20);            
+                                        arrow.setVelocity(p.getLocation().getDirection().multiply(3));
+                                        arrow.setKnockbackStrength(5);
+                                        arrow.setColor(Color.PURPLE);          
+                                        arrow.setPierceLevel(100);
+                                        arrow.setCritical(true);  
+                                        arrow.setFireTicks(60);            
+                                        arrow.setDamage(20);     
+
+                                        p.playSound(p.getLocation(), Sound.ENTITY_WITHER_BREAK_BLOCK, 30, 30);
+                                    }
+                                }
+                            );
+                            
+                            try
+                            {
+                                Thread.sleep(100);
+                            } 
+                            
+                            catch (InterruptedException ex)
+                            {
+                                /*.-.*/
+                            }
+                        };
+                    }
+                }
+            );
         }
         
         else if (wand.equals(DashWandz.wands.get(1)))/*Lightning Wand*/
@@ -137,6 +177,9 @@ public class EventsHandler implements Listener
                                     @Override public void run()
                                     {
                                         location.getWorld().strikeLightning(location);
+                                        location.getWorld().createExplosion(location, 1, true, true);
+                                        
+                                        p.playSound(p.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 30, 30);
                                     };
                                 }
                             );
@@ -171,6 +214,8 @@ public class EventsHandler implements Listener
                                         fireball.setVelocity(p.getLocation().getDirection().multiply(1.5));
                                         fireball.setFallDistance(120);            
                                         fireball.setFireTicks(60);
+                                        
+                                        p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20, 20);
                                     };
                                 }
                             );
@@ -224,6 +269,8 @@ public class EventsHandler implements Listener
                                         {
                                             witherskull.setCharged(true);
                                         };
+                                        
+                                        p.playSound(p.getLocation(), Sound.ENTITY_WITHER_SHOOT, 30, 30);                                        
                                     };
                                 }
                             );
