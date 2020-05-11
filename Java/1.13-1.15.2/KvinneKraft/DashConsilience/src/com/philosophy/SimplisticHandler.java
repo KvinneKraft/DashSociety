@@ -4,6 +4,7 @@
 
 package com.philosophy;
 
+import java.util.HashMap;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,6 +20,8 @@ public class SimplisticHandler implements CommandExecutor
 {
     private final Location staff_house_location = new Location(Bukkit.getWorld("world"), 232.864, 71.50000, -256.045);
     private final Location rules_house_location = new Location(Bukkit.getWorld("world"), 240.939, 69, -212.038);
+    
+    public static final HashMap<Player, Location> back_locations = new HashMap<Player, Location>();
     
     @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
     {
@@ -50,6 +53,20 @@ public class SimplisticHandler implements CommandExecutor
         {
             p.sendMessage(Freya.color("&aYou have been teleported to the &erule house&a!"));
             p.teleport(rules_house_location);
+        }
+        
+        else if (l.contains("back"))
+        {
+            if (!back_locations.containsKey(p))
+            {
+                p.sendMessage(Freya.color("&cYou have no previous locations ;c"));
+                return false;
+            };
+            
+            p.sendMessage(Freya.color("&aYou have been teleported back to your previous location!"));
+            p.teleport((Location) back_locations.get(p));
+            
+            back_locations.remove(p);
         }
         
         else if (l.contains("bee") && p.isOp())

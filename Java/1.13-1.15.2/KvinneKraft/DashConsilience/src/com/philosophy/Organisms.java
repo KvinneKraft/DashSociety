@@ -14,10 +14,12 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Stray;
 import org.bukkit.entity.Wither;
@@ -50,12 +52,36 @@ public class Organisms
     
     public static void onEntityAttack(final EntityDamageByEntityEvent e)
     {
-        if (!(e.getEntity() instanceof Player))
+        final Entity damager = (Entity) e.getDamager();        
+        final Entity entity = (Entity) e.getEntity();
+        
+        if (entity instanceof LivingEntity)
+        {
+            final LivingEntity living_entity = (LivingEntity) entity;
+            
+            if (damager instanceof Snowball)
+            {
+                living_entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 4 * 20, 1));                
+                living_entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2 * 20, 1));
+            }
+        
+            else if (damager instanceof Egg)
+            {
+                if (rand.nextInt(1000) < 250)
+                {
+                    living_entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 4 * 20, 4));                    
+                    living_entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, 1));      
+                };
+            };
+            
+            return;
+        };
+        
+        if (!(entity instanceof Player))
         { 
             return;
         };
         
-        final Entity damager = (Entity) e.getDamager();
         final Player victim = (Player) e.getEntity();
         
         if (e.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE) || damager instanceof Arrow)

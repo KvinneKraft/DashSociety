@@ -31,3 +31,6 @@ commands:
         
     bee:
         aliases: [beething]
+        
+    back:
+        aliases: [beck]

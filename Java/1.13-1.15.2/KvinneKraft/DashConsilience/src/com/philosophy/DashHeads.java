@@ -50,7 +50,7 @@ public class DashHeads
             
             final Random r = new Random();
             
-            k.sendMessage(Freya.color("&eYou have been given &6&l" + take_price + "&6$ &efor killing &6" + p.getName() + "&e!"));
+            k.sendMessage(Freya.color("&eYou have been given &6&l150&6$ &efor killing &6" + p.getName() + "&e!"));
             
             if (r.nextInt() < 40)
             {
