@@ -4,9 +4,7 @@
 
 package dash.recoded;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,6 +38,8 @@ public class ChatCooldowns extends JavaPlugin implements Listener, CommandExecut
     
     private void LoadConfiguration()
     {
+        saveDefaultConfig();
+        
         plugin.reloadConfig();
         config = (FileConfiguration) plugin.getConfig();
         

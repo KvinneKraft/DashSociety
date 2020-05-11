@@ -36,6 +36,8 @@ public class SocialSpy extends JavaPlugin implements Listener,CommandExecutor
     
     private void LoadConfiguration()
     {
+        saveDefaultConfig();
+        
         plugin.reloadConfig();
         config = (FileConfiguration) plugin.getConfig();
         

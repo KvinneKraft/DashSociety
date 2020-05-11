@@ -11,6 +11,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Cod;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Salmon;
 import org.bukkit.entity.TropicalFish;
@@ -78,6 +79,78 @@ public class Consilience extends JavaPlugin
             
             0,
             280 * 20
+        );
+        
+        getServer().getScheduler().runTaskLaterAsynchronously
+        (
+            plugin,
+            
+            new Runnable()
+            {
+                @Override public void run()
+                {
+                    getServer().getScheduler().runTask
+                    (
+                        plugin,
+
+                        new Runnable()
+                        {
+                            @Override public void run()
+                            {
+                                getServer().broadcastMessage(Freya.color("&e&oAnyone with over &6&l25.000&6$ &e&oin-game money will be charged with 15% taxes with in the next 1 minute! A restart will follow!"));
+                            };
+                        }
+                    );                    
+                    
+                    try
+                    {
+                        Thread.sleep(60000);
+                    } 
+                    
+                    catch (InterruptedException ex)
+                    {
+                        // Just, no!
+                    };
+                   
+                    for (final Player p : getServer().getOnlinePlayers())
+                    {
+                        if (econ.getBalance(p) > 25000)
+                        {
+                            getServer().getScheduler().runTask
+                            (
+                                plugin,
+                                
+                                new Runnable()
+                                {
+                                    @Override public void run()
+                                    {
+                                        final double amount = econ.getBalance(p) * 0.15;
+                                        
+                                        p.sendMessage(Freya.color("&aYou have paid &6&l" + (int) amount + "&6$ &afor taxes, thank you!"));
+                                        
+                                        econ.withdrawPlayer(p, amount);
+                                    };
+                                }
+                            );
+                        };
+                    };
+                    
+                    getServer().getScheduler().runTask
+                    (
+                        plugin,
+
+                        new Runnable()
+                        {
+                            @Override public void run()
+                            {
+                                getServer().dispatchCommand(getServer().getConsoleSender(), "restart");
+                            };
+                        }
+                    );                      
+                };
+            },
+                
+            20 * 86400
         );
         
         Freya.print("Done!");

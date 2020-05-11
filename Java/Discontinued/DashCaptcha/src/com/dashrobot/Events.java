@@ -132,8 +132,7 @@ public class Events implements Listener
     boolean dash_join, once_verify;
     
     
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e)
+    @EventHandler public void onPlayerJoin(PlayerJoinEvent e)
     {
         Player p = e.getPlayer();        
         
@@ -200,8 +199,7 @@ public class Events implements Listener
     int maximum_attempts;        
     
     
-    @EventHandler
-    public void onPlayerCloseInventory(InventoryCloseEvent e)
+    @EventHandler public void onPlayerCloseInventory(InventoryCloseEvent e)
     {        
         Player p = (Player)e.getPlayer();        
         
@@ -222,45 +220,6 @@ public class Events implements Listener
                 
             4
         );
-    };
-    
-    
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent e)
-    {
-        if(verification_cache.containsKey(e.getPlayer()))
-        {        
-            if(block_chat)
-            {
-                e.setCancelled(block_chat);
-            };
-        };
-    };
-    
-    
-    @EventHandler
-    public void onPlayerCommand(PlayerCommandPreprocessEvent e)
-    {
-        if(verification_cache.containsKey(e.getPlayer()))
-        {        
-            if(block_command)
-            {
-                e.setCancelled(block_command);
-            };
-        };
-    };
-    
-    
-    @EventHandler
-    public void onPlayerMovement(PlayerMoveEvent e)
-    {
-        if(verification_cache.containsKey(e.getPlayer()))
-        {
-            if(block_movement)
-            {
-                e.setCancelled(block_movement);
-            };
-        };
     };
     
     
@@ -366,7 +325,43 @@ public class Events implements Listener
     
     
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e)
+    public void onPlayerChat(AsyncPlayerChatEvent e)
+    {
+        if(verification_cache.containsKey(e.getPlayer()))
+        {        
+            if(block_chat)
+            {
+                e.setCancelled(block_chat);
+            };
+        };
+    };
+    
+    
+    @EventHandler public void onPlayerCommand(PlayerCommandPreprocessEvent e)
+    {
+        if(verification_cache.containsKey(e.getPlayer()))
+        {        
+            if(block_command)
+            {
+                e.setCancelled(block_command);
+            };
+        };
+    };
+    
+    
+    @EventHandler public void onPlayerMovement(PlayerMoveEvent e)
+    {
+        if(verification_cache.containsKey(e.getPlayer()))
+        {
+            if(block_movement)
+            {
+                e.setCancelled(block_movement);
+            };
+        };
+    };
+    
+    
+    @EventHandler public void onInventoryClick(InventoryClickEvent e)
     {
         Player p = (Player) e.getWhoClicked();        
         ItemStack i = e.getCurrentItem();
