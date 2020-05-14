@@ -11,6 +11,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Cod;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Salmon;
@@ -36,7 +37,7 @@ public class Consilience extends JavaPlugin
         
         final String[] commands = new String[] 
         { 
-            "discord", "github", "shop", "staff", "rules", "bee", "back"
+            "discord", "github", "shop", "staff", "rules", "bee", "back", "whyvote"
         };
        
         final SimplisticHandler simplistic = new SimplisticHandler();        
@@ -58,7 +59,7 @@ public class Consilience extends JavaPlugin
                 { 
                     for (final Entity entity : getServer().getWorld("world").getEntities())
                     {
-                        if (entity instanceof Salmon || entity instanceof PufferFish || entity instanceof TropicalFish || entity instanceof Cod)
+                        if (entity instanceof Salmon || entity instanceof PufferFish || entity instanceof TropicalFish || entity instanceof Cod || entity instanceof Item)
                         {
                             getServer().getScheduler().runTask
                             (
@@ -81,7 +82,7 @@ public class Consilience extends JavaPlugin
             280 * 20
         );
         
-        getServer().getScheduler().runTaskLaterAsynchronously
+        getServer().getScheduler().runTaskTimerAsynchronously
         (
             plugin,
             
@@ -97,60 +98,51 @@ public class Consilience extends JavaPlugin
                         {
                             @Override public void run()
                             {
-                                getServer().broadcastMessage(Freya.color("&e&oAnyone with over &6&l25.000&6$ &e&oin-game money will be charged with 15% taxes with in the next 1 minute! A restart will follow!"));
+                                getServer().broadcastMessage(Freya.color("&aAnyone with over &6&l25.000$ &ain-game money will be charged with &6&l8% &ataxes with in the next 1 minute!"));
                             };
                         }
                     );                    
                     
-                    try
-                    {
-                        Thread.sleep(60000);
-                    } 
-                    
-                    catch (InterruptedException ex)
-                    {
-                        // Just, no!
-                    };
-                   
-                    for (final Player p : getServer().getOnlinePlayers())
-                    {
-                        if (econ.getBalance(p) > 25000)
-                        {
-                            getServer().getScheduler().runTask
-                            (
-                                plugin,
-                                
-                                new Runnable()
-                                {
-                                    @Override public void run()
-                                    {
-                                        final double amount = econ.getBalance(p) * 0.15;
-                                        
-                                        p.sendMessage(Freya.color("&aYou have paid &6&l" + (int) amount + "&6$ &afor taxes, thank you!"));
-                                        
-                                        econ.withdrawPlayer(p, amount);
-                                    };
-                                }
-                            );
-                        };
-                    };
-                    
-                    getServer().getScheduler().runTask
+                    getServer().getScheduler().runTaskLaterAsynchronously
                     (
-                        plugin,
-
+                        Consilience.plugin,
+                            
                         new Runnable()
                         {
                             @Override public void run()
                             {
-                                getServer().dispatchCommand(getServer().getConsoleSender(), "restart");
+                                for (final Player p : getServer().getOnlinePlayers())
+                                {
+                                    if (econ.getBalance(p) > 25000)
+                                    {
+                                        getServer().getScheduler().runTask
+                                        (
+                                            plugin,
+
+                                            new Runnable()
+                                            {
+                                                @Override public void run()
+                                                {
+                                                    final double amount = econ.getBalance(p) * 0.08;
+
+                                                    p.sendMessage(Freya.color("&aYou have paid &6&l" + (int) amount + "&6$ &afor taxes, thank you!"));
+
+                                                    econ.withdrawPlayer(p, amount);
+                                                };
+                                            }
+                                        );
+                                    };
+                                };
                             };
-                        }
-                    );                      
+                        },
+                            
+                        60 * 20
+                    );                  
                 };
             },
-                
-            20 * 86400
+            
+            60 * 30,
+            (60 * 60) * 20
         );
         
         Freya.print("Done!");
@@ -158,6 +150,7 @@ public class Consilience extends JavaPlugin
     
     @Override public void onDisable()
     {
+        getServer().getScheduler().cancelTasks(plugin);
         Freya.print("Oh, I have been terminated.");
     };
 };

@@ -33,7 +33,19 @@ public class SimplisticHandler implements CommandExecutor
         final String l = c.toString().toLowerCase();
         final Player p = (Player) s;        
         
-        if(l.contains("github"))
+        if (l.contains("whyvote"))
+        {
+            p.sendMessage(Freya.color("&7Hey there, thank you for checking this one out."));
+            p.sendMessage(" ");
+            p.sendMessage(Freya.color("&7We appreciate your votes because it makes us able"));
+            p.sendMessage(Freya.color("&7to say that we are doing a good job, a well community"));
+            p.sendMessage(Freya.color("&7makes a well founder, I would say."));
+            p.sendMessage(" ");
+            p.sendMessage(Freya.color("&7Your votes makes us noticable and in return do you"));
+            p.sendMessage(Freya.color("&7get something cool, some in-game money or some items!"));
+        }
+        
+        else if (l.contains("github"))
         {
             p.sendMessage(Freya.color("&eHey there, you can find some of my work at &dhttps://github.com/KvinneKraft &e!"));
         }

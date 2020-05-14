@@ -16,7 +16,9 @@ import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Snowball;
@@ -262,6 +264,16 @@ public class Organisms
         {
             entity.setMaxHealth(20);
             entity.setHealth(20);
+            
+            return;
+        };
+        
+        if (entity instanceof Pillager)
+        {
+            entity.setMaxHealth(45);
+            entity.setHealth(45);
+            
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999 * 20, 2));
             
             return;
         };
