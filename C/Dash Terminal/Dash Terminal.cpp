@@ -18,10 +18,17 @@ using namespace std;
 DashSociety::Manipulation manp;
 DashSociety::FileSystem fsys;
 
-extern string directory = ("C:\\Windows\\System32");
+extern string directory = ("DEFAULT");
 
 extern void ShellExecution()
 {
+    manp.clear();
+
+    if (directory == "DEFAULT")
+    {
+	directory = fsys.getdir();
+    };
+
     string buff;
 
     for ( ; ; )
@@ -43,7 +50,8 @@ extern void ShellExecution()
 	{
 	    if (args.size() < 2)
 	    {
-		cout << "(!) Usage: \'mkdir C:\\Users\\Dashie\\ Lunare\\Desktop\\Folder\'\n";
+		cout << "(!) Usage: \'mkdir C:\\Users\\Dashie/Lunare\\Desktop\\Folder\'\n";
+		cout << "(!) Note: Adding \'/\' instead of a space is recommended!\n";
 		continue;
 	    };
 
@@ -64,7 +72,7 @@ extern void ShellExecution()
 
 		case DashSociety::FileSystem::FILE_SYSTEM_ERROR::DIRECTORY_EXISTS:
 		{
-		    cout << "(!) The directory already exists.\n";
+		    cout << "(!) This directory already exists.\n";
 		    break;
 		};
 
@@ -86,16 +94,20 @@ int main(void)
 {
     if (!auth.SignIn())
     {
+	manp.clear();
+
 	cout << "(!) Odin has closed the gates of Valhala infront of you!\n";
 	cout << "(!) You will have to close this application in order to retry, press enter to continue.";
 
-	string key;
-	getline(cin, key);
-
-	return -1;
+	string key; getline(cin, key); exit(-1);
     };
 
-    cout << "(~) Welcome back " + auth.username + ", blessed be )o(!\n";
+    cout << "(+) Welcome back " + auth.username + ", blessed be )o(\n";
+    cout << "(+) Please wait while I am doing some last thingies ....\n";
+
+    SetConsoleTitle(TEXT("Dash Terminal - By Dashie A.K.A. Kvinne Kraft"));
+
+    Sleep(3500);
 
     ShellExecution();
 };

@@ -177,7 +177,7 @@ public class AutoBroadcaster extends JavaPlugin implements CommandExecutor
             
             for (final String line : as)
             {
-                message += line;
+                message += line + " ";
             };
             
             getServer().broadcastMessage(color(message));

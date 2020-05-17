@@ -37,7 +37,9 @@ namespace DashSociety
 		return FILE_SYSTEM_ERROR::DIRECTORY_EXISTS;
 	    };
 
-	    CreateDirectory(dir, NULL);
+	    Manipulation manp;
+
+	    CreateDirectory(manp.replace("/", " ", string(dir)).c_str(), NULL);
 
 	    if (direxist(dir))
 	    {
@@ -48,6 +50,13 @@ namespace DashSociety
 	    {
 		return FILE_SYSTEM_ERROR::OTHER_ERROR;
 	    };
+	};
+
+	string getdir()
+	{
+	    TCHAR currdir[MAX_PATH];
+	    GetCurrentDirectory(MAX_PATH, currdir);
+	    return string(currdir);
 	};
     };
 };
