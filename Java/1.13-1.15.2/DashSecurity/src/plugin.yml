@@ -9,4 +9,12 @@ version: 1.0
 author: [Dashie,KvinneKraft,Freya,WitchCraft,Dash]
 name: DashSecSE
 
+commands:
+    login:
+        aliases: [signin, log, auth]
+    register:
+        aliases: [reg, regis]
+    resetpassword:
+        aliases: [resetlogin, respass, resetpass]
+
 # Dash Security Special Edition <--

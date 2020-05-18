@@ -4,15 +4,6 @@
 #
 ###################################################
 #
-# Features:
-# Dash Captcha (Prevent none human users)
-# Dash Login and Register (Login and register your account)
-# UUID Support (Support both premium and cracked accounts)
-# Chat Text Verification (Like the captcha but then a hash rather than an item)
-# IP Lock (Only able to login using the specified ips)
-#
-###################################################
-#
 # Are you afraid of people hijacking your account?
 # This option will make them unable to login even when they
 # have your login credentials, this will compare the ip address
