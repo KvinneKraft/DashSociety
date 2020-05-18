@@ -98,7 +98,7 @@ public class Consilience extends JavaPlugin
                         {
                             @Override public void run()
                             {
-                                getServer().broadcastMessage(Freya.color("&aAnyone with over &6&l25.000$ &ain-game money will be charged with &6&l8% &ataxes with in the next 1 minute!"));
+                                getServer().broadcastMessage(Freya.color("&aAnyone with over &6&l15.000$ &ain-game money will be charged with &6&l8.5% &ataxes with in the next 1 minute!"));
                             };
                         }
                     );                    
@@ -113,7 +113,7 @@ public class Consilience extends JavaPlugin
                             {
                                 for (final Player p : getServer().getOnlinePlayers())
                                 {
-                                    if (econ.getBalance(p) > 25000)
+                                    if (econ.getBalance(p) > 15000)
                                     {
                                         getServer().getScheduler().runTask
                                         (
@@ -123,7 +123,7 @@ public class Consilience extends JavaPlugin
                                             {
                                                 @Override public void run()
                                                 {
-                                                    final double amount = econ.getBalance(p) * 0.08;
+                                                    final double amount = econ.getBalance(p) * 0.085;
 
                                                     p.sendMessage(Freya.color("&aYou have paid &6&l" + (int) amount + "&6$ &afor taxes, thank you!"));
 

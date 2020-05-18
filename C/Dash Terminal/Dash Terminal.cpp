@@ -18,6 +18,8 @@ using namespace std;
 DashSociety::Manipulation manp;
 DashSociety::FileSystem fsys;
 
+#include"DashCore/Pony.h"
+
 extern string directory = ("DEFAULT");
 
 extern void ShellExecution()
@@ -92,6 +94,10 @@ DashSociety::Authentication auth;
 
 int main(void)
 {
+    DashSociety::PonyGame game;
+
+    game.play();
+
     if (!auth.SignIn())
     {
 	manp.clear();

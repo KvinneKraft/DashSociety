@@ -159,6 +159,7 @@
     <ClInclude Include="DashCore\Authentication.h" />
     <ClInclude Include="DashCore\FileSystem.h" />
     <ClInclude Include="DashCore\Manipulation.h" />
+    <ClInclude Include="DashCore\Pony.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,236 +1,150 @@
+#pragma once
 
 namespace DashSociety
 {
     class Manipulation
     {
     public:
-		void clear()
+	void clear()
+	{
+	    CONSOLE_SCREEN_BUFFER_INFO info;
+
+	    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+
+	    auto const& widthy = (info.srWindow.Right - info.srWindow.Left + 1);
+	    auto const& height = (info.srWindow.Bottom - info.srWindow.Top + 1);
+
+	    for (int s = 0, x = 0, y = 0; s < (widthy * height); s += 1, x += 1)
+	    {
+		if (x == widthy)
 		{
-			HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-			CONSOLE_SCREEN_BUFFER_INFO info;
-
-			GetConsoleScreenBufferInfo(handle, &info);
-
-			auto const& widthy = (info.srWindow.Right - info.srWindow.Left + 1);
-			auto const& height = (info.srWindow.Bottom - info.srWindow.Top + 1);
-
-			COORD posixy;
-
-			for (int s = 0, x = 0, y = 0; s < (widthy * height); s += 1, x += 1)
-			{
-				if (x == widthy)
-				{
-					y += 1;
-					x = 0;
-				};
-
-				posixy.X = x;
-				posixy.Y = y;
-
-				SetConsoleCursorPosition(handle, posixy);
-				printf(" ");
-			};
-
-			posixy.X = 0;
-			posixy.Y = 0;
-
-			SetConsoleCursorPosition(handle, posixy);
+		    y += 1;
+		    x = 0;
 		};
 
-		void setCursorPos(int const& x, int const& y)
+		setCursorPos(x, y);
+		printf(" ");
+	    };
+
+	    setCursorPos(0, 0);
+	};
+
+	void setCursorPos(int x, int y)
+	{   
+	    if (x < 0 || y < 0)
+	    {
+		CONSOLE_SCREEN_BUFFER_INFO info;
+
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+
+		if (x < 0)
 		{
-			auto const& handle = GetStdHandle(STD_OUTPUT_HANDLE);
-			COORD posixy;
-
-			if (x < 0 || y < 0)
-			{
-				CONSOLE_SCREEN_BUFFER_INFO info;
-
-				GetConsoleScreenBufferInfo(handle, &info);
-
-				if (x < 0)
-				{
-					x = (info.srWindow.Right - info.srWindow.Left + 1) / 2;
-				};
-				
-				if (y < 0)
-				{
-					y = (info.srWindow.Bottom - info.srWindow.Top + 1) / 2;				
-				};
-			};
-
-			posixy.x = x;
-			posixy.y = y;
-
-			SetConsoleCursorPosition(handle, posixy);
+		    x = (info.srWindow.Right - info.srWindow.Left + 1) / 2;
 		};
 
-		void play()
+		if (y < 0)
 		{
-			CONSOLE_SCREEN_BUFFER_INFO info;
+		    y = (info.srWindow.Bottom - info.srWindow.Top + 1) / 2;
+		};
+	    };
 
-			GetConsoleScreenBufferInfo(handle, &info);
+	    COORD posixy;
 
-			auto const& buff_widthy = (info.srWindow.Right - info.srWindow.Left + 1);
-			auto const& buff_height = (info.srWindow.Bottom - info.srWindow.Top + 1);			
+	    posixy.X = x;
+	    posixy.Y = y;
 
-			int x = 0, y = 0;
+	    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), posixy);
+	};
 
-			auto const& STICK_MAN = (
-				"  ###" 
-				"  ###"
-				"   #"//Perhaps make a pony animation?
-				" #####"
-				"#  #  #"
-				"#  #  #"
-				"  ###"
-				" #   #"
-				" #   #"				
-			);
+	vector<string> split(const string& data, const char& hit)
+	{
+	    vector<string> result;
+	    string buffer;
 
-			while (true)
-			{
-				switch (_getch())
-				{
-					case 'W':
-					case 'w':
-					{
-						if (y < buff_height)
-						{
-							y += 1;
-						};
+	    auto const &len = (const int)data.length();
 
-						break;
-					};
+	    for (auto id = 0; id < len; id += 1)
+	    {
+		if (data[id] == hit)
+		{
+		    result.push_back(buffer);
+		    buffer = "";
 
-					case 'S':
-					case 's':
-					{
-						if (y > 0)
-						{
-							y -= 1;
-						};
-
-						break;
-					};
-
-					case 'D':
-					case 'd':
-					{
-						if (x < buff_widthy)
-						{
-							x += 1;
-						};
-
-						break;
-					};
-
-					case 'A':
-					case 'a':
-					{
-						if (x > 0)
-						{
-							x -= 1;
-						};
-
-						break;
-					};															
-				};
-
-				setCursorPos(x, y);
-				cout << STICK_MAN;// Create a Wipe Character function 
-			};
+		    continue;
 		};
 
-		vector<string> split(const string& data, const char& hit)
+		buffer += data[id];
+
+		if (id == len - 1)
 		{
-			vector<string> result;
-			string buffer;
+		    result.push_back(buffer);
+		    break;
+		};
+	    };
 
-			auto const &len = (const int)data.length();
+	    return result;
+	};
 
-			for (auto id = 0; id < len; id += 1)
-			{
-				if (data[id] == hit)
-				{
-					result.push_back(buffer);
-					buffer = "";
+	string replace(const string& from, const string& to, const string& data)
+	{
+	    string result;
 
-					continue;
-				};
+	    if (from.length() > 1)
+	    {
+		vector<string> words = split(data, ' ');
 
-				buffer += data[id];
+		for (auto const& word : words)
+		{
+		    if (word == from)
+		    {
+			result += to + " ";
+		    }
 
-				if (id == len - 1)
-				{
-					result.push_back(buffer);
-					break;
-				};
-			};
-
-			return result;
+		    else
+		    {
+			result += word + " ";
+		    };
 		};
 
-		string replace(const string& from, const string& to, const string& data)
+		return result += "\b";
+	    }
+
+	    else//Assuming 1 length
+	    {
+		result = data;
+
+		for (int id = 0; id < (signed)result.length(); id += 1)
 		{
-			string result;
-
-			if (from.length() > 1)
-			{
-				vector<string> words = split(data, ' ');
-
-				for (auto const& word : words)
-				{
-					if (word == from)
-					{
-					result += to + " ";
-					}
-
-					else
-					{
-					result += word + " ";
-					};
-				};
-
-				return result += "\b";
-			}
-
-			else//Assuming 1 length
-			{
-				result = data;
-
-				for (int id = 0; id < (signed) result.length(); id += 1)
-				{
-					if (result[id] == from[0])
-					{
-						result[id] = to[0];
-					};
-				};
-
-				return result;
-			};
+		    if (result[id] == from[0])
+		    {
+			result[id] = to[0];
+		    };
 		};
 
-		string tolower(string data)
+		return result;
+	    };
+	};
+
+	string tolower(string data)
+	{
+	    if (data.length() < 1)
+	    {
+		return "ERROR: NO DATA GIVEN!";
+	    };
+
+	    std::transform
+	    (
+		data.begin(),
+		data.end(),
+		data.begin(),
+
+		[](unsigned char c)
 		{
-			if (data.length() < 1)
-			{
-				return "ERROR: NO DATA GIVEN!";
-			};
+		    return std::tolower(c);
+		}
+	    );
 
-			std::transform
-			(
-				data.begin(),
-				data.end(),
-				data.begin(),
-
-				[](unsigned char c)
-				{
-					return std::tolower(c);
-				}
-			);
-
-			return data;
-		};
+	    return data;
+	};
     };
 };
