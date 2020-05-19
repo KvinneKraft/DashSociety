@@ -5,7 +5,9 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -202,6 +204,86 @@ public class bandaids extends JavaPlugin implements CommandExecutor, Listener
         );
         
         players.add(p);
+    };
+    
+    @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
+    {
+        if (!(s instanceof Player))
+        {
+            return false;
+        };
+        
+        final Player p = (Player) s;
+        
+        if (!p.hasPermission(admn_p))
+        {
+            p.sendMessage(color("&cYou may not use this command!"));
+            return false;
+        };
+        
+        if (as.length > 0 && as[0].equalsIgnoreCase("reload"))
+        {
+            p.sendMessage(color("&eReloading configuration ...."));
+            
+            LoadConfiguration();
+            
+            p.sendMessage(color("&eSuccess!"));
+        }
+        
+        else if(as.length > 0 && as[0].equalsIgnoreCase("give"))
+        {
+            Player receiver = p;            
+            int amount = 1;
+            
+            if (as.length >= 1)
+            {
+                try
+                {
+                    amount = Integer.valueOf(as[1]);
+                }
+                
+                catch (final Exception e)
+                {
+                    p.sendMessage(color("&cThe amount specified must be numeric!"));
+                    return false;
+                };
+            };
+            
+            if (as.length >= 2)
+            {
+                receiver = (Player) getServer().getPlayerExact(as[2]);
+                
+                if (p == null)
+                {
+                    p.sendMessage(color("&cThe player must be online!"));
+                    return false;
+                };
+            };
+            
+            final ItemStack item = bandaid; 
+            
+            item.setAmount(amount);
+            receiver.getInventory().addItem(item);
+            
+            if (p.equals(receiver))
+            {
+                p.sendMessage(color("&eYou have successfully given yourself &b" + amount + " &ebandaids!"));
+            }
+            
+            else 
+            {
+                receiver.sendMessage(color("&eYou have been given &b" + amount + " &ebandaids!"));
+                p.sendMessage(color("&eYou have given &6" + receiver.getName() + " &b" + amount + " &ebandaids!"));            
+            };
+        }
+        
+        else 
+        {
+            p.sendMessage(color("&cCorrect usage: &4/betterbandaids [reload | give] <amount> <player>"));
+            return false;
+        };
+        
+        return true;
     };
     
     @Override public void onDisable()
