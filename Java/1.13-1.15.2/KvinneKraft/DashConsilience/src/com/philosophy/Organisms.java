@@ -14,9 +14,10 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Husk;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
@@ -29,7 +30,6 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -75,11 +75,9 @@ public class Organisms
                     living_entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, 1));      
                 };
             };
-            
-            return;
-        };
+        }
         
-        if (!(entity instanceof Player))
+        else if (!(entity instanceof Player))
         { 
             return;
         };
@@ -90,14 +88,14 @@ public class Organisms
         {
             final Arrow arrow = (Arrow) e.getDamager();
             
-            if (!(arrow.getShooter() instanceof Stray) && !(arrow.getShooter() instanceof Skeleton))
+            if (!(arrow.getShooter() instanceof Stray) && !(arrow.getShooter() instanceof Skeleton) && !(arrow.getShooter() instanceof Pillager))
             {
                 return;
             };        
             
             final int chance = rand.nextInt(BASE_PERCENTAGE);
 
-            if (chance <= 200)
+            if (chance <= 800)
             {
                 victim.addPotionEffect
                 (
@@ -111,33 +109,30 @@ public class Organisms
                 );
             };
             
-            if (chance <= 50)
+            if (chance <= 75)
             {
-                damager.getWorld().createExplosion(damager.getLocation(), 4, false, false);
+                damager.getWorld().createExplosion(damager.getLocation(), 10, false, false);
             };            
 
             return;
-        };        
+        }        
 
-        if (damager instanceof CaveSpider)
+        else if (damager instanceof CaveSpider)
         {
             victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 8 * 20, 4));
-        };
+        }
         
-        if (damager instanceof Spider)
+        else if (damager instanceof Spider)
         {
             victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 4));
             victim.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 4 * 20, 4));
-        };
+        }
         
-        if (damager instanceof Zombie)
+        else if (damager instanceof Zombie || damager instanceof Husk || damager instanceof Drowned)
         {
-            if (rand.nextInt(BASE_PERCENTAGE) < 400)
+            if (rand.nextInt(BASE_PERCENTAGE) < 800)
             {
-                for (int i = 0; i <= rand.nextInt(effects.size()); i += 1)
-                {
-                    victim.addPotionEffect(effects.get(rand.nextInt(effects.size())));
-                };
+                victim.addPotionEffect(effects.get(rand.nextInt(effects.size())));
             };
         };
     };
@@ -215,7 +210,7 @@ public class Organisms
             return;
         };
         
-        if (entity instanceof Skeleton)
+        if (entity instanceof Skeleton || entity instanceof Stray || entity instanceof Pillager)
         {
             if (rand.nextInt(BASE_PERCENTAGE) < 5)
             {
@@ -235,10 +230,18 @@ public class Organisms
                 equipment.setItemInMainHand(bow);
             };
             
+            if (entity instanceof Pillager)
+            {
+                entity.setMaxHealth(45);
+                entity.setHealth(45);
+
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999 * 20, 2));
+            };            
+            
             return;
         };
         
-        if (entity instanceof Zombie)
+        if (entity instanceof Zombie || entity instanceof Husk)
         {
             if (rand.nextInt(BASE_PERCENTAGE) < 15)
             {
@@ -267,48 +270,5 @@ public class Organisms
             
             return;
         };
-        
-        if (entity instanceof Pillager)
-        {
-            entity.setMaxHealth(45);
-            entity.setHealth(45);
-            
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999 * 20, 2));
-            
-            return;
-        };
-    };
-    
-    public static void onEntityTarget(final EntityTargetEvent e)
-    {
-        Bukkit.getScheduler().runTaskAsynchronously
-        (
-            Consilience.plugin, 
-                
-            new Runnable() 
-            { 
-                @Override public void run() 
-                {
-                    final Entity entity = (Entity) e.getEntity();
-
-                    if (entity instanceof Bee)
-                    {
-                        final Bee bee = (Bee) entity;
-
-                        if (bee.getCustomName() != null)
-                        {
-                            final Player target = (Player) Bukkit.getPlayerExact(bee.getCustomName());
-
-                            if (target != null && target.isOnline())
-                            {
-                                bee.setTarget(((LivingEntity) target));
-                            };
-                        };
-                    };
-                };
-            }
-        );
-        
-        return;
     };
 };

@@ -57,11 +57,6 @@ public class EventsHandler implements Listener
         Organisms.onEntitySpawn(e);
     };
     
-    @EventHandler public void onCreatureTarget(final EntityTargetEvent e)
-    {
-        Organisms.onEntityTarget(e);
-    };
-    
     private boolean scramblerActive = false, canScramble = false;
     private String scrambleWord, scrambleWordAnswer;
     
@@ -69,13 +64,13 @@ public class EventsHandler implements Listener
     (
         new String[]
         {
-            "KylesEgg", "Economy", "Conclusive", "Theoretical", "Interpretation",
+            "BirdEgg", "Economy", "Conclusive", "Theoretical", "Interpretation",
             "TurdNuggets", "Dashie", "Philosophical", "Philosophy", "Nostalgia",
             "FluffyBalls", "ILoveYou", "Busses", "Maggots", "Worlds", "FlippingChair",
             "Decisive", "Listener", "MobsAreCool", "ThisIsAHardOneToSolve", "Yes",
             "Tremendous", "Globalization", "WorldOrder", "DashSociety", "KvinneKraft",
             "FlyingNuts", "Walnut", "HeIsAWurm", "YouCanNotGuessThis", "ILOVEYOU", 
-            "Metaphorical", "Anthropologist", "Metaphysicist", "Metacorporal", "C++"
+            "Metaphorical", "Anthropologist", "Metaphysicist", "Metacorporal", "CIsBabe"
         }
     );    
     

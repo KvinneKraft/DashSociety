@@ -76,7 +76,7 @@ public class bandaids extends JavaPlugin implements CommandExecutor, Listener
             
             try
             {
-                PotionEffect effect = new PotionEffect(PotionEffectType.getByName(arr[0].toUpperCase()), Integer.valueOf(arr[1]), Integer.valueOf(arr[2]));
+                PotionEffect effect = new PotionEffect(PotionEffectType.getByName(arr[0].toUpperCase()), Integer.valueOf(arr[2]) * 20, Integer.valueOf(arr[1]) - 1);
                 
                 if (effect == null)
                 {
@@ -136,12 +136,24 @@ public class bandaids extends JavaPlugin implements CommandExecutor, Listener
     {
         final Player p = (Player) e.getPlayer();
         
-        if (p.getInventory().getItemInMainHand() != bandaid)
+        if (p.getInventory().getItemInMainHand() == null)
         {
             return;
         }
         
-        else if (!p.hasPermission(cons_p))
+        else
+        {
+            final ItemStack comparison = bandaid;
+       
+            comparison.setAmount(p.getInventory().getItemInMainHand().getAmount());
+            
+            if (!p.getInventory().getItemInMainHand().equals(comparison))
+            {
+                return;
+            };
+        };
+        
+        if (!p.hasPermission(cons_p))
         {
             p.sendMessage(messages.get(1));
             return;
@@ -235,7 +247,7 @@ public class bandaids extends JavaPlugin implements CommandExecutor, Listener
             Player receiver = p;            
             int amount = 1;
             
-            if (as.length >= 1)
+            if (as.length >= 2)
             {
                 try
                 {
@@ -249,7 +261,7 @@ public class bandaids extends JavaPlugin implements CommandExecutor, Listener
                 };
             };
             
-            if (as.length >= 2)
+            if (as.length >= 3)
             {
                 receiver = (Player) getServer().getPlayerExact(as[2]);
                 
