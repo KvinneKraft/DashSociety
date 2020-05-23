@@ -7,11 +7,9 @@ package com.philosophy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Bee;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Drowned;
@@ -82,7 +80,7 @@ public class Organisms
             return;
         };
         
-        final Player victim = (Player) e.getEntity();
+        final Player victim = (Player) entity;
         
         if (e.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE) || damager instanceof Arrow)
         {

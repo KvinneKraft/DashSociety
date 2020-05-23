@@ -17,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -38,7 +37,10 @@ public class EventsHandler implements Listener
     
     @EventHandler public void onPlayerDeath(final PlayerDeathEvent e)
     {
-        SimplisticHandler.back_locations.put((Player) e.getEntity(), (Location) e.getEntity().getLocation());          
+        SimplisticHandler.back_locations.put((Player) e.getEntity(), (Location) e.getEntity().getLocation());       
+        
+        e.getEntity().sendMessage(Freya.color("&7Ssshhhh, type &8/back &7to go back to your death location!"));
+        
         DashHeads.onDeath(e);
     };
     
@@ -191,6 +193,16 @@ public class EventsHandler implements Listener
         {
             e.setMessage(Freya.color("&e" + e.getMessage()));
         }
+        
+        else if (p.getName().toLowerCase().equals("jorrit777"))
+        {
+            e.setMessage(Freya.color("&9" + e.getMessage()));
+        }
+        
+        else if (p.getName().toLowerCase().equals("leonie42"))
+        {
+            e.setMessage(Freya.color("&9" + e.getMessage()));
+        }        
         
         else if (p.getName().toLowerCase().equals("siul200311"))
         {

@@ -224,7 +224,11 @@ public class BetterRTP extends JavaPlugin
         
         if (do_fireworks)
         {
+            p.setInvulnerable(true);
+            
             DetonateFirework(location, Color.fromRGB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)), Color.fromRGB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)), FireworkEffect.Type.BURST);
+            
+            p.setInvulnerable(false);
         };
         
         if (do_sounds && sound != null)

@@ -17,7 +17,7 @@ public class Authenticate
     {
         Freya.color("&7&oI love you all, have fun on this server while"),
         Freya.color("&7&oit is still here, be nice and respectful to"),
-        Freya.color("&7&oothers and overall enjoy your time )o(")
+        Freya.color("&7&oothers and overall enjoy your time )o(\n")
     };
     
     public static void onPlayerJoin(PlayerJoinEvent e)
