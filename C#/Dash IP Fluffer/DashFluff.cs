@@ -49,8 +49,10 @@ namespace Dash_IP_Fluffer
 	}
 
 	private readonly PictureBox main_control_container = new PictureBox();
+	private readonly PictureBox ipbox_container = new PictureBox();
 	private readonly TextBox ipbox = new TextBox();
 	private readonly Button check = new Button();
+	private readonly Label iptext = new Label();
 
 	private readonly PictureBox optional_button_container = new PictureBox();
 	private readonly Button settings, attack, tools;
@@ -60,13 +62,43 @@ namespace Dash_IP_Fluffer
 	    SetupLayout();
 
 	    /*---[ Initializing Main Controls ]---*/
+	    Add.RuImage(this, main_control_container, null, new Size(350, 100), Point.Empty);
+
+	    try
+	    {
+		Add.RuImage(main_control_container, ipbox_container, null, new Size(175, 26), new Point(100, 1));
+
+		ipbox_container.BackColor = Color.FromArgb(223, 194, 255);
+		ipbox_container.Click += (s, e) => ipbox.Select();
+
+		Add.ZeTextBox(ipbox_container, ipbox, Size.Empty, Point.Empty, Color.FromArgb(255, 255, 255), ipbox_container.BackColor, "255.255.255.255:65535", Get.FONT_TYPE_MAIN, 12);
+
+		ipbox.Size = new Size(ipbox.PreferredSize.Width - 8, ipbox.PreferredSize.Height);
+		ipbox.Location = new Point((ipbox_container.Width - ipbox.Width) / 2, (ipbox_container.Height - ipbox.Height) / 2);
+
+		Add.ThaLabel(main_control_container, iptext, Point.Empty, Color.FromArgb(255, 255, 255), "Host:", Get.FONT_TYPE_CUTE, 15);
 	    
+		iptext.MaximumSize = new Size(50, ipbox_container.Height + 2);
+		iptext.MinimumSize = new Size(50, ipbox_container.Height + 2);
+		iptext.Location = new Point(ipbox_container.Left - iptext.Width, ipbox_container.Top - 1);
+
+		iptext.TextAlign = ContentAlignment.MiddleCenter;
+		iptext.BackColor = Get.menu_bar.BackColor;
+
+		main_control_container.Paint += (s, e) => Add.Rectangle(e, Get.menu_bar.BackColor, 2, ipbox_container.Size, ipbox_container.Location);
+	    }
+
+	    catch (Exception e)
+	    {
+		ErrorHandler(e);
+	    };
+	    
+	    main_control_container.Location = new Point((Width - main_control_container.Width) / 2, 45);
 
 	    /*---[ Initializing Optional Buttons ]---*/
 	    Add.RuImage(this, optional_button_container, null, new Size(320, 28), new Point(-1, -1));
 
 	    optional_button_container.BackColor = BackColor;
-	    optional_button_container.BringToFront();
 
 	    try
 	    {
