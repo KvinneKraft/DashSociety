@@ -79,6 +79,8 @@ namespace Dash_IP_Fluffer
 	    obj.BackColor = Color.FromArgb(0, 0, 0, 255);
 	    obj.ForeColor = fcl;
 
+	    obj.UseCompatibleTextRendering = true;
+
 	    srf.Controls.Add(obj);
 	}
 

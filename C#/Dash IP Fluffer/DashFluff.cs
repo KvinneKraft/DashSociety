@@ -48,11 +48,10 @@ namespace Dash_IP_Fluffer
 	    Add.InteractiveToolBar(this);
 	}
 
-	private readonly PictureBox main_control_container = new PictureBox();
-	private readonly PictureBox ipbox_container = new PictureBox();
+	private readonly PictureBox main_control_container = new PictureBox(), ipbox_container = new PictureBox();
 	private readonly TextBox ipbox = new TextBox();
 	private readonly Button check = new Button();
-	private readonly Label iptext = new Label();
+	private readonly Label iptext = new Label(), checkip = new Label();
 
 	private readonly PictureBox optional_button_container = new PictureBox();
 	private readonly Button settings, attack, tools;
@@ -62,28 +61,47 @@ namespace Dash_IP_Fluffer
 	    SetupLayout();
 
 	    /*---[ Initializing Main Controls ]---*/
-	    Add.RuImage(this, main_control_container, null, new Size(350, 100), Point.Empty);
+	    Add.RuImage(this, main_control_container, null, new Size(275, 28), Point.Empty); main_control_container.BackColor = Color.FromArgb(1, 1, 1);
 
 	    try
 	    {
-		Add.RuImage(main_control_container, ipbox_container, null, new Size(175, 26), new Point(100, 1));
+		Add.RuImage(main_control_container, ipbox_container, null, new Size(175, 26), new Point((main_control_container.Width - 175) / 2, (main_control_container.Height - 26) / 2));
 
-		ipbox_container.BackColor = Color.FromArgb(223, 194, 255);
+		ipbox_container.BackColor = Color.FromArgb(250, 170, 210);
 		ipbox_container.Click += (s, e) => ipbox.Select();
 
 		Add.ZeTextBox(ipbox_container, ipbox, Size.Empty, Point.Empty, Color.FromArgb(255, 255, 255), ipbox_container.BackColor, "255.255.255.255:65535", Get.FONT_TYPE_MAIN, 12);
 
+		ipbox.TextAlign = HorizontalAlignment.Center;
+
 		ipbox.Size = new Size(ipbox.PreferredSize.Width - 8, ipbox.PreferredSize.Height);
 		ipbox.Location = new Point((ipbox_container.Width - ipbox.Width) / 2, (ipbox_container.Height - ipbox.Height) / 2);
 
-		Add.ThaLabel(main_control_container, iptext, Point.Empty, Color.FromArgb(255, 255, 255), "Host:", Get.FONT_TYPE_CUTE, 15);
-	    
+		Add.ThaLabel(main_control_container, iptext, Point.Empty, Color.FromArgb(255, 255, 255), "Tango:", Get.FONT_TYPE_MAIN, 11);
+		
 		iptext.MaximumSize = new Size(50, ipbox_container.Height + 2);
 		iptext.MinimumSize = new Size(50, ipbox_container.Height + 2);
-		iptext.Location = new Point(ipbox_container.Left - iptext.Width, ipbox_container.Top - 1);
 
 		iptext.TextAlign = ContentAlignment.MiddleCenter;
+		iptext.Location = new Point(ipbox_container.Left - iptext.Width, ipbox_container.Top - 1);
+
 		iptext.BackColor = Get.menu_bar.BackColor;
+
+		Add.ThaLabel(main_control_container, checkip, Point.Empty, Color.FromArgb(255, 255, 255), "Check\nStatus", Get.FONT_TYPE_MAIN, 9);
+
+		checkip.MouseLeave += (s, e) => checkip.BackColor = Color.FromArgb(217, 145, 181);
+		checkip.MouseHover += (s, e) => checkip.BackColor = Color.FromArgb(230, 158, 194);
+		checkip.MouseEnter += (s, e) => checkip.BackColor = Color.FromArgb(230, 158, 194);
+		checkip.MouseDown += (s, e) => checkip.BackColor = Color.FromArgb(250, 184, 217);
+		checkip.MouseUp += (s, e) => checkip.BackColor = Color.FromArgb(230, 158, 194);
+
+		checkip.MaximumSize = new Size(50, ipbox_container.Height + 2);
+		checkip.MinimumSize = new Size(50, ipbox_container.Height + 2);
+
+		checkip.TextAlign = ContentAlignment.MiddleCenter;
+		checkip.Location = new Point(ipbox_container.Left + ipbox_container.Width, ipbox_container.Top - 1);
+
+		checkip.BackColor = Get.menu_bar.BackColor;
 
 		main_control_container.Paint += (s, e) => Add.Rectangle(e, Get.menu_bar.BackColor, 2, ipbox_container.Size, ipbox_container.Location);
 	    }
@@ -93,10 +111,10 @@ namespace Dash_IP_Fluffer
 		ErrorHandler(e);
 	    };
 	    
-	    main_control_container.Location = new Point((Width - main_control_container.Width) / 2, 45);
+	    main_control_container.Location = new Point((Width - main_control_container.Width) / 2, 40);
 
 	    /*---[ Initializing Optional Buttons ]---*/
-	    Add.RuImage(this, optional_button_container, null, new Size(320, 28), new Point(-1, -1));
+	    Add.RuImage(this, optional_button_container, null, new Size(320, 28), new Point(-1, 82));
 
 	    optional_button_container.BackColor = BackColor;
 

@@ -16,6 +16,7 @@ import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Husk;
+import org.bukkit.entity.Illusioner;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
@@ -55,45 +56,42 @@ public class Organisms
         final Entity damager = (Entity) e.getDamager();        
         final Entity entity = (Entity) e.getEntity();
         
-        if (entity instanceof LivingEntity)
+        if (!(entity instanceof LivingEntity))
         {
-            final LivingEntity living_entity = (LivingEntity) entity;
-            
-            if (damager instanceof Snowball)
-            {
-                living_entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 4 * 20, 1));                
-                living_entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2 * 20, 1));
-            }
-        
-            else if (damager instanceof Egg)
-            {
-                if (rand.nextInt(1000) < 250)
-                {
-                    living_entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 4 * 20, 4));                    
-                    living_entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, 1));      
-                };
-            };
-        }
-        
-        else if (!(entity instanceof Player))
-        { 
             return;
         };
         
-        final Player victim = (Player) entity;
+        final LivingEntity living_entity = (LivingEntity) entity;
+
+        if (damager instanceof Snowball)
+        {
+            living_entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 4 * 20, 1));                
+            living_entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2 * 20, 1));
+        }
+
+        else if (damager instanceof Egg)
+        {
+            if (rand.nextInt(1000) < 250)
+            {
+                living_entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 4 * 20, 4));                    
+                living_entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, 1));      
+            };
+        };
         
-        if (e.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE) || damager instanceof Arrow)
+        final LivingEntity victim = (LivingEntity) entity;
+        
+        if (damager instanceof Arrow)
         {
             final Arrow arrow = (Arrow) e.getDamager();
             
-            if (!(arrow.getShooter() instanceof Stray) && !(arrow.getShooter() instanceof Skeleton) && !(arrow.getShooter() instanceof Pillager))
+            if (!(arrow.getShooter() instanceof Stray) && !(arrow.getShooter() instanceof Skeleton) && !(arrow.getShooter() instanceof Pillager) && !(arrow.getShooter() instanceof Illusioner))
             {
                 return;
             };        
             
             final int chance = rand.nextInt(BASE_PERCENTAGE);
 
-            if (chance <= 800)
+            if (chance <= 650)
             {
                 victim.addPotionEffect
                 (
@@ -107,9 +105,9 @@ public class Organisms
                 );
             };
             
-            if (chance <= 75)
+            if (chance <= 50)
             {
-                damager.getWorld().createExplosion(damager.getLocation(), 10, false, false);
+                damager.getWorld().createExplosion(damager.getLocation(), 2, true, true);
             };            
 
             return;
