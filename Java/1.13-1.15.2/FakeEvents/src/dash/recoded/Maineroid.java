@@ -3,6 +3,17 @@
 
 package dash.recoded;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
 public class Maineroid extends JavaPlugin implements CommandExecutor
 {
     void LoadConfiguration()
@@ -63,8 +74,74 @@ public class Maineroid extends JavaPlugin implements CommandExecutor
 
         if (as.length >= 1)
         {
-            final arg = as[0].ToLowerCase();
+            final String arg = as[0].toLowerCase();
 
+            if (p.hasPermission(command_permission))
+            {
+                if (arg.equals("modules"))
+                {
+                    p.sendMessage(color("&aAvailable Modules: &7&oban [player] [reason], ipban [player] [reason], tempban [player] [reason] [time], kick [player] [reason], mute [player] [reason], op [player], deop [player], vote [player] &7and &7&odonation [player]&7!"));
+                }
+
+                else if (commands.contains(arg))
+                {
+                    if (as.length < 2)
+                    {
+                        p.sendMessage(color("&cHey, you must specify a player."));
+                        return true;
+                    };
+
+                    String message = messages.get(commands.indexOf(arg)).replace("%player%", as[1]);
+
+                    if (arg.equals("mute") || arg.equals("tempban"))
+                    {
+                        if (as.length < 4)
+                        {
+                            p.sendMessage(color("&cYou forgot to add a reason and or time."));
+                            return true;
+                        };
+                        
+                        String resun = "";
+                        
+                        for (int id = 2; id < as.length; id += 1)
+                        {
+                            resun += as[id] + " ";                        
+                        };
+                        
+                        message = message.replace("%duration%", as[3]).replace("%reason%", resun);
+                    }
+
+                    else if (arg.equals("ban") || arg.equals("ipban") || arg.equals("kick"))
+                    {
+                        if (as.length < 3)
+                        {
+                            p.sendMessage(color("&cYou forgot to add a reason."));
+                            return true;
+                        };
+                        
+                        String resun = "";
+                        
+                        for (int id = 2; id < as.length; id += 1)
+                        {
+                            resun += as[id] + " ";                        
+                        };
+                        
+                        message = message.replace("%reason%", resun);
+                    };
+
+                    getServer().broadcastMessage(color(message));
+                    
+                    return true;
+                }
+
+                else if (!arg.equals("reload"))
+                {
+                    p.sendMessage(color("&cPerhaps check the valid modules using &4/f modules &c?"));
+                    
+                    return true;
+                };
+            };            
+            
             if (p.hasPermission(admin_permission))
             {
                 if (arg.equals("reload"))
@@ -79,56 +156,6 @@ public class Maineroid extends JavaPlugin implements CommandExecutor
                 else
                 {
                     p.sendMessage(color("&cDid you mean to type &4/f reload &c?"));
-                };
-
-                return true;
-            }
-
-            else if (p.hasPermission(command_permission))
-            {
-                if (arg.equals("modules"))
-                {
-                    p.sendMessage(color("&aAvailable Modules: &a&oban [player] [reason], ipban [player] [reason], tempban [player] [reason] [time], kick [player] [reason], mute [player] [reason], op [player], deop [player], vote [player] &aand &a&odonation [player] [money]&a!"));
-                }
-
-                else if (commands.contains(arg))
-                {
-                    if (as.length < 2)
-                    {
-                        p.sendMessage(color("&cHey, you must specify a player."));
-                        return true;
-                    };
-
-                    final String message = messages.get(commands.indexOf(arg)).replace("%player%", as[1]);
-
-                    if (arg.equals("mute") || arg.equals("tempban"))
-                    {
-                        if (as.length < 4)
-                        {
-                            p.sendMessage(color("&cYou forgot to add a reason and or time."));
-                            return true;
-                        };
-
-                        message = message.replace("%duration%", as[3]).replace("%reason%", as[2]);
-                    }
-
-                    else if (arg.equals("ban") || arg.equals("ipban") || arg.equals("kick"))
-                    {
-                        if (as.length < 3)
-                        {
-                            p.sendMessage(color("&cYou forgot to add a reason."));
-                            return true;
-                        };
-
-                        message = message.replace("%reason%", as[2]);
-                    };
-
-                    getServer().broadcastMessage(color(message));
-                }
-
-                else
-                {
-                    p.sendMessage(color("&cPerhaps check the valid modules using &4/f modules &c?"));
                 };
 
                 return true;

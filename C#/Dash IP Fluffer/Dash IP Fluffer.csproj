@@ -51,8 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DashFluff.cs" />
-    <Compile Include="DushUtil.cs" />
+    <Compile Include="Struct\DushUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Struct\Primary.cs" />
+    <Compile Include="Struct\MonitorLog.cs" />
+    <Compile Include="Struct\Secondary.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
