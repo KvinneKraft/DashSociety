@@ -166,7 +166,7 @@ namespace Dash_IP_Fluffer
 	    
 	    obj.Paint += (s, e) =>
 	    {
-		Rectangle(e, mbr.BackColor, 2, obj.Size, Point.Empty);
+		Rectangle(e, Color.FromArgb(217, 145, 181), 2, obj.Size, Point.Empty);
 	    };
 	}
 

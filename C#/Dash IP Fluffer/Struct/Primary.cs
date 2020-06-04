@@ -16,7 +16,7 @@ namespace Dash_IP_Fluffer
 	readonly Label checkip = new Label();
 	readonly Label iptext = new Label();
 
-	readonly Form owner = Interfuce.interfuce;
+	readonly Form owner = (Form) Interfuce.interfuce;
 
 	public void Initialize()
 	{
@@ -44,7 +44,7 @@ namespace Dash_IP_Fluffer
 		iptext.TextAlign = ContentAlignment.MiddleCenter;
 		iptext.Location = new Point(ipbox_container.Left - iptext.Width, ipbox_container.Top - 1);
 
-		iptext.BackColor = Get.menu_bar.BackColor;
+		iptext.BackColor = (Color) Get.menu_bar.BackColor;
 
 		Add.ThaLabel(main_control_container, checkip, Point.Empty, Color.FromArgb(255, 255, 255), "Check\nStatus", Get.FONT_TYPE_MAIN, 9);
 
@@ -60,7 +60,7 @@ namespace Dash_IP_Fluffer
 		checkip.TextAlign = ContentAlignment.MiddleCenter;
 		checkip.Location = new Point(ipbox_container.Left + ipbox_container.Width, ipbox_container.Top - 1);
 
-		checkip.BackColor = Get.menu_bar.BackColor;
+		checkip.BackColor = (Color) Get.menu_bar.BackColor;
 
 		main_control_container.Paint += (s, e) => Add.Rectangle(e, Get.menu_bar.BackColor, 2, ipbox_container.Size, ipbox_container.Location);
 	    }

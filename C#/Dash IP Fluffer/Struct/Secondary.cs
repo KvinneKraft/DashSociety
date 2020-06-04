@@ -8,16 +8,15 @@ namespace Dash_IP_Fluffer
     public class Secondary
     {
 	private readonly PictureBox optional_button_container = new PictureBox();
-
 	private readonly Button settings, attack, tools;
 
-	readonly Form owner = Interfuce.interfuce;
+	readonly Form owner = (Form) Interfuce.interfuce;
 
 	public void Initialize()
 	{
 	    Add.RuImage(owner, optional_button_container, null, new Size(320, 28), new Point(-1, 82));
 
-	    optional_button_container.BackColor = owner.BackColor;
+	    optional_button_container.BackColor = (Color) owner.BackColor;
 
 	    try
 	    {
@@ -31,8 +30,8 @@ namespace Dash_IP_Fluffer
 		    "Settings", "Attack", "Tools"
 		};
 
-		Color button_back_color = Get.menu_bar.BackColor;
-		Color button_fore_color = Color.FromArgb(255, 255, 255);
+		Color button_fore_color = (Color) Color.FromArgb(255, 255, 255);
+		Color button_back_color = Color.FromArgb(191, 115, 153); //(Color) Get.menu_bar.BackColor;
 
 		for (int x = 0, key = 0; key < buttons.Count; x += 110, key += 1)
 		{
