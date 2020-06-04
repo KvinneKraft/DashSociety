@@ -9,41 +9,17 @@ namespace Dash_IP_Fluffer
 	readonly PictureBox pink_separator = new PictureBox();
 	readonly PictureBox log_container = new PictureBox();
 
-	readonly TextBox logtext = new TextBox();
-
-	/*readonly PictureBox scroll_container = new PictureBox();
-	readonly PictureBox scroll_bar = new PictureBox();
-
-	private void ScrollBarHook(MouseEventArgs e)
-	{
-	    if (e.Delta < 0)
-	    {
-		if (scroll_bar.Top >= 12)
-		{
-		    scroll_bar.Top -= 10;
-		};
-	    }
-
-	    else
-	    {
-		if (scroll_bar.Top <= scroll_container.Height - (12 + scroll_bar.Height))
-		{
-		    scroll_bar.Top += 10;
-		};
-	    };
-	}*/
-
+	public static readonly TextBox logtext = new TextBox();
+ 
 	readonly Form owner = (Form) Interfuce.interfuce;
 
 	public void Initialize()
 	{
-	    Add.RuImage(owner, log_container, null, new Size(owner.Width, 225), new Point(0, owner.Height - 225));
-
-	    log_container.BackColor = (Color)Get.menu_bar.BackColor;
+	    Add.RuImage(owner, log_container, null, new Size(owner.Width, 225), new Point(0, owner.Height - 225)); log_container.BackColor = (Color)Get.menu_bar.BackColor;
 
 	    try
 	    {
-		Add.ZeTextBox(log_container, logtext, new Size(log_container.Width - 4, log_container.Height - 4), new Point(2, 2), Color.FromArgb(255, 255, 255), Color.FromArgb(191, 115, 153), "", Get.FONT_TYPE_MAIN, 8);
+		Add.ZeTextBox(log_container, logtext, new Size(log_container.Width - 4, log_container.Height - 4), new Point(2, 2), Color.FromArgb(255, 255, 255), Color.FromArgb(191, 115, 153), "", Get.FONT_TYPE_MAIN, 8); logtext.AutoScrollOffset = new Point(-1, -1); logtext.ScrollBars = ScrollBars.Vertical; logtext.Multiline = true; logtext.ReadOnly = true;
 
 		if (welcome_message.Contains("{barrier}"))//Lazy Programmer Technique 1.0
 		{
@@ -57,13 +33,7 @@ namespace Dash_IP_Fluffer
 		    logtext.Text = welcome_message.Replace("{barrier}", buff);
 		};
 
-		logtext.AutoScrollOffset = new Point(-1, -1);
-		logtext.ScrollBars = ScrollBars.Vertical;
-		logtext.Multiline = true;
-		logtext.ReadOnly = true;
-
-		Add.RuImage(logtext, pink_separator, null, new Size(2, log_container.Height), new Point(logtext.Width - 19, 0));
-		pink_separator.BackColor = (Color) Get.menu_bar.BackColor;
+		Add.RuImage(logtext, pink_separator, null, new Size(2, log_container.Height), new Point(logtext.Width - 19, 0)); pink_separator.BackColor = (Color) Get.menu_bar.BackColor;
 	    }
 
 	    catch (Exception e)

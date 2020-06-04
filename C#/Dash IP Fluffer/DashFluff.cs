@@ -17,6 +17,12 @@ namespace Dash_IP_Fluffer
 	{
 	    Application.EnableVisualStyles();
 	    Application.SetCompatibleTextRenderingDefault(false);
+
+	    using (Greeting greeting = new Greeting())
+	    {
+		greeting.ShowDialog();
+	    };
+
 	    Application.Run(new Interfuce());
 	}
     };
