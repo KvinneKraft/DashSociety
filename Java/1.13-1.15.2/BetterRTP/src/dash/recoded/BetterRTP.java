@@ -5,6 +5,7 @@
 package dash.recoded;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.ChatColor;
@@ -14,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -62,12 +64,7 @@ public class BetterRTP extends JavaPlugin
         plugin.reloadConfig();
         config = (FileConfiguration) plugin.getConfig();
         
-        minx = config.getDouble("coordinates.min-x");
-        maxx = config.getDouble("coordinates.max-x");
-        minz = config.getDouble("coordinates.min-z");
-        maxz = config.getDouble("coordinates.max-z");
-        
-        normal_permission = config.getString("permissions.teleportation-permission");
+        normal_permission = config.getString("permissions.tp-permission");
         admin_permission = config.getString("permissions.admin-permission");
         
         do_fireworks = config.getBoolean("optionals.firework-effects.enabled");
@@ -82,19 +79,19 @@ public class BetterRTP extends JavaPlugin
                 
                 if (cache.length < 3)
                 {
-                    print("Invalid potion format in the config.yml!");
+                    print("Invalid potion format in the config.yml");
                     continue;
                 }
                 
                 else if (!isInteger(cache[1]) || !(isInteger(cache[2])))
                 {
-                    print("Invalid amplifier and or duration in the config.yml!");
+                    print("Invalid amplifier and or duration in the config.yml");
                     continue;
                 }
                 
                 else if (PotionEffectType.getByName(cache[0].toUpperCase()) == null)
                 {
-                    print("Invalid potion effect type in the config.yml!");
+                    print("Invalid potion effect type in the config.yml");
                     continue;
                 };
                 
@@ -116,7 +113,7 @@ public class BetterRTP extends JavaPlugin
             
             catch (final Exception e)
             {
-                print("Invalid sound specified in the config.yml!");
+                print("Invalid sound specified in the config.yml");
                 do_sounds = false;
             }
         };
@@ -127,20 +124,39 @@ public class BetterRTP extends JavaPlugin
             
             if (world == null)
             {
-                print("Invalid world name in the config.yml!");
+                print("Invalid world name in the config.yml");
                 continue;
             };
             
             worlds.add(world);
         };
         
-        cooldown = config.getInt("optionals.teleportation-cooldown") * 20;
-        send_title = config.getBoolean("optionals.send_title");
+        send_title = config.getBoolean("optionals.send_title");        
+        cooldown = config.getInt("optionals.tp-cooldown") * 20;
+        
+        for (String line : config.getStringList("optionals.biome-blacklist"))
+        {
+            final Biome biome = (Biome) Biome.valueOf(line.toUpperCase().replace(' ', '_'));
+            
+            if (biome == null)
+            {
+                print("Invalid biome name in the config.yml");
+            };
+            
+            biomes.add(biome);
+        };
+        
+        minx = config.getDouble("coordinates.min-x");
+        maxx = config.getDouble("coordinates.max-x");
+        minz = config.getDouble("coordinates.min-z");
+        maxz = config.getDouble("coordinates.max-z");        
     };
     
+    private final HashMap<Player, Boolean> player_queue = new HashMap<>();
     private final List<PotionEffect> potion_effects = new ArrayList<>();    
-    private final List<Player> players = new ArrayList<>();
+    
     private final List<World> worlds = new ArrayList<>();
+    private final List<Biome> biomes = new ArrayList<>();
     
     private boolean do_potions, do_fireworks, do_sounds, send_title;    
     private double minx, maxx, minz, maxz;
@@ -151,121 +167,173 @@ public class BetterRTP extends JavaPlugin
     
     private void randomly_teleport(final Player p)
     {
-        if (!worlds.contains(p.getWorld()))
+        if (player_queue.containsKey(p) && player_queue.get(p))
+        {
+            p.sendMessage(color("&cYou already have a teleportation pending!"));
+            return;
+        }
+        
+        else if (!worlds.contains(p.getWorld()))
         {
             p.sendMessage(color("&cYou may not use this command in this world."));
             return;
         }
-        
-        else if (players.contains(p))
+
+        else if (player_queue.containsKey(p))
         {
             p.sendMessage(color("&cYou must wait at least " + cooldown / 20 + " seconds before doing this again."));
             return;
-        };
+        };        
         
-        final Random rand = new Random();
-        double x, y = 165, z;
-        
-        x = minx + (maxx - minx) * rand.nextDouble();
-        z = minz + (maxz - minz) * rand.nextDouble();
-        
-        final Location location = new Location(p.getWorld(), x, y, z);
-        boolean hasLand = false;
-        
-        while (!hasLand)
-        {
-            if (y <= 8)
-            {
-                p.sendMessage(color("&cNo suitable location could has been found."));
-                return;
-            }
-            
-            else
-            {
-                location.setY(y);
-                
-                if (location.getBlock().getType().equals(Material.AIR))
-                {
-                    location.setY(y + 1);
-                    
-                    if (location.getBlock().getType().equals(Material.AIR))
-                    {
-                        location.setY(y - 2);
-                        
-                        if (!location.getBlock().getType().equals(Material.AIR))
-                        {
-                            location.setY(y + 1);                        
-                            hasLand = true;
-
-                            continue;                              
-                        };
-                    };
-                };
-            };
-            
-            y -= 1;
-        };
-        
-        final String success = color("&aYou have been teleported to &7X: " + (int) x + " &7Y: " + (int) y + " &7Z: " + (int) z + " &a!");
-        
-        p.sendMessage(success);
-        
-        if (send_title)
-        {
-            p.sendTitle("", success);            
-        };
-        
-        p.teleport(location);
-        
-        if (do_potions && potion_effects.size() > 0)
-        {
-            p.addPotionEffects(potion_effects);
-        };
-        
-        if (do_fireworks)
-        {
-            p.setInvulnerable(true);
-            
-            DetonateFirework(location, Color.fromRGB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)), Color.fromRGB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)), FireworkEffect.Type.BURST);
-            
-            p.setInvulnerable(false);
-        };
-        
-        if (do_sounds && sound != null)
-        {
-            p.playSound(location, sound, 30, 30);
-        };
-        
-        if (p.isOp() || p.hasPermission(admin_permission))
-        {
-            return;
-        };
-        
-        players.add(p);
-        
-        getServer().getScheduler().runTaskLater
+        getServer().getScheduler().runTaskAsynchronously
         (
             plugin, 
                 
             new Runnable() 
-            { 
-                @Override public void run() 
-                { 
-                    if (!players.contains(p))
+            {
+                @Override public void run()
+                {
+                    player_queue.put(p, true);                    
+                    
+                    final Random rand = new Random();
+                    double x, y = 165, z;
+
+                    p.sendMessage(color("&aSearching for a destination ...."));                                       
+                    
+                    final Location location = new Location(p.getWorld(), 0, y, 0);                    
+                    
+                    int c = 0;
+                    
+                    while (true)
                     {
-                        return;
+                        x = minx + (maxx - minx) * rand.nextDouble();
+                        z = minz + (maxz - minz) * rand.nextDouble();  
+                    
+                        location.setX(x);
+                        location.setZ(z);
+                        
+                        if (!biomes.contains(location.getWorld().getBiome((int) x, (int) y, (int) z)))
+                        {
+                            break;
+                        }
+                        
+                        else if (c == 3)
+                        {
+                            p.sendMessage(color("&cNo suitable location has been found!"));
+                            return;
+                        };
+                        
+                        c += 1;
                     };
                     
-                    if (p.isOnline())
+                    boolean hasLand = false;                             
+
+                    while (!hasLand)
                     {
-                        p.sendMessage(color("&aYou may now use &7/wild &aagain!"));
-                    };
+                        if (location.getY() <= 8)
+                        {
+                            p.sendMessage(color("&cNo suitable location has been found."));
+                            return;
+                        }
+
+                        else
+                        {
+                            if (location.getBlock().getType().equals(Material.AIR))
+                            {
+                                location.setY(location.getY() + 1);
+
+                                if (location.getBlock().getType().equals(Material.AIR))
+                                {
+                                    location.setY(location.getY() - 2);
+
+                                    if (!location.getBlock().getType().equals(Material.AIR))
+                                    {
+                                        location.setY(location.getY() + 1);                        
+                                        hasLand = true;
+
+                                        continue;                              
+                                    };
+                                };
+                            };
+                        };
+
+                        location.setY(location.getY() - 1);
+                    };                    
                     
-                    players.remove(p);
-                }; 
-            }, 
-            
-            cooldown
+                    getServer().getScheduler().runTask
+                    (
+                        plugin,
+                            
+                        new Runnable()
+                        {
+                            @Override public void run()
+                            {
+                                final String success = color("&aYou have been teleported to &7X: " + (int) location.getX() + " &7Y: " + (int) location.getY() + " &7Z: " + (int) location.getZ() + " &a!");
+
+                                p.sendMessage(success);
+
+                                if (send_title)
+                                {
+                                    p.sendTitle("", success);            
+                                };
+
+                                p.teleport(location);
+
+                                if (do_potions && potion_effects.size() > 0)
+                                {
+                                    p.addPotionEffects(potion_effects);
+                                };
+
+                                if (do_fireworks)
+                                {
+                                    p.setInvulnerable(true);
+
+                                    DetonateFirework(location, Color.fromRGB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)), Color.fromRGB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)), FireworkEffect.Type.BURST);
+
+                                    p.setInvulnerable(false);
+                                };
+
+                                if (do_sounds && sound != null)
+                                {
+                                    p.playSound(location, sound, 30, 30);
+                                };
+
+                                if (p.isOp() || p.hasPermission(admin_permission))
+                                {
+                                    return;
+                                };
+
+                                player_queue.put(p, false);
+
+                                getServer().getScheduler().runTaskLater
+                                (
+                                    plugin, 
+
+                                    new Runnable() 
+                                    { 
+                                        @Override public void run() 
+                                        { 
+                                            if (!player_queue.containsKey(p))
+                                            {
+                                                return;
+                                            };
+
+                                            if (p.isOnline())
+                                            {
+                                                p.sendMessage(color("&aYou may now use &7/wild &aagain!"));
+                                            };
+
+                                            player_queue.remove(p);
+                                        }; 
+                                    }, 
+
+                                    cooldown
+                                );
+                            };
+                        }
+                    );
+                };
+            }
         );
     };
     

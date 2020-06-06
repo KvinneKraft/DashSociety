@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class Spawn implements CommandExecutor
 {
-    public static final double x = 5.399, y = 66, z = -3.524;//5.399 66 -3.524
+    public static final double x = 0.905, y = 63, z = 0.504;//5.399 66 -3.524
     private final List<Player> players = new ArrayList<>();
     
     @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
