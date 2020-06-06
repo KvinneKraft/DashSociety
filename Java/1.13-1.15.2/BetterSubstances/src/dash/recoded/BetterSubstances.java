@@ -31,6 +31,7 @@ public class BetterSubstances extends JavaPlugin
     final List<List<PotionEffect>> substance_genetics = new ArrayList<>();    
     final List<Integer> substance_cooldown = new ArrayList<>();    
     final List<String> permission_sets = new ArrayList<>();
+    final List<String> substance_ids = new ArrayList<>();
     
     String admin_permission;
     
@@ -53,9 +54,7 @@ public class BetterSubstances extends JavaPlugin
         try
         {
             if (genetic.size() < 3)
-            {
                 return null;
-            };
             
             final PotionEffectType type = (PotionEffectType) PotionEffectType.getByName(genetic.get(0).toUpperCase().replace("EFFECT:", ""));
             final int strength = (int) Integer.parseInt(genetic.get(1).toUpperCase().replace("STRENGTH:", ""));
@@ -98,14 +97,14 @@ public class BetterSubstances extends JavaPlugin
             final List<String> pure = Arrays.asList(line.replace(" ", "").split(","));
             final ItemStack substance = ObtainSubstance(pure.get(0));
             
-            if (pure.size() < 6 || substance == null)
+            if (pure.size() < 7 || substance == null)
             {
                 print("Invalid substance syntax found in config.yml!\r\nSkipping ....");
                 continue;
             };
             
-            final String s_name = color(pure.get(1));
-            final String s_lore = color(pure.get(2));
+            final String s_name = color(pure.get(2));
+            final String s_lore = color(pure.get(3));
             
             substance.getItemMeta().setDisplayName(s_name);
             substance.getItemMeta().setLore(Arrays.asList(s_lore));          
@@ -118,7 +117,7 @@ public class BetterSubstances extends JavaPlugin
             
             final List<PotionEffect> genetic_cache = new ArrayList<>();
             
-            for (final String genetic_effect : pure.get(3).split("&"))
+            for (final String genetic_effect : pure.get(4).split("&"))
             {
                 final PotionEffect s_genetic = ObtainGenetics(Arrays.asList(genetic_effect.split("-")));
 
@@ -133,7 +132,7 @@ public class BetterSubstances extends JavaPlugin
             
             substance_genetics.add(genetic_cache);
             
-            final int cooldown = GetInteger(pure.get(4));
+            final int cooldown = GetInteger(pure.get(5));
             
             switch (cooldown)
             {
@@ -145,12 +144,12 @@ public class BetterSubstances extends JavaPlugin
                 default:
                 {
                     substance_cooldown.add(cooldown);                    
-                    permission_sets.add(pure.get(5));                                                              
+                    permission_sets.add(pure.get(6));                                                              
                 };
             }; 
             
             substances.put(substance, substances.size());                  
-            substance_list += color("&e" + s_name + "&a, &e");            
+            substance_list += color("&e" + pure.get(1) + "&a, &e");            
         };
         
         substance_list = substance_list.substring(0, substance_list.length() - 2) + "&a.";
@@ -278,7 +277,11 @@ public class BetterSubstances extends JavaPlugin
                 
                 else if (a.equals("give"))
                 {
-                    
+                    if (as.length < 3)
+                    {
+                        p.sendMessage(color("&cYou lack arguments, try something alike: &c/bs give HyperSugar 10 Dashie"));
+                        return false;
+                    };
                     
                     return true;
                 }
@@ -290,7 +293,7 @@ public class BetterSubstances extends JavaPlugin
                 };
             };
             
-            p.sendMessage(color("&cCorrect syntax: &4/bs [reload | list | give] <amount> <player>"));            
+            p.sendMessage(color("&cCorrect syntax: &4/bs [reload | list | give] <substance> <amount> <player>"));            
             return true;
         };
     };
