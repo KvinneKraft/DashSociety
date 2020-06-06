@@ -1,11 +1,11 @@
 
 package dash.recoded;
 
-import com.sun.tools.javac.util.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -94,6 +95,8 @@ public class BetterSubstances extends JavaPlugin
         plugin.reloadConfig();
         config = (FileConfiguration) plugin.getConfig();
         
+        admin_permission = config.getString("administrative-permission");
+        
         for (final String line : config.getStringList("substance-table"))// One Substance by itself
         {
             final List<String> pure = Arrays.asList(line.replace(" ", "").split(","));
@@ -101,19 +104,23 @@ public class BetterSubstances extends JavaPlugin
             
             if (pure.size() < 7 || substance == null)
             {
-                print("Invalid substance syntax found in config.yml!\r\nSkipping ....");
+                print("Invalid substance syntax found in config.yml! Skipping ....");
                 continue;
             };
             
-            final String s_name = color(pure.get(2));
-            final String s_lore = color(pure.get(3));
+            final String s_name = color(pure.get(2)).split(":")[1].replace("_", " ");
+            final String s_lore = color(pure.get(3)).split(":")[1].replace("_", " ");
             
-            substance.getItemMeta().setDisplayName(s_name);
-            substance.getItemMeta().setLore(Arrays.asList(s_lore));          
+            final ItemMeta meta = substance.getItemMeta();
+            
+            meta.setDisplayName(s_name);
+            meta.setLore(Arrays.asList(s_lore));          
+            
+            substance.setItemMeta(meta);
             
             if (substances.containsKey(substance))
             {
-                print("Duplicated substance found in config.yml!\r\nSkipping....");
+                print("Duplicated substance found in config.yml! Skipping....");
                 continue;
             };
             
@@ -125,7 +132,7 @@ public class BetterSubstances extends JavaPlugin
 
                 if (s_genetic == null)
                 {
-                    print("Invalid substance genetics found in config.yml!\r\nSkipping....");
+                    print("Invalid substance genetics found in config.yml! Skipping....");
                     continue;
                 };
 
@@ -134,30 +141,32 @@ public class BetterSubstances extends JavaPlugin
             
             substance_genetics.add(genetic_cache);
             
-            final int cooldown = GetInteger(pure.get(5));
+            final int cooldown = GetInteger(pure.get(5).toLowerCase().replace("cooldown:", ""));
             
             switch (cooldown)
             {
                 case 30:
                 {
-                    print("Invalid substance cooldown found in config.yml!\r\nUsing default (30s)....");                    
+                    print("Invalid substance cooldown found in config.yml! Using default (30s)....");                    
                 };
                 
                 default:
                 {
                     substance_cooldown.add(cooldown);                    
-                    permission_sets.add(pure.get(6));                                                              
+                    permission_sets.add(pure.get(6).replace("permission:", ""));                                                              
                 };
             }; 
             
-            substances.put(substance, substances.size());            
-            subsub_s.put(pure.get(1).toLowerCase(), substance);
+            pure.set(1, pure.get(1).toLowerCase().replace("give_name:", ""));
             
-            substance_list += color("&e" + pure.get(1) + "&a, &e");            
-            substance_ids.add(pure.get(1).toLowerCase());
+            substances.put(substance, substances.size());            
+            subsub_s.put(ChatColor.stripColor(color(pure.get(1))), substance);            
+            
+            substance_list += "&e" + pure.get(1) + "&a, &e";            
+            substance_ids.add(ChatColor.stripColor(color(pure.get(1))));
         };
         
-        substance_list = substance_list.substring(0, substance_list.length() - 2) + "&a.";
+        substance_list = color(substance_list.substring(0, substance_list.length() - 4) + "&a.");
     };    
     
     @Override public void onEnable()
@@ -171,7 +180,7 @@ public class BetterSubstances extends JavaPlugin
         
         final String greeting = 
         (
-            "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\r\n" +
+            "\r\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\r\n" +
             "Author: KvinneKraft (Dashie)\r\n" +
             "Version: 1.0\r\n" +
             "Contact: KvinneKraft@protonmail.com\r\n" +
@@ -184,7 +193,7 @@ public class BetterSubstances extends JavaPlugin
     
     class Events implements Listener
     {
-        final List<Pair<Player, ItemStack>> queue = new ArrayList<>();
+        final List<Map<Player, ItemStack>> queue = new ArrayList<>();
         
         @EventHandler public void PotentialSubstanceUse(final PlayerInteractEvent e)
         {
@@ -193,22 +202,24 @@ public class BetterSubstances extends JavaPlugin
             if (substance == null) 
                 return;
             
-            substance.setAmount(1);
+            final ItemStack sc = new ItemStack(substance.getType(), 1); sc.setItemMeta(substance.getItemMeta());
             
-            if (!substances.containsKey(substance))
+            if (!substances.containsKey(sc))
                 return;
             
-            final int s_identifier = substances.get(substance);
+            final int s_identifier = substances.get(sc);
             final Player p = (Player) e.getPlayer();
             
             if (!p.hasPermission(permission_sets.get(s_identifier)))
                 return;
             
-            final Pair s_pair = new Pair(p, substance);            
+            final Map<Player, ItemStack> s_pair = new HashMap<>();
+            
+            s_pair.put(p, sc);
             
             if (queue.contains(s_pair))
             {
-                p.sendMessage(color("&cYou are on a cooldown of " + substance_cooldown.get(s_identifier) + " !"));
+                p.sendMessage(color("&cYou are on a cooldown of &4" + substance_cooldown.get(s_identifier) + " &cseconds !"));
                 return;
             }
             
@@ -225,8 +236,9 @@ public class BetterSubstances extends JavaPlugin
                     };
                 },
                     
-                5
+                3
             );
+            
             if (!queue.contains(s_pair) && !p.hasPermission(admin_permission))
             {
                 queue.add(s_pair);
@@ -246,7 +258,7 @@ public class BetterSubstances extends JavaPlugin
 
                             if (p.isOnline())
                             {
-                                p.sendMessage(color("&aYou may consume another one of those &d" + substance.getItemMeta().getDisplayName() + " &a!"));
+                                p.sendMessage(color("&aYou may consume another one of those &d" + sc.getItemMeta().getDisplayName() + " &a!"));
                             };
                         };
                     },
@@ -296,7 +308,7 @@ public class BetterSubstances extends JavaPlugin
                 {
                     if (as.length < 3)//give substance amount player
                     {
-                        p.sendMessage(color("&cYou lack arguments, try something alike: &c/bs give HyperSugar 10 Dashie"));
+                        p.sendMessage(color("&cYou lack arguments, try something alike: &4/bs give HyperSugar 10 Dashie"));
                         return false;
                     };
                     
@@ -306,7 +318,10 @@ public class BetterSubstances extends JavaPlugin
                         return false;
                     };
                     
-                    final ItemStack substance = subsub_s.get(substance_ids.indexOf(as[1].toLowerCase()));
+                    final ItemStack substance = subsub_s.get(as[1].toLowerCase());
+                    
+                    if (substance == null) return false;
+                    
                     final int s_amount = GetInteger(as[2]);
                     
                     if (s_amount == 30)
@@ -316,6 +331,7 @@ public class BetterSubstances extends JavaPlugin
                     };
                     
                     substance.setAmount(s_amount);
+                    
                     Player receiver = (Player) p;
                     
                     if (as.length > 3)
@@ -324,7 +340,7 @@ public class BetterSubstances extends JavaPlugin
                         
                         if (receiver == null)
                         {
-                            p.sendMessage(color("&cThe specified player must be online!s"));
+                            p.sendMessage(color("&cThe specified player must be online!"));
                             return false;
                         };
                     };
