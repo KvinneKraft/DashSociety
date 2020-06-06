@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -80,7 +83,7 @@ public class BetterSubstances extends JavaPlugin
         }
     };
     
-    void loadConfiguration()
+    void LoadFancyConfiguration()
     {
         saveDefaultConfig();
         
@@ -154,9 +157,10 @@ public class BetterSubstances extends JavaPlugin
     {
         print("I am loading ....");
         
-        loadConfiguration();
+        LoadFancyConfiguration();
         
         getServer().getPluginManager().registerEvents(new Events(), this);
+        getCommand("bettersubstances").setExecutor(new Commands());
         
         final String greeting = 
         (
@@ -231,6 +235,49 @@ public class BetterSubstances extends JavaPlugin
                     substance_cooldown.get(s_identifier) * 20
                 );
             };
+        };
+    };
+    
+    class Commands implements CommandExecutor
+    {
+        @Override public boolean onCommand(final CommandSender s, final Command c, String a, final String[] as)
+        {
+            if (!(s instanceof Player))
+            {
+                print("You may only use this command as a player!");
+                return false;
+            };
+            
+            final Player p = (Player) s;
+            
+            if (as.length >= 1)
+            {
+                a = as[0].toLowerCase();
+                
+                if (a.equals("reload"))
+                {
+                    p.sendMessage(color("&eLoading ...."));
+                    
+                    LoadFancyConfiguration();
+                    
+                    p.sendMessage(color("&eDone!"));
+                    
+                    return true;
+                }
+                
+                else if (a.equals("give"))
+                {
+                    return true;
+                }
+                
+                else if (a.equals("list"))
+                {
+                    return true;
+                };
+            };
+            
+            p.sendMessage(color("&cCorrect syntax: &4/bs [reload | list | give] <amount> <player>"));            
+            return true;
         };
     };
     
