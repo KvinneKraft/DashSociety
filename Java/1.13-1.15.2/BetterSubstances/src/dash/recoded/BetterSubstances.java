@@ -149,8 +149,11 @@ public class BetterSubstances extends JavaPlugin
                 };
             }; 
             
-            substances.put(substance, substances.size());            
+            substances.put(substance, substances.size());                  
+            substance_list += color("&e" + s_name + "&a, &e");            
         };
+        
+        substance_list = substance_list.substring(0, substance_list.length() - 2) + "&a.";
     };    
     
     @Override public void onEnable()
@@ -238,6 +241,8 @@ public class BetterSubstances extends JavaPlugin
         };
     };
     
+    String substance_list = color("&aAvailable Substances: ");
+    
     class Commands implements CommandExecutor
     {
         @Override public boolean onCommand(final CommandSender s, final Command c, String a, final String[] as)
@@ -250,7 +255,13 @@ public class BetterSubstances extends JavaPlugin
             
             final Player p = (Player) s;
             
-            if (as.length >= 1)
+            if (!p.hasPermission(admin_permission))
+            {
+                p.sendMessage(color("&cYou have insufficient permissions to be doing this!"));
+                return false;
+            }
+            
+            else if (as.length >= 1)
             {
                 a = as[0].toLowerCase();
                 
@@ -267,11 +278,14 @@ public class BetterSubstances extends JavaPlugin
                 
                 else if (a.equals("give"))
                 {
+                    
+                    
                     return true;
                 }
                 
                 else if (a.equals("list"))
                 {
+                    p.sendMessage(substance_list);
                     return true;
                 };
             };
