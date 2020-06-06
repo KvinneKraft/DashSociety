@@ -27,8 +27,10 @@ public class BetterSubstances extends JavaPlugin
     JavaPlugin plugin;
     
     final HashMap<ItemStack, Integer> substances = new HashMap<>(); 
+    final HashMap<String, ItemStack> subsub_s = new HashMap<>();
     
     final List<List<PotionEffect>> substance_genetics = new ArrayList<>();    
+    
     final List<Integer> substance_cooldown = new ArrayList<>();    
     final List<String> permission_sets = new ArrayList<>();
     final List<String> substance_ids = new ArrayList<>();
@@ -148,8 +150,11 @@ public class BetterSubstances extends JavaPlugin
                 };
             }; 
             
-            substances.put(substance, substances.size());                  
+            substances.put(substance, substances.size());            
+            subsub_s.put(pure.get(1).toLowerCase(), substance);
+            
             substance_list += color("&e" + pure.get(1) + "&a, &e");            
+            substance_ids.add(pure.get(1).toLowerCase());
         };
         
         substance_list = substance_list.substring(0, substance_list.length() - 2) + "&a.";
@@ -207,9 +212,21 @@ public class BetterSubstances extends JavaPlugin
                 return;
             }
             
-            p.addPotionEffects(substance_genetics.get(s_identifier));
-            e.getItem().setAmount(e.getItem().getAmount() - 1);
-            
+            getServer().getScheduler().runTaskLater
+            (
+                plugin,
+                    
+                new Runnable()
+                {
+                    @Override public void run()
+                    {
+                        p.addPotionEffects(substance_genetics.get(s_identifier));
+                        e.getItem().setAmount(e.getItem().getAmount() - 1);                        
+                    };
+                },
+                    
+                5
+            );
             if (!queue.contains(s_pair) && !p.hasPermission(admin_permission))
             {
                 queue.add(s_pair);
@@ -277,12 +294,53 @@ public class BetterSubstances extends JavaPlugin
                 
                 else if (a.equals("give"))
                 {
-                    if (as.length < 3)
+                    if (as.length < 3)//give substance amount player
                     {
                         p.sendMessage(color("&cYou lack arguments, try something alike: &c/bs give HyperSugar 10 Dashie"));
                         return false;
                     };
                     
+                    if (!substance_ids.contains(as[1].toLowerCase()))
+                    {
+                        p.sendMessage(color("&cThis substance does not exist, perhaps create it in the config.yml?"));
+                        return false;
+                    };
+                    
+                    final ItemStack substance = subsub_s.get(substance_ids.indexOf(as[1].toLowerCase()));
+                    final int s_amount = GetInteger(as[2]);
+                    
+                    if (s_amount == 30)
+                    {
+                        p.sendMessage(color("&cYou must specify a numeric give value!"));
+                        return false;
+                    };
+                    
+                    substance.setAmount(s_amount);
+                    Player receiver = (Player) p;
+                    
+                    if (as.length > 3)
+                    {
+                        receiver = (Player) getServer().getPlayerExact(as[3]);
+                        
+                        if (receiver == null)
+                        {
+                            p.sendMessage(color("&cThe specified player must be online!s"));
+                            return false;
+                        };
+                    };
+                    
+                    if (receiver.equals(p))
+                    {
+                        p.sendMessage(color("&aYou have given yourself &e" + s_amount + "x " + substance.getItemMeta().getDisplayName() + " &a!"));
+                    }
+                    
+                    else 
+                    {
+                        receiver.sendMessage(color("&aYou have been given &e" + s_amount + "x " + substance.getItemMeta().getDisplayName() + " &a!"));                        
+                        p.sendMessage(color("&aYou have given the player &e" + receiver.getName() + s_amount + "x " + substance.getItemMeta().getDisplayName() + " &a!"));
+                    };
+                    
+                    receiver.getInventory().addItem(substance);                    
                     return true;
                 }
                 
