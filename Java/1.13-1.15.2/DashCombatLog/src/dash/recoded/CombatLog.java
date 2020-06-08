@@ -1,21 +1,37 @@
+// Author: Dashie
+// Version: 1.0
+
 package dash.recoded;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -29,6 +45,27 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
     
     private int timer = 0;
     
+    private void clear_caches()
+    {
+        if (player_inv.size() > 0)
+        {
+            player_inv.clear();
+
+            for (int i = 0; i < mob_list.size(); i += 1)
+            {
+                for (final Skeleton skelly : mob_list.get(i))
+                {
+                    skelly.remove();
+                };
+            };
+        };
+        
+        if (mob_list.size() > 0)
+        {
+            mob_list.clear();
+        };         
+    };    
+    
     private void LoadConfiguration()
     {
         saveDefaultConfig();
@@ -41,41 +78,49 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
             mssgs.clear();
         };
         
-        mssgs.add(color(config.getString("dash-combat-log.general.messages.tag-message")));
-        mssgs.add(color(config.getString("dash-combat-log.general.messages.combat-deny-message")));
-        mssgs.add(color(config.getString("dash-combat-log.general.messages.broadcast-message")));        
-        mssgs.add(color(config.getString("dash-combat-log.general.messages.expire-message")));
+        mssgs.add(color(config.getString("messages.tag-message")));
+        mssgs.add(color(config.getString("messages.combat-deny-message")));
+        mssgs.add(color(config.getString("messages.broadcast-message")));        
+        mssgs.add(color(config.getString("messages.expire-message")));
+        mssgs.add(color(config.getString("punishment.death-logout.skeleton-name-format")));
         
         if (switc.size() > 0)
         {
             switc.clear();
         };
         
-        switc.add(config.getBoolean("dash-combat-log.general.messages.broadcast-global"));
-        switc.add(config.getBoolean("dash-combat-log.general.commands.block-commands"));
-        switc.add(config.getBoolean("dash-combat-log.punishment.death-logout"));
-        switc.add(config.getBoolean("dash-combat-log.punishment.disable-fly"));
+        switc.add(config.getBoolean("messages.broadcast-global"));
+        switc.add(config.getBoolean("commands.block-commands"));
+        switc.add(config.getBoolean("punishment.death-logout.enabled"));
+        switc.add(config.getBoolean("punishment.disable-fly"));
+        switc.add(config.getBoolean("punishment.death-logout.skeleton-prop"));
+        switc.add(config.getBoolean("punishment.death-logout.skeleton-armour"));
         
         if (perms.size() > 0)
         {
             perms.clear();
         };
         
-        perms.add(config.getString("dash-combat-log.general.commands.bypass-permission"));
-        perms.add(config.getString("dash-combat-log.punishment.bypass-permission"));
+        perms.add(config.getString("commands.bypass-permission"));
+        perms.add(config.getString("punishment.bypass-permission"));
         
         if (cmdwl.size() > 0)
         {
             cmdwl.clear();
         };
         
-        cmdwl.addAll(config.getStringList("dash-combat-log.general.commands.command-whitelist"));
+        cmdwl.addAll(config.getStringList("commands.command-whitelist"));
         
         cmdwl.add("/cl");
         cmdwl.add("/combatlog");
         cmdwl.add("/dashlog");
         
-        timer = config.getInt("dash-combat-log.timer") * 20;
+        timer = config.getInt("timer") * 20;
+        
+        if (switc.get(4))
+        {
+            clear_caches();
+        };        
     };
     
     @Override public void onEnable()
@@ -135,16 +180,15 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
                     {
                         if (tags.containsKey(p))
                         {
-                            if (p.isOnline())
-                            {
-                                p.sendMessage(mssgs.get(3));
-                            };
-                          
-                            getServer().getScheduler().getActiveWorkers().remove(tims.get(p));
-                            tims.get(p).cancel();                            
+                            getServer().getScheduler().getActiveWorkers().remove(tims.get(p));                            
                             
-                            tags.remove(p);
-                            tims.remove(p);                                  
+                            tims.get(p).cancel();                            
+                            tims.remove(p);                            
+                            
+                            if (p.isOnline())
+                                p.sendMessage(mssgs.get(3));                            
+                            
+                            tags.remove(p);                                  
                         };
                     };
                 },
@@ -233,6 +277,116 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
             {
                 getServer().broadcastMessage(mssgs.get(2).replace("%player%", p.getName()));
             };
+            
+            if (switc.get(4))
+            {
+                final Skeleton skelly = (Skeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
+                
+                skelly.setSeed(0);
+                
+                if (switc.get(5))
+                {
+                    final List<ItemStack> armour = Arrays.asList
+                    (
+                        p.getEquipment().getArmorContents()
+                    );
+                    
+                    if (armour.size() > 0)
+                    {
+                        skelly.getEquipment().setArmorContents
+                        (
+                            (ItemStack[]) armour.toArray()
+                        );
+                        
+                        skelly.getEquipment().setHelmetDropChance(10000);
+                        skelly.getEquipment().setChestplateDropChance(10000);
+                        skelly.getEquipment().setLeggingsDropChance(10000);
+                        skelly.getEquipment().setBootsDropChance(10000);
+                    };
+                };
+                
+                skelly.setCustomNameVisible(true);
+                skelly.setCustomName(mssgs.get(4));
+                
+                final Double health = (Double) p.getHealth();
+                
+                skelly.setMaxHealth(health);
+                skelly.setHealth(health);
+                
+                final ItemStack[] player_contents = (ItemStack[]) p.getInventory().getContents();
+                
+                if (player_contents.length > 0)
+                {
+                    player_inv.put(p, player_contents);
+                };
+                
+                List<Skeleton> listy = new ArrayList<>();
+                
+                if (mob_list.containsKey(p))
+                {
+                    listy = mob_list.get(p);
+                };
+                
+                listy.add(skelly);
+                
+                mob_list.put(p, listy);
+            };
+        };
+    };
+    
+    final HashMap<Player, List<Skeleton>> mob_list = new HashMap<>();
+    final HashMap<Player, ItemStack[]> player_inv = new HashMap<>();
+    
+    private void DetonateFirework(Location location, Color mcolor, Color fcolor, FireworkEffect.Type type)
+    {
+        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        FireworkMeta firework_meta = firework.getFireworkMeta();
+        
+        firework_meta.addEffect(FireworkEffect.builder().withColor(mcolor).with(type).flicker(true).withFlicker().withTrail().withFade(fcolor).trail(true).build());
+        
+        firework.setFireworkMeta(firework_meta);
+        firework.detonate();
+    };     
+    
+    @EventHandler private void onEntityDeath(final EntityDeathEvent e)
+    {
+        final Entity entity = (Entity) e.getEntity();
+        
+        if (entity instanceof Skeleton)
+        {
+            if (e.getEntity().getKiller() instanceof Player)
+            {
+                final Player p = (Player) e.getEntity().getKiller();
+                
+                if (mob_list.containsKey(p))
+                {
+                    if (mob_list.get(p).contains((Skeleton) entity))
+                    {
+                        mob_list.get(p).remove(mob_list.get(p).indexOf((Skeleton) entity));
+                        
+                        if (mob_list.get(p).size() < 1)
+                        {
+                            mob_list.remove(p);
+                        };
+                        
+                        if (player_inv.containsKey(p))
+                        {
+                            final Location location = (Location) p.getLocation(); 
+                            
+                            location.getBlock().setType(Material.CHEST);
+                            
+                            final Chest chest = (Chest) location.getBlock(); 
+                            
+                            chest.setCustomName(mssgs.get(4).replace("{player}", p.getName()));
+                            chest.getInventory().setContents(player_inv.get(p));
+                            
+                            player_inv.remove(p);                            
+                            
+                            p.setInvulnerable(true); DetonateFirework(location, Color.PURPLE, Color.AQUA, FireworkEffect.Type.BURST); p.setInvulnerable(false);
+                        };
+                    };
+                };
+            };
         };
     };
     
@@ -320,6 +474,12 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
     @Override public void onDisable()
     {
         getServer().getScheduler().cancelTasks(plugin);
+        
+        if (switc.get(4))
+        {
+            clear_caches();
+        };
+        
         print("Plugin has been disabled ;c");
     };
     

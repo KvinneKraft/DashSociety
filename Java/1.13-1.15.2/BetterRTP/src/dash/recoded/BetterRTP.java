@@ -22,6 +22,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -152,9 +153,9 @@ public class BetterRTP extends JavaPlugin
         maxz = config.getDouble("coordinates.max-z");        
     };
     
-    private final HashMap<Player, Boolean> player_queue = new HashMap<>();
     private final List<PotionEffect> potion_effects = new ArrayList<>();    
-    
+    private final List<Player> player_queue = new ArrayList<>();    
+    private final List<Player> tp_queue = new ArrayList<>();
     private final List<World> worlds = new ArrayList<>();
     private final List<Biome> biomes = new ArrayList<>();
     
@@ -167,7 +168,7 @@ public class BetterRTP extends JavaPlugin
     
     private void randomly_teleport(final Player p)
     {
-        if (player_queue.containsKey(p) && player_queue.get(p))
+        if (tp_queue.contains(p))
         {
             p.sendMessage(color("&cYou already have a teleportation pending!"));
             return;
@@ -179,7 +180,7 @@ public class BetterRTP extends JavaPlugin
             return;
         }
 
-        else if (player_queue.containsKey(p))
+        else if (player_queue.contains(p))
         {
             p.sendMessage(color("&cYou must wait at least " + cooldown / 20 + " seconds before doing this again."));
             return;
@@ -192,16 +193,14 @@ public class BetterRTP extends JavaPlugin
             new Runnable() 
             {
                 @Override public void run()
-                {
-                    player_queue.put(p, true);                    
-                    
+                {   
                     final Random rand = new Random();
                     double x, y = 165, z;
 
                     p.sendMessage(color("&aSearching for a destination ...."));                                       
+                    tp_queue.add(p);
                     
                     final Location location = new Location(p.getWorld(), 0, y, 0);                    
-                    
                     int c = 0;
                     
                     while (true)
@@ -220,6 +219,8 @@ public class BetterRTP extends JavaPlugin
                         else if (c == 3)
                         {
                             p.sendMessage(color("&cNo suitable location has been found!"));
+                            tp_queue.remove(p);
+                            
                             return;
                         };
                         
@@ -233,6 +234,8 @@ public class BetterRTP extends JavaPlugin
                         if (location.getY() <= 8)
                         {
                             p.sendMessage(color("&cNo suitable location has been found."));
+                            tp_queue.remove(p);
+                            
                             return;
                         }
 
@@ -259,6 +262,8 @@ public class BetterRTP extends JavaPlugin
 
                         location.setY(location.getY() - 1);
                     };                    
+                    
+                    tp_queue.remove(p);
                     
                     getServer().getScheduler().runTask
                     (
@@ -302,9 +307,9 @@ public class BetterRTP extends JavaPlugin
                                 {
                                     return;
                                 };
-
-                                player_queue.put(p, false);
-
+                                
+                                player_queue.add(p);
+                                            
                                 getServer().getScheduler().runTaskLater
                                 (
                                     plugin, 
@@ -313,7 +318,7 @@ public class BetterRTP extends JavaPlugin
                                     { 
                                         @Override public void run() 
                                         { 
-                                            if (!player_queue.containsKey(p))
+                                            if (!player_queue.contains(p))
                                             {
                                                 return;
                                             };
@@ -322,7 +327,7 @@ public class BetterRTP extends JavaPlugin
                                             {
                                                 p.sendMessage(color("&aYou may now use &7/wild &aagain!"));
                                             };
-
+                                            
                                             player_queue.remove(p);
                                         }; 
                                     }, 
