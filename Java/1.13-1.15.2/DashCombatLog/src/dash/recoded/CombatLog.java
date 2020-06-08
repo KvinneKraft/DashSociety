@@ -23,14 +23,16 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,22 +50,27 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
     
     private void clear_caches()
     {
-        if (player_inv.size() > 0)
+        if (player_items.size() > 0)
         {
-            player_inv.clear();
+            player_items.clear();
             
-            for (Map.Entry<Player, List<Skeleton>> entry : mob_list.entrySet())
+            for (Map.Entry<Player, List<WitherSkeleton>> entry : player_zombies.entrySet())
             {
-                for (final Skeleton skelly : entry.getValue())
+                for (final WitherSkeleton skelly : entry.getValue())
                 {
                     skelly.remove();
                 };                
             };
         };
         
-        if (mob_list.size() > 0)
+        if (player_inventories.size() > 0)
         {
-            mob_list.clear();
+            player_inventories.clear();
+        };
+        
+        if (player_zombies.size() > 0)
+        {
+            player_zombies.clear();
         };         
     };    
     
@@ -279,11 +286,9 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
             
             if (switc.get(4))
             {
-                final Skeleton skelly = (Skeleton) p.getWorld().spawn(p.getLocation(), Skeleton.class);
-                
-                print("Hey");
-                
-                skelly.setSeed(0);
+                final WitherSkeleton skelly = (WitherSkeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.WITHER_SKELETON);
+
+                skelly.getEquipment().clear();                
                 
                 if (switc.get(5))
                 {
@@ -299,46 +304,56 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
                             (ItemStack[]) armour.toArray()
                         );
                         
-                        skelly.getEquipment().setHelmetDropChance(10000);
-                        skelly.getEquipment().setChestplateDropChance(10000);
-                        skelly.getEquipment().setLeggingsDropChance(10000);
-                        skelly.getEquipment().setBootsDropChance(10000);
+                        skelly.getEquipment().setHelmetDropChance(0);
+                        skelly.getEquipment().setChestplateDropChance(0);
+                        skelly.getEquipment().setLeggingsDropChance(0);
+                        skelly.getEquipment().setBootsDropChance(0);
                     };
                 };
                 
                 skelly.setCustomNameVisible(true);
-                skelly.setCustomName(mssgs.get(4));
+                skelly.setCustomName(mssgs.get(4).replace("{player}", p.getName()));                
+                skelly.setAI(false);
                 
                 final double health = 20;
                 
                 skelly.setMaxHealth(health);
                 skelly.setHealth(health);
                 
-                final ItemStack[] player_contents = (ItemStack[]) p.getInventory().getContents();
-                
-                if (player_contents.length > 0)
+                final List<ItemStack> substances = new ArrayList<>();
+
+                for (final ItemStack substance : p.getInventory().getContents())
                 {
-                    player_inv.put(p, player_contents);
-                };
+                    if (substance != null && !substance.getType().equals(Material.AIR))
+                    {
+                        substances.add(substance);
+                    };
+                };                
                 
-                List<Skeleton> listy = new ArrayList<>();
+                if (substances.size() > 0)
+                {   
+                    player_items.put((Player) e.getPlayer().getKiller(), (ItemStack[]) substances.toArray(new ItemStack[substances.size()]));
+                    p.getInventory().clear(); 
+                };               
                 
-                if (mob_list.containsKey(p))
+                List<WitherSkeleton> listy = new ArrayList<>();
+                
+                if (player_zombies.containsKey(p))
                 {
-                    listy = mob_list.get(p);
+                    listy = player_zombies.get(p);
                 };
                 
                 listy.add(skelly);
                 
-                mob_list.put(p, listy);
+                player_zombies.put((Player) e.getPlayer().getKiller(), listy);
             };
             
             p.setHealth(0);            
         };
     };
     
-    final HashMap<Player, List<Skeleton>> mob_list = new HashMap<>();
-    final HashMap<Player, ItemStack[]> player_inv = new HashMap<>();
+    final HashMap<Player, List<WitherSkeleton>> player_zombies = new HashMap<>();
+    final HashMap<Player, ItemStack[]> player_items = new HashMap<>();
     
     private void DetonateFirework(Location location, Color mcolor, Color fcolor, FireworkEffect.Type type)
     {
@@ -355,41 +370,58 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
     {
         final Entity entity = (Entity) e.getEntity();
         
-        if (entity instanceof Skeleton)
+        if (entity instanceof WitherSkeleton)
         {
             if (e.getEntity().getKiller() instanceof Player)
             {
                 final Player p = (Player) e.getEntity().getKiller();
                 
-                if (mob_list.containsKey(p))
+                if (player_zombies.containsKey(p))
                 {
-                    if (mob_list.get(p).contains((Skeleton) entity))
+                    if (player_zombies.get(p).contains((WitherSkeleton) entity))
                     {
-                        mob_list.get(p).remove(mob_list.get(p).indexOf((Skeleton) entity));
+                        player_zombies.get(p).remove(player_zombies.get(p).indexOf((WitherSkeleton) entity));
                         
-                        if (mob_list.get(p).size() < 1)
+                        if (player_zombies.get(p).size() < 1)
                         {
-                            mob_list.remove(p);
+                            player_zombies.remove(p);
                         };
-                        
-                        if (player_inv.containsKey(p))
+                       
+                        if (player_items.containsKey(p))
                         {
-                            final Location location = (Location) p.getLocation(); 
+                            final Location location = (Location) entity.getLocation(); 
                             
                             location.getBlock().setType(Material.CHEST);
                             
-                            final Chest chest = (Chest) location.getBlock(); 
+                            final Chest chest = (Chest) location.getBlock().getState();
                             
                             chest.setCustomName(mssgs.get(4).replace("{player}", p.getName()));
-                            chest.getInventory().setContents(player_inv.get(p));
-                            
-                            player_inv.remove(p);                            
+                            chest.getBlockInventory().addItem(player_items.get(p));
+
+                            player_items.remove(p);                            
+                            player_inventories.put(p, chest.getBlockInventory());
                             
                             p.setInvulnerable(true); DetonateFirework(location, Color.PURPLE, Color.AQUA, FireworkEffect.Type.BURST); p.setInvulnerable(false);
                         };
                     };
                 };
             };
+            
+            e.getDrops().clear();            
+        };
+    };
+    
+    final HashMap<Player, Inventory> player_inventories = new HashMap<>();
+    
+    @EventHandler private void onInventoryClose(final InventoryCloseEvent e)
+    {
+        final Player p = (Player) e.getPlayer();
+        
+        if (e.getInventory() != null && player_inventories.containsKey(p))
+        {
+            player_inventories.remove(p);
+            
+            e.getInventory().getLocation().getBlock().setType(Material.AIR);
         };
     };
     

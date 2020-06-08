@@ -33,6 +33,7 @@ import org.bukkit.Sound;
 import java.util.Random;
 import org.bukkit.Color;
 import java.util.List;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 
 //---//
@@ -183,7 +184,7 @@ public class Events implements Listener
                     {
                         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 222222, 222222));        
                     };
-        
+                    
                     open_captcha_dialog(p);
                 };
             },
@@ -222,6 +223,28 @@ public class Events implements Listener
         );
     };
     
+    @EventHandler public void onPlayerRespawn(final PlayerRespawnEvent e)
+    {
+        Player p = (Player)e.getPlayer();        
+        
+        if(!verification_cache.containsKey(p))
+        {
+            return;
+        };
+        
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Captcha.plugin, 
+            new Runnable() 
+            {
+                @Override
+                public void run()
+                {
+                    open_captcha_dialog(p);       
+                };
+            }, 
+                
+            4
+        );        
+    };
     
     private void clear_essence(Player p)
     {
