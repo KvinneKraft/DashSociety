@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -50,13 +51,13 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
         if (player_inv.size() > 0)
         {
             player_inv.clear();
-
-            for (int i = 0; i < mob_list.size(); i += 1)
+            
+            for (Map.Entry<Player, List<Skeleton>> entry : mob_list.entrySet())
             {
-                for (final Skeleton skelly : mob_list.get(i))
+                for (final Skeleton skelly : entry.getValue())
                 {
                     skelly.remove();
-                };
+                };                
             };
         };
         
@@ -271,8 +272,6 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
         
         if (switc.get(2) && tags.containsKey(p))
         {
-            p.setHealth(0);
-            
             if (switc.get(0))
             {
                 getServer().broadcastMessage(mssgs.get(2).replace("%player%", p.getName()));
@@ -280,7 +279,9 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
             
             if (switc.get(4))
             {
-                final Skeleton skelly = (Skeleton) p.getWorld().spawnEntity(p.getLocation(), EntityType.SKELETON);
+                final Skeleton skelly = (Skeleton) p.getWorld().spawn(p.getLocation(), Skeleton.class);
+                
+                print("Hey");
                 
                 skelly.setSeed(0);
                 
@@ -308,7 +309,7 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
                 skelly.setCustomNameVisible(true);
                 skelly.setCustomName(mssgs.get(4));
                 
-                final Double health = (Double) p.getHealth();
+                final double health = 20;
                 
                 skelly.setMaxHealth(health);
                 skelly.setHealth(health);
@@ -331,6 +332,8 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
                 
                 mob_list.put(p, listy);
             };
+            
+            p.setHealth(0);            
         };
     };
     
@@ -460,6 +463,8 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
                 LoadConfiguration();
                 
                 p.sendMessage(color("&aDone!"));
+                
+                return true;
             };
         };
         
