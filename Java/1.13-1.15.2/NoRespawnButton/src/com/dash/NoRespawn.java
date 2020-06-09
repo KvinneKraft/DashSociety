@@ -50,6 +50,8 @@ public class NoRespawn extends JavaPlugin
     
     void LoadConfiguration()
     {
+        saveDefaultConfig();
+        
         if (plugin == null)
             plugin = (JavaPlugin) this;
         
@@ -106,7 +108,7 @@ public class NoRespawn extends JavaPlugin
                 
                 if (spawns.containsKey(p.getWorld()))
                 {
-                    if (p.getHealth() - e.getDamage() < 1)
+                    if (p.getHealth() - e.getDamage() <= 1)
                     {
                         p.setHealth(p.getMaxHealth());
 
@@ -116,6 +118,7 @@ public class NoRespawn extends JavaPlugin
                         };
                         
                         p.teleport(spawns.get(p.getWorld()));                        
+                        p.setFireTicks(0);
                         
                         getServer().getScheduler().runTaskAsynchronously
                         (
