@@ -90,14 +90,21 @@ public class VoteGUI extends JavaPlugin
         };
         
         final ItemMeta meta = (ItemMeta) vod.getItemMeta();
-        
         meta.setDisplayName(" ");
+        
         vod.setItemMeta(meta);
         
         for (int i = 0; i < inventory.getStorageContents().length; i += 1)
         {
             if (inventory.getStorageContents()[i] == null || inventory.getStorageContents()[i].getType().equals(Material.AIR))
             {
+                if (i == inventory.getStorageContents().length - 1)
+                {
+                    final ItemMeta murta = (ItemMeta) vod.getItemMeta();
+                    murta.setDisplayName(color("&d&0Plugin by KvinneKraft"));
+                    vod.setItemMeta(murta);                    
+                };
+                
                 inventory.setItem(i, vod);
             };
         };
