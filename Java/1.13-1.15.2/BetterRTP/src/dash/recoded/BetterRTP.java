@@ -5,7 +5,6 @@
 package dash.recoded;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.ChatColor;
@@ -22,7 +21,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -151,6 +149,8 @@ public class BetterRTP extends JavaPlugin
         maxx = config.getDouble("coordinates.max-x");
         minz = config.getDouble("coordinates.min-z");
         maxz = config.getDouble("coordinates.max-z");        
+        
+        getServer().getScheduler().cancelTasks(plugin);
     };
     
     private final List<PotionEffect> potion_effects = new ArrayList<>();    
@@ -201,7 +201,7 @@ public class BetterRTP extends JavaPlugin
                     tp_queue.add(p);
                     
                     final Location location = new Location(p.getWorld(), 0, y, 0);                    
-                    int c = 0;
+                    int c = 1;
                     
                     while (true)
                     {
@@ -227,10 +227,10 @@ public class BetterRTP extends JavaPlugin
                         c += 1;
                     };
                     
-                    boolean hasLand = false;                             
-
-                    while (!hasLand)
-                    {
+                    while (true)
+                    {   
+                        final int OLD_Y = (int) location.getY();                        
+                        
                         if (location.getY() <= 8)
                         {
                             p.sendMessage(color("&cNo suitable location has been found."));
@@ -239,31 +239,24 @@ public class BetterRTP extends JavaPlugin
                             return;
                         }
 
-                        else
+                        else if (location.getBlock().getType().equals(Material.AIR))
                         {
+                            location.setY(location.getY() + 1);
+
                             if (location.getBlock().getType().equals(Material.AIR))
                             {
-                                location.setY(location.getY() + 1);
+                                location.setY(location.getY() - 2);
 
-                                if (location.getBlock().getType().equals(Material.AIR))
+                                if (!location.getBlock().getType().equals(Material.AIR))
                                 {
-                                    location.setY(location.getY() - 2);
-
-                                    if (!location.getBlock().getType().equals(Material.AIR))
-                                    {
-                                        location.setY(location.getY() + 1);                        
-                                        hasLand = true;
-
-                                        continue;                              
-                                    };
+                                    location.setY(location.getY() + 1);                        
+                                    break;                         
                                 };
                             };
                         };
 
-                        location.setY(location.getY() - 1);
+                        location.setY(OLD_Y - 1);
                     };                    
-                    
-                    tp_queue.remove(p);
                     
                     getServer().getScheduler().runTask
                     (
@@ -276,7 +269,8 @@ public class BetterRTP extends JavaPlugin
                                 final String success = color("&aYou have been teleported to &7X: " + (int) location.getX() + " &7Y: " + (int) location.getY() + " &7Z: " + (int) location.getZ() + " &a!");
 
                                 p.sendMessage(success);
-
+                                tp_queue.remove(p);
+                                
                                 if (send_title)
                                 {
                                     p.sendTitle("", success);            
@@ -390,6 +384,7 @@ public class BetterRTP extends JavaPlugin
     
     @Override public void onDisable()
     {
+        getServer().getScheduler().cancelTasks(plugin);
         print("Plugin has been disabled!");
     };
     
