@@ -17,15 +17,25 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 
 public class Captcha extends JavaPlugin
 {
     FileConfiguration config = null;
     JavaPlugin plugin = null;
     
-    // Order variables correctly later on^
-    
+    protected static class Fireworks 
+    {       
+        static boolean do_fireworks, random_firework_types, random_firework_color;        
+        
+        static final List<FireworkEffect.Type> firework_types = new ArrayList<>();       
+        static final List<Color> rgb_combinations = new ArrayList<>();   
+        
+        static String permission;
+    };
+
     protected static class Sounds 
     {
         static boolean do_completion_sound = false;
@@ -34,22 +44,46 @@ public class Captcha extends JavaPlugin
         static Sound completion_sound;
     };
     
-    protected static class Fireworks 
-    {
-        static boolean do_fireworks = false;
-
-        static final List<FireworkEffect.Type> firework_types = new ArrayList<>();
-        static boolean random_firework_types = true;
-
-        static final List<Color> rgb_combinations = new ArrayList<>();
-        static boolean random_firework_color = true;            
-        
-        static String permission;
-    };
-    
     protected static class Lightning
     {
         static boolean do_lightning = false;
+    };
+    
+    protected static class Mechanism
+    {
+        protected static class  Security
+        {
+            static Integer maximum_attempts, attempt_timeout;
+            static boolean lock_ip_address;
+            
+            protected static class Restrictions
+            {
+                static boolean disable_chat, disable_movement, disable_inventory_interaction, disable_damage, prevent_kill_aura;
+            };
+            
+            protected static class PotionEffects
+            {
+                static final List<PotionEffect> potion_effects = new ArrayList<>();
+                static boolean apply_potion_effects;
+            };
+        };
+        
+        protected static class Interface
+        {
+            static String title;
+            
+            protected static class NormalItems
+            {
+                static final List<ItemStack> items = new ArrayList<>();                
+                static String display_name, lore;
+            };
+            
+            protected static class KeyItems
+            {
+                static final List<ItemStack> items = new ArrayList<>();                
+                static String display_name, lore;                
+            };
+        };
     };
     
     void LoadConfiguration()
