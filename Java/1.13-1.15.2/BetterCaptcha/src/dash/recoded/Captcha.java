@@ -226,19 +226,75 @@ public class Captcha extends JavaPlugin
             Sounds.completion_sound = Sound.ENTITY_PLAYER_LEVELUP;
         }; /* End of Sound Module */   
         
-        internal.InitializeGUI();
-    };
-    
-    final Internal internal = new Internal();    
-    
-    protected class Internal 
-    {
-        Inventory inventory = null;
+        try /*Mechanism*/
+        {
+            try /*Security*/
+            {
+                try /*Restrictions*/
+                {
+                    
+                }
+                
+                catch (final Exception e)
+                {
+                    
+                }; /*End of Restrictions*/
+                
+                try /*Potions*/
+                {
+                    
+                }
+                
+                catch (final Exception e)
+                {
+                    
+                }; /*End of Potions*/                
+            }
+            
+            catch (final Exception e)
+            {
+                
+            }; /*End of Security*/
+            
+            try /*Interface*/
+            {
+                
+            }
+            
+            catch (final Exception e)
+            {
+                
+            }; /*End of Interface*/
+        }
         
-        void InitializeGUI()
+        catch (final Exception e)
         {
             
+        }; /*End of Mechanism*/
+        
+        system.InitializeGUI();
+    };
+    
+    final Sister system = new Sister();    
+    
+    protected class Sister
+    {
+        Inventory inventory = null;
+
+        void InitializeGUI()
+        {
+            /*Add Items to GUI and shit.*/
         };
+    };    
+    
+    protected class Events implements Listener
+    {
+        protected class Cache
+        {
+            /*HashMaps and shit*/
+        };
+        
+        /*More Abracadabra here*/
     };    
     
     @Override public void onEnable()
@@ -280,11 +336,6 @@ public class Captcha extends JavaPlugin
             return true;
         };
     };    
-    
-    protected class Events implements Listener
-    {
-        /*More Abracadabra here*/
-    };
     
     @Override public void onDisable()
     {
