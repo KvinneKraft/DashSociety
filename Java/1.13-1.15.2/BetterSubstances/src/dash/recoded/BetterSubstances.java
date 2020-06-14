@@ -202,10 +202,13 @@ public class BetterSubstances extends JavaPlugin
             if (substance == null) 
                 return;
             
-            final ItemStack sc = new ItemStack(substance.getType(), 1); sc.setItemMeta(substance.getItemMeta());
+            final ItemStack sc = new ItemStack(substance.getType(), 1); { final ItemMeta meta = (ItemMeta) substance.getItemMeta(); sc.setItemMeta(meta); };
             
             if (!substances.containsKey(sc))
+            {
+                //print("No existence");
                 return;
+            };
             
             final int s_identifier = substances.get(sc);
             final Player p = (Player) e.getPlayer();

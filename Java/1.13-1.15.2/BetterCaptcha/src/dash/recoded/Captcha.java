@@ -5,21 +5,33 @@
 package dash.recoded;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class Captcha extends JavaPlugin
 {
@@ -75,13 +87,15 @@ public class Captcha extends JavaPlugin
             protected static class NormalItems
             {
                 static final List<ItemStack> items = new ArrayList<>();                
-                static String display_name, lore;
+                static final List<String> lore = new ArrayList<>();
+                static String display_name;
             };
             
             protected static class KeyItems
             {
                 static final List<ItemStack> items = new ArrayList<>();                
-                static String display_name, lore;                
+                static final List<String> lore = new ArrayList<>();
+                static String display_name;                
             };
         };
     };
@@ -230,40 +244,136 @@ public class Captcha extends JavaPlugin
         {
             try /*Security*/
             {
+                Mechanism.Security.maximum_attempts = config.getInt("mechanism.maximum-attempts");                    
+                Mechanism.Security.attempt_timeout = config.getInt("mechanism.attempt-timeout");
+
+                Mechanism.Security.lock_ip_address = config.getBoolean("mechanism.lock-ip-address");                
+                
                 try /*Restrictions*/
                 {
-                    
+                    Mechanism.Security.Restrictions.disable_chat = config.getBoolean("mechanism.security.restrictions.disable-chat");
+                    Mechanism.Security.Restrictions.disable_movement = config.getBoolean("mechanism.security.restrictions.disable-movement");
+                    Mechanism.Security.Restrictions.disable_inventory_interaction = config.getBoolean("mechanism.security.restrictions.disable-inventory-interaction");
+                    Mechanism.Security.Restrictions.disable_damage = config.getBoolean("mechanism.security.restrictions.disable-damage");                    
+                    Mechanism.Security.Restrictions.prevent_kill_aura = config.getBoolean("mechanism.security.restrictions.prevent-kill-aura");
                 }
                 
                 catch (final Exception e)
                 {
-                    
+                    throw error;
                 }; /*End of Restrictions*/
                 
                 try /*Potions*/
                 {
+                    Mechanism.Security.PotionEffects.apply_potion_effects = config.getBoolean("mechanism.security.potion-appliance.enabled");
                     
+                    if (Mechanism.Security.PotionEffects.apply_potion_effects)
+                    {
+                        if (Mechanism.Security.PotionEffects.potion_effects.size() >= 1)
+                        {
+                            Mechanism.Security.PotionEffects.potion_effects.clear();
+                        };
+                        
+                        for (final String effect : config.getStringList("mechanism.security.potion-appliance.effects"))
+                        {
+                            final PotionEffect finalized = new PotionEffect(PotionEffectType.getByName(effect), 99999, 1);
+                            
+                            if (finalized == null)
+                            {
+                                throw error;
+                            };
+                            
+                            Mechanism.Security.PotionEffects.potion_effects.add(finalized);
+                        };
+                    };
                 }
                 
                 catch (final Exception e)
                 {
-                    
+                    print("Invalid settings have been found in the potion-appliance section of the plugin.yml. Disabling this feature ....");
+                    Mechanism.Security.PotionEffects.apply_potion_effects = false;
                 }; /*End of Potions*/                
             }
             
             catch (final Exception e)
             {
-                
+                print("There was an error in the security part of the config.yml. Certain features may not function as expected!");
             }; /*End of Security*/
             
             try /*Interface*/
             {
+                Mechanism.Interface.title = color(config.getString("mechanism.interface.title"));
                 
+                Mechanism.Interface.NormalItems.items.clear();
+                Mechanism.Interface.NormalItems.lore.clear();
+                
+                Mechanism.Interface.NormalItems.display_name = color(config.getString("mechanism.interface.none-key-items.display-name"));                
+                Mechanism.Interface.NormalItems.lore.add(color(config.getString("mechanism.interface.none-key-items.lore")));                
+                
+                for (final String item : config.getStringList("mechanism.interface.none-key-items.items"))
+                {
+                    try
+                    {
+                        final ItemStack substance = new ItemStack(Material.getMaterial(item), 1);
+                        
+                        if (substance == null)
+                        {
+                            throw error;
+                        };
+                        
+                        final ItemMeta meta = (ItemMeta) substance.getItemMeta();
+
+                        meta.setDisplayName(Mechanism.Interface.NormalItems.display_name);
+                        meta.setLore(Mechanism.Interface.NormalItems.lore);
+
+                        substance.setItemMeta(meta);
+                        
+                        Mechanism.Interface.NormalItems.items.add(substance);
+                    }
+                    
+                    catch (final Exception e)
+                    {
+                        print("There was an invalid item found in the none-key-items section in the config.yml! Skipping ....");
+                    };
+                };                
+                
+                Mechanism.Interface.KeyItems.items.clear();
+                Mechanism.Interface.KeyItems.lore.clear();
+                
+                Mechanism.Interface.KeyItems.display_name = color(config.getString("mechanism.interface.key-items.display-name"));                
+                Mechanism.Interface.KeyItems.lore.add(color(config.getString("mechanism.interface.key-items.lore")));
+                
+                for (final String item : config.getStringList("mechanism.interface.key-items.items"))
+                {
+                    try
+                    {
+                        final ItemStack substance = new ItemStack(Material.getMaterial(item), 1);
+                        
+                        if (substance == null)
+                        {
+                            throw error;
+                        };
+                        
+                        final ItemMeta meta = (ItemMeta) substance.getItemMeta();
+
+                        meta.setDisplayName(Mechanism.Interface.KeyItems.display_name);
+                        meta.setLore(Mechanism.Interface.KeyItems.lore);
+
+                        substance.setItemMeta(meta);                        
+                        
+                        Mechanism.Interface.KeyItems.items.add(substance);
+                    }
+                    
+                    catch (final Exception e)
+                    {
+                        print("There was an invalid item found in the key-items section in the config.yml! Skipping ....");
+                    };
+                };
             }
             
             catch (final Exception e)
             {
-                
+                print("There was an error in the interface part of the config.yml. Certain features may not function as expected!");
             }; /*End of Interface*/
         }
         
@@ -271,30 +381,179 @@ public class Captcha extends JavaPlugin
         {
             
         }; /*End of Mechanism*/
-        
-        system.InitializeGUI();
     };
-    
-    final Sister system = new Sister();    
-    
-    protected class Sister
-    {
-        Inventory inventory = null;
-
-        void InitializeGUI()
-        {
-            /*Add Items to GUI and shit.*/
-        };
-    };    
     
     protected class Events implements Listener
     {
         protected class Cache
-        {
-            /*HashMaps and shit*/
+        { 
+            final HashMap<Player, Integer> player_attempts = new HashMap<>();
+            final HashMap<Player, ItemStack> player_keys = new HashMap<>();            
+            final HashMap<Player, Inventory> player_guis = new HashMap<>();                                
+            final HashMap<Player, String> player_ips = new HashMap<>();
         };
         
-        /*More Abracadabra here*/
+        // Remove player-ip spot when the player solves the captcha.
+        // 
+        
+        final Cache cache = new Cache();
+        
+        @EventHandler public void onPlayerQuit(final PlayerQuitEvent e)
+        {
+            final Player p = (Player) e.getPlayer();
+            
+            if (cache.player_attempts.containsKey(p))
+            {
+                if (Mechanism.Security.lock_ip_address) cache.player_ips.remove(p);                
+                
+                cache.player_attempts.remove(p);
+                cache.player_guis.remove(p);
+                cache.player_keys.remove(p);            
+            };
+        };
+        
+        // Disable things when locked into captcha
+        // Finish Completion
+        // Inventory Close reappearance
+        // Inventory Close reshuffle ?
+ 
+        @EventHandler public void onPlayerInteract(final InventoryClickEvent e)
+        {
+            if(!(e.getWhoClicked() instanceof Player))
+            {
+                return;
+            };
+            
+            final Player p = (Player) e.getWhoClicked();
+            
+            if (cache.player_guis.containsKey(p))
+            {
+                if (e.getCurrentItem().equals(cache.player_keys.get(p)))
+                {
+                    // Completion
+                    
+                    if (Mechanism.Security.lock_ip_address) cache.player_ips.remove(p);                    
+                    
+                    cache.player_attempts.remove(p);
+                    cache.player_guis.remove(p);
+                    cache.player_keys.remove(p);
+                    
+                    p.closeInventory();
+                }
+
+                else
+                {
+                    int attempts = 1;
+
+                    if (cache.player_attempts.containsKey(p))
+                    {
+                        attempts = cache.player_attempts.get(p);
+
+                        if (attempts >= Mechanism.Security.maximum_attempts)
+                        {
+                            p.kickPlayer(color("&cYou have exceeded the maximum attempts!\nYou may relog in order to retry."));
+                        };
+
+                        attempts += 1;
+                    };            
+
+                    cache.player_attempts.put(p, attempts);
+                };
+                
+                if (Mechanism.Security.Restrictions.disable_inventory_interaction)
+                {
+                    e.setCancelled(true);
+                };
+            };
+        };
+        
+        @EventHandler public void onPlayerJoin(final PlayerJoinEvent e)
+        {   
+            final Player p = (Player) e.getPlayer();                                 
+            
+            getServer().getScheduler().runTaskAsynchronously
+            (
+                plugin,
+                    
+                new Runnable()
+                {
+                    @Override public void run()
+                    {
+                        final Inventory gui = getInventory(p);
+                       
+                        cache.player_guis.put(p, gui);
+                        
+                        if (Mechanism.Security.lock_ip_address)
+                        {
+                            cache.player_ips.put(p, p.getAddress().getAddress().toString());
+                        };
+                        
+                        cache.player_keys.put(p, cache.player_keys.get(p));                        
+                         
+                        getServer().getScheduler().runTaskLater
+                        (
+                            plugin, 
+                                
+                            new Runnable() 
+                            { 
+                                @Override public void run() 
+                                { 
+                                    if (Mechanism.Security.PotionEffects.apply_potion_effects)
+                                    {
+                                        p.addPotionEffects(Mechanism.Security.PotionEffects.potion_effects);
+                                    };
+                                    
+                                    p.openInventory(gui);
+                                   
+                                    getServer().getScheduler().runTaskLater
+                                    (
+                                        plugin, 
+                                            
+                                        new Runnable() 
+                                        {
+                                            @Override public void run()
+                                            {
+                                                if (p.isOnline())
+                                                {
+                                                    p.kickPlayer(color("&cYou took to long to solve the captcha.\nYou may relog in order to retry."));
+                                                };
+                                            };
+                                        }, 
+                                        
+                                        Mechanism.Security.attempt_timeout * 20
+                                    );
+                                }; 
+                            },
+                            
+                            1
+                        );
+                    };
+                }
+            );
+        };
+        
+        private Inventory getInventory(final Player p)
+        {
+            final Random rand = new Random();
+            final int sacred_entry = rand.nextInt(24);
+
+            final Inventory gui = Bukkit.createInventory(null, 24, Mechanism.Interface.title);            
+            
+            for (int normal_size = rand.nextInt(Mechanism.Interface.NormalItems.items.size()), entry = 0; entry < 24; entry += 1)
+            {
+                if (entry == sacred_entry)
+                {
+                    gui.setItem(sacred_entry, Mechanism.Interface.KeyItems.items.get(Mechanism.Interface.KeyItems.items.size()));
+                    cache.player_keys.put(p, gui.getItem(sacred_entry));
+                    
+                    continue;
+                };
+
+                gui.setItem(entry, Mechanism.Interface.NormalItems.items.get(normal_size));                
+            };            
+            
+            return gui;
+        };
     };    
     
     @Override public void onEnable()
