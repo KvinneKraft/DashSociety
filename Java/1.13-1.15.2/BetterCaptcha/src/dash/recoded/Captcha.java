@@ -416,7 +416,8 @@ public class Captcha extends JavaPlugin
         // Finish Completion
         // Inventory Close reappearance
         // Inventory Close reshuffle ?
- 
+        // Events Shits
+        
         @EventHandler public void onPlayerInteract(final InventoryClickEvent e)
         {
             if(!(e.getWhoClicked() instanceof Player))

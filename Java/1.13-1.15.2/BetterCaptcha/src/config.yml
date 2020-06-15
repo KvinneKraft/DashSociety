@@ -105,7 +105,7 @@ mechanism:
     # captcha G.U.I. as much as possible:
     interface:
         # The Title of the captcha G.U.I.:
-        title: 'Dashies Better Captcha 2.0'
+        title: '&dDashies Better Captcha &52.0'
         # All the options related to the items that will be used
         # to confuse the player:
         none-key-items:
