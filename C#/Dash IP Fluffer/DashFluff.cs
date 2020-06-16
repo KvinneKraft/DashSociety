@@ -51,12 +51,14 @@ namespace Dash_IP_Fluffer
 	    Add.InteractiveToolBar(this);
 	}
 
+	public static readonly MonitorLog monitor_log = new MonitorLog();
+
 	public Interfuce()
 	{
 	    SetupLayout();
 
-	    new Primary().Initialize();
-	    new MonitorLog().Initialize();
+	    Primary.Initialize();
+	    MonitorLog.Initialize();
 	    new Secondary().Initialize();
 
 

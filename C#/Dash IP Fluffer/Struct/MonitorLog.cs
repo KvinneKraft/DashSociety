@@ -6,14 +6,14 @@ namespace Dash_IP_Fluffer
 {
     public class MonitorLog
     {
-	readonly PictureBox pink_separator = new PictureBox();
-	readonly PictureBox log_container = new PictureBox();
+	static readonly PictureBox pink_separator = new PictureBox();
+	static readonly PictureBox log_container = new PictureBox();
 
 	public static readonly TextBox logtext = new TextBox();
  
-	readonly Form owner = (Form) Interfuce.interfuce;
+	static readonly Form owner = (Form) Interfuce.interfuce;
 
-	public void Initialize()
+	public static void Initialize()
 	{
 	    Add.RuImage(owner, log_container, null, new Size(owner.Width, 225), new Point(0, owner.Height - 225)); log_container.BackColor = (Color)Get.menu_bar.BackColor;
 
@@ -42,7 +42,7 @@ namespace Dash_IP_Fluffer
 	    };
 	}
 
-	readonly string welcome_message = (
+	static readonly string welcome_message = (
 	    "{barrier}\r\n" +
 	    
 	    "This version of Dash IP Fluffer is still being developed " +

@@ -4,21 +4,21 @@ using System.Windows.Forms;
 
 namespace Dash_IP_Fluffer
 {
-    public class Primary
+    public static class Primary
     {
-	readonly PictureBox main_control_container = new PictureBox();
-	readonly PictureBox ipbox_container = new PictureBox();
+	static readonly PictureBox main_control_container = new PictureBox();
+	static readonly PictureBox ipbox_container = new PictureBox();
 
-	readonly TextBox ipbox = new TextBox();
+	public static readonly TextBox ipbox = new TextBox();
 
-	readonly Button check = new Button();
+	static readonly Button check = new Button();
 
-	readonly Label checkip = new Label();
-	readonly Label iptext = new Label();
+	static readonly Label checkip = new Label();
+	static readonly Label iptext = new Label();
 
-	readonly Form owner = (Form) Interfuce.interfuce;
+	static readonly Form owner = (Form) Interfuce.interfuce;
 
-	public void Initialize()
+	public static void Initialize()
 	{
 	    Add.RuImage(owner, main_control_container, null, new Size(275, 28), Point.Empty); main_control_container.BackColor = Color.FromArgb(1, 1, 1);
 

@@ -46,10 +46,15 @@ modules:
         # Now, what permission should a player have in order to
         # have this speciality present:
         permission: 'default'
-#
-#
+# Some of the configurable options that are related to
+# the communicable side of this plugin: 
 messages:
- 
+    # The message that will be sent to the player once the player
+    # has actually passed its captcha!
+    completion-message: '&aYou may now roam freely!'
+    # When this is true the message will be sent to the user their 
+    # screen rather than their chat:
+    send-as-title: true
     
 # Some properties related to the mechanism of the plugin
 # itself to enhancen and personalize the captcha to your
@@ -100,12 +105,12 @@ mechanism:
             effects:
                 - 'CONFUSION'
                 - 'BLINDNESS'
-                - 'SLOWNESS'
+                - 'SLOW'
     # Here are some options that will allow you to design the
     # captcha G.U.I. as much as possible:
     interface:
         # The Title of the captcha G.U.I.:
-        title: '&dDashies Better Captcha &52.0'
+        title: '&aClick the &b{key} &a!'
         # All the options related to the items that will be used
         # to confuse the player:
         none-key-items:

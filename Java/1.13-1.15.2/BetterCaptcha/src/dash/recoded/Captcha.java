@@ -9,25 +9,38 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -42,7 +55,7 @@ public class Captcha extends JavaPlugin
     {       
         static boolean do_fireworks, random_firework_types, random_firework_color;        
         
-        static final List<FireworkEffect.Type> firework_types = new ArrayList<>();       
+        static final List<FireworkEffect.Type> firework_types = new ArrayList<>();
         static final List<Color> rgb_combinations = new ArrayList<>();   
         
         static String permission;
@@ -59,6 +72,12 @@ public class Captcha extends JavaPlugin
     protected static class Lightning
     {
         static boolean do_lightning = false;
+    };
+    
+    protected static class Messages
+    {
+        static String completion_message;
+        static boolean send_as_title; 
     };
     
     protected static class Mechanism
@@ -125,6 +144,7 @@ public class Captcha extends JavaPlugin
             };
             
             Fireworks.random_firework_types = config.getBoolean("modules.fireworks.effect-randomizer");
+            Fireworks.firework_types.clear();
             
             if (!Fireworks.random_firework_types) 
             {
@@ -160,7 +180,26 @@ public class Captcha extends JavaPlugin
                 };
             };
             
+            if (Fireworks.random_firework_types)
+            {
+                Fireworks.firework_types.addAll
+                (
+                    Arrays.asList
+                    (
+                        new FireworkEffect.Type[] 
+                        {
+                            FireworkEffect.Type.BALL,
+                            FireworkEffect.Type.BALL_LARGE,
+                            FireworkEffect.Type.BURST,
+                            FireworkEffect.Type.CREEPER,
+                            FireworkEffect.Type.STAR
+                        }
+                    )
+                );                
+            };
+            
             Fireworks.random_firework_color = config.getBoolean("modules.fireworks.rgb-randomizer");
+            Fireworks.rgb_combinations.clear();
             
             if (!Fireworks.random_firework_color)
             {
@@ -215,7 +254,7 @@ public class Captcha extends JavaPlugin
                 print("Invalid fireworks settings were detected in the configuration file. Disabling this module!");
                 Fireworks.do_fireworks = false;
             };
-        }; /* End of Firework Module */
+        }; /*End of Firework Module*/
         
         try /*Sound Module*/
         {
@@ -238,16 +277,27 @@ public class Captcha extends JavaPlugin
         {
             print("Invalid sound has been found in the configuration file. Using the default one!");
             Sounds.completion_sound = Sound.ENTITY_PLAYER_LEVELUP;
-        }; /* End of Sound Module */   
+        }; /*End of Sound Module*/   
+        
+        try /*Messages*/
+        {
+            Messages.completion_message = color(config.getString("messages.completion-message"));
+            Messages.send_as_title = config.getBoolean("messages.send-as-title");
+        }
+        
+        catch (final Exception e)
+        {
+            print("Invalid message configuration has been found in the configuration file.");
+        }; /*End of Messages*/
         
         try /*Mechanism*/
         {
             try /*Security*/
             {
-                Mechanism.Security.maximum_attempts = config.getInt("mechanism.maximum-attempts");                    
-                Mechanism.Security.attempt_timeout = config.getInt("mechanism.attempt-timeout");
+                Mechanism.Security.maximum_attempts = config.getInt("mechanism.security.maximum-attempts");                    
+                Mechanism.Security.attempt_timeout = config.getInt("mechanism.security.attempt-timeout");
 
-                Mechanism.Security.lock_ip_address = config.getBoolean("mechanism.lock-ip-address");                
+                Mechanism.Security.lock_ip_address = config.getBoolean("mechanism.security.lock-ip-address");                
                 
                 try /*Restrictions*/
                 {
@@ -268,22 +318,27 @@ public class Captcha extends JavaPlugin
                     Mechanism.Security.PotionEffects.apply_potion_effects = config.getBoolean("mechanism.security.potion-appliance.enabled");
                     
                     if (Mechanism.Security.PotionEffects.apply_potion_effects)
-                    {
-                        if (Mechanism.Security.PotionEffects.potion_effects.size() >= 1)
-                        {
-                            Mechanism.Security.PotionEffects.potion_effects.clear();
-                        };
+                    {    
+                        Mechanism.Security.PotionEffects.potion_effects.clear();
                         
                         for (final String effect : config.getStringList("mechanism.security.potion-appliance.effects"))
                         {
-                            final PotionEffect finalized = new PotionEffect(PotionEffectType.getByName(effect), 99999, 1);
-                            
-                            if (finalized == null)
+                            try
                             {
-                                throw error;
-                            };
+                                final PotionEffect finalized = new PotionEffect(PotionEffectType.getByName(effect), 99999, 1);
+
+                                if (finalized == null)
+                                {
+                                    throw error;
+                                };
+
+                                Mechanism.Security.PotionEffects.potion_effects.add(finalized);
+                            }
                             
-                            Mechanism.Security.PotionEffects.potion_effects.add(finalized);
+                            catch (final Exception e)
+                            {
+                                print("Invalid potion-appliance effect found in the configuration file. Skipping ....");
+                            };
                         };
                     };
                 }
@@ -390,13 +445,109 @@ public class Captcha extends JavaPlugin
             final HashMap<Player, Integer> player_attempts = new HashMap<>();
             final HashMap<Player, ItemStack> player_keys = new HashMap<>();            
             final HashMap<Player, Inventory> player_guis = new HashMap<>();                                
-            final HashMap<Player, String> player_ips = new HashMap<>();
+            final HashMap<UUID, String> player_ips = new HashMap<>();
         };
         
-        // Remove player-ip spot when the player solves the captcha.
-        // 
-        
         final Cache cache = new Cache();
+        
+        @EventHandler public void onPlayerDamage(final EntityDamageEvent e)
+        {
+            final Entity entity = (Entity) e.getEntity();
+            
+            if (Mechanism.Security.Restrictions.disable_damage)
+            {
+                if (entity instanceof Player)
+                {
+                    final Player p = (Player) entity;
+
+                    if (cache.player_guis.containsKey(p))
+                    {
+                        e.setCancelled(true);
+                    }
+                };
+            };
+        };
+        
+        @EventHandler public void onEntityDamage(final EntityDamageByEntityEvent e)
+        {
+            final Entity entity = (Entity) e.getEntity();
+            
+            if (Mechanism.Security.Restrictions.prevent_kill_aura)
+            {
+                if (entity instanceof Player && e.getDamager() instanceof Player)
+                {
+                    final Player p = (Player) entity;
+                    
+                    if (cache.player_guis.containsKey(p))
+                    {
+                        p.kickPlayer(color("You should be unable to hit entities while you have to solve your captcha!"));
+                        e.setCancelled(true);
+                    };
+                };
+            };
+        };
+        
+        @EventHandler public void onPlayerMovement(final PlayerMoveEvent e)
+        {
+            if (cache.player_guis.containsKey(e.getPlayer()))
+            {
+                if(Mechanism.Security.Restrictions.disable_movement)
+                {
+                    e.setCancelled(true);
+                };
+            };
+        };
+        
+        @EventHandler public void onPlayerCommand(final PlayerCommandPreprocessEvent e)
+        {
+            if (cache.player_guis.containsKey(e.getPlayer()))
+            {
+                if (Mechanism.Security.Restrictions.disable_chat)
+                {
+                    e.setCancelled(true);
+                };
+            };
+        };
+        
+        @EventHandler public void onPlayerChat(final AsyncPlayerChatEvent e)
+        {
+            if (cache.player_guis.containsKey(e.getPlayer()))
+            {
+                if (Mechanism.Security.Restrictions.disable_chat)
+                {
+                    e.setCancelled(true);
+                };
+            };
+        };
+        
+        @EventHandler public void onInventoryClose(final InventoryCloseEvent e)
+        {
+            if (Mechanism.Security.Restrictions.disable_inventory_interaction)
+            {
+                final Player p = (Player) e.getPlayer();                
+                
+                if (cache.player_guis.containsKey(p))
+                {
+                    getServer().getScheduler().runTaskLater
+                    (
+                        plugin, 
+
+                        new Runnable() 
+                        { 
+                            @Override public void run() 
+                            {
+                                if (cache.player_guis.containsKey(p))
+                                {
+                                    p.openInventory(cache.player_guis.get(p));
+                                };
+                            };
+                        }, 
+
+                        1
+                    );
+                };
+            };
+        };
         
         @EventHandler public void onPlayerQuit(final PlayerQuitEvent e)
         {
@@ -404,7 +555,7 @@ public class Captcha extends JavaPlugin
             
             if (cache.player_attempts.containsKey(p))
             {
-                if (Mechanism.Security.lock_ip_address) cache.player_ips.remove(p);                
+                if (Mechanism.Security.lock_ip_address && cache.player_ips.containsKey(p.getUniqueId())) cache.player_ips.remove(p.getUniqueId());                
                 
                 cache.player_attempts.remove(p);
                 cache.player_guis.remove(p);
@@ -412,13 +563,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        // Disable things when locked into captcha
-        // Finish Completion
-        // Inventory Close reappearance
-        // Inventory Close reshuffle ?
-        // Events Shits
-        
-        @EventHandler public void onPlayerInteract(final InventoryClickEvent e)
+        @EventHandler public void onInventoryInteract(final InventoryClickEvent e)
         {
             if(!(e.getWhoClicked() instanceof Player))
             {
@@ -429,17 +574,59 @@ public class Captcha extends JavaPlugin
             
             if (cache.player_guis.containsKey(p))
             {
-                if (e.getCurrentItem().equals(cache.player_keys.get(p)))
+                if (e.getCurrentItem() != null && e.getCurrentItem().equals(cache.player_keys.get(p)))
                 {
-                    // Completion
+                    if (Lightning.do_lightning) p.getWorld().strikeLightningEffect(p.getLocation());
                     
-                    if (Mechanism.Security.lock_ip_address) cache.player_ips.remove(p);                    
+                    if (p.hasPermission(Fireworks.permission) && Fireworks.do_fireworks)
+                    {
+                        final Random rand = new Random();
+                        
+                        FireworkEffect.Type type = type = Fireworks.firework_types.get(rand.nextInt(Fireworks.firework_types.size())); 
+                        Color color = null;
+                                
+                        if (Fireworks.random_firework_color)
+                        {
+                            color = Color.fromRGB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+                        }
+                        
+                        else
+                        {
+                            color = Fireworks.rgb_combinations.get(rand.nextInt(Fireworks.rgb_combinations.size()));                            
+                        };
+                        
+                        Detonate.Firework(p.getLocation(), color, color, type);
+                    };
+                    
+                    if (p.hasPermission(Sounds.permission) && Sounds.do_completion_sound) p.playSound(p.getLocation(), Sounds.completion_sound, 30, 30);
+                    if (Mechanism.Security.lock_ip_address && cache.player_ips.containsKey(p.getUniqueId())) cache.player_ips.remove(p.getUniqueId());                    
                     
                     cache.player_attempts.remove(p);
                     cache.player_guis.remove(p);
                     cache.player_keys.remove(p);
                     
+                    if (Mechanism.Security.PotionEffects.apply_potion_effects)
+                    {
+                        for (final PotionEffect effect : Mechanism.Security.PotionEffects.potion_effects)
+                        {
+                            if (p.hasPotionEffect(effect.getType()))
+                            {
+                                p.removePotionEffect(effect.getType());
+                            };
+                        };
+                    };
+                    
                     p.closeInventory();
+                    
+                    if (Messages.send_as_title)
+                    {
+                        p.sendTitle(Messages.completion_message, "");
+                    }
+                    
+                    else
+                    {
+                        p.sendMessage(Messages.completion_message);
+                    };
                 }
 
                 else
@@ -468,6 +655,23 @@ public class Captcha extends JavaPlugin
             };
         };
         
+        @EventHandler public void onPlayerAuthenticate(final AsyncPlayerPreLoginEvent e)
+        {
+            if (Mechanism.Security.lock_ip_address)
+            {
+                final UUID uuid = (UUID) e.getUniqueId();
+                
+                if (cache.player_ips.containsKey(uuid))
+                {
+                    if (!e.getAddress().getAddress().toString().equalsIgnoreCase(cache.player_ips.get(uuid)))
+                    {
+                        e.setKickMessage(color("&cYou may not authenticate with another account using the same IP Address!"));
+                        e.disallow(Result.KICK_OTHER, e.getKickMessage());
+                    };
+                };
+            };
+        };
+        
         @EventHandler public void onPlayerJoin(final PlayerJoinEvent e)
         {   
             final Player p = (Player) e.getPlayer();                                 
@@ -486,11 +690,9 @@ public class Captcha extends JavaPlugin
                         
                         if (Mechanism.Security.lock_ip_address)
                         {
-                            cache.player_ips.put(p, p.getAddress().getAddress().toString());
+                            cache.player_ips.put(p.getUniqueId(), p.getAddress().getAddress().toString());
                         };
                         
-                        cache.player_keys.put(p, cache.player_keys.get(p));                        
-                         
                         getServer().getScheduler().runTaskLater
                         (
                             plugin, 
@@ -514,7 +716,7 @@ public class Captcha extends JavaPlugin
                                         {
                                             @Override public void run()
                                             {
-                                                if (p.isOnline())
+                                                if (p.isOnline() && cache.player_guis.containsKey(p))
                                                 {
                                                     p.kickPlayer(color("&cYou took to long to solve the captcha.\nYou may relog in order to retry."));
                                                 };
@@ -536,26 +738,44 @@ public class Captcha extends JavaPlugin
         private Inventory getInventory(final Player p)
         {
             final Random rand = new Random();
-            final int sacred_entry = rand.nextInt(24);
-
-            final Inventory gui = Bukkit.createInventory(null, 24, Mechanism.Interface.title);            
+            final int sacred_entry = rand.nextInt(27);
+            final List<ItemStack> items = new ArrayList<>();
             
-            for (int normal_size = rand.nextInt(Mechanism.Interface.NormalItems.items.size()), entry = 0; entry < 24; entry += 1)
+            for (int entry = 0; entry < 27; entry += 1)
             {
+                ItemStack item = (ItemStack) Mechanism.Interface.NormalItems.items.get(rand.nextInt(Mechanism.Interface.NormalItems.items.size()));
+                
                 if (entry == sacred_entry)
                 {
-                    gui.setItem(sacred_entry, Mechanism.Interface.KeyItems.items.get(Mechanism.Interface.KeyItems.items.size()));
-                    cache.player_keys.put(p, gui.getItem(sacred_entry));
-                    
-                    continue;
-                };
-
-                gui.setItem(entry, Mechanism.Interface.NormalItems.items.get(normal_size));                
+                    item = (ItemStack) Mechanism.Interface.KeyItems.items.get(rand.nextInt(Mechanism.Interface.KeyItems.items.size()));
+                    cache.player_keys.put(p, item);
+                };                
+                
+                items.add(item);
             };            
+            
+            final String item_id = cache.player_keys.get(p).getType().toString().replace("_", " ");
+            final Inventory gui = Bukkit.createInventory(null, 27, Mechanism.Interface.title.replace("{key}", item_id)); 
+            
+            for (int id = 0; id < gui.getSize(); id += 1) gui.setItem(id, items.get(id));
             
             return gui;
         };
     };    
+    
+    protected static class Detonate
+    {
+        public static void Firework(Location location, Color mcolor, Color fcolor, FireworkEffect.Type type)
+        {
+            Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+            FireworkMeta firework_meta = firework.getFireworkMeta();
+
+            firework_meta.addEffect(FireworkEffect.builder().withColor(mcolor).with(type).flicker(true).withFlicker().withTrail().withFade(fcolor).trail(true).build());
+
+            firework.setFireworkMeta(firework_meta);
+            firework.detonate();
+        };          
+    };
     
     @Override public void onEnable()
     {
