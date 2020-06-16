@@ -811,7 +811,26 @@ public class Captcha extends JavaPlugin
                 return false;
             };
             
-            /*Abracadabra here*/
+            final Player p = (Player) s;
+            
+            if (p.hasPermission("admin"))
+            {
+                if (as.length > 0 && as[0].equalsIgnoreCase("reload"))
+                {
+                    p.sendMessage(color("&eReloading ...."));
+                    LoadConfiguration();
+                    p.sendMessage(color("&eDone!"));
+                }
+                
+                else
+                {
+                    p.sendMessage(color("&cDid you mean to imply the argument &4&oreload &c?"));
+                };
+                
+                return true;
+            };
+            
+            p.sendMessage(color("&cYou may not use this command!"));
             
             return true;
         };

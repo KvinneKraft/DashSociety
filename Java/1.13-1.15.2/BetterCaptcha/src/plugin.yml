@@ -12,5 +12,5 @@ author: [Dashie, KvinneKraft, Freya, Princess_Freya, Majesty_Freya]
 
 commands:
     dashcaptcha:
-        aliases: [dc, captcha, dashrobot, robots]
+        aliases: [dc, captcha, dashrobot, robots, bettercaptcha]
         description: A magickal command
