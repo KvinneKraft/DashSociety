@@ -1,0 +1,46 @@
+#
+# Author: Dashie
+# Version: 1.0
+#
+modules:
+    marrying:
+        permission: 'default'
+        minimum-radius: 40
+        broadcast-globally: true
+        messages:
+            proposal-pending: '&cYou already have a proposal pending. Cancel it by typing &4/marry cancel'
+            proposal-request-receive: '&aYou have received a marriage proprosal from &e%p%&a!'
+            proposal-request-send: '&aYou have sent &e%p% &aa marriage proposal!'
+            proposal-accept-receiver: '&aYou successfully have accepted the proposal!'
+            proposal-accept-sender: '&aYour proposal had been accepted!'
+            proposal-deny-receiver: '&aYou have denied the proposal!'
+            proposal-deny-sender: '&cYour proposal had been denied!'
+            married-message-receiver: '&aYou are now married to &e%p%&a!'
+            married-message-sender: '&aYou are now married to &e%p%&a!'
+            married-message-global: '&eThe players &6%p1% &eand &6%p2% &ehave married!'
+        sounds:
+            enabled: true
+            accept-sound: 'ENTITY_PLAYER_LEVELUP'
+            denied-sound: 'ENTITY_WITHER_DIE'
+    kissies:
+        permission: 'default'
+        give-cool-down: 30
+        minimum-radius: 40 
+        messages:
+            receive-message: '&aYou have received a kissy from &e%p%&a.' 
+            give-message: '&aYou have given &e%p% &aa kissy!'
+        sounds:
+            enabled: true
+            give-sound: 'ENTITY_PLAYER_LEVELUP'
+            receive-sound: 'ENTITY_PLAYER_LEVELUP'
+    huggies:
+        permission: 'default'
+        give-cool-down: 30
+        minimum-radius: 40 
+        messages:
+            receive-message: '&aYou have received a hug from &e%p%&a.' 
+            give-message: '&aYou have given &e%p% &aa hug!'
+        sounds:
+            enabled: true
+            give-sound: 'ENTITY_PLAYER_LEVELUP'
+            receive-sound: 'ENTITY_PLAYER_LEVELUP'
