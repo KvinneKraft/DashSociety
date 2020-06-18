@@ -1,0 +1,41 @@
+#Should fly be turned on when entering land they have perms to.
+autofly: false
+#Message when fly is turned on
+flyOn: '&eFactionsFly &8> &aFly on!'
+#Message when fly is turned off
+flyOff: '&eFactionsFly &8> &cFly off!'
+#Message when player does not have permissions for a land type
+cantFly: '&eFactionsFly &8> &cYou cant fly here!'
+#Message when player does not have any permissions to fly
+noPerms: '&eFactionsFly &8> &cNo Permissions'
+#Message for /fly reload
+reloadMsg: '&eFactionsFly &8> &aReload'
+#Max height a player can fly to.
+maxY: 256
+#Message when player reaches max height!
+maxYMsg: '&eFactions &8> &cMax Height'
+#Should there be a leave/enter message! true = yes , false = no
+leaveMsg: true
+#Message when player leaves land
+leaveLand: '&eFactions &8> &eLeaving.. &e(&c%faction%&e)'
+#Message when player enters land
+enterLand: '&eFactions &8> &eEntering.. &e(&a%faction%&e)'
+#Should players be able to pearl while flying? false = no , true = yes
+flyPearl: false
+#Message when enderpearl is denied
+flyPearlMsg: '&eFactions &8> &CYou cannot enderpearl while flying'
+#Disable fly when enemy is close?
+radiusDisable: true
+#Radius to check for players in.
+radius: 50
+#Message when fly is disabled due to enemy being in radius
+enemyClose: '&eFactions &8> &CA enemy player is within 50 blocks of you &e(&cfly disabled&e)'
+
+#Permissions#
+#factionfly.own
+#factionfly.ally
+#factionfly.enemy
+#factionfly.neutral
+#factionfly.wild
+#factionfly.warzone
+#factionfly.safezone

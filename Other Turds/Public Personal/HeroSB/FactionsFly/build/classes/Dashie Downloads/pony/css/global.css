@@ -1,0 +1,48 @@
+
+/***********************************/
+/* ------- Global CSS Code ------- */
+/***********************************/
+
+.top-main-container, .bottom-main-container {
+box-shadow: 0 0 13px #FF0000, 0 0 10px #0000FF;
+font-family: 'dash';
+}
+
+body, html {
+min-width: 100%;
+width: auto;
+min-height: 100%;
+height: 100%;
+display: grid;
+background-color: rgba(24, 24, 24, 0.8);
+background-repeat: no-repeat;
+z-index: 9;
+}
+
+a {
+text-decoration: none !important;
+}
+
+a:hover {
+color: inherit;
+}
+
+a:visited {
+color: inherit;
+}
+
+* {
+padding: 0;
+border: 0;
+margin: 0;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@font-face {
+font-family: 'dash';
+src: url('font.ttf');
+}
+
+.dash-font {
+font-family: 'dash', 'Roboto';
+}
