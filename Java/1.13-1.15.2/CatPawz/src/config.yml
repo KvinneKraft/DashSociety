@@ -29,6 +29,9 @@ cat-wand:
     # The permission that is required when a player wants 
     # to use the cat wand:
     wand-permission: "default"
+    # The cooldown per shot when using the wand:
+    # NOTE: admin-permission bypassess this!
+    wand-shoot-cooldown: 10
 #
 # These are all of the modifiable properties for the
 # plugin in general, such as the admin permission:

@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -93,11 +95,17 @@ public class CatPawz extends JavaPlugin
             final static ItemStack wand_material = new ItemStack(Material.BLAZE_ROD, 1);            
             
             static int particle_density = 0;            
+            static int use_cooldown = 0;
             
             static Sound meow_shoot_sound = null;            
             static Sound meow_sound = null;  
             
             static String permission = "";                        
+        };
+        
+        protected static class Cache
+        {
+            final static List<Player> player_queue = new ArrayList<>();
         };
     };
     
@@ -143,6 +151,14 @@ public class CatPawz extends JavaPlugin
         {
             print("ERROR: An invalid property has been detected for the particle density in the config.yml!");
             CatWand.Properties.particle_density = 30;
+        };
+        
+        CatWand.Properties.use_cooldown = verify.isInteger(config.getString("cat-wand.meow-shoot-cooldown"));
+        
+        if (CatWand.Properties.use_cooldown < 1)
+        {
+            print("ERROR: An invalid property has been detected for the wand shoot cooldown in the config.yml!");
+            CatWand.Properties.use_cooldown = 10;
         };
         
         CatWand.Properties.particles.clear();
@@ -214,11 +230,47 @@ public class CatPawz extends JavaPlugin
         {
             final Player p = (Player) e.getPlayer();
             
+            if (CatWand.Cache.player_queue.contains(p))
+            {
+                p.sendMessage(color("&cYou are on a cooldown, please slow it down a bit!"));
+                return;
+            };
+            
             if (p.hasPermission(CatWand.Properties.permission))
             {
                 if (e.getItem().equals(CatWand.Properties.wand_material))
                 {
+                    if (!p.hasPermission(admin_permission))
+                    {
+                        CatWand.Cache.player_queue.add(p);
+                        
+                        getServer().getScheduler().runTaskLaterAsynchronously
+                        (
+                            plugin,
+                                
+                            new Runnable()
+                            {
+                                @Override public void run()
+                                {
+                                    if (CatWand.Cache.player_queue.contains(p))
+                                    {
+                                        if (p.isOnline())
+                                        {
+                                            p.sendMessage(color("&aYou may now use the &eCat Wand &aagain!"));
+                                        };
+                                        
+                                        CatWand.Cache.player_queue.remove(p);
+                                    };
+                                };
+                            },
+                            
+                            CatWand.Properties.use_cooldown * 20
+                        );
+                    };
                     
+                    
+                    p.playSound(p.getLocation(), CatWand.Properties.meow_shoot_sound, 28, 28);                    
+                    p.launchProjectile(Snowball.class);
                 };
             };
         };
@@ -231,9 +283,28 @@ public class CatPawz extends JavaPlugin
                 {
                     final Player p = (Player) e.getEntity().getShooter();
                     
-                    if (p.getInventory().getItemInMainHand().isSimilar(CatWand.Properties.wand_material))
+                    if (p.getInventory().getItemInMainHand().getItemMeta().getLore().equals(CatWand.Properties.wand_material.getItemMeta().getLore()) && p.getInventory().getItemInMainHand().isSimilar(CatWand.Properties.wand_material))
                     {
-                        // Summon Effects and what not
+                        final Snowball snowball = (Snowball) e.getEntity();
+                        
+                        final Location snowball_location = (Location) snowball.getLocation();
+                        final World snowball_world = (World) snowball.getWorld();
+                        
+                        getServer().getScheduler().runTaskAsynchronously
+                        (
+                            plugin,
+                            
+                            new Runnable()
+                            {
+                                @Override public void run()
+                                {
+                                    for (final Particle particle : CatWand.Properties.particles)
+                                    {
+                                        snowball_world.spawnParticle(particle, snowball_location, 1, 1, 1, CatWand.Properties.particle_density);
+                                    };                                    
+                                };
+                            }
+                        );
                     };
                 };
             };
