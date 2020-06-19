@@ -8,26 +8,46 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CatPawz extends JavaPlugin
 {
+    FileConfiguration config;
+    JavaPlugin plugin;
+    
+    void ReloadPlugin()
+    {
+        if (plugin != this)
+        {
+            plugin = (JavaPlugin) this;
+        };
+        
+        plugin.reloadConfig();
+        config = (FileConfiguration) plugin.getConfig();
+                
+    };
+    
     @Override public void onEnable()
     {
         print("I am trying to swim ....");
         
+        ReloadPlugin();
+        
+        getServer().getPluginManager().registerEvents(new Events(), plugin);            
+        getCommand("catpawz").setExecutor(new Commands());                  
+        
         print
         (
             (
-                "\n-=-=-=-=-=-=-=-=-=-=-=-=-" +
-                "" +
-                "" +
-                "" +
-                "" +
-                "" +
-                "-=-=-=-=-=-=-=-=-=-=-=-=-"
+                "\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" +
+                "Author: Dashie" +
+                "Version: 1.0" +
+                "Github: https://github.com/KvinneKraft" +
+                "Email: KvinneKraft@protonmail.com" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
             )
         );
         
