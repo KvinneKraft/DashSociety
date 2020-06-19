@@ -22,10 +22,16 @@ cat-wand:
         - CRIT
     # The sound effect of when the meow projectile hits
     # something:
-    meow-sound: ENTITY_CAT_MEOW
+    meow-sound: ENTITY_CAT_PURR
     # The sound that will be sent to the player shooting
     # the cat projectile:
     meow-shoot-sound: ENTITY_CAT_HISS
     # The permission that is required when a player wants 
     # to use the cat wand:
     wand-permission: "default"
+#
+# These are all of the modifiable properties for the
+# plugin in general, such as the admin permission:
+globalized:
+    # The permission for commands such as /catpawz reload:
+    admin-permission: "admin"
