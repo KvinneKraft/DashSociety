@@ -4,7 +4,10 @@
 
 package dash.recoded;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -13,12 +16,84 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CatPawz extends JavaPlugin
 {
     FileConfiguration config;
     JavaPlugin plugin;
+    
+    protected class Verifier
+    {
+        Material isMaterial(final String material)
+        {
+            try
+            {
+                Material.getMaterial(material);
+            }
+            
+            catch (final Exception e)
+            {
+                return null;
+            }
+        };
+        
+        Sound isSound(final String sound)
+        {
+            try
+            {
+                return Sound.valueOf(sound);
+            }
+            
+            catch (final Exception e)
+            {
+                return null;
+            }
+        };
+        
+        Particle isParticle(final String particle)
+        {
+            try
+            {
+                return Particle.valueOf(particle);
+            }
+            
+            catch (final Exception e)
+            {
+                return null;
+            }
+        };
+        
+        Integer isInteger(final String integer)
+        {
+            try
+            {
+                return Integer.parseInt(integer);
+            }
+            
+            catch (final Exception e)
+            {
+                return -1;
+            }
+        };
+    };
+    
+    protected static class CatWand 
+    {
+        protected static class Properties
+        {
+            final static List<Particle> particles = new ArrayList<>();          
+            final static ItemStack wand_material = new ItemStack(Material.BLAZE_ROD, 1);            
+            
+            static int particle_density = 0;            
+            
+            static Sound meow_shoot_sound = null;            
+            static Sound meow_sound = null;  
+            
+            static String permission = "";                        
+        };
+    };
     
     void ReloadPlugin()
     {
@@ -29,6 +104,9 @@ public class CatPawz extends JavaPlugin
         
         plugin.reloadConfig();
         config = (FileConfiguration) plugin.getConfig();
+        
+        final Verifier verify = new Verifier();
+        
         
     };
     

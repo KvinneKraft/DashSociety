@@ -7,8 +7,10 @@
 cat-wand:
     # The material of the wand can be specified here:
     wand-material: BLAZE_ROD
-    # The projectile shot can be specified here:
-    meow-projectile: SNOWBALL
+    # The name of the wand item can be specified here:
+    wand-display-name: "&6Purr Purr"
+    # The lore of the wand item can be specified here:
+    wand-lore: "&6The ancient old phrase goes alike:\n&6&oMeow Meow, Purr Purrrr\n&c;')"
     # The particle density can be specified here:
     meow-particle-density: 30
     # All of the particles that will show when your
