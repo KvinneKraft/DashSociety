@@ -12,4 +12,5 @@ name: CatPawz
 
 commands:
     catpawz:
+        description: A help command for Fluffy Pawz.
         aliases: [kittens, cats, fluffs, kittypawz]

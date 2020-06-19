@@ -113,6 +113,8 @@ public class CatPawz extends JavaPlugin
     
     void ReloadPlugin()
     {
+        saveDefaultConfig();
+        
         if (plugin != this)
         {
             plugin = (JavaPlugin) this;
@@ -138,6 +140,7 @@ public class CatPawz extends JavaPlugin
             wand_meta.setDisplayName(color(config.getString("cat-wand.wand-display-name")));
             
             CatWand.Properties.wand_material.setItemMeta(wand_meta);
+            CatWand.Properties.wand_material.setType(wand_substance);
         }
         
         catch (final Exception e)
@@ -153,7 +156,7 @@ public class CatPawz extends JavaPlugin
             CatWand.Properties.particle_density = 30;
         };
         
-        CatWand.Properties.use_cooldown = verify.isInteger(config.getString("cat-wand.meow-shoot-cooldown"));
+        CatWand.Properties.use_cooldown = verify.isInteger(config.getString("cat-wand.wand-shoot-cooldown"));
         
         if (CatWand.Properties.use_cooldown < 1)
         {
@@ -212,11 +215,11 @@ public class CatPawz extends JavaPlugin
         print
         (
             (
-                "\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" +
-                "Author: Dashie" +
-                "Version: 1.0" +
-                "Github: https://github.com/KvinneKraft" +
-                "Email: KvinneKraft@protonmail.com" +
+                "\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" +
+                "Author: Dashie\n" +
+                "Version: 1.0\n" +
+                "Github: https://github.com/KvinneKraft\n" +
+                "Email: KvinneKraft@protonmail.com\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
             )
         );
@@ -238,7 +241,7 @@ public class CatPawz extends JavaPlugin
             
             if (p.hasPermission(CatWand.Properties.permission))
             {
-                if (e.getItem().equals(CatWand.Properties.wand_material))
+                if (e.getItem() != null && e.getItem().equals(CatWand.Properties.wand_material))
                 {
                     if (!p.hasPermission(admin_permission))
                     {
@@ -283,7 +286,7 @@ public class CatPawz extends JavaPlugin
                 {
                     final Player p = (Player) e.getEntity().getShooter();
                     
-                    if (p.getInventory().getItemInMainHand().getItemMeta().getLore().equals(CatWand.Properties.wand_material.getItemMeta().getLore()) && p.getInventory().getItemInMainHand().isSimilar(CatWand.Properties.wand_material))
+                    if (p.getInventory().getItemInMainHand().getItemMeta().hasLore() && p.getInventory().getItemInMainHand().getItemMeta().getLore().equals(CatWand.Properties.wand_material.getItemMeta().getLore()) && p.getInventory().getItemInMainHand().isSimilar(CatWand.Properties.wand_material))
                     {
                         final Snowball snowball = (Snowball) e.getEntity();
                         
@@ -298,9 +301,11 @@ public class CatPawz extends JavaPlugin
                             {
                                 @Override public void run()
                                 {
+                                    snowball_world.playSound(snowball_location, CatWand.Properties.meow_sound, 28, 28);
+                                    
                                     for (final Particle particle : CatWand.Properties.particles)
                                     {
-                                        snowball_world.spawnParticle(particle, snowball_location, 1, 1, 1, CatWand.Properties.particle_density);
+                                        snowball_world.spawnParticle(particle, snowball_location, CatWand.Properties.particle_density, 1, 1, 1);
                                     };                                    
                                 };
                             }

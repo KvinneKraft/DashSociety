@@ -10,9 +10,9 @@ cat-wand:
     # The name of the wand item can be specified here:
     wand-display-name: "&6Purr Purr"
     # The lore of the wand item can be specified here:
-    wand-lore: "&6The ancient old phrase goes alike:\n&6&oMeow Meow, Purr Purrrr\n&c;')"
+    wand-lore: "&6&oMeow Meow, Purr Purrrr &c;')"
     # The particle density can be specified here:
-    meow-particle-density: 30
+    meow-particle-density: 16
     # All of the particles that will show when your
     # meow projectile hits something:
     meow-particles:
