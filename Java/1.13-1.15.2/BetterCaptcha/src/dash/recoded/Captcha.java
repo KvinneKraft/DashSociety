@@ -38,6 +38,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -520,6 +521,32 @@ public class Captcha extends JavaPlugin
             };
         };
         
+        @EventHandler public void onPlayerRespawn(final PlayerRespawnEvent e)
+        {
+            final Player p = (Player) e.getPlayer();                
+
+            if (cache.player_guis.containsKey(p))
+            {
+                getServer().getScheduler().runTaskLater
+                (
+                    plugin, 
+
+                    new Runnable() 
+                    { 
+                        @Override public void run() 
+                        {
+                            if (cache.player_guis.containsKey(p))
+                            {
+                                p.openInventory(cache.player_guis.get(p));
+                            };
+                        };
+                    }, 
+
+                    1
+                );
+            };            
+        };
+        
         @EventHandler public void onInventoryClose(final InventoryCloseEvent e)
         {
             if (Mechanism.Security.Restrictions.disable_inventory_interaction)
@@ -555,7 +582,7 @@ public class Captcha extends JavaPlugin
             
             if (cache.player_attempts.containsKey(p))
             {
-                if (Mechanism.Security.lock_ip_address && cache.player_ips.containsKey(p.getUniqueId())) cache.player_ips.remove(p.getUniqueId());                
+                if (Mechanism.Security.lock_ip_address && cache.player_ips.containsKey(p.getUniqueId())) { cache.player_ips.remove(p.getUniqueId()); };                
                 
                 cache.player_attempts.remove(p);
                 cache.player_guis.remove(p);

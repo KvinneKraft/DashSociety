@@ -237,7 +237,7 @@ public class CombatLog extends JavaPlugin implements Listener, CommandExecutor
     
     @EventHandler private void onPlayerAttack(final EntityDamageByEntityEvent e)
     {
-        if (!(e.getEntity() instanceof Player) || e.getDamage() <= 0)
+        if (!(e.getEntity() instanceof Player) || e.getDamage() <= 2)
         {
             return;
         }
