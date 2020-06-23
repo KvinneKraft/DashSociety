@@ -7,10 +7,10 @@ main: com.kvinnekraft.FlamingArrows
 version: 1.0
 api-version: 1.13
 
-name: FlamingArrows
+name: GlassyArrows
 author: [Dashie, KvinneKraft, Freya, AnyoneWhoHasBeenAPartOfMyLifeMuchLove]
 
 commands:
-    flamingarrows:
+    glassyarrows:
         aliases: [fa, arrows, breakglass, glassarrows, arrowglass]
         description: Flamy Arrows by KvinneKraft!

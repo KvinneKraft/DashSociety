@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Random;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -31,10 +31,21 @@ public class FlamingArrows extends JavaPlugin
     {
         print("I am crawling out of my tomb ....");
         
-        getServer().getPluginManager().registerEvents(new Events(), plugin);
-        getCommand("flamingarrows").setExecutor(new Commands());
+        LoadConfiguration();
         
-        //print();
+        getServer().getPluginManager().registerEvents(new Events(), plugin);
+        getCommand("glassyarrows").setExecutor(new Commands());
+        
+        print
+        (
+            "\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" +
+            " Author: Dashie\n" +
+            " Version: 1.0\n" +
+            "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" +
+            " Email: KvinneKraft@protonmail.com\n" +
+            " Github: https://github.com/KvinneKraft \n" +
+            "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
+        );
         
         print("Guess what I did? I crawled out of my tomb!");
     };
@@ -155,7 +166,7 @@ public class FlamingArrows extends JavaPlugin
                 };
             };
             
-            p.sendMessage(color("&cInvalid syntax, valid syntax: /flamingarrows reload"));
+            p.sendMessage(color("&cInvalid syntax, valid syntax: &4&o/glassyarrows reload"));
             
             return true;
         };
@@ -173,7 +184,7 @@ public class FlamingArrows extends JavaPlugin
                 {
                     final Entity entity = (Entity) e.getEntity();
 
-                    if (entity instanceof Arrow)
+                    if (entity_types.contains(entity.getType()))
                     {
                         if (e.getHitBlock() != null && glass_types.contains(e.getHitBlock().getType()))
                         {
@@ -181,7 +192,9 @@ public class FlamingArrows extends JavaPlugin
 
                             if (rand.nextInt(100) < break_chance)
                             {
+                                entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 10);                                
                                 e.getHitBlock().breakNaturally();
+                                entity.remove(); 
                             };
                         };
                     };
@@ -202,6 +215,6 @@ public class FlamingArrows extends JavaPlugin
     
     protected void print(final String d)
     {
-        System.out.println("(Flaming Arrows): " + d);
+        System.out.println("(Glassy Arrows): " + d);
     };
 };
