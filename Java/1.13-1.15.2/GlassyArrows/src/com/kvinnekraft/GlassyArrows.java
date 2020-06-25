@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class FlamingArrows extends JavaPlugin
+public class GlassyArrows extends JavaPlugin
 {
     FileConfiguration config;
     JavaPlugin plugin;
@@ -54,7 +56,7 @@ public class FlamingArrows extends JavaPlugin
     final List<Material> glass_types = new ArrayList<>();    
     
     String break_permission, admin_permission;
-    int break_chance;
+    int break_chance, break_radius;
     
     protected void LoadConfiguration()
     {
@@ -75,13 +77,21 @@ public class FlamingArrows extends JavaPlugin
             
             try
             {
-                break_chance = config.getInt("flaming-arrows.arrow-break-chance");
+                break_chance = config.getInt("glassy-arrows.arrow-break-chance");
+                break_radius = config.getInt("glassy-arrows.arrow-break-radius") - 1;
+                
+                if (break_radius < 0)
+                {
+                    break_radius = 0;
+                };
             }
             
             catch (final Exception e)
             {
-                print("A none integral value for the arrow break chance had been found in the configuration file, using the default one (50) now!");
+                print("One or more none integral value(s) had been found in the configuration file!");
+                
                 break_chance = 50;
+                break_radius = 1;
             };
             
             entity_types.clear();
@@ -91,7 +101,7 @@ public class FlamingArrows extends JavaPlugin
             
             for (final String path : paths)
             {
-                for (final String data : config.getStringList("flaming-arrows." + path))
+                for (final String data : config.getStringList("glassy-arrows." + path))
                 {
                     try
                     {   
@@ -192,9 +202,59 @@ public class FlamingArrows extends JavaPlugin
 
                             if (rand.nextInt(100) < break_chance)
                             {
-                                entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 10);                                
-                                e.getHitBlock().breakNaturally();
-                                entity.remove(); 
+                                getServer().getScheduler().runTaskAsynchronously
+                                (
+                                    plugin, 
+                                        
+                                    new Runnable() 
+                                    { 
+                                        @Override public void run() 
+                                        {
+                                            final Location location = e.getHitBlock().getLocation();
+                                            
+                                            for (int x = location.getBlockX() - break_radius; x <= location.getBlockX() + break_radius; x++)
+                                            {
+                                                for (int y = location.getBlockY() - break_radius; y <= location.getBlockY() + break_radius; y++)
+                                                {
+                                                    for (int z = location.getBlockZ() - break_radius; z <= location.getBlockZ() + break_radius; z++)
+                                                    {
+                                                        final Block block = (Block) location.getWorld().getBlockAt(x, y, z);
+                                                        
+                                                        if (glass_types.contains(block.getType()))
+                                                        {
+                                                            getServer().getScheduler().runTask
+                                                            (
+                                                                plugin,
+                                                                    
+                                                                new Runnable()
+                                                                {
+                                                                    @Override public void run()
+                                                                    {
+                                                                        entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_GLASS_BREAK, 10, 10);                                                                            
+                                                                        block.breakNaturally();
+                                                                    };
+                                                                }
+                                                            );
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                            
+                                            getServer().getScheduler().runTask
+                                            (
+                                                plugin, 
+                                                    
+                                                new Runnable() 
+                                                { 
+                                                    @Override public void run() 
+                                                    {                            
+                                                        entity.remove();                                                         
+                                                    }; 
+                                                }
+                                            );
+                                        }; 
+                                    }
+                                );
                             };
                         };
                     };

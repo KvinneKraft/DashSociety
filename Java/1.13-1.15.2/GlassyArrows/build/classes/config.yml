@@ -13,7 +13,7 @@ permissions:
     plugin-admin-permission: admin
 # Here are some modifable settings related to the arrows
 # themselves:
-flaming-arrows:
+glassy-arrows:
     # Here are the projectiles which will be seen as arrows when
     # they hit glass, you can even add snowballs and what not:
     considerable-arrows:
@@ -28,6 +28,9 @@ flaming-arrows:
         - 'PINK_STAINED_GLASS'
         - 'PINK_STAINED_GLASS_PANE'
         - 'GLASS'
+    # here you may specify the range of blocks which may be broken when
+    # one of the above projectiles hits it:
+    arrow-break-radius: 1
     # This will determine the chance on a scale from 1 to a thousand
     # whether the block may be broken:
     arrow-break-chance: 50
