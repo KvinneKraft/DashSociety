@@ -29,6 +29,60 @@ public final class WordScramble extends JavaPlugin
     Integer broadcast_interval, scramble_timeout;
     String broadcast_format, success_format, timeout_format, scramble_permission;
 
+    boolean solve_cancel = false;
+
+    protected class Start
+    {
+
+        final StringBuilder builder = new StringBuilder();
+        final List<Character> chars = new ArrayList<>();
+
+        final Random rand = new Random();
+
+        protected void Scrambler()
+        {
+            String word = scramble_list.get(rand.nextInt(scramble_list.size()));
+
+            chars.clear();
+
+            for (final char c : word.toCharArray())
+                chars.add(c);
+
+            Collections.shuffle(chars);
+
+            for (final char c : chars)
+                builder.append(c);
+
+            final String scrambled = builder.toString();
+
+            scrambled_words.add(scrambled);
+            solved_words.add(word);
+
+            getServer().getScheduler().runTaskLaterAsynchronously
+            (
+                plugin,
+
+                new Runnable()
+                {
+                    @Override public void run()
+                    {
+                        if (scrambled_words.contains(scrambled))
+                        {
+                            getServer().broadcastMessage(timeout_format.replace("%scrambled%", scrambled).replace("%solved%", word));
+
+                            scrambled_words.remove(scrambled);
+                            solved_words.remove(word);
+                        };
+                    };
+                },
+
+                scramble_timeout * 20
+            );
+
+            getServer().broadcastMessage(broadcast_format.replace("%scrambled%", scrambled));
+        };
+    };
+
     protected void startScrambler()
     {
         getServer().getScheduler().runTaskTimerAsynchronously
@@ -37,49 +91,13 @@ public final class WordScramble extends JavaPlugin
 
             new Runnable()
             {
-                final Random rand = new Random();
+                final Start start = new Start();
 
                 @Override public void run()
                 {
                     if (getServer().getOnlinePlayers().size() > 0)
                     {
-                        String word = scramble_list.get(rand.nextInt(scramble_list.size()));
-
-                        final List<Character> chars = new ArrayList<>();
-                        for (final char c : word.toCharArray()) chars.add(c);
-
-                        Collections.shuffle(chars);
-
-                        final StringBuilder builder = new StringBuilder();
-                        for (final char c : chars) builder.append(c);
-
-                        final String scrambled = builder.toString();
-
-                        scrambled_words.add(scrambled);
-                        solved_words.add(word);
-
-                        getServer().broadcastMessage(broadcast_format.replace("%scrambled%", word));
-
-                        getServer().getScheduler().runTaskLaterAsynchronously
-                        (
-                            plugin,
-
-                            new Runnable()
-                            {
-                                @Override public void run()
-                                {
-                                    if (scrambled_words.contains(scrambled))
-                                    {
-                                        getServer().broadcastMessage(timeout_format.replace("%scrambled%", scrambled).replace("%solved%", word));
-
-                                        scrambled_words.remove(scrambled);
-                                        solved_words.remove(word);
-                                    };
-                                };
-                            },
-
-                            scramble_timeout * 20
-                        );
+                        start.Scrambler();
                     };
                 };
             },
@@ -103,10 +121,16 @@ public final class WordScramble extends JavaPlugin
                     {
                         final int index = solved_words.indexOf(piece);
 
+                        getServer().broadcastMessage(success_format.replace("%scrambled%", scrambled_words.get(index)).replace("%successor%", p.getName()).replace("%solved%", piece));
+
                         scrambled_words.remove(index);
                         solved_words.remove(index);
 
-                        getServer().broadcastMessage(success_format.replace("%scrambled%", scrambled_words.get(index)).replace("%successor%", p.getName()).replace("%solved%", piece));
+                        if (solve_cancel)
+                        {
+                            e.setCancelled(true);
+                            return;
+                        };
                     };
                 };
             };
@@ -153,9 +177,12 @@ public final class WordScramble extends JavaPlugin
             };
 
             broadcast_format = color(config.getString("word-scramble.configuration.scramble-broadcast-format"));
-            timeout_format = color(config.getString("word-scramble.configuration.scramble-success-format"));
-            success_format = color(config.getString("word-scramble.configuration.scramble-timeout-format"));
+            success_format = color(config.getString("word-scramble.configuration.scramble-success-format"));
+            timeout_format = color(config.getString("word-scramble.configuration.scramble-timeout-format"));
 
+            solve_cancel = config.getBoolean("word-scramble.configuration.scramble-stop-chat");
+
+            scramble_list.clear();
             scramble_list.addAll(config.getStringList("word-scramble.configuration.scramble-list"));
         }
 
@@ -195,7 +222,12 @@ public final class WordScramble extends JavaPlugin
 
                     else if (as[0].equalsIgnoreCase("new"))
                     {
+                        p.sendMessage(color("&aGenerating a scrambled word ...."));
 
+                        stopTasks();
+
+                        Start start = new Start();
+                        start.Scrambler();
 
                         return true;
                     };
