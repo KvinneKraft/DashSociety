@@ -156,7 +156,7 @@ public final class WordScramble extends JavaPlugin
             timeout_format = color(config.getString("word-scramble.configuration.scramble-success-format"));
             success_format = color(config.getString("word-scramble.configuration.scramble-timeout-format"));
 
-            scramble_list.addAll(config.getStringList("word-scramble.configuration.scramble-list"))
+            scramble_list.addAll(config.getStringList("word-scramble.configuration.scramble-list"));
         }
 
         catch (final Exception e)
