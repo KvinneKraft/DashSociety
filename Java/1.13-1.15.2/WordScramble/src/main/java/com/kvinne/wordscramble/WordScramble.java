@@ -33,8 +33,6 @@ public final class WordScramble extends JavaPlugin
 
     protected class Start
     {
-
-        final StringBuilder builder = new StringBuilder();
         final List<Character> chars = new ArrayList<>();
 
         final Random rand = new Random();
@@ -49,6 +47,8 @@ public final class WordScramble extends JavaPlugin
                 chars.add(c);
 
             Collections.shuffle(chars);
+
+            final StringBuilder builder = new StringBuilder();
 
             for (final char c : chars)
                 builder.append(c);
