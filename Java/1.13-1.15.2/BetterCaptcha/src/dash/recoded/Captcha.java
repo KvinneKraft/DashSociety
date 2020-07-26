@@ -464,7 +464,7 @@ public class Captcha extends JavaPlugin
                     if (cache.player_guis.containsKey(p))
                     {
                         e.setCancelled(true);
-                    }
+                    };
                 };
             };
         };
@@ -621,8 +621,12 @@ public class Captcha extends JavaPlugin
                         {
                             color = Fireworks.rgb_combinations.get(rand.nextInt(Fireworks.rgb_combinations.size()));                            
                         };
-                        
+
+                        p.setInvulnerable(true);
+
                         Detonate.Firework(p.getLocation(), color, color, type);
+
+                        p.setInvulnerable(false);
                     };
                     
                     if (p.hasPermission(Sounds.permission) && Sounds.do_completion_sound) p.playSound(p.getLocation(), Sounds.completion_sound, 30, 30);
@@ -647,7 +651,7 @@ public class Captcha extends JavaPlugin
                     
                     if (Messages.send_as_title)
                     {
-                        p.sendTitle(Messages.completion_message, "");
+                        p.sendTitle(Messages.completion_message, "", 20 * 3, 5 * 20, 3 * 20);
                     }
                     
                     else
