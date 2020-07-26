@@ -52,7 +52,7 @@ public class NukeArrows extends JavaPlugin
 
             final ItemMeta meta = nuclear_bow.getItemMeta();
 
-            meta.setLore(Arrays.asList(config.getString("settings.bow-lore")));
+            meta.setLore(Arrays.asList(color(config.getString("settings.bow-lore"))));
             meta.setUnbreakable(config.getBoolean("settings.bow-unbreakable"));
             meta.setDisplayName(color(config.getString("settings.bow-name")));
 
@@ -70,6 +70,8 @@ public class NukeArrows extends JavaPlugin
         print("Loading .....");
 
         LoadConfiguration();
+
+        print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\nAuthor: Dashie\nVersion: 1.0\nGithub: https://github.com/KvinneKraft\nEmail: KvinneKraft@protonmail.com\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 
         getServer().getPluginManager().registerEvents(new Events(), plugin);
         getCommand("nukearrows").setExecutor(new Commands());
@@ -140,7 +142,6 @@ public class NukeArrows extends JavaPlugin
                 {
                     p.sendMessage(color("&aYou have given yourself a " + nuclear_bow.getItemMeta().getDisplayName() + " &a!"));
                     p.getInventory().addItem(nuclear_bow);
-
                     return true;
                 };
             };
