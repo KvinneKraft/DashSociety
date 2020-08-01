@@ -73,8 +73,6 @@ public final class DamageTeleport extends JavaPlugin
 
                 player_queue.add(p);
 
-                print("!");
-
                 getServer().getScheduler().runTaskAsynchronously
                 (
                     plugin,
