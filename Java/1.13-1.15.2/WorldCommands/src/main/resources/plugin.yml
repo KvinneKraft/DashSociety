@@ -1,4 +1,16 @@
-name: WorldCommands
-version: ${project.version}
+
+# Author: Dashie
+# Version: 1.0
+
 main: com.kvinnekraft.WorldCommands
-api-version: 1.16
+
+name: WorldCommands
+author: [Dashie, KvinneKraft, Ponyball]
+
+api-version: 1.13
+version: 1.0
+
+commands:
+  worldcommands:
+    aliases: [wc, worldcommand, wcommands, wcommand, wcs]
+    description: By KvinneKraft@protonmail.com
