@@ -128,6 +128,7 @@ public final class DamageTeleport extends JavaPlugin
                                                 {
                                                     @Override public void run()
                                                     {
+                                                        player_queue.remove(p);
                                                         p.teleport(l);
                                                     };
                                                 }
