@@ -1,0 +1,4 @@
+name: MineDrops
+version: ${project.version}
+main: com.kvinnekraft.MineDrops
+api-version: 1.16
