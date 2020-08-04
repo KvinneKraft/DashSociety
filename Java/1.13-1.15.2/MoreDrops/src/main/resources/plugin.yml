@@ -1,0 +1,4 @@
+name: MoreDrops
+version: ${project.version}
+main: com.kvinnekraft.MoreDrops
+api-version: 1.16

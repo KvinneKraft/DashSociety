@@ -1,8 +1,8 @@
-package com.kvinnekraft.luckyblocks;
+package com.kvinnekraft;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class LuckyBlocks extends JavaPlugin {
+public final class DashBlocks extends JavaPlugin {
 
     @Override
     public void onEnable() {

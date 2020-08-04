@@ -1,4 +1,0 @@
-name: LuckyBlocks
-version: ${project.version}
-main: com.kvinnekraft.luckyblocks.LuckyBlocks
-api-version: 1.16
