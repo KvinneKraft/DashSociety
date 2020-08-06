@@ -73,6 +73,12 @@ public final class MoreDrops extends JavaPlugin
 
         try
         {
+            potion_effects.clear();
+            sound_effects.clear();
+            mob_drops.clear();
+            mob_types.clear();
+            chances.clear();
+
             for (int k = 1 ; ; k += 1)
             {
                 if (config.contains("mob-drops." + k))
