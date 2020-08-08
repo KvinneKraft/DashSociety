@@ -1,9 +1,0 @@
-name: FactionFly
-main: me.isosceles.landfly.Main
-version: 1.6
-author: [Isosceles]
-depend: [Factions]
-commands:
-  ffly:
-    description: Faction Fly Command.   
-    aliases: [factionfly] 
