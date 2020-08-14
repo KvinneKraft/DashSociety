@@ -1,4 +1,0 @@
-name: SkipThatNight
-version: ${project.version}
-main: com.kvinnekraft.SkipThatNight
-api-version: 1.16

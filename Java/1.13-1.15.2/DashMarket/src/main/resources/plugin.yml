@@ -1,0 +1,4 @@
+name: DashMarket
+version: ${project.version}
+main: com.kvinnekraft.DashMarket
+api-version: 1.16
