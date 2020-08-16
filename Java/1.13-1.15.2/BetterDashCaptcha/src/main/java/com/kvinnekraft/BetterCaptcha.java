@@ -1,8 +1,8 @@
 
 // Author: Dashie
-// Version: 1.0
+// Version: 2.1
 
-package dash.recoded;
+package com.kvinnekraft;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -47,12 +48,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Captcha extends JavaPlugin
+public final class BetterCaptcha extends JavaPlugin
 {
     FileConfiguration config = null;
     JavaPlugin plugin = null;
     
-    protected static class Fireworks 
+    protected static final class Fireworks
     {       
         static boolean do_fireworks, random_firework_types, random_firework_color;        
         
@@ -62,7 +63,7 @@ public class Captcha extends JavaPlugin
         static String permission;
     };
 
-    protected static class Sounds 
+    protected static final class Sounds
     {
         static boolean do_completion_sound = false;
        
@@ -70,20 +71,20 @@ public class Captcha extends JavaPlugin
         static Sound completion_sound;
     };
     
-    protected static class Lightning
+    protected static final class Lightning
     {
         static boolean do_lightning = false;
     };
     
-    protected static class Messages
+    protected static final class Messages
     {
         static String completion_message;
         static boolean send_as_title; 
     };
     
-    protected static class Mechanism
+    protected static final class Mechanism
     {
-        protected static class  Security
+        protected static final class  Security
         {
             static Integer maximum_attempts, attempt_timeout;
             static boolean lock_ip_address;
@@ -95,27 +96,27 @@ public class Captcha extends JavaPlugin
             
             protected static class PotionEffects
             {
-                static final List<PotionEffect> potion_effects = new ArrayList<>();
-                static boolean apply_potion_effects;
+                protected static final List<PotionEffect> potion_effects = new ArrayList<>();
+                protected static boolean apply_potion_effects;
             };
         };
         
-        protected static class Interface
+        protected static final class Interface
         {
-            static String title;
+            protected static String title;
             
-            protected static class NormalItems
+            protected static final class NormalItems
             {
-                static final List<ItemStack> items = new ArrayList<>();                
-                static final List<String> lore = new ArrayList<>();
-                static String display_name;
+                protected static final List<ItemStack> items = new ArrayList<>();
+                protected static final List<String> lore = new ArrayList<>();
+                protected static String display_name;
             };
             
-            protected static class KeyItems
+            protected static final class KeyItems
             {
-                static final List<ItemStack> items = new ArrayList<>();                
-                static final List<String> lore = new ArrayList<>();
-                static String display_name;                
+                protected static final List<ItemStack> items = new ArrayList<>();
+                protected static final List<String> lore = new ArrayList<>();
+                protected static String display_name;
             };
         };
     };
@@ -125,10 +126,10 @@ public class Captcha extends JavaPlugin
         saveDefaultConfig();
         
         if (plugin == null)
-            plugin = (JavaPlugin) this;
+            plugin = this;
         
         plugin.reloadConfig();
-        config = (FileConfiguration) plugin.getConfig();
+        config = plugin.getConfig();
     
         Lightning.do_lightning = config.getBoolean("modules.lightning-switch");
         
@@ -151,19 +152,13 @@ public class Captcha extends JavaPlugin
             {
                 for (final String type : config.getStringList("modules.fireworks.effects"))
                 {
-                    final String arr[] = type.replace(" ", "").toUpperCase().split(",");
+                    final String[] arr = type.replace(" ", "").toUpperCase().split(",");
                     
                     try
                     {
                         for (final String suspect : arr)
                         {
                             final FireworkEffect.Type buff = FireworkEffect.Type.valueOf(suspect);
-                            
-                            if (type == null)
-                            {
-                                throw error;
-                            };
-                            
                             Fireworks.firework_types.add(buff);
                         };
                     }
@@ -187,14 +182,11 @@ public class Captcha extends JavaPlugin
                 (
                     Arrays.asList
                     (
-                        new FireworkEffect.Type[] 
-                        {
-                            FireworkEffect.Type.BALL,
-                            FireworkEffect.Type.BALL_LARGE,
-                            FireworkEffect.Type.BURST,
-                            FireworkEffect.Type.CREEPER,
-                            FireworkEffect.Type.STAR
-                        }
+                        FireworkEffect.Type.BALL,
+                        FireworkEffect.Type.BALL_LARGE,
+                        FireworkEffect.Type.BURST,
+                        FireworkEffect.Type.CREEPER,
+                        FireworkEffect.Type.STAR
                     )
                 );                
             };
@@ -435,23 +427,23 @@ public class Captcha extends JavaPlugin
         
         catch (final Exception e)
         {
-            
+            print("An unknown error has occurred.  If this error persists please contact me at KvinneKraft@protonmail.com.  Be sure to send me the following:\n" + e.getMessage());
         }; /*End of Mechanism*/
     };
     
-    protected class Events implements Listener
+    protected final class Events implements Listener
     {
-        protected class Cache
+        protected final class Cache
         { 
-            final HashMap<Player, Integer> player_attempts = new HashMap<>();
-            final HashMap<Player, ItemStack> player_keys = new HashMap<>();            
-            final HashMap<Player, Inventory> player_guis = new HashMap<>();                                
-            final HashMap<UUID, String> player_ips = new HashMap<>();
+            protected final HashMap<Player, Integer> player_attempts = new HashMap<>();
+            protected final HashMap<Player, ItemStack> player_keys = new HashMap<>();
+            protected final HashMap<Player, Inventory> player_guis = new HashMap<>();
+            protected final HashMap<UUID, String> player_ips = new HashMap<>();
         };
         
         final Cache cache = new Cache();
         
-        @EventHandler public void onPlayerDamage(final EntityDamageEvent e)
+        @EventHandler public final void onPlayerDamage(final EntityDamageEvent e)
         {
             final Entity entity = (Entity) e.getEntity();
             
@@ -469,7 +461,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onEntityDamage(final EntityDamageByEntityEvent e)
+        @EventHandler public final void onEntityDamage(final EntityDamageByEntityEvent e)
         {
             final Entity entity = (Entity) e.getEntity();
             
@@ -488,7 +480,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onPlayerMovement(final PlayerMoveEvent e)
+        @EventHandler public final void onPlayerMovement(final PlayerMoveEvent e)
         {
             if (cache.player_guis.containsKey(e.getPlayer()))
             {
@@ -499,7 +491,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onPlayerCommand(final PlayerCommandPreprocessEvent e)
+        @EventHandler public final void onPlayerCommand(final PlayerCommandPreprocessEvent e)
         {
             if (cache.player_guis.containsKey(e.getPlayer()))
             {
@@ -510,7 +502,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onPlayerChat(final AsyncPlayerChatEvent e)
+        @EventHandler public final void onPlayerChat(final AsyncPlayerChatEvent e)
         {
             if (cache.player_guis.containsKey(e.getPlayer()))
             {
@@ -521,7 +513,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onPlayerRespawn(final PlayerRespawnEvent e)
+        @EventHandler public final void onPlayerRespawn(final PlayerRespawnEvent e)
         {
             final Player p = (Player) e.getPlayer();                
 
@@ -533,7 +525,7 @@ public class Captcha extends JavaPlugin
 
                     new Runnable() 
                     { 
-                        @Override public void run() 
+                        @Override public final void run()
                         {
                             if (cache.player_guis.containsKey(p))
                             {
@@ -547,7 +539,7 @@ public class Captcha extends JavaPlugin
             };            
         };
         
-        @EventHandler public void onInventoryClose(final InventoryCloseEvent e)
+        @EventHandler public final void onInventoryClose(final InventoryCloseEvent e)
         {
             if (Mechanism.Security.Restrictions.disable_inventory_interaction)
             {
@@ -561,7 +553,7 @@ public class Captcha extends JavaPlugin
 
                         new Runnable() 
                         { 
-                            @Override public void run() 
+                            @Override public final void run()
                             {
                                 if (cache.player_guis.containsKey(p))
                                 {
@@ -576,7 +568,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onPlayerQuit(final PlayerQuitEvent e)
+        @EventHandler public final void onPlayerQuit(final PlayerQuitEvent e)
         {
             final Player p = (Player) e.getPlayer();
             
@@ -590,7 +582,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onInventoryInteract(final InventoryClickEvent e)
+        @EventHandler public final void onInventoryInteract(final InventoryClickEvent e)
         {
             if(!(e.getWhoClicked() instanceof Player))
             {
@@ -686,7 +678,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onPlayerAuthenticate(final AsyncPlayerPreLoginEvent e)
+        @EventHandler public final void onPlayerAuthenticate(final AsyncPlayerPreLoginEvent e)
         {
             if (Mechanism.Security.lock_ip_address)
             {
@@ -703,7 +695,7 @@ public class Captcha extends JavaPlugin
             };
         };
         
-        @EventHandler public void onPlayerJoin(final PlayerJoinEvent e)
+        @EventHandler public final void onPlayerJoin(final PlayerJoinEvent e)
         {   
             final Player p = (Player) e.getPlayer();                                 
             
@@ -766,7 +758,7 @@ public class Captcha extends JavaPlugin
             );
         };
         
-        private Inventory getInventory(final Player p)
+        protected final Inventory getInventory(final Player p)
         {
             final Random rand = new Random();
             final int sacred_entry = rand.nextInt(27);
@@ -794,7 +786,7 @@ public class Captcha extends JavaPlugin
         };
     };    
     
-    protected static class Detonate
+    protected final static class Detonate
     {
         public static void Firework(Location location, Color mcolor, Color fcolor, FireworkEffect.Type type)
         {
@@ -808,7 +800,7 @@ public class Captcha extends JavaPlugin
         };          
     };
     
-    @Override public void onEnable()
+    @Override public final void onEnable()
     {
         print("Trying to catch my breath here, hold on ....");
         
@@ -822,7 +814,7 @@ public class Captcha extends JavaPlugin
             (
                 "\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" +
                 "Author: Dashie A.K.A. KvinneKraft\n" +
-                "Version: 2.0\n" +
+                "Version: 2.1\n" +
                 "Email: KvinneKraft@protonmail.com\n" +
                 "Github: https://github.com/KvinneKraft\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
@@ -832,9 +824,9 @@ public class Captcha extends JavaPlugin
         print("I am now breathing!");
     };
     
-    protected class Commands implements CommandExecutor
+    protected final class Commands implements CommandExecutor
     {
-        @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
+        @Override public final boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
         {
             if (!(s instanceof Player))
             {
@@ -855,14 +847,13 @@ public class Captcha extends JavaPlugin
                 
                 else
                 {
-                    p.sendMessage(color("&cDid you mean to imply the argument &4&oreload &c?"));
+                    p.sendMessage(color("&cPerhaps try &7/captcha reload &c?"));
                 };
                 
                 return true;
             };
             
             p.sendMessage(color("&cYou may not use this command!"));
-            
             return true;
         };
     };    
@@ -872,12 +863,12 @@ public class Captcha extends JavaPlugin
         print("I think that I died?");
     };
     
-    String color(final String line)
+    protected final String color(final String line)
     {
         return ChatColor.translateAlternateColorCodes('&', line);
     };
     
-    void print(final String line)
+    protected final void print(final String line)
     {
         System.out.println("(Better Captcha): " + line);
     };
