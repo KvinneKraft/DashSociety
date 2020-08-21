@@ -1,4 +1,0 @@
-name: DashMenu
-version: ${project.version}
-main: com.kvinnekraft.DashMenu
-api-version: 1.16
