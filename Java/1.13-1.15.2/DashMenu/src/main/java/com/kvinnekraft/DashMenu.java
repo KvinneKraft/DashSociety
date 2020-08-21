@@ -2,7 +2,7 @@ package com.kvinnekraft;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class DashMarket extends JavaPlugin {
+public final class DashMenu extends JavaPlugin {
 
     @Override
     public void onEnable() {
