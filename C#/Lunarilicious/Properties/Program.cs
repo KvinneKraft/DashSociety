@@ -9,10 +9,7 @@ namespace Lunarilicious
 	[STAThread]
 	static void Main(string[] args)
 	{
-	    Lunaroc lunaroc = new Lunaroc();
-
-	    Application.EnableVisualStyles();
-	    Application.Run(lunaroc);
+	    Application.Run(new Lunaroc());
 	}
     }
 }
