@@ -14,119 +14,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace Lunarilicious
-{
-    public class Entity
-    {
-	public readonly List<PictureBox> Characters = new List<PictureBox>();
-	public readonly List<PictureBox> Effects = new List<PictureBox>();
-
-	public enum CharacterType
-	{
-	    Pug
-	};
-
-	public enum EffectType
-	{
-	    LandExplosion
-	};
-
-	private readonly Form Owner = Lunaroc.getOwner();
-
-	public void LoadCharacters()
-	{
-	    // Add in a property read mechanism so it can do all of the work for me.
-
-	    PictureBox character = new PictureBox();
-
-	    character.BackColor = Color.FromArgb(0, 0, 0, 255);
-	    character.Image = Image.FromFile("data\\characters\\Pug.gif"); // X - 16 = Actual
-	    character.Size = new Size(128, 128);
-	    character.Location = new Point(0, Owner.Height - 43 * 2);
-
-	    Owner.Controls.Add(character);
-	    Characters.Add(character);
-
-	    PictureBox effect = new PictureBox();
-
-	    effect.BackColor = Color.FromArgb(0, 0, 0, 255);
-	    effect.Image = Image.FromFile("data\\effects\\LandExplosion.gif");
-	    effect.Size = new Size(128, 128);
-	    effect.Location = Point.Empty;
-	    effect.Visible = false;
-
-	    Owner.Controls.Add(effect);
-	    Effects.Add(effect);
-	}
-
-	public void playEffect(Point location, int duration, EffectType type)
-	{
-	    Control control = Effects[(int)type]; // New object?
-
-	    control.Location = new Point(location.X, location.Y);
-
-	    Lunaroc.EquippedCharacter.Visible = false;
-	    Lunaroc.EquippedCharacter.Enabled = false;
-
-	    control.Visible = true;
-
-	    System.Timers.Timer scheduler = new System.Timers.Timer(duration);
-	    
-	    scheduler.Enabled = true;
-	    
-	    scheduler.Elapsed += (s, e) =>
-	    {
-		control.Visible = false;
-
-		Lunaroc.EquippedCharacter.Visible = true;
-		Lunaroc.EquippedCharacter.Enabled = true;
-
-		scheduler.Dispose();
-	    };
-
-	    scheduler.Start();
-	}
-    };
-
-    public class Sounds
-    {
-	private readonly List<SoundPlayer> SoundPlayers = new List<SoundPlayer>();
-
-	public void LoadSoundData()
-	{
-	    List<string> paths = new List<string>();
-
-	    if (SoundPlayers.Count > 0)
-	    {
-		SoundPlayers.Clear();
-	    };
-
-	    foreach (SoundType sound in Enum.GetValues(typeof(SoundType)))
-	    {
-		SoundPlayers.Add(new SoundPlayer("data\\sounds\\" + sound.ToString() + ".wav"));
-	    };
-	}
-
-	public enum SoundType
-	{
-	    DogAttack,
-	    DogWalk,
-	    DogGrowl
-	};
-
-	private readonly Form Owner = Lunaroc.getOwner();
-
-	public void playSound(SoundType sound_id)
-	{
-	    Owner.Invoke
-	    (
-		(MethodInvoker)delegate ()
-		{
-		    SoundPlayers[(int)sound_id].Play();
-		}
-	    );
-	}
-    };
-
+{ 
     public class Lunaroc : Form
     {
 	readonly Entity Creature;
@@ -144,7 +32,11 @@ namespace Lunarilicious
 
 	    EquippedCharacter = Creature.Characters[0]; // Should add in a selector
 
-	    //--- Character Manipulation
+	    RegisterEvents();
+	}
+
+	public void RegisterEvents()
+	{
 	    try
 	    {
 		KeyDown += (s, e) =>
@@ -154,7 +46,7 @@ namespace Lunarilicious
 
 		    Keys key = e.KeyData;
 
-		    if (key == Keys.A && !isInAir && !isOnCooldown)
+		    if (key == Keys.A && !isInAir)
 		    {
 			if (x > -16)
 			{
@@ -164,7 +56,7 @@ namespace Lunarilicious
 			Sound.playSound(Sounds.SoundType.DogWalk);
 		    }
 
-		    else if (key == Keys.D && !isInAir && !isOnCooldown)
+		    else if (key == Keys.D && !isInAir)
 		    {
 			if (x < Width - 74)
 			{
@@ -201,8 +93,6 @@ namespace Lunarilicious
 				Thread.Sleep(10);
 			    };
 
-			    Creature.playEffect(EquippedCharacter.Location, 500, Entity.EffectType.LandExplosion);
-			    
 			    Thread.Sleep(2000);
 
 			    isInAir = false;
@@ -224,7 +114,7 @@ namespace Lunarilicious
 			    {
 				isOnCooldown = false;
 			    };
-			    
+
 			    scheduler.Dispose();
 			};
 
@@ -271,11 +161,12 @@ namespace Lunarilicious
 		MinimumSize = sz;
 		MaximumSize = sz;
 
-		//FormBorderStyle = FormBorderStyle.None;
+		FormBorderStyle = FormBorderStyle.None;// Custom Border??? Menu Screen??? Sound Track???
 		StartPosition = FormStartPosition.CenterScreen;
 
-		// Icon = (Icon) icon;
+		BackgroundImage = Image.FromFile("data\\gui\\GameWallpaper.png");
 
+		// Icon = (Icon) icon;
 		Text = "Lunarilicious";
 	    }
 
