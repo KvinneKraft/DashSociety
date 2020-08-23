@@ -154,7 +154,7 @@ namespace Lunarilicious
 
 		    Keys key = e.KeyData;
 
-		    if (key == Keys.A)
+		    if (key == Keys.A && !isInAir && !isOnCooldown)
 		    {
 			if (x > -16)
 			{
@@ -164,7 +164,7 @@ namespace Lunarilicious
 			Sound.playSound(Sounds.SoundType.DogWalk);
 		    }
 
-		    else if (key == Keys.D)
+		    else if (key == Keys.D && !isInAir && !isOnCooldown)
 		    {
 			if (x < Width - 74)
 			{
