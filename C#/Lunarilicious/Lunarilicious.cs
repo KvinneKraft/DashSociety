@@ -16,21 +16,21 @@ using System.Collections.Generic;
 namespace Lunarilicious
 { 
     public class Lunaroc : Form
-    {
-	readonly Entity Creature;
-	readonly Sounds Sound;
-
+    { 
 	protected bool isOnCooldown = false;
 	protected bool isInAir = false;
 
 	public static PictureBox EquippedCharacter;
+	protected Entity Creature;
 
 	public void Runtime()
 	{
+	    Creature = new Entity();
 	    Creature.LoadCharacters();
-	    Sound.LoadSoundData();
 
-	    EquippedCharacter = Creature.Characters[0]; // Should add in a selector
+	    //EquippedCharacter = Creature.Characters[0]; // Should add in a selector
+	    
+	    Sound.LoadGameTracks();
 
 	    RegisterEvents();
 	}
@@ -52,8 +52,6 @@ namespace Lunarilicious
 			{
 			    x -= 15;
 			};
-
-			Sound.playSound(Sounds.SoundType.DogWalk);
 		    }
 
 		    else if (key == Keys.D && !isInAir)
@@ -62,8 +60,6 @@ namespace Lunarilicious
 			{
 			    x += 15;
 			};
-
-			Sound.playSound(Sounds.SoundType.DogWalk);
 		    }
 
 		    else if (key == Keys.S)
@@ -86,10 +82,8 @@ namespace Lunarilicious
 			    Thread.Sleep(250);
 
 			    for (int t = 0; t < 10; t += 1)
-			    {
+			    { 
 				EquippedCharacter.Location = new Point(EquippedCharacter.Location.X, EquippedCharacter.Location.Y + 5);
-				Sound.playSound(Sounds.SoundType.DogAttack);
-
 				Thread.Sleep(10);
 			    };
 
@@ -121,8 +115,6 @@ namespace Lunarilicious
 			isOnCooldown = true;
 
 			scheduler.Start();
-
-			Sound.playSound(Sounds.SoundType.DogGrowl);
 		    };
 
 		    Point location = new Point();
@@ -147,33 +139,25 @@ namespace Lunarilicious
 	    catch { };
 	}
 
+	StartMenu Menu = new StartMenu();
+
 	public Lunaroc()
 	{
 	    Owner = this;
-
-	    //--- Main GUI
+	    
 	    try
 	    {
-		BackColor = Color.FromArgb(16, 16, 16);
-
-		Size sz = new Size(350, 350);
+		Size sz = new Size(500, 425);
 
 		MinimumSize = sz;
 		MaximumSize = sz;
 
-		FormBorderStyle = FormBorderStyle.None;// Custom Border??? Menu Screen??? Sound Track???
-		StartPosition = FormStartPosition.CenterScreen;
-
-		BackgroundImage = Image.FromFile("data\\gui\\GameWallpaper.png");
-
-		// Icon = (Icon) icon;
 		Text = "Lunarilicious";
+
+		Menu.Setup(this);
 	    }
 
 	    catch { };
-
-	    Creature = new Entity();
-	    Sound = new Sounds();
 
 	    Runtime();
 	}

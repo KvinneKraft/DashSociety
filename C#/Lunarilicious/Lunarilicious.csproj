@@ -28,12 +28,16 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>.\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Properties\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -53,14 +57,37 @@
     </Compile>
     <Compile Include="Properties\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Entity.cs" />
-    <Compile Include="src\Sounds.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="src\entity\Entity.cs" />
+    <Compile Include="src\gui\Injector.cs" />
+    <Compile Include="src\gui\inventory\Inventory.cs" />
+    <Compile Include="src\gui\startmenu\StartMenu.cs" />
+    <Compile Include="src\sounds\Sound.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\App.config" />
+    <None Include="Properties\cute.ttf" />
+    <None Include="Properties\main.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\materials.yml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\logo.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
