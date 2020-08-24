@@ -7,11 +7,14 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Media;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using System.Configuration;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace Lunarilicious
 { 
@@ -23,8 +26,46 @@ namespace Lunarilicious
 	public static PictureBox EquippedCharacter;
 	protected Entity Creature;
 
+	public static bool isNumeric(string k)
+	{
+	    return int.TryParse(k.Replace(":", ""), out int t);
+	}
+
 	public void Runtime()
 	{
+	    // Configuration File Loader ;)
+	    List<string> config = File.ReadAllLines("data\\config\\crystal.yml").ToList();
+
+	    for (int k = 0; k < config.Count; k += 1)
+	    {
+		if (k != 0) k -= 1;
+		
+		if (config[k].StartsWith("#") || config[k] == string.Empty)
+		{
+		    config.RemoveAt(k);
+		    continue;
+		};
+
+		break;
+	    };
+
+	    for (int k = 0 ; k < config.Count ; k += 1)
+	    {
+		if (isNumeric(config[k]))
+		{
+		    for (int s_k = k + 1; s_k < 8; s_k += 1)
+		    {
+			string setting = config[s_k].ToLower();
+
+			MessageBox.Show(setting);
+		    };
+
+		    k += 6;
+
+		    continue;
+		};
+	    };
+
 	    Creature = new Entity();
 	    Creature.LoadCharacters();
 

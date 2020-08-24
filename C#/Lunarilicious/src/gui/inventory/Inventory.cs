@@ -20,6 +20,7 @@ namespace Lunarilicious
 	    if (hideAll)
 	    {
 		if (StartMenu.START_MENU.Visible) StartMenu.START_MENU.Visible = false;
+		// internal class with hide container method
 	    };
 
 	    try
