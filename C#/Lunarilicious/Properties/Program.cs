@@ -9,7 +9,9 @@ namespace Lunarilicious
 	[STAThread]
 	static void Main(string[] args)
 	{
-	    Application.Run(new Lunaroc());
+	    Lunaroc lunaroc = new Lunaroc();
+
+	    Application.Run(lunaroc);
 	}
     }
 }

@@ -36,8 +36,8 @@ namespace Lunarilicious
 
 	public void LoadCharacters()
 	{
-	    // Add in a property read mechanism so it can do all of the work for me.
 	    // What about guns and crates?
+	    // Select ponies or pugs like pony_types[pony_names.indexOf("ponyname")];
 
 	    try //---Initialize Ponies:
 	    {

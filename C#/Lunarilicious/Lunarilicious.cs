@@ -24,50 +24,23 @@ namespace Lunarilicious
 	protected bool isInAir = false;
 
 	public static PictureBox EquippedCharacter;
-	protected Entity Creature;
 
-	public static bool isNumeric(string k)
-	{
-	    return int.TryParse(k.Replace(":", ""), out int t);
-	}
+	protected Crystal Crystal;
+	protected Entity Creature;
 
 	public void Runtime()
 	{
-	    // Configuration File Loader ;)
-	    List<string> config = File.ReadAllLines("data\\config\\crystal.yml").ToList();
-
-	    for (int k = 0; k < config.Count; k += 1)
-	    {
-		if (k != 0) k -= 1;
-		
-		if (config[k].StartsWith("#") || config[k] == string.Empty)
-		{
-		    config.RemoveAt(k);
-		    continue;
-		};
-
-		break;
-	    };
-
-	    for (int k = 0 ; k < config.Count ; k += 1)
-	    {
-		if (isNumeric(config[k]))
-		{
-		    for (int s_k = k + 1; s_k < 8; s_k += 1)
-		    {
-			string setting = config[s_k].ToLower();
-
-			MessageBox.Show(setting);
-		    };
-
-		    k += 6;
-
-		    continue;
-		};
-	    };
-
 	    Creature = new Entity();
 	    Creature.LoadCharacters();
+
+	    Crystal = new Crystal();
+	    Crystal.LoadCrystals();
+
+	    // - Work on the Character Selector ( MAKE SURE THAT THE USER CAN PURCHASE UNAVAILABLE
+	    //					  CHARACTERS, IT IS IMPORTANT! )
+	    // - Work on the Shop G.U.I.
+	    // - Work on the Inventory G.U.I.
+	    // - Add Catch Statements around Initialization Things
 
 	    //EquippedCharacter = Creature.Characters[0]; // Should add in a selector
 	    

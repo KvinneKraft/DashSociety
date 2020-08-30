@@ -52,7 +52,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Properties\icon.ico</ApplicationIcon>
+    <ApplicationIcon>Properties\resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -78,29 +78,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="src\crystal\Crystal.cs" />
     <Compile Include="src\entity\Entity.cs" />
     <Compile Include="src\gui\Injector.cs" />
     <Compile Include="src\gui\inventory\Inventory.cs" />
     <Compile Include="src\gui\startmenu\StartMenu.cs" />
     <Compile Include="src\sounds\Sound.cs" />
+    <Compile Include="src\util\Integers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\config\crystal.yml" />
     <None Include="Properties\App.config" />
-    <None Include="Properties\cute.ttf" />
-    <None Include="Properties\main.ttf" />
+    <None Include="Properties\resources\cute.ttf" />
+    <None Include="Properties\resources\main.ttf" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -116,6 +112,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\shop\crystals\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="idea.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
