@@ -26,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public final class FireworkBombs extends JavaPlugin
 {
@@ -85,30 +86,14 @@ public final class FireworkBombs extends JavaPlugin
 
                 location.getWorld().dropItemNaturally(location, new ItemStack(Material.SNOWBALL, 1));
 
-                getServer().getScheduler().scheduleSyncRepeatingTask
-                (
-                    plugin,
-
-                    () ->
-                    {
-                        if (location.getNearbyEntities(5, 5, 5).contains(snowball))
-                        {
-                            location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 4);
-                            location.getWorld().spawnParticle(Particle.FLAME, location, 4);
-                        };
-                    },
-
-                    2, 120
-                );
-
                 getServer().getScheduler().runTaskLater
                 (
                     plugin,
 
                     () ->
                     {
-                        if (location.getNearbyEntities(5, 5, 5).contains(snowball))
-                        {
+                        //if (location.getNearbyEntities(5, 5, 5).contains(snowball))
+                        //{
                             snowball.remove();
 
                             for ( int t = 0; t < 8; t += 1)
@@ -119,7 +104,7 @@ public final class FireworkBombs extends JavaPlugin
 
                                     () ->
                                     {
-                                        int min = -8, max = 8;
+                                        int min = -4, max = 4;
 
                                         double x = ThreadLocalRandom.current().nextInt(min, max + 1);
                                         double y = location.getY() + ThreadLocalRandom.current().nextInt(min, max + 1);
@@ -136,7 +121,7 @@ public final class FireworkBombs extends JavaPlugin
                                     1
                                 );
                             };
-                        };
+                        //};
                     },
 
                     120
