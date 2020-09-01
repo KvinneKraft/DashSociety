@@ -44,7 +44,7 @@ namespace Lunarilicious
 
 	    //EquippedCharacter = Creature.Characters[0]; // Should add in a selector
 	    
-	    Sound.LoadGameTracks();
+	    //Sound.LoadGameTracks();
 
 	    RegisterEvents();
 	}

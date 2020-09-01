@@ -17,18 +17,18 @@ namespace Lunarilicious
     {
 	public readonly List<PictureBox> Characters = new List<PictureBox>();
 
-	public static class EntityType
+	public class EntityType
 	{
-	    public static class Pony
+	    public class Pony
 	    {
-		public static List<PictureBox> pony_types = new List<PictureBox>();
-		public static List<string> pony_names = new List<string>();
+		public static readonly List<PictureBox> pony_types = new List<PictureBox>();
+		public static readonly List<string> pony_names = new List<string>();
 	    };
 
-	    public static class Pug
+	    public class Pug
 	    {
-		public static List<PictureBox> pug_types = new List<PictureBox>();
-		public static List<string> pug_names = new List<string>();
+		public static readonly List<PictureBox> pug_types = new List<PictureBox>();
+		public static readonly List<string> pug_names = new List<string>();
 	    };
 	};
 

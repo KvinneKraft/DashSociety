@@ -85,6 +85,7 @@
     <Compile Include="src\gui\startmenu\StartMenu.cs" />
     <Compile Include="src\sounds\Sound.cs" />
     <Compile Include="src\util\Integers.cs" />
+    <Compile Include="src\util\Strings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\config\crystal.yml" />

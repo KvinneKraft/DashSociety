@@ -18,110 +18,73 @@ namespace Lunarilicious
     {
 	public static class CrystalType
 	{
-	    public static List<PictureBox> graphics = new List<PictureBox>();
-	    
-	    public static List<string> names = new List<string>();
-	    
-	    public static List<ulong> sell_p = new List<ulong>();
-	    public static List<int> sell_a = new List<int>();
+	    public static readonly List<PictureBox> graphics = new List<PictureBox>();
 
-	    public static List<ulong> buy_p = new List<ulong>();
-	    public static List<int> buy_a = new List<int>();
+	    public static void addGraphics(string file)
+	    {
+		try
+		{
+		    PictureBox crystal = new PictureBox();
 
-	    public static List<int> tier = new List<int>();
-	    public static List<int> cid = new List<int>();
+		    crystal.Image = Image.FromFile(file);
+		    crystal.BackColor = Color.FromArgb(0, 0, 0, 255);
+		    crystal.Size = crystal.Image.Size;
+
+		    graphics.Add(crystal);
+		}
+
+		catch (Exception e)
+		{
+		    // ERROR HANDLER?
+		};
+	    }
+
+	    public static readonly List<string> names = new List<string>();
+	    public static readonly List<string> files = new List<string>();
+	    public static readonly List<string> types = new List<string>();
+
+	    public static readonly List<ulong> sell_p = new List<ulong>();
+	    public static readonly List<int> sell_a = new List<int>();
+
+	    public static readonly List<ulong> buy_p = new List<ulong>();
+	    public static readonly List<int> buy_a = new List<int>();
+
+	    public static readonly List<int> tier = new List<int>();
+	    public static readonly List<int> cid = new List<int>();
 	};
 
-	private string formatConfigLine(string line) // Put into String class
+	public class info
 	{
-	    line = line.Replace("name:", string.Empty).Replace("tier:", string.Empty).Replace("sell:", string.Empty).Replace("buy:", string.Empty).Replace("\'", string.Empty).Replace("\"", string.Empty);
-
-	    int length = 0;
-
-	    for (int l = 0; l < line.Length; l += 1)
-	    {
-		if (!line[l].Equals(' '))
-		{
-		    break;
-		};
-
-		length += 1;
-	    };
-
-	    return line.Remove(0, length);
-	}
-
-	private void toStringDialog(List<string> list)
-	{
-	    string result = string.Empty;
-
-	    foreach (string line in list)
-	    {
-		result += line + "\r\n";
-	    };
-
-	    MessageBox.Show(result);
-	}
-
-	private string removeEmpty(string str)
-	{
-	    int length = 0;
-
-	    for (int k = 0; k < str.Length; k += 1)
-	    {
-		if (str[k].Equals(' '))
-		{
-		    length += 1;
-		    continue;
-		};
-
-		break;
-	    };
-
-	    return str.Remove(0, length);
-	}
-
-	public enum Properties { name, tier, sell, buy };
+	    public static readonly int props = 7;
+	};
 
 	public void LoadCrystals()
 	{
 	    /*
-		- Convert the YML config to usable data, put it all into the above lists.
+		- Work on custom drops
+		- Work on selector crystals
 	     */
-
-	    if (CrystalType.graphics.Count > 0)
-	    {
-		CrystalType.graphics.Clear();
-		CrystalType.names.Clear();
-
-		CrystalType.sell_p.Clear();
-		CrystalType.sell_a.Clear();
-
-		CrystalType.buy_p.Clear();
-		CrystalType.buy_a.Clear();
-
-		CrystalType.tier.Clear();
-		CrystalType.cid.Clear();
-	    };
-
-	    try //---Initialize Crystal Graphics:
-	    {
-		foreach (var crystal_file in new DirectoryInfo("data\\crystals\\").GetFiles("*.png"))
-		{
-		    PictureBox crystal = new PictureBox();
-		    
-		    crystal.Image = Image.FromFile(crystal_file.FullName);
-		    crystal.BackColor = Color.FromArgb(0, 0, 0, 255);
-		    crystal.Size = crystal.Image.Size;
-
-		    CrystalType.graphics.Add(crystal);
-		};
-	    }
-
-	    catch (Exception e) { MessageBox.Show($"{e}"); };
-
+	    
 	    try //---Initialize Crystal Configuration:
 	    {
+		if (CrystalType.graphics.Count > 0)
+		{
+		    CrystalType.graphics.Clear();
+		    CrystalType.names.Clear();
+
+		    CrystalType.sell_p.Clear();
+		    CrystalType.sell_a.Clear();
+
+		    CrystalType.buy_p.Clear();
+		    CrystalType.buy_a.Clear();
+
+		    CrystalType.files.Clear();
+		    CrystalType.types.Clear();
+
+		    CrystalType.tier.Clear();
+		    CrystalType.cid.Clear();
+		};
+
 		List<string> config = File.ReadAllLines("data\\config\\crystal.yml").ToList();
 		
 		for (int k = 0; k < config.Count; k += 1)
@@ -129,9 +92,10 @@ namespace Lunarilicious
 		    // Something causes the algorithm to not detect 
 		    // all of the put hash tags.
 
-		    if (config[k].Contains("#"))
+		    if (config[k].Contains('#'))
 		    {
-			config[k].Remove(k);
+			config.Remove(config[k]);
+			config.RemoveAt(config.IndexOf(config[k]));
 		    };
 
 		    //---Ordering configuration data:
@@ -139,10 +103,11 @@ namespace Lunarilicious
 		    {
 			List<string> properties = new List<string>();
 
-			for (int s_k = k+1; s_k < k+5; s_k += 1)
+			k += 1;
+
+			for (int s_k = k; s_k < k + info.props; s_k += 1)
 			{
-			    string setting = formatConfigLine(config[s_k]);
-			    properties.Add(setting);
+			    properties.Add(Strings.formatConfigLine(config[s_k]));
 			};
 
 			CrystalType.tier.Add(int.Parse(properties[1]));
@@ -160,11 +125,22 @@ namespace Lunarilicious
 			CrystalType.names.Add(properties[0]);
 			CrystalType.cid.Add(k - 1);
 
-			k += 4;
+			CrystalType.addGraphics(properties[4]);
+
+			CrystalType.types.Add(properties[5]);
+
+			if (properties[6].Equals("drops:"))
+			{
+			    properties.Remove("drops:");
+
+			    // Continue Work: (Add in drops)
+			};
+
+			k += info.props;
 		    };
 		};
 
-		toStringDialog(config);
+		Strings.toStringDialog(config);
 	    }
 
 	    catch (Exception e) { MessageBox.Show($"{e}"); };

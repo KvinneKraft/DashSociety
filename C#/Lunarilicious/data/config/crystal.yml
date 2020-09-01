@@ -22,14 +22,42 @@
 #
 # crystal-settings.<number>.cid - corresponds to the drop id, which is programmatically setup.
 #
+# TYPES: NORMAL, NEXUS
+#
 crystal-settings:
     1:
-        name: 'Shroom Nexus Crystal'
+        name: 'Shroom Crystal'
         tier: 3
-        sell: '1~10'
-        buy: '1~1000'
+        sell: '8~100'
+        buy: '1~10000'
+        file: 'shroom_crystal.png'
+        type: 'NORMAL'
+        drops:
+            1:
+                amount: ''
+                chance: ''
+                type: ''
     2:
-        name: 'Shroom Nexus Crystal'
+        name: 'Truffle Crystal'
         tier: 3
-        sell: '1~10'
-        buy: '1~1000'
+        sell: '8~100'
+        buy: '1~10000'
+        file: 'truffle_crystal.png'
+        type: 'NORMAL'
+        drops:
+            1:
+                amount: ''
+                chance: ''
+                type: ''
+    3:
+        name: 'Mush Crystal'
+        tier: 3
+        sell: '8~100'
+        buy: '1~10000'
+        file: 'mush_crystal.png'
+        type: 'NORMAL'
+        drops:
+            1:
+                amount: ''
+                chance: ''
+                type: ''
