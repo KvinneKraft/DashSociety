@@ -15,21 +15,8 @@ namespace Lunarilicious
 {
     public static class Inventory
     {
-	public static void Show(bool hideAll)
-	{
-	    if (hideAll)
-	    {
-		if (StartMenu.START_MENU.Visible) StartMenu.START_MENU.Visible = false;
-		// internal class with hide container method
-	    };
-
-	    try
-	    {
-
-	    }
-
-	    catch { };
-	}
+	//---Inventory Objects
+	public static readonly PictureBox INVENTORY_MENU = new PictureBox();
 
 	public static void Setup()
 	{

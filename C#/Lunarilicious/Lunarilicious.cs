@@ -53,7 +53,7 @@ namespace Lunarilicious
 	{
 	    try
 	    {
-		KeyDown += (s, e) =>
+		KeyDown += (s, e) => 
 		{
 		    int x = EquippedCharacter.Location.X;
 		    int y = EquippedCharacter.Location.Y;

@@ -33,7 +33,7 @@ namespace Lunarilicious
 		    graphics.Add(crystal);
 		}
 
-		catch (Exception e)
+		catch /*(Exception e)*/
 		{
 		    // ERROR HANDLER?
 		};

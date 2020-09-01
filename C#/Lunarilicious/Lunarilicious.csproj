@@ -82,7 +82,9 @@
     <Compile Include="src\entity\Entity.cs" />
     <Compile Include="src\gui\Injector.cs" />
     <Compile Include="src\gui\inventory\Inventory.cs" />
+    <Compile Include="src\gui\play\selector\Selector.cs" />
     <Compile Include="src\gui\startmenu\StartMenu.cs" />
+    <Compile Include="src\gui\VisibilityManager.cs" />
     <Compile Include="src\sounds\Sound.cs" />
     <Compile Include="src\util\Integers.cs" />
     <Compile Include="src\util\Strings.cs" />

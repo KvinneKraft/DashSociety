@@ -16,21 +16,21 @@ namespace Lunarilicious
     public class StartMenu
     {
 	//----Start Menu Objects
-	public static PictureBox START_MENU_CONTAINER = new PictureBox();
-	public static PictureBox GAME_TITLE_OBJECT = new PictureBox();
-	public static PictureBox START_MENU = new PictureBox();
+	public static readonly PictureBox START_MENU_CONTAINER = new PictureBox();
+	public static readonly PictureBox GAME_TITLE_OBJECT = new PictureBox();
+	public static readonly PictureBox START_MENU = new PictureBox();
 
-	public static Button GAME_SETTINGS = new Button();
-	public static Button INVENTORY = new Button();
-	public static Button PLAY_GAME = new Button();
+	public static readonly Button GAME_SETTINGS = new Button();
+	public static readonly Button INVENTORY = new Button();
+	public static readonly Button PLAY_GAME = new Button();
 	
 	//----Menu Bar Objects
-	public static PictureBox BAR_OBJECT = new PictureBox();
+	public static readonly PictureBox BAR_OBJECT = new PictureBox();
 
-	public static Button MINIMIZE_OBJECT = new Button();
-	public static Button QUIT_OBJECT = new Button();
+	public static readonly Button MINIMIZE_OBJECT = new Button();
+	public static readonly Button QUIT_OBJECT = new Button();
 
-	public static Label BAR_TITLE = new Label();
+	public static readonly Label BAR_TITLE = new Label();
 
 	public static void UpdateBarTitle(string title)
 	{
@@ -103,11 +103,26 @@ namespace Lunarilicious
 		Size OPTION_SIZE = new Size(125, START_MENU_CONTAINER.Height);
 		
 		Injector.Add.AButton(START_MENU_CONTAINER, PLAY_GAME, OPTION_SIZE, Point.Empty, OPTION_COLOR, Color.White, "Play Game", Injector.Get.FONT_TYPE_MAIN, 14);
+
+		PLAY_GAME.Click += (s, e) => playGame();//Same ideology for the others.
+
 		Injector.Add.AButton(START_MENU_CONTAINER, INVENTORY, OPTION_SIZE, new Point(PLAY_GAME.Left + PLAY_GAME.Width + 20, 0), OPTION_COLOR, Color.White, "Inventory", Injector.Get.FONT_TYPE_MAIN, 14);
 		Injector.Add.AButton(START_MENU_CONTAINER, GAME_SETTINGS, OPTION_SIZE, new Point(INVENTORY.Left + INVENTORY.Width + 20, 0), OPTION_COLOR, Color.White, "Settings", Injector.Get.FONT_TYPE_MAIN, 14);
 	    }
 
 	    catch { };
+	}
+	
+	public static Selector selector = null;
+
+	public void playGame()
+	{
+	    if (selector == null)
+	    {
+		selector = new Selector(Lunaroc.getOwner());
+	    };
+
+	    VisibilityManager.ShowComponent(Selector.SELECTOR_MENU);
 	}
     };
 };
