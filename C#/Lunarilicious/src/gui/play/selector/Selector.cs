@@ -90,7 +90,7 @@ namespace Lunarilicious
 	 - Autoload characters
 	 - Add a back button
 	 - Add on hover buy - sell - info
-	 - Add custom scroll bar
+	 - Make scrollbar work
 	*/
 
 	public void SelectCharacter()
