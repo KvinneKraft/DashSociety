@@ -47,6 +47,7 @@ namespace Lunarilicious
 	    //Sound.LoadGameTracks();
 
 	    RegisterEvents();
+	    this.Show();
 	}
 
 	public void RegisterEvents()
@@ -157,6 +158,7 @@ namespace Lunarilicious
 
 	public Lunaroc()
 	{
+	    this.Hide();
 	    Owner = this;
 	    
 	    try
@@ -176,7 +178,7 @@ namespace Lunarilicious
 	    Runtime();
 	}
 
-	static Form Owner;
+	new static Form Owner;
 
 	public static Form getOwner()
 	{

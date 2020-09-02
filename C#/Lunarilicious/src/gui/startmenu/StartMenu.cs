@@ -75,7 +75,7 @@ namespace Lunarilicious
 		    Base.SendToBack();
 		};
 
-		Injector.Add.ThaLabel(BAR_OBJECT, BAR_TITLE, Point.Empty, Color.White, string.Empty, Injector.Get.FONT_TYPE_MAIN, 10);
+		Injector.Add.ThaLabel(BAR_OBJECT, BAR_TITLE, Point.Empty, Color.White, string.Empty, Injector.Get.FONT_TYPE_MAIN, 10); /*PURPOSELY*/  Injector.Set.Draggable(BAR_TITLE, Base);
 
 		UpdateBarTitle("Main Screen");
 	    }

@@ -18,6 +18,13 @@ namespace Lunarilicious
 	//----Main Objects
 	public static readonly PictureBox SELECTOR_MENU = new PictureBox();
 
+	//---Character Objects
+	public static readonly PictureBox CHARACTER_BASE = new PictureBox();
+
+	//---Scrollbar Objects
+	public static readonly PictureBox SCROLL_BAR_BASE = new PictureBox();
+	public static readonly PictureBox SCROLL_BAR = new PictureBox();
+
 	public Selector(Form Base)
 	{
 	    try //---Initialize Selector Menu Base
@@ -25,7 +32,7 @@ namespace Lunarilicious
 		SELECTOR_MENU.Hide();
 
 		//SELECTOR_MENU.Image = Image.FromFile(""); // <--- Wallpaper
-		SELECTOR_MENU.BackColor = Color.FromArgb(16, 16, 16);
+		SELECTOR_MENU.BackColor = Color.FromArgb(10, 10, 10);
 		SELECTOR_MENU.Size = StartMenu.START_MENU.Size;
 		SELECTOR_MENU.Location = new Point(1, 26);
 
@@ -38,6 +45,39 @@ namespace Lunarilicious
 		};
 
 		Base.Controls.Add(SELECTOR_MENU);
+	    }
+
+	    catch { };
+
+	    try //---Initialize Scroll Bar
+	    {
+		SCROLL_BAR_BASE.BackColor = Color.FromArgb(24, 24, 24);
+		SCROLL_BAR_BASE.Size = new Size(32, SELECTOR_MENU.Height - 10);
+		SCROLL_BAR_BASE.Location = new Point(SELECTOR_MENU.Width - SCROLL_BAR_BASE.Width - 5, 5);
+
+		SELECTOR_MENU.Controls.Add(SCROLL_BAR_BASE);
+
+		/*SCROLL_BAR.BackColor = Color.FromArgb(16, 16, 16);
+		SCROLL_BAR.Size = new Size(SCROLL_BAR_BASE.Width - 4, SCROLL_BAR_BASE.Height - 4);
+		SCROLL_BAR.Location = new Point(2, 2);
+
+		SCROLL_BAR_BASE.Controls.Add(SCROLL_BAR);*/
+	    }
+
+	    catch { };
+
+	    try //---Initialize Character Menu Base
+	    {
+		CHARACTER_BASE.BackColor = Color.FromArgb(24, 24, 24);
+		CHARACTER_BASE.Size = new Size(SELECTOR_MENU.Width - (SCROLL_BAR_BASE.Width + 15), SELECTOR_MENU.Height - 10);
+		CHARACTER_BASE.Location = new Point(5, 5);
+
+		SELECTOR_MENU.Paint += (s, e) =>
+		{
+		    Injector.Add.Rectangle(e, Color.FromArgb(20, 20, 20), 2, CHARACTER_BASE.Size, CHARACTER_BASE.Location);
+		};
+
+		SELECTOR_MENU.Controls.Add(CHARACTER_BASE);
 	    }
 
 	    catch { };

@@ -140,7 +140,7 @@ namespace Lunarilicious
 		    };
 		};
 
-		Strings.toStringDialog(config);
+		//Strings.toStringDialog(config);
 	    }
 
 	    catch (Exception e) { MessageBox.Show($"{e}"); };
