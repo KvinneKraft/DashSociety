@@ -164,10 +164,10 @@ namespace Lunarilicious
 
 		    int radius = (border_radius) * 3;
 
-		    graphics_path.AddArc(rectum.X, rectum.Y, radius, radius, 180, 90);
+		    graphics_path.AddArc(rectum.X, rectum.Y, radius, radius, 170/*180*/, 90);
 		    graphics_path.AddArc((rectum.X + rectum.Width - radius), rectum.Y, radius, radius, 270, 90);
 		    graphics_path.AddArc((rectum.X + rectum.Width - radius), (rectum.Y + rectum.Height - radius), radius, radius, 0, 90);
-		    graphics_path.AddArc(rectum.X, (rectum.Y + rectum.Height - radius), radius, radius, 90, 90);
+		    graphics_path.AddArc(rectum.X, (rectum.Y + rectum.Height - radius), radius, radius, 80/*90*/, 90);
 
 		    Region reg = new Region(graphics_path);
 		    control.Region = reg;

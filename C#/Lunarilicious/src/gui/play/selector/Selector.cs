@@ -52,16 +52,18 @@ namespace Lunarilicious
 	    try //---Initialize Scroll Bar
 	    {
 		SCROLL_BAR_BASE.BackColor = Color.FromArgb(24, 24, 24);
-		SCROLL_BAR_BASE.Size = new Size(32, SELECTOR_MENU.Height - 10);
-		SCROLL_BAR_BASE.Location = new Point(SELECTOR_MENU.Width - SCROLL_BAR_BASE.Width - 5, 5);
+		SCROLL_BAR_BASE.Size = new Size(20, SELECTOR_MENU.Height - 8);
+		SCROLL_BAR_BASE.Location = new Point(SELECTOR_MENU.Width - SCROLL_BAR_BASE.Width - 5, 4);
 
+		Injector.Add.ControlBorder(SCROLL_BAR_BASE, 4);
 		SELECTOR_MENU.Controls.Add(SCROLL_BAR_BASE);
 
-		/*SCROLL_BAR.BackColor = Color.FromArgb(16, 16, 16);
-		SCROLL_BAR.Size = new Size(SCROLL_BAR_BASE.Width - 4, SCROLL_BAR_BASE.Height - 4);
-		SCROLL_BAR.Location = new Point(2, 2);
+		SCROLL_BAR.BackColor = Color.FromArgb(8, 8, 8);
+		SCROLL_BAR.Size = new Size(SCROLL_BAR_BASE.Width - 6, SCROLL_BAR_BASE.Height - 5);
+		SCROLL_BAR.Location = new Point(3, 2);
 
-		SCROLL_BAR_BASE.Controls.Add(SCROLL_BAR);*/
+		Injector.Add.ControlBorder(SCROLL_BAR, 4);
+		SCROLL_BAR_BASE.Controls.Add(SCROLL_BAR);
 	    }
 
 	    catch { };
@@ -77,6 +79,7 @@ namespace Lunarilicious
 		    Injector.Add.Rectangle(e, Color.FromArgb(20, 20, 20), 2, CHARACTER_BASE.Size, CHARACTER_BASE.Location);
 		};
 
+		Injector.Add.ControlBorder(CHARACTER_BASE, 4);
 		SELECTOR_MENU.Controls.Add(CHARACTER_BASE);
 	    }
 
