@@ -155,7 +155,7 @@ namespace Lunarilicious
 	}
 
 	StartMenu Menu = new StartMenu();
-
+	
 	public Lunaroc()
 	{
 	    this.Hide();
