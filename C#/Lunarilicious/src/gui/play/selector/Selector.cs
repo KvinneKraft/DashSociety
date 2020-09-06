@@ -20,6 +20,7 @@ namespace Lunarilicious
 
 	//---Character Objects
 	public static readonly PictureBox CHARACTER_BASE = new PictureBox();
+	public static readonly PictureBox CHARACTER_BASE_BASE = new PictureBox();
 
 	//---Scrollbar Objects
 	public static readonly PictureBox SCROLL_BAR_BASE = new PictureBox();
@@ -68,7 +69,7 @@ namespace Lunarilicious
 
 	    catch { };
 
-	    try //---Initialize Character Menu Base
+	    try //---Initialize Character Menu Bases
 	    {
 		CHARACTER_BASE.BackColor = Color.FromArgb(24, 24, 24);
 		CHARACTER_BASE.Size = new Size(SELECTOR_MENU.Width - (SCROLL_BAR_BASE.Width + 15), SELECTOR_MENU.Height - 10);
@@ -81,10 +82,47 @@ namespace Lunarilicious
 
 		Injector.Add.ControlBorder(CHARACTER_BASE, 4);
 		SELECTOR_MENU.Controls.Add(CHARACTER_BASE);
+
+		CHARACTER_BASE_BASE.BackColor = CHARACTER_BASE.BackColor;
+		CHARACTER_BASE_BASE.Size = new Size(CHARACTER_BASE.Width - 16, CHARACTER_BASE.Height - 16);
+		CHARACTER_BASE_BASE.Location = new Point(8, 8);
+
+		CHARACTER_BASE.Controls.Add(CHARACTER_BASE_BASE);
+
+		try //---Initialize Characters
+		{
+		    for (int o = 0, k = 0, c = 0, y = 0, a = pony_size(k), r = -1, x = 0; k < Entity.EntityType.Pony.pony_types.Count; k += 1, x += 64, c += 1)
+		    {
+			if (k >= o)                     
+			{
+			    r += 1;
+
+			    CHARACTER_BASE_BASE.Controls.Add(new PictureBox());
+
+			    CHARACTER_BASE_BASE.Controls[r].BackColor = Color.FromArgb(8, 8, 8);
+			    CHARACTER_BASE_BASE.Controls[r].Size = new Size(CHARACTER_BASE_BASE.Width, 64);
+			    CHARACTER_BASE_BASE.Controls[r].Location = new Point(0, y);
+			   
+			    y += CHARACTER_BASE_BASE.Controls[r].Height + 5;
+			    x = 0; c = 0; o += a;
+			};
+			
+			// - Perhaps create a container for each of the ponies with a custom 
+			// - layout for buy, sell, info and equip?
+			// -
+
+			CHARACTER_BASE_BASE.Controls[r].Controls.Add(Entity.EntityType.Pony.pony_types[k]);
+			CHARACTER_BASE_BASE.Controls[r].Controls[c].Location = new Point(x, CHARACTER_BASE_BASE.Controls[r].Controls[c].Height - CHARACTER_BASE_BASE.Controls[r].Height);
+		    };
+		}
+
+		catch (Exception e) { MessageBox.Show($"{e}"); };
 	    }
 
 	    catch { };
 	}
+
+	public static int pony_size(int k) => 7;
 
 	/*
 	 - Autoload characters
