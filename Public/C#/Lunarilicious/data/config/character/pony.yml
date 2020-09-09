@@ -1,0 +1,58 @@
+#
+# Author: Dashie
+# Version: 1.0
+#
+# You are allowed to modify the configuration of this game, just keep in mind
+# that I would appreciate your donations at KvinneKraft@protonmail.com through
+# PayPal.  The payment mechanism is there to motivate players and to help me 
+#          maintain this game and make it greater than it already is.
+#
+pony-settings:
+    1:
+        name: 'BonBon'
+        buy: '350000'
+    2:
+        name: 'Cellery'
+        buy: '10000000'
+    3:
+        name: 'Holley'
+        buy: '500000'
+    4:
+        name: 'Laura'
+        buy: '200000'
+    5:
+        name: 'Flamey'
+        buy: '5000000'
+    6:
+        name: 'Long Socks'
+        buy: '10000000'
+    7:
+        name: 'Puffley'
+        buy: '350000'
+    8:
+        name: 'Flunfy'
+        buy: '2500000'
+    9:
+        name: 'Apperentice'
+        buy: '1000000'
+    10:
+        name: 'Malveria'
+        buy: '750000'
+    11:
+        name: 'Lunare'
+        buy: '100000000'
+    12:
+        name: 'Milky'
+        buy: '50000000'
+    13:
+        name: 'Ocelot'
+        buy: '1000000'
+    14:
+        name: 'Starlight'
+        buy: '5000000'
+    15:
+        name: 'Skluffy'
+        buy: '1000000'
+    16:
+        name: 'Muffin'
+        buy: '95000'
