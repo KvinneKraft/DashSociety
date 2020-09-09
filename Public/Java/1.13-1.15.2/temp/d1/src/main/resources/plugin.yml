@@ -1,4 +1,0 @@
-name: D
-version: ${project.version}
-main: d.d.D
-api-version: 1.16
