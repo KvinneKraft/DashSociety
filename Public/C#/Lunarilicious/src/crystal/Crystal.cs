@@ -20,16 +20,17 @@ namespace Lunarilicious
 	{
 	    public static readonly List<PictureBox> graphics = new List<PictureBox>();
 
-	    public static void addGraphics(string file)
+	    public static void AddGraphics(string file)
 	    {
 		try
 		{
-		    PictureBox crystal = new PictureBox();
+		    PictureBox crystal = new PictureBox
+		    {
+			Image = Image.FromFile(file),
+			BackColor = Color.FromArgb(0, 0, 0, 255)
+		    };
 
-		    crystal.Image = Image.FromFile(file);
-		    crystal.BackColor = Color.FromArgb(0, 0, 0, 255);
 		    crystal.Size = crystal.Image.Size;
-
 		    graphics.Add(crystal);
 		}
 
@@ -53,7 +54,7 @@ namespace Lunarilicious
 	    public static readonly List<int> cid = new List<int>();
 	};
 
-	class info
+	class Info
 	{
 	    public static readonly int props = 7;
 	};
@@ -81,13 +82,13 @@ namespace Lunarilicious
 		    };
 
 		    //---Ordering configuration data:
-		    if (Integers.isNumeric(config[k]))
+		    if (Integers.IsNumeric(config[k]))
 		    {
 			List<string> properties = new List<string>();
 
 			k += 1;
 
-			for (int s_k = k; s_k < k + info.props; s_k += 1)
+			for (int s_k = k; s_k < k + Info.props; s_k += 1)
 			{
 			    properties.Add(Strings.formatConfigLine(config[s_k]));
 			};
@@ -107,7 +108,7 @@ namespace Lunarilicious
 			CrystalType.names.Add(properties[0]);
 			CrystalType.cid.Add(k - 1);
 
-			CrystalType.addGraphics(properties[4]);
+			CrystalType.AddGraphics(properties[4]);
 
 			CrystalType.types.Add(properties[5]);
 
@@ -118,7 +119,7 @@ namespace Lunarilicious
 			    // Continue Work: (Add in drops)
 			};
 
-			k += info.props;
+			k += Info.props;
 		    };
 		};
 

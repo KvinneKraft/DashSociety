@@ -20,13 +20,13 @@ namespace Lunarilicious
 { 
     class Lunaroc : Form
     { 
-	protected bool isOnCooldown = false;
-	protected bool isInAir = false;
+	bool isOnCooldown = false;
+	bool isInAir = false;
 
-	static PictureBox EquippedCharacter;
+	readonly static PictureBox EquippedCharacter;
 
-	protected Crystal Crystal;
-	protected Entity Creature;
+	Crystal Crystal;
+	Entity Creature;
 
 	public void Runtime()
 	{
@@ -112,10 +112,11 @@ namespace Lunarilicious
 
 		    else if (key == Keys.F && !isOnCooldown)
 		    {
-			System.Timers.Timer scheduler = new System.Timers.Timer();
-
-			scheduler.Interval = 3000;
-			scheduler.Enabled = true;
+			System.Timers.Timer scheduler = new System.Timers.Timer
+			{
+			    Interval = 3000,
+			    Enabled = true
+			};
 
 			scheduler.Elapsed += (ss, se) =>
 			{
@@ -154,7 +155,7 @@ namespace Lunarilicious
 	    catch { };
 	}
 
-	new StartMenu Menu = new StartMenu();
+	readonly new StartMenu Menu = new StartMenu();
 	
 	public Lunaroc()
 	{
@@ -180,7 +181,7 @@ namespace Lunarilicious
 
 	new static Form Owner;
 
-	public static Form getOwner()
+	public static Form GetOwner()
 	{
 	    return Owner;
 	}

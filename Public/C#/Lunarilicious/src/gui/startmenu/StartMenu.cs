@@ -118,7 +118,7 @@ namespace Lunarilicious
 	{
 	    if (selector == null)
 	    {
-		selector = new Selector(Lunaroc.getOwner());
+		selector = new Selector(Lunaroc.GetOwner());
 	    };
 
 	    VisibilityManager.ShowComponent(Selector.SELECTOR_MENU);

@@ -35,7 +35,7 @@ namespace Lunarilicious
 		SELECTOR_MENU.Hide();
 
 		//SELECTOR_MENU.Image = Image.FromFile(""); // <--- Wallpaper
-		SELECTOR_MENU.BackColor = Color.FromArgb(10, 10, 10);
+		SELECTOR_MENU.BackColor = Color.FromArgb(40, 75, 130);
 		SELECTOR_MENU.Size = StartMenu.START_MENU.Size;
 		SELECTOR_MENU.Location = new Point(1, 26);
 
@@ -54,16 +54,16 @@ namespace Lunarilicious
 
 	    try //---Initialize Scroll Bar
 	    {
-		SCROLL_BAR_BASE.BackColor = Color.FromArgb(24, 24, 24);
-		SCROLL_BAR_BASE.Size = new Size(20, SELECTOR_MENU.Height - 8);
-		SCROLL_BAR_BASE.Location = new Point(SELECTOR_MENU.Width - SCROLL_BAR_BASE.Width - 5, 4);
+		SCROLL_BAR_BASE.BackColor = Color.FromArgb(53, 129, 252);
+		SCROLL_BAR_BASE.Size = new Size(20, SELECTOR_MENU.Height - 10);
+		SCROLL_BAR_BASE.Location = new Point(SELECTOR_MENU.Width - SCROLL_BAR_BASE.Width - 5, 5);
 
 		Injector.Add.ControlBorder(SCROLL_BAR_BASE, 4);
 		SELECTOR_MENU.Controls.Add(SCROLL_BAR_BASE);
 
-		SCROLL_BAR.BackColor = Color.FromArgb(8, 8, 8);
-		SCROLL_BAR.Size = new Size(SCROLL_BAR_BASE.Width - 6, SCROLL_BAR_BASE.Height - 5);
-		SCROLL_BAR.Location = new Point(3, 2);
+		SCROLL_BAR.BackColor = Color.FromArgb(40, 75, 130);
+		SCROLL_BAR.Size = new Size(SCROLL_BAR_BASE.Width - 10, SCROLL_BAR_BASE.Height - 8);
+		SCROLL_BAR.Location = new Point(5, 4);
 
 		Injector.Add.ControlBorder(SCROLL_BAR, 4);
 		SCROLL_BAR_BASE.Controls.Add(SCROLL_BAR);
@@ -73,13 +73,13 @@ namespace Lunarilicious
 
 	    try //---Initialize Character Menu Bases
 	    {
-		CHARACTER_BASE.BackColor = Color.FromArgb(24, 24, 24);
+		CHARACTER_BASE.BackColor = Color.FromArgb(53, 129, 252);
 		CHARACTER_BASE.Size = new Size(SELECTOR_MENU.Width - (SCROLL_BAR_BASE.Width + 15), SELECTOR_MENU.Height - 10);
 		CHARACTER_BASE.Location = new Point(5, 5);
 
 		SELECTOR_MENU.Paint += (s, e) =>
 		{
-		    Injector.Add.Rectangle(e, Color.FromArgb(20, 20, 20), 2, CHARACTER_BASE.Size, CHARACTER_BASE.Location);
+		    Injector.Add.Rectangle(e, Color.FromArgb(40, 75, 130), 2, new Size(CHARACTER_BASE.Width + 1, CHARACTER_BASE.Height + 1), CHARACTER_BASE.Location);
 		};
 
 		Injector.Add.ControlBorder(CHARACTER_BASE, 4);
@@ -101,7 +101,7 @@ namespace Lunarilicious
 
 			    CHARACTER_BASE_BASE.Controls.Add(new PictureBox());
 
-			    CHARACTER_BASE_BASE.Controls[r].BackColor = Color.FromArgb(8, 8, 8);
+			    CHARACTER_BASE_BASE.Controls[r].BackColor = Color.FromArgb(40, 75, 130);
 			    CHARACTER_BASE_BASE.Controls[r].Size = new Size(CHARACTER_BASE_BASE.Width, 64);
 			    CHARACTER_BASE_BASE.Controls[r].Location = new Point(0, y);
 			   
@@ -110,9 +110,14 @@ namespace Lunarilicious
 			};
 
 			CHARACTER_BASE_BASE.Controls[r].Controls.Add(Entity.EntityType.Pony.ponies[k]);
-
 			CHARACTER_BASE_BASE.Controls[r].Controls[c].Location = new Point(x, CHARACTER_BASE_BASE.Controls[r].Controls[c].Height - CHARACTER_BASE_BASE.Controls[r].Height);
-			CHARACTER_BASE_BASE.Controls[r].Controls[c].Click += (s, e) => CHARACTER.Select();
+
+			PictureBox SELECT = CHARACTER_BASE_BASE.Controls[r].Controls[c] as PictureBox;
+
+			string NAME = Entity.EntityType.Pony.names[k];
+			int PRICE = Entity.EntityType.Pony.prices[k];
+
+			CHARACTER_BASE_BASE.Controls[r].Controls[c].Click += (s, e) => CHARACTER.Select(SELECT, NAME, PRICE);
 		    };
 		}
 

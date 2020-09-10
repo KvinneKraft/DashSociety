@@ -1,10 +1,12 @@
 ﻿
+// This file is a pure pile of shit, I have to update this.
+// For now, let us just focus on the functional part.  There is always
+// sufficient room for improvements ;)
+
 // Author: Dashie
 // Version: 1.0
 
 using System;
-using System.IO;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
@@ -39,6 +41,7 @@ namespace Lunarilicious
 
 		obj.Font = Get.CustomFont(pts, type);
 		obj.Text = tex;
+		obj.TextAlign = ContentAlignment.MiddleCenter;
 
 		obj.BackColor = bcl;
 		obj.ForeColor = fcl;
@@ -151,7 +154,7 @@ namespace Lunarilicious
 		};
 	    }
 
-	    private static External ext = new External();
+	    private readonly static External ext = new External();
 
 	    public static void ControlBorder(Control control, int border_radius)
 	    {
@@ -223,7 +226,7 @@ namespace Lunarilicious
 
 	public static class Get
 	{
-	    public static bool isAdministrator()
+	    public static bool IsAdministrator()
 	    {
 		using (WindowsIdentity id = WindowsIdentity.GetCurrent())
 		{
@@ -240,8 +243,7 @@ namespace Lunarilicious
 
 	    public static Size FontSize(String data, Font font)
 	    {
-		Size size = TextRenderer.MeasureText(data, font, new Size(int.MaxValue, int.MaxValue));
-		return new Size(size.Width + data.Length, size.Height);
+		return TextRenderer.MeasureText(data, font);
 	    }
 
 	    [DllImport("gdi32.dll")]
@@ -260,7 +262,7 @@ namespace Lunarilicious
 
 	    public static Font CustomFont(int points, int type)
 	    {
-		Byte[] external_font_data = null;
+		Byte[] external_font_data;
 
 		if (FontCollection.Families.Length < 2)
 		{
@@ -276,16 +278,6 @@ namespace Lunarilicious
 			AddFontMemResourceEx(pointer, (uint)external_font_data.Length, IntPtr.Zero, ref cache_size);
 			FontCollection.AddMemoryFont(pointer, external_font_data.Length);
 		    };
-		};
-
-		if (type == 0)
-		{
-		    external_font_data = fonts[type];
-		}
-
-		else
-		{
-		    external_font_data = fonts[type];
 		};
 
 		return new Font(FontCollection.Families[type], points, FontStyle.Regular);

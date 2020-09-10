@@ -39,7 +39,7 @@ namespace Lunarilicious
 	    };
 	};
 
-	private readonly Form Owner = Lunaroc.getOwner();
+	//private readonly Form Owner = Lunaroc.GetOwner();
 
 	void LoadConfiguration(EntityType.Types TYPE)
 	{
@@ -49,15 +49,17 @@ namespace Lunarilicious
 	    {
 		data[l] = Strings.formatConfigLine(Strings.removeEmpty(data[l]));
 		
-		if (Integers.isNumeric(data[l]))
+		if (Integers.IsNumeric(data[l]))
 		{
 		    string name = Strings.formatConfigLine(Strings.removeEmpty(data[l + 1]));
 		    string buy = Strings.formatConfigLine(Strings.removeEmpty(data[l + 2]));
 
-		    PictureBox character = new PictureBox();
+		    PictureBox character = new PictureBox
+		    {
+			Image = Image.FromFile($@"data\characters\{TYPE.ToString().ToLower()}\{EntityType.Pony.names.Count + 1}.gif"),
+			BackColor = Color.FromArgb(0, 0, 0, 255)
+		    };
 
-		    character.Image = Image.FromFile($@"data\characters\{TYPE.ToString().ToLower()}\{EntityType.Pony.names.Count + 1}.gif");
-		    character.BackColor = Color.FromArgb(0, 0, 0, 255);
 		    character.Size = character.Image.Size;
 
 		    try

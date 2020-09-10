@@ -15,17 +15,19 @@ namespace Lunarilicious
 {
     class Integers
     {
-	public static bool isNumeric(string k)
+	public static int CenterOf(Control b, Control t) => (b.Width - t.Width) / 2;
+
+	public static bool IsNumeric(string k)
 	{
-	    return int.TryParse(k.Replace(":", string.Empty).Replace(" ", string.Empty), out int t);
+	    return int.TryParse(k.Replace(":", string.Empty).Replace(" ", string.Empty), out int _);
 	}
 
-	public static int toInt(string v)
+	public static int ToInt(string v)
 	{
 	    return int.Parse(v);
 	}
 
-	public static ulong toUInt(string v)
+	public static ulong ToUInt(string v)
 	{
 	    return ulong.Parse(v);
 	}
