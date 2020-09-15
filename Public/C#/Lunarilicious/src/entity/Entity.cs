@@ -28,6 +28,7 @@ namespace Lunarilicious
 	    {
 		public static readonly List<PictureBox> ponies = new List<PictureBox>();
 		public static readonly List<string> names = new List<string>();
+		public static readonly List<string> descr = new List<string>();
 		public static readonly List<int> prices = new List<int>();
 	    };
 
@@ -35,6 +36,7 @@ namespace Lunarilicious
 	    {
 		public static readonly List<PictureBox> pugs = new List<PictureBox>();
 		public static readonly List<string> names = new List<string>();
+		public static readonly List<string> descr = new List<string>();
 		public static readonly List<int> prices = new List<int>();
 	    };
 	};
@@ -48,8 +50,8 @@ namespace Lunarilicious
 	    for (int l = 0; l < data.Length; l += 1)
 	    {
 		data[l] = Strings.formatConfigLine(Strings.removeEmpty(data[l]));
-		
-		if (Integers.IsNumeric(data[l]))
+
+		if (Integers.IsNumeric(data[l]) && !data[l].Contains("#"))
 		{
 		    string name = Strings.formatConfigLine(Strings.removeEmpty(data[l + 1]));
 		    string buy = Strings.formatConfigLine(Strings.removeEmpty(data[l + 2]));
