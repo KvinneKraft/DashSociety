@@ -26,17 +26,17 @@ namespace Lunarilicious
 
 	    public class Pony
 	    {
+		public static readonly List<List<string>> descr = new List<List<string>>();
 		public static readonly List<PictureBox> ponies = new List<PictureBox>();
 		public static readonly List<string> names = new List<string>();
-		public static readonly List<string> descr = new List<string>();
 		public static readonly List<int> prices = new List<int>();
 	    };
 
 	    public class Pug
 	    {
+		public static readonly List<List<string>> descr = new List<List<string>>();
 		public static readonly List<PictureBox> pugs = new List<PictureBox>();
 		public static readonly List<string> names = new List<string>();
-		public static readonly List<string> descr = new List<string>();
 		public static readonly List<int> prices = new List<int>();
 	    };
 	};
@@ -46,12 +46,27 @@ namespace Lunarilicious
 	void LoadConfiguration(EntityType.Types TYPE)
 	{
 	    string[] data = File.ReadAllLines($@"data\config\character\{TYPE.ToString().ToLower()}.yml");
+	    List<string> desc = new List<string>();
+
 	    // ADD DESCRIPTION TO CONFIG
 	    for (int l = 0; l < data.Length; l += 1)
 	    {
 		data[l] = Strings.formatConfigLine(Strings.removeEmpty(data[l]));
 
-		if (Integers.IsNumeric(data[l]) && !data[l].Contains("#"))
+		if (data[l].Equals("description"))
+		{
+		    for (int k = l; k < data.Length; k += 1)
+		    {
+			string desl = Strings.removeEmpty(data[k]);
+
+			if (desl.StartsWith("-"))
+			{
+			    desc.Add(desl.Replace("- ", string.Empty));		    
+			};
+		    };
+		}
+
+		else if (Integers.IsNumeric(data[l]) && !data[l].Contains("#"))
 		{
 		    string name = Strings.formatConfigLine(Strings.removeEmpty(data[l + 1]));
 		    string buy = Strings.formatConfigLine(Strings.removeEmpty(data[l + 2]));
@@ -73,6 +88,7 @@ namespace Lunarilicious
 				EntityType.Pony.names.Add(name);
 				EntityType.Pony.prices.Add(Int32.Parse(buy));
 				EntityType.Pony.ponies.Add(character);
+				EntityType.Pony.descr.Add(desc);
 
 				break;
 			    };
@@ -82,6 +98,7 @@ namespace Lunarilicious
 				EntityType.Pug.names.Add(name);
 				EntityType.Pug.prices.Add(Int32.Parse(buy));
 				EntityType.Pug.pugs.Add(character);
+				EntityType.Pug.descr.Add(desc);
 
 				break;
 			    };
@@ -90,7 +107,7 @@ namespace Lunarilicious
 
 		    catch
 		    {
-			// ERROR HANDLING?
+			// ERROR HANDLING? 
 		    };
 		    
 		    l += 2;

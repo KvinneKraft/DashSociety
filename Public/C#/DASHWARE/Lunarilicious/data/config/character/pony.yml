@@ -11,48 +11,112 @@ pony-settings:
     1:
         name: 'BonBon'
         buy: '350000'
+        description:
+        - Just
+        - testing
+        - this thing
     2:
         name: 'Cellery'
         buy: '10000000'
+        description:
+        -
+        -
+        -
     3:
         name: 'Holley'
         buy: '500000'
+        description:
+        -
+        -
+        -
     4:
         name: 'Laura'
         buy: '200000'
+        description:
+        -
+        -
+        -
     5:
         name: 'Flamey'
         buy: '5000000'
+        description:
+        -
+        -
+        -
     6:
         name: 'Long Socks'
         buy: '10000000'
+        description:
+        -
+        -
+        -
     7:
         name: 'Puffley'
         buy: '350000'
+        description:
+        -
+        -
+        -
     8:
         name: 'Flunfy'
         buy: '2500000'
+        description:
+        -
+        -
+        -
     9:
         name: 'Apperentice'
         buy: '1000000'
+        description:
+        -
+        -
+        -
     10:
         name: 'Malveria'
         buy: '750000'
+        description:
+        -
+        -
+        -
     11:
         name: 'Lunare'
         buy: '100000000'
+        description:
+        -
+        -
+        -
     12:
         name: 'Milky'
         buy: '50000000'
+        description:
+        -
+        -
+        -
     13:
         name: 'Ocelot'
         buy: '1000000'
+        description:
+        -
+        -
+        -
     14:
         name: 'Starlight'
         buy: '5000000'
+        description:
+        -
+        -
+        -
     15:
         name: 'Skluffy'
         buy: '1000000'
+        description:
+        -
+        -
+        -
     16:
         name: 'Muffin'
         buy: '95000'
+        description:
+        -
+        -
+        -

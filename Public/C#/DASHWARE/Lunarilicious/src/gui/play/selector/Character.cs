@@ -145,6 +145,8 @@ namespace Lunarilicious
 	    AVATAR_PRICE.Location = new Point(Integers.CenterOf(AVATAR_CONTAINER, AVATAR_PRICE), AVATAR_BOX.Top + AVATAR_BOX.Height + 10);
 	    AVATAR_PRICE.Text = $"${Price}";
 
+	    // Find a way to show description nicely.
+
 	    if (!Visible)
 	    {
 		ShowDialog();

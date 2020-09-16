@@ -17,6 +17,7 @@ namespace Lunarilicious
     {
 	//----Main Objects
 	public static readonly PictureBox SELECTOR_MENU = new PictureBox();
+	public static readonly Button BACK = new Button();
 
 	//---Character Objects
 	static readonly PictureBox CHARACTER_BASE_BASE = new PictureBox();
@@ -46,6 +47,9 @@ namespace Lunarilicious
 			StartMenu.UpdateBarTitle("Character Selector");
 		    };
 		};
+
+		Injector.Add.AButton(SELECTOR_MENU, BACK, new Size(135, 28), new Point(-1, SELECTOR_MENU.Height - 38), StartMenu.START_MENU.BackColor, Color.FromArgb(255, 255, 255), "Back", Injector.Get.FONT_TYPE_MAIN, 12);
+		Injector.Add.ControlBorder(BACK, 8);
 
 		Base.Controls.Add(SELECTOR_MENU);
 	    }
