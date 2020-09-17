@@ -6,11 +6,11 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Reflection;
 using System.Diagnostics;
-using System.Net.Sockets;
 using System.Windows.Forms;
-using System.Security.Principal;
+//using System.Security.Principal;
 using System.Runtime.InteropServices;
 
 // F#ck the rules, who their rules? I will just poop it out right here ;p
@@ -27,11 +27,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
+// Okay, so, there is no true use to any of this code, but it is just something neat.  I mean, who does not like innovative ideas?
 namespace RemotePull
 {
     class Program
     {
-	public static bool IsAdministrator() 
+	/*public static bool IsAdministrator() 
 	{
 	    using (WindowsIdentity id = WindowsIdentity.GetCurrent())
 	    {
@@ -44,7 +45,7 @@ namespace RemotePull
 	    };
 
 	    return false;
-	}
+	}*/
 
 	static string DescriptionData =
 	(
@@ -58,9 +59,8 @@ namespace RemotePull
 
 	static string HelpData =
 	(
-	    "Available Commands: [cls | clear], [download <url>], [online <host>] or [launch <filepath>]" +
-	    ") DOWNLOAD - Make sure that the U.R.L. has no spaces in it." +
-	    ") ONLINE - Make sure that the destination server does not block your pings." +
+	    "Available Commands: [cls | clear], [download <url>] or [launch <filepath>]\n" +
+	    ") DOWNLOAD - Make sure that the U.R.L. is reachable.\n" +
 	    ") LAUNCH - Make sure that you have the necessary file permissions."
 	);
 	static void HelpMe() => Console.WriteLine(HelpData);
@@ -220,29 +220,6 @@ namespace RemotePull
 			    continue;
 			}
 
-			else if (agg.Equals("online"))
-			{
-			    if (arg.Length < 2)
-			    {
-				Console.WriteLine("(!) Perhaps try something like 'ping https://www.google.com' ?");
-				continue;
-			    };
-
-			    string host; // Do-thing
-
-			    if (!IsOnline())
-			    {
-
-			    }
-
-			    else
-			    {
-
-			    };
-
-			    continue;
-			}
-
 			else if (agg.Equals("launch"))
 			{
 			    if (arg.Length < 2)
@@ -251,7 +228,45 @@ namespace RemotePull
 				continue;
 			    };
 
+			    Console.WriteLine("(-) Checking if file and the file path exists ....");
 
+			    string file = arg[1];
+
+			    for (int k = 2; k < arg.Length; file += " " + arg[k], k += 1);
+
+			    if (!File.Exists(file))
+			    {
+				Console.WriteLine($"(!) The file {file} could not be found!");
+				continue;
+			    };
+
+			    Console.WriteLine("(!) File and file path OK!");
+			    Console.WriteLine("(-) Executing file asynchronously ....");
+
+			    try
+			    {
+				new Thread(() =>
+				{
+				    using (Process proc = new Process())
+				    {
+					proc.StartInfo = new ProcessStartInfo()
+					{
+					    FileName = file
+					};
+
+					proc.Start();
+				    };
+				})
+
+				{ IsBackground = true }.Start();
+
+				Console.WriteLine("(!) Execution OK!");
+			    }
+
+			    catch
+			    {
+				Console.WriteLine($"(!) An error has occurred while attempting to execute {file} !");
+			    };
 
 			    continue;
 			};
