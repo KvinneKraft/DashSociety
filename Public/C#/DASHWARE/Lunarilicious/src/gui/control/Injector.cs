@@ -8,280 +8,151 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Security.Principal;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Drawing.Text;
 
 namespace Lunarilicious
 {
-    class Injector
+    class Exceptions
     {
-	public static class Add
+	public static readonly Exception UNKNOWN = new Exception("The object requested does not exist.");
+	public static readonly Exception NULL = new Exception("A possible null pointer exception has occurred.");
+    };
+
+    class Mod
+    {
+	public static bool Centerize(Control _ctrl, Control _pare, bool _horiz, bool _verti)
 	{
-	    public static void AButton(Control srf, Button obj, Size siz, Point loc, Color bcl, Color fcl, String tex, Int32 type, Int32 pts)
+	    try
 	    {
-		obj.Size = siz;
-		obj.MinimumSize = siz;
-		obj.MaximumSize = siz;
+		Point _loca = _ctrl.Location;
 
-		if (loc.X < 0)
-		{
-		    loc.X = (srf.Width - obj.Width) / 2;
-		};
+		if (_verti) _loca.Y = (_pare.Height - _ctrl.Height) / 2;
+		if (_horiz) _loca.X = (_pare.Width - _ctrl.Width) / 2;
 
-		if (loc.Y < 0)
-		{
-		    loc.Y = (srf.Height - siz.Height) / 2;
-		};
+		_ctrl.Update();
 
-		obj.Location = loc;
-
-		obj.Font = Get.CustomFont(pts, type);
-		obj.Text = tex;
-		obj.TextAlign = ContentAlignment.MiddleCenter;
-
-		obj.BackColor = bcl;
-		obj.ForeColor = fcl;
-
-		obj.FlatAppearance.BorderColor = Color.FromArgb(0, 0, 0, 255);
-		obj.FlatAppearance.BorderSize = 0;
-		obj.FlatStyle = FlatStyle.Flat;
-
-		srf.Controls.Add(obj);
+		return true;
 	    }
 
-	    public static void ThaLabel(Control srf, Label obj, Point loc, Color fcl, String tex, Int32 type, Int32 pts)
+	    catch
 	    {
-		obj.Font = Get.CustomFont(pts, type);
-		obj.Text = tex;
-
-		Size siz = Get.FontSize(tex, obj.Font);
-
-		obj.Size = siz;
-		obj.MinimumSize = siz;
-		obj.MaximumSize = siz;
-
-		obj.BorderStyle = BorderStyle.None;
-		obj.FlatStyle = FlatStyle.Flat;
-
-		if (loc.X < 0)
-		{
-		    loc.X = (srf.Width - siz.Width) / 2;
-		};
-
-		if (loc.Y < 0)
-		{
-		    loc.Y = (srf.Height - siz.Height) / 2;
-		};
-
-		obj.Location = loc;
-
-		obj.BackColor = Color.FromArgb(0, 0, 0, 255);
-		obj.ForeColor = fcl;
-
-		obj.UseCompatibleTextRendering = true;
-
-		srf.Controls.Add(obj);
-	    }
-
-	    public static void ZeTextBox(Control srf, TextBox obj, Size siz, Point loc, Color fcl, Color bcl, String tex, Int32 type, Int32 pts)
-	    {
-		obj.Font = Get.CustomFont(pts, type);
-		obj.Text = tex;
-
-		obj.Size = siz;
-		obj.MinimumSize = siz;
-		obj.MaximumSize = siz;
-
-		obj.BorderStyle = BorderStyle.None;
-
-		if (loc.X < 0)
-		{
-		    loc.X = (srf.Width - obj.Width) / 2;
-		};
-
-		if (loc.Y < 0)
-		{
-		    loc.Y = (srf.Height - obj.Height) / 2;
-		};
-
-		obj.Location = loc;
-
-		obj.BackColor = bcl;
-		obj.ForeColor = fcl;
-
-		// Containers can be added manually, later on.
-
-		srf.Controls.Add(obj);
-	    }
-
-	    public static void RuImage(Control srf, PictureBox obj, Image img, Size siz, Point loc)
-	    {
-		obj.Size = siz;
-		obj.MinimumSize = siz;
-		obj.MaximumSize = siz;
-
-		if (loc.X < 0)
-		{
-		    loc.X = (srf.Width - obj.Width) / 2;
-		};
-
-		if (loc.Y < 0)
-		{
-		    loc.Y = (srf.Height - obj.Height) / 2;
-		};
-
-		obj.Location = loc;
-
-		if (img != null)
-		{
-		    obj.Image = img;
-		};
-
-		srf.Controls.Add(obj);
-	    }
-
-	    public static void Rectangle(PaintEventArgs e, Color color, float width, Size size, Point point)
-	    {
-		Graphics graphics = e.Graphics;
-
-		using (Pen pen = new Pen(color, width))
-		{
-		    graphics.DrawRectangle(pen, new Rectangle(point, size));
-		};
-	    }
-
-	    private readonly static External ext = new External();
-
-	    public static void ControlBorder(Control control, int border_radius)
-	    {
-		control.Paint += (s, e) =>
-		{
-		    ext.LemonSquish(e);
-
-		    Rectangle rectum = new Rectangle(0, 0, control.Width, control.Height);
-		    GraphicsPath graphics_path = new GraphicsPath();
-
-		    int radius = (border_radius) * 3;
-
-		    graphics_path.AddArc(rectum.X, rectum.Y, radius, radius, 170/*180*/, 90);
-		    graphics_path.AddArc((rectum.X + rectum.Width - radius), rectum.Y, radius, radius, 270, 90);
-		    graphics_path.AddArc((rectum.X + rectum.Width - radius), (rectum.Y + rectum.Height - radius), radius, radius, 0, 90);
-		    graphics_path.AddArc(rectum.X, (rectum.Y + rectum.Height - radius), radius, radius, 80/*90*/, 90);
-
-		    Region reg = new Region(graphics_path);
-		    control.Region = reg;
-		};
-	    }
-	};
-
-	class External : Form
-	{
-	    public void LemonSquish(PaintEventArgs e)
-	    {
-		e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-		base.OnPaint(e);
-	    }
-	};
-
-	public static class Set
-	{
-	    public static void Draggable(Control trigger, Control obj)
-	    {
-		Point point = Point.Empty;
-
-		trigger.MouseDown += (s, e) =>
-		{
-		    point = new Point(e.X, e.Y);
-		};
-
-		trigger.MouseUp += (s, e) =>
-		{
-		    point = Point.Empty;
-		};
-
-		trigger.MouseMove += (s, e) =>
-		{
-		    if (point.IsEmpty)
-		    {
-			return;
-		    };
-
-		    obj.Location = new Point(obj.Location.X + (e.X - point.X), obj.Location.Y + (e.Y - point.Y));
-		};
-	    }
-
-	    [DllImport("user32.dll")]
-	    static extern IntPtr CreateIconFromResource(byte[] presbits, uint dwResSize, bool fIcon, uint dwVer);
-
-	    static void ResourceCursor(Control srf, byte[] res)
-	    {
-		srf.Cursor = new Cursor(CreateIconFromResource(res, (uint)res.Length, false, 0x00030000));
-	    }
-	};
-
-
-	public static class Get
-	{
-	    public static bool IsAdministrator()
-	    {
-		using (WindowsIdentity id = WindowsIdentity.GetCurrent())
-		{
-		    WindowsPrincipal princess = new WindowsPrincipal(id);
-
-		    if (princess.IsInRole(WindowsBuiltInRole.Administrator))
-		    {
-			return true;
-		    };
-		};
-
-		return false;
-	    }
-
-	    public static Size FontSize(String data, Font font)
-	    {
-		return TextRenderer.MeasureText(data, font);
-	    }
-
-	    [DllImport("gdi32.dll")]
-	    private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
-
-	    private static readonly PrivateFontCollection FontCollection = new PrivateFontCollection();
-
-	    private static readonly List<Byte[]> fonts = new List<Byte[]>()
-	    {
-		(byte[])Properties.Resources.cute,
-		(byte[])Properties.Resources.main
+		throw Exceptions.NULL;
 	    };
+	}
 
-	    public static readonly int FONT_TYPE_CUTE = 0;
-	    public static readonly int FONT_TYPE_MAIN = 1;
-
-	    public static Font CustomFont(int points, int type)
+	public static bool Resize(Control _ctrl, Size _size)
+	{
+	    try
 	    {
-		Byte[] external_font_data;
+		if (_size.Height < 1) _size.Height = _ctrl.PreferredSize.Height;
+		if (_size.Width < 1) _size.Width = _ctrl.PreferredSize.Width;
 
+		_ctrl.MaximumSize = _size;
+		_ctrl.MinimumSize = _size;
+		_ctrl.Update();
+
+		return true;
+	    }
+
+	    catch
+	    {
+		throw Exceptions.NULL;
+	    };
+	}
+    };
+
+    class Get
+    {
+	public static class Font
+	{
+	    public static readonly int NORMAL = 0;
+	    public static readonly int CUTE = 1;
+	};
+    };
+
+    class Add
+    {
+	[DllImport("gdi32.dll")] 
+	private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
+	private static readonly PrivateFontCollection FontCollection = new PrivateFontCollection();
+
+	static Font GetFont(int _ftyp, int _fsiz)
+	{
+	    try
+	    {
 		if (FontCollection.Families.Length < 2)
 		{
-		    foreach (Byte[] bytes in fonts)
+		    List<byte[]> _fcol = new List<byte[]>()
 		    {
-			external_font_data = bytes;
+			(byte[])Properties.Resources.main,
+			(byte[])Properties.Resources.cute
+		    };
 
-			IntPtr pointer = Marshal.AllocCoTaskMem(external_font_data.Length);
-			Marshal.Copy(external_font_data, 0, pointer, external_font_data.Length);
+		    foreach (byte[] _fbyt in _fcol)
+		    {
+			IntPtr _ptr = Marshal.AllocCoTaskMem(_fbyt.Length);
+			Marshal.Copy(_fbyt, 0, _ptr, _fbyt.Length);
 
-			uint cache_size = 0;
+			uint _cache = 0;
 
-			AddFontMemResourceEx(pointer, (uint)external_font_data.Length, IntPtr.Zero, ref cache_size);
-			FontCollection.AddMemoryFont(pointer, external_font_data.Length);
+			AddFontMemResourceEx(_ptr, (uint) _fbyt.Length, IntPtr.Zero, ref _cache);
+			FontCollection.AddMemoryFont(_ptr, _fbyt.Length);
 		    };
 		};
 
-		return new Font(FontCollection.Families[type], points, FontStyle.Regular);
+		return new Font(FontCollection.Families[_ftyp], _fsiz, FontStyle.Regular);
 	    }
-	};
-    }
+
+	    catch
+	    {
+		throw Exceptions.UNKNOWN;
+	    };
+	}
+
+	public static void PictureBox(Control _base, PictureBox _pict, Image _imag, Point _iloc, Color _pcol)
+	{
+	    try
+	    {
+
+	    }
+
+	    catch (Exception e)
+	    {
+		// Error Handler
+	    };
+	}
+
+	public static void Button(Control _base, Button _butt, string _text, int _fozi, int _font, Size _size, Point _loca, Color _bcol, Color _fcol)
+	{
+	    try
+	    {
+		_butt.MinimumSize = _size;
+		_butt.MaximumSize = _size;
+
+		_butt.Font = GetFont(_font, _fozi);
+		_butt.Text = $"{_text}";
+
+		_butt.Location = _loca; Mod.Centerize(_base, _butt, _loca.X < 1, _loca.Y < 1);
+
+		_butt.FlatAppearance.BorderSize = 0;
+		_butt.FlatStyle = FlatStyle.Flat;
+
+		_butt.BackColor = _bcol;
+		_butt.ForeColor = _fcol;
+
+		_base.Controls.Add(_butt);
+		_base.Update();
+	    }
+
+	    catch (Exception e)
+	    {
+		// Error Handler
+	    };
+	}
+    };
 }

@@ -81,6 +81,7 @@
     <Compile Include="src\crystal\Crystal.cs" />
     <Compile Include="src\entity\Entity.cs" />
     <Compile Include="src\gui\control\Injector.cs" />
+    <Compile Include="src\gui\control\InjectorOLD.cs" />
     <Compile Include="src\gui\inventory\Inventory.cs" />
     <Compile Include="src\gui\play\selector\Character.cs">
       <SubType>Form</SubType>
