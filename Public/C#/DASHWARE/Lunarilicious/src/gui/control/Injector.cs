@@ -25,15 +25,106 @@ namespace Lunarilicious
 
     class Mod
     {
+	public static void Rectangle(PaintEventArgs e, Color _color, float _width, Size _size, Point _loca)
+	{
+	    Graphics graphics = e.Graphics;
+
+	    using (Pen pen = new Pen(_color, _width))
+	    {
+		graphics.SmoothingMode = SmoothingMode.AntiAlias;
+		graphics.DrawRectangle(pen, new Rectangle(_loca, _size));
+	    };
+	}
+
+	[DllImport("user32.dll")] static extern IntPtr CreateIconFromResource(byte[] presbits, uint dwResSize, bool fIcon, uint dwVer);
+
+	public static bool ResourceCursor(Control _ctrl, byte[] _reso)
+	{
+	    try
+	    {
+		Cursor cursor = new Cursor(CreateIconFromResource(_reso, (uint) _reso.Length, false, 0x00030000));
+
+		_ctrl.Cursor = cursor;
+		_ctrl.Update();
+
+		return true;
+	    }
+
+	    catch
+	    {
+		throw Exceptions.UNKNOWN;
+	    };
+	}
+
+	public static void Moveable(Control _trig, Control _obj)
+	{
+	    Point _loca = Point.Empty;
+
+	    _trig.MouseDown += (s, e) =>
+	    {
+		_loca = new Point(e.X, e.Y);
+	    };
+
+	    _trig.MouseUp += (s, e) =>
+	    {
+		_loca = Point.Empty;
+	    };
+
+	    _trig.MouseMove += (s, e) =>
+	    {
+		if (_loca.IsEmpty)
+		{
+		    return;
+		};
+
+		int x = _obj.Location.X + (e.X - _loca.X);
+		int y = _obj.Location.Y + (e.Y - _loca.Y);
+
+		_obj.Location = new Point(x, y);
+	    };
+	}
+
+	class PortableForm : Form
+	{
+	    public void PaintOwner(PaintEventArgs e)
+	    {
+		e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+		base.OnPaint(e);
+	    }
+	};
+
+	static readonly PortableForm portableForm = new PortableForm();
+
+	public static void Border(Control _ctrl, int _rad)
+	{
+	    _ctrl.Paint += (s, e) =>
+	    {
+		portableForm.PaintOwner(e);
+
+		Rectangle rect = new Rectangle(0, 0, _ctrl.Width, _ctrl.Height);
+		GraphicsPath grapp = new GraphicsPath();
+
+		_rad = _rad * 3;
+
+		grapp.AddArc(rect.X, rect.Y, _rad, _rad, 170, 90);
+		grapp.AddArc(rect.X + rect.Width - _rad, rect.Y, _rad, _rad, 270, 90);
+		grapp.AddArc(rect.X + rect.Width - _rad, rect.Y + rect.Height - _rad, _rad, _rad, 0, 90);
+		grapp.AddArc(rect.X, rect.Y + rect.Height - _rad, _rad, _rad, 80, 90);
+
+		_ctrl.Region = new Region(grapp);
+	    };
+	}
+
 	public static bool Centerize(Control _ctrl, Control _pare, bool _horiz, bool _verti)
 	{
 	    try
 	    {
-		Point _loca = _ctrl.Location;
+		Point loca = _ctrl.Location;
 
-		if (_verti) _loca.Y = (_pare.Height - _ctrl.Height) / 2;
-		if (_horiz) _loca.X = (_pare.Width - _ctrl.Width) / 2;
+		if (_verti) loca.Y = (_pare.Height - _ctrl.Height) / 2;
+		if (_horiz) loca.X = (_pare.Width - _ctrl.Width) / 2;
 
+		_ctrl.Location = loca;
 		_ctrl.Update();
 
 		return true;
@@ -118,10 +209,55 @@ namespace Lunarilicious
 	{
 	    try
 	    {
+		Mod.Centerize(_pict, _base, _iloc.X < 1, _iloc.Y < 1);
 
+		_pict.MinimumSize = _imag.Size;
+		_pict.MaximumSize = _imag.Size;
+
+		_pict.BorderStyle = BorderStyle.None;
+		
+		_pict.BackColor = _pcol;
+		_pict.Location = _iloc;
+
+		_base.Controls.Add(_pict);
+		_base.Update();
 	    }
 
 	    catch (Exception e)
+	    {
+		// Error Handler
+	    };
+	}
+
+	public static void Label(Control _base, Label _labl, string _text, int _fozi, int _font, Size _size, Point _loca, Color _bcol, Color _fcol)
+	{
+	    try
+	    {
+		_labl.Location = _loca;
+
+		Mod.Centerize(_labl, _base, _loca.X < 1, _loca.Y < 1);
+
+		_labl.BorderStyle = BorderStyle.None;
+		_labl.FlatStyle = FlatStyle.Flat;
+
+		if (_size.Equals(Size.Empty)) _size = TextRenderer.MeasureText(_text, GetFont(_font, _fozi));
+
+		_labl.MinimumSize = _size;
+		_labl.MaximumSize = _size;
+
+		_labl.Text = _text;
+
+		if (_bcol == null) _bcol = Color.FromArgb(0, 0, 0, 255);
+		if (_fcol == null) _fcol = Color.FromArgb(0, 0, 0, 255);
+
+		_labl.BackColor = _bcol;
+		_labl.ForeColor = _fcol;
+
+		_base.Controls.Add(_labl);
+		_base.Update();
+	    }
+
+	    catch
 	    {
 		// Error Handler
 	    };
@@ -137,7 +273,9 @@ namespace Lunarilicious
 		_butt.Font = GetFont(_font, _fozi);
 		_butt.Text = $"{_text}";
 
-		_butt.Location = _loca; Mod.Centerize(_base, _butt, _loca.X < 1, _loca.Y < 1);
+		_butt.Location = _loca; 
+		
+		Mod.Centerize(_butt, _base, _loca.X < 1, _loca.Y < 1);
 
 		_butt.FlatAppearance.BorderSize = 0;
 		_butt.FlatStyle = FlatStyle.Flat;
