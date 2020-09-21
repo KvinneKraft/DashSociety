@@ -48,8 +48,14 @@ namespace Lunarilicious
 		    };
 		};
 
-		Injector.Add.AButton(SELECTOR_MENU, BACK, new Size(135, 28), new Point(-1, SELECTOR_MENU.Height - 38), StartMenu.START_MENU.BackColor, Color.FromArgb(255, 255, 255), "Back", Injector.Get.FONT_TYPE_MAIN, 12);
-		Injector.Add.ControlBorder(BACK, 8);
+		Add.Button(SELECTOR_MENU, BACK, "Back", Get.Font.NORMAL, 12, new Size(135, 28), new Point(-1, SELECTOR_MENU.Height - 38), StartMenu.START_MENU.BackColor, Color.FromArgb(255, 255, 255));
+
+		BACK.Click += (s, e) =>
+		{
+		    VisibilityManager.ShowComponent(StartMenu.START_MENU);
+		};
+		
+		Mod.Border(BACK, 8);
 
 		Base.Controls.Add(SELECTOR_MENU);
 	    }
@@ -59,17 +65,17 @@ namespace Lunarilicious
 	    try //---Initialize Scroll Bar
 	    {
 		SCROLL_BAR_BASE.BackColor = Color.FromArgb(53, 129, 252);
-		SCROLL_BAR_BASE.Size = new Size(20, SELECTOR_MENU.Height - 10);
+		Mod.Resize(SCROLL_BAR_BASE, new Size(20, SELECTOR_MENU.Height - 10));
 		SCROLL_BAR_BASE.Location = new Point(SELECTOR_MENU.Width - SCROLL_BAR_BASE.Width - 5, 5);
 
-		Injector.Add.ControlBorder(SCROLL_BAR_BASE, 4);
+		Mod.Border(SCROLL_BAR_BASE, 4);
 		SELECTOR_MENU.Controls.Add(SCROLL_BAR_BASE);
 
 		SCROLL_BAR.BackColor = Color.FromArgb(40, 75, 130);
-		SCROLL_BAR.Size = new Size(SCROLL_BAR_BASE.Width - 10, SCROLL_BAR_BASE.Height - 8);
+		Mod.Resize(SCROLL_BAR, new Size(SCROLL_BAR_BASE.Width - 10, SCROLL_BAR_BASE.Height - 8));
 		SCROLL_BAR.Location = new Point(5, 4);
 
-		Injector.Add.ControlBorder(SCROLL_BAR, 4);
+		Mod.Border(SCROLL_BAR, 4);
 		SCROLL_BAR_BASE.Controls.Add(SCROLL_BAR);
 	    }
 
@@ -83,10 +89,10 @@ namespace Lunarilicious
 
 		SELECTOR_MENU.Paint += (s, e) =>
 		{
-		    Injector.Add.Rectangle(e, Color.FromArgb(40, 75, 130), 2, new Size(CHARACTER_BASE.Width + 1, CHARACTER_BASE.Height + 1), CHARACTER_BASE.Location);
+		    Mod.Rectangle(e, Color.FromArgb(40, 75, 130), 2, new Size(CHARACTER_BASE.Width + 1, CHARACTER_BASE.Height + 1), CHARACTER_BASE.Location);
 		};
 
-		Injector.Add.ControlBorder(CHARACTER_BASE, 4);
+		Mod.Border(CHARACTER_BASE, 4);
 		SELECTOR_MENU.Controls.Add(CHARACTER_BASE);
 
 		CHARACTER_BASE_BASE.BackColor = CHARACTER_BASE.BackColor;
@@ -108,7 +114,9 @@ namespace Lunarilicious
 			    CHARACTER_BASE_BASE.Controls[r].BackColor = Color.FromArgb(40, 75, 130);
 			    CHARACTER_BASE_BASE.Controls[r].Size = new Size(CHARACTER_BASE_BASE.Width, 64);
 			    CHARACTER_BASE_BASE.Controls[r].Location = new Point(0, y);
-			   
+
+			    Mod.Border(CHARACTER_BASE_BASE.Controls[r], 4);
+
 			    y += CHARACTER_BASE_BASE.Controls[r].Height + 5;
 			    x = 0; c = 0; o += a;
 			};
@@ -128,7 +136,7 @@ namespace Lunarilicious
 		catch (Exception e) { MessageBox.Show($"{e}"); };
 	    }
 
-	    catch { };
+	    catch (Exception e) { MessageBox.Show($"{e}"); };
 	}
 
 	static int PonySize(int k) => 7; // Fix this, please. holy shit.

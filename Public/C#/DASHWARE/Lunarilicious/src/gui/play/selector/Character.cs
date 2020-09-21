@@ -49,7 +49,7 @@ namespace Lunarilicious
 
 		base.BackColor = Color.FromArgb(53, 129, 252);
 
-		Paint += (s, e) => Injector.Add.Rectangle(e, Color.FromArgb(40, 75, 130), 2, new Size(size.Width - 1, size.Height - 1), new Point(1, 1));
+		Paint += (s, e) => Mod.Rectangle(e, Color.FromArgb(40, 75, 130), 2, new Size(size.Width - 1, size.Height - 1), new Point(0, 0));
 	    }
 
 	    catch { };
@@ -63,8 +63,8 @@ namespace Lunarilicious
 		AVATAR_CONTAINER.Location = new Point(15, 15);
 		Controls.Add(AVATAR_CONTAINER);
 
-		Injector.Add.ThaLabel(AVATAR_CONTAINER, AVATAR_PRICE, Point.Empty, Color.FromArgb(255, 255, 255), string.Empty, 1, 16);
-		Injector.Add.ThaLabel(AVATAR_CONTAINER, AVATAR_NAME, Point.Empty, Color.FromArgb(255, 255, 255), string.Empty, 0, 24);
+		Add.Label(AVATAR_CONTAINER, AVATAR_PRICE, string.Empty, 16, Get.Font.NORMAL, Size.Empty, Point.Empty, Color.Empty, Color.FromArgb(255, 255, 255));
+		Add.Label(AVATAR_CONTAINER, AVATAR_NAME, string.Empty, 16, Get.Font.NORMAL, Size.Empty, Point.Empty, Color.Empty, Color.FromArgb(255, 255, 255));
 
 		AVATAR_BOX.Size = new Size(64, 64);
 		AVATAR_BOX.BackColor = Color.FromArgb(0, 0, 0, 255);
@@ -90,16 +90,16 @@ namespace Lunarilicious
 		Color BUTTON_B_COLOR = Color.FromArgb(40, 75, 130);
 		Color BUTTON_F_COLOR = Color.FromArgb(255, 255, 255);
 
-		int BUTTON_FONT = Injector.Get.FONT_TYPE_MAIN;
+		int BUTTON_FONT = Get.Font.NORMAL;
 		int BUTTON_FONT_SIZE = 12;
 
-		Injector.Add.AButton(BUTTON_CONTAINER, BUY, BUTTON_SIZE, Point.Empty, BUTTON_B_COLOR, BUTTON_F_COLOR, "Buy", BUTTON_FONT, BUTTON_FONT_SIZE);
+		Add.Button(BUTTON_CONTAINER, BUY, "Buy", BUTTON_FONT_SIZE, BUTTON_FONT, BUTTON_SIZE, Point.Empty, BUTTON_B_COLOR, BUTTON_F_COLOR);
 		BUY.Click += (s, e) => Hide();
 
-		Injector.Add.AButton(BUTTON_CONTAINER, EQUIP, BUTTON_SIZE, new Point(BUY.Width + 10, 0), BUTTON_B_COLOR, BUTTON_F_COLOR, "Equip", BUTTON_FONT, BUTTON_FONT_SIZE);
+		Add.Button(BUTTON_CONTAINER, EQUIP, "Equip", BUTTON_FONT_SIZE, BUTTON_FONT, BUTTON_SIZE, new Point(BUY.Width + 10, 0), BUTTON_B_COLOR, BUTTON_F_COLOR);
 		EQUIP.Click += (s, e) => Hide();
 
-		Injector.Add.AButton(BUTTON_CONTAINER, CANCEL, BUTTON_SIZE, new Point(EQUIP.Left + EQUIP.Width + 10, 0), BUTTON_B_COLOR, BUTTON_F_COLOR, "Cancel", BUTTON_FONT, BUTTON_FONT_SIZE);
+		Add.Button(BUTTON_CONTAINER, CANCEL, "Cancel", BUTTON_FONT_SIZE, BUTTON_FONT, BUTTON_SIZE, new Point(EQUIP.Left + EQUIP.Width + 10, 0), BUTTON_B_COLOR, BUTTON_F_COLOR);
 		CANCEL.Click += (s, e) => Hide();
 	    }
 
@@ -121,7 +121,7 @@ namespace Lunarilicious
 
 		foreach (Control control in controls)
 		{
-		    Injector.Add.ControlBorder(control, 4);
+		    Mod.Border(control, 4);
 		};
 	    }
 
@@ -130,8 +130,8 @@ namespace Lunarilicious
 	 
 	public void Select(PictureBox Pony, string Name, int Price)
 	{
-	    AVATAR_NAME.MinimumSize = Injector.Get.FontSize(Name, AVATAR_NAME.Font); // Simplify this shit.
-	    AVATAR_NAME.MaximumSize = Injector.Get.FontSize(Name, AVATAR_NAME.Font);
+	    AVATAR_NAME.MinimumSize = TextRenderer.MeasureText(Name, AVATAR_NAME.Font); // Simplify this shit.
+	    AVATAR_NAME.MaximumSize = TextRenderer.MeasureText(Name, AVATAR_NAME.Font);
 	    AVATAR_NAME.Location = new Point(Integers.CenterOf(AVATAR_CONTAINER, AVATAR_NAME), 5);
 	    AVATAR_NAME.Text = Name;
 
@@ -140,8 +140,8 @@ namespace Lunarilicious
 	    AVATAR.Size  = Pony.Image.Size;
 	    AVATAR.Image = Pony.Image;
 
-	    AVATAR_PRICE.MinimumSize = Injector.Get.FontSize($"${Price}", AVATAR_PRICE.Font); // Simplify this shit.
-	    AVATAR_PRICE.MaximumSize = Injector.Get.FontSize($"${Price}", AVATAR_PRICE.Font);
+	    AVATAR_PRICE.MinimumSize = TextRenderer.MeasureText($"${Price}", AVATAR_PRICE.Font); // Simplify this shit.
+	    AVATAR_PRICE.MaximumSize = TextRenderer.MeasureText($"${Price}", AVATAR_PRICE.Font);
 	    AVATAR_PRICE.Location = new Point(Integers.CenterOf(AVATAR_CONTAINER, AVATAR_PRICE), AVATAR_BOX.Top + AVATAR_BOX.Height + 10);
 	    AVATAR_PRICE.Text = $"${Price}";
 

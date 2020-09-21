@@ -35,7 +35,7 @@ namespace Lunarilicious
 	{
 	    BAR_TITLE.Text = title;
 	    
-	    Size size = Injector.Get.FontSize(title, BAR_TITLE.Font);
+	    Size size = TextRenderer.MeasureText(title, BAR_TITLE.Font);
 
 	    BAR_TITLE.MaximumSize = size;
 	    BAR_TITLE.MinimumSize = size;
@@ -51,31 +51,30 @@ namespace Lunarilicious
 		Base.FormBorderStyle = FormBorderStyle.None;
 		Base.BackColor = Color.FromArgb(16, 16, 16);
 		Base.Icon = Properties.Resources.icon;
-
-		Injector.Add.RuImage(Base, BAR_OBJECT, null, new Size(Base.Width, 26), Point.Empty); //BAR_OBJECT.BackColor = Owner.BackColor;
-		Injector.Set.Draggable(BAR_OBJECT, Base);
+		
+		Add.PictureBox(Base, BAR_OBJECT, null, new Size(Base.Width, 26), Point.Empty, Base.BackColor); //BAR_OBJECT.BackColor = Owner.BackColor;
+		Mod.Moveable(BAR_OBJECT, Base);
 
 		Base.Paint += (s, e) =>
 		{
-		    Injector.Add.Rectangle(e, Base.BackColor, 2, new Size(Base.Width, Base.Height - 26), new Point(0, 25));
+		    Mod.Rectangle(e, Base.BackColor, 2, new Size(Base.Width, Base.Height - 26), new Point(0, 25));
 		};
 
-		Injector.Add.AButton(BAR_OBJECT, QUIT_OBJECT, new Size(60, BAR_OBJECT.Height), new Point(BAR_OBJECT.Width - 60, 0), BAR_OBJECT.BackColor, Color.FromArgb(255, 255, 255), "X", Injector.Get.FONT_TYPE_MAIN, 10);
+		Add.Button(BAR_OBJECT, QUIT_OBJECT, "X", Get.Font.NORMAL, 10, new Size(60, BAR_OBJECT.Height), new Point(BAR_OBJECT.Width - 60, 0), BAR_OBJECT.BackColor, Color.FromArgb(255, 255, 255));
 
 		QUIT_OBJECT.Click += (s, e) =>
 		{
 		    Environment.Exit(-1);
 		};
 
-		Injector.Add.AButton(BAR_OBJECT, MINIMIZE_OBJECT, new Size(60, BAR_OBJECT.Height), new Point(BAR_OBJECT.Width - 120, 0), BAR_OBJECT.BackColor, Color.FromArgb(255, 255, 255), "-", Injector.Get.FONT_TYPE_MAIN, 10);
+		Add.Button(BAR_OBJECT, MINIMIZE_OBJECT, "-", Get.Font.NORMAL, 10, new Size(60, BAR_OBJECT.Height), new Point(BAR_OBJECT.Width - 120, 0), BAR_OBJECT.BackColor, Color.FromArgb(255, 255, 255));
 
 		MINIMIZE_OBJECT.Click += (s, e) =>
 		{
 		    Base.SendToBack();
 		};
 
-		Injector.Add.ThaLabel(BAR_OBJECT, BAR_TITLE, Point.Empty, Color.White, string.Empty, Injector.Get.FONT_TYPE_MAIN, 10); /*PURPOSELY*/  Injector.Set.Draggable(BAR_TITLE, Base);
-
+		Add.Label(BAR_OBJECT, BAR_TITLE, string.Empty, 10, Get.Font.NORMAL, Size.Empty, Point.Empty, Color.Empty, Color.White); /*PURPOSELY*/  Mod.Moveable(BAR_TITLE, Base);
 		UpdateBarTitle("Main Screen");
 	    }
 
@@ -90,23 +89,23 @@ namespace Lunarilicious
 
 		Base.Controls.Add(START_MENU);
 
-		Injector.Add.RuImage(START_MENU, GAME_TITLE_OBJECT, Image.FromFile("data\\gui\\GameTitle.png"), new Size(463, 55), new Point(-1, 24));
+		Add.PictureBox(START_MENU, GAME_TITLE_OBJECT, Image.FromFile("data\\gui\\GameTitle.png"), new Size(463, 55), new Point(-1, 24), Color.Empty);
 		GAME_TITLE_OBJECT.BackColor = Color.FromArgb(0, 0, 0, 255);
 
 		// Hide Owner when going to another menu, perhaps the shop or so.
 
-		Injector.Add.RuImage(START_MENU, START_MENU_CONTAINER, null, new Size(415, 56), new Point(-1, 120));
+		Add.PictureBox(START_MENU, START_MENU_CONTAINER, null, new Size(415, 56), new Point(-1, 120), Color.Empty);
 		START_MENU_CONTAINER.BackColor = Color.FromArgb(0, 0, 0, 255);
 
 		Color OPTION_COLOR = Color.FromArgb(16, 16, 16);
 		Size OPTION_SIZE = new Size(125, START_MENU_CONTAINER.Height);
 		
-		Injector.Add.AButton(START_MENU_CONTAINER, PLAY_GAME, OPTION_SIZE, Point.Empty, OPTION_COLOR, Color.White, "Play Game", Injector.Get.FONT_TYPE_MAIN, 14);
+		Add.Button(START_MENU_CONTAINER, PLAY_GAME, "Play Game", 14, Get.Font.NORMAL, OPTION_SIZE, Point.Empty, OPTION_COLOR, Color.White);
 
 		PLAY_GAME.Click += (s, e) => PlayGame();//Same ideology for the others.
 
-		Injector.Add.AButton(START_MENU_CONTAINER, INVENTORY, OPTION_SIZE, new Point(PLAY_GAME.Left + PLAY_GAME.Width + 20, 0), OPTION_COLOR, Color.White, "Inventory", Injector.Get.FONT_TYPE_MAIN, 14);
-		Injector.Add.AButton(START_MENU_CONTAINER, GAME_SETTINGS, OPTION_SIZE, new Point(INVENTORY.Left + INVENTORY.Width + 20, 0), OPTION_COLOR, Color.White, "Settings", Injector.Get.FONT_TYPE_MAIN, 14);
+		Add.Button(START_MENU_CONTAINER, INVENTORY, "Inventory", 14, Get.Font.NORMAL, OPTION_SIZE, new Point(PLAY_GAME.Left + PLAY_GAME.Width + 20, 0), OPTION_COLOR, Color.White);
+		Add.Button(START_MENU_CONTAINER, GAME_SETTINGS, "Settings", 14, Get.Font.NORMAL, OPTION_SIZE, new Point(INVENTORY.Left + INVENTORY.Width + 20, 0), OPTION_COLOR, Color.White);
 	    }
 
 	    catch { };

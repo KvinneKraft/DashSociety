@@ -95,23 +95,30 @@ namespace Lunarilicious
 
 	static readonly PortableForm portableForm = new PortableForm();
 
-	public static void Border(Control _ctrl, int _rad)
+	public static void Border(Control _ctrl, int _rar)
 	{
 	    _ctrl.Paint += (s, e) =>
 	    {
-		portableForm.PaintOwner(e);
+		try
+		{
+		    portableForm.PaintOwner(e);
 
-		Rectangle rect = new Rectangle(0, 0, _ctrl.Width, _ctrl.Height);
-		GraphicsPath grapp = new GraphicsPath();
+		    using (GraphicsPath grapp = new GraphicsPath())
+		    {
+		        Rectangle rect = new Rectangle(0, 0, _ctrl.Width, _ctrl.Height);
 
-		_rad = _rad * 3;
+			int _rad = (_rar) * 3;
 
-		grapp.AddArc(rect.X, rect.Y, _rad, _rad, 170, 90);
-		grapp.AddArc(rect.X + rect.Width - _rad, rect.Y, _rad, _rad, 270, 90);
-		grapp.AddArc(rect.X + rect.Width - _rad, rect.Y + rect.Height - _rad, _rad, _rad, 0, 90);
-		grapp.AddArc(rect.X, rect.Y + rect.Height - _rad, _rad, _rad, 80, 90);
+			grapp.AddArc(rect.X, rect.Y, _rad, _rad, 170, 90);
+			grapp.AddArc((rect.X + rect.Width - _rad), rect.Y, _rad, _rad, 270, 90);
+			grapp.AddArc((rect.X + rect.Width - _rad), (rect.Y + rect.Height - _rad), _rad, _rad, 0, 90);
+			grapp.AddArc(rect.X, (rect.Y + rect.Height - _rad), _rad, _rad, 80, 90);
 
-		_ctrl.Region = new Region(grapp);
+			_ctrl.Region = new Region(grapp);
+		    };
+		}
+
+		catch (Exception es) { MessageBox.Show(es.ToString()); };
 	    };
 	}
 
@@ -161,8 +168,8 @@ namespace Lunarilicious
     {
 	public static class Font
 	{
-	    public static readonly int NORMAL = 0;
-	    public static readonly int CUTE = 1;
+	    public static readonly int NORMAL = 1;
+	    public static readonly int CUTE = 0;
 	};
     };
 
@@ -184,15 +191,19 @@ namespace Lunarilicious
 			(byte[])Properties.Resources.cute
 		    };
 
+		    byte[] _fra;
+
 		    foreach (byte[] _fbyt in _fcol)
 		    {
-			IntPtr _ptr = Marshal.AllocCoTaskMem(_fbyt.Length);
-			Marshal.Copy(_fbyt, 0, _ptr, _fbyt.Length);
+			_fra = _fbyt;
+
+			IntPtr _ptr = Marshal.AllocCoTaskMem(_fra.Length);
+			Marshal.Copy(_fra, 0, _ptr, _fra.Length);
 
 			uint _cache = 0;
 
-			AddFontMemResourceEx(_ptr, (uint) _fbyt.Length, IntPtr.Zero, ref _cache);
-			FontCollection.AddMemoryFont(_ptr, _fbyt.Length);
+			AddFontMemResourceEx(_ptr, (uint) _fra.Length, IntPtr.Zero, ref _cache);
+			FontCollection.AddMemoryFont(_ptr, _fra.Length);
 		    };
 		};
 
@@ -201,23 +212,42 @@ namespace Lunarilicious
 
 	    catch
 	    {
-		throw Exceptions.UNKNOWN;
+		return null;
 	    };
 	}
 
-	public static void PictureBox(Control _base, PictureBox _pict, Image _imag, Point _iloc, Color _pcol)
+	public static void PictureBox(Control _base, PictureBox _pict, Image _imag, Size _size, Point _iloc, Color _pcol)
 	{
 	    try
 	    {
-		Mod.Centerize(_pict, _base, _iloc.X < 1, _iloc.Y < 1);
+		if (_imag != null)
+		{
+		    _pict.Image = _imag;
 
-		_pict.MinimumSize = _imag.Size;
-		_pict.MaximumSize = _imag.Size;
+		    if (_size == Size.Empty)
+		    {
+			_size = _pict.Image.Size;
+		    };
+		};
+
+		_pict.MinimumSize = _size;
+		_pict.MaximumSize = _size;
+
+		_pict.Location = _iloc;
+
+		if (_iloc != Point.Empty)
+		{
+		    Mod.Centerize(_pict, _base, _iloc.X < 0, _iloc.Y < 0);
+		};
 
 		_pict.BorderStyle = BorderStyle.None;
-		
+
+		if (_pcol == Color.Empty || _pcol == null)
+		{
+		    _pcol = Color.FromArgb(0, 0, 0, 255);
+		};
+
 		_pict.BackColor = _pcol;
-		_pict.Location = _iloc;
 
 		_base.Controls.Add(_pict);
 		_base.Update();
@@ -225,7 +255,7 @@ namespace Lunarilicious
 
 	    catch (Exception e)
 	    {
-		// Error Handler
+		// Error Handler 
 	    };
 	}
 
@@ -235,20 +265,21 @@ namespace Lunarilicious
 	    {
 		_labl.Location = _loca;
 
-		Mod.Centerize(_labl, _base, _loca.X < 1, _loca.Y < 1);
+		Mod.Centerize(_labl, _base, _loca.X < 0, _loca.Y < 0);
 
 		_labl.BorderStyle = BorderStyle.None;
 		_labl.FlatStyle = FlatStyle.Flat;
+		_labl.Font = GetFont(_font, _fozi);
 
-		if (_size.Equals(Size.Empty)) _size = TextRenderer.MeasureText(_text, GetFont(_font, _fozi));
+		if (_size.Equals(Size.Empty)) _size = TextRenderer.MeasureText(_text, _labl.Font);
 
 		_labl.MinimumSize = _size;
 		_labl.MaximumSize = _size;
 
 		_labl.Text = _text;
 
-		if (_bcol == null) _bcol = Color.FromArgb(0, 0, 0, 255);
-		if (_fcol == null) _fcol = Color.FromArgb(0, 0, 0, 255);
+		if (_bcol == Color.Empty) _bcol = Color.FromArgb(0, 0, 0, 255);
+		if (_fcol == Color.Empty) _fcol = Color.FromArgb(0, 0, 0, 255);
 
 		_labl.BackColor = _bcol;
 		_labl.ForeColor = _fcol;
@@ -257,9 +288,9 @@ namespace Lunarilicious
 		_base.Update();
 	    }
 
-	    catch
+	    catch (Exception e)
 	    {
-		// Error Handler
+		// Error Handler 
 	    };
 	}
 
@@ -275,7 +306,7 @@ namespace Lunarilicious
 
 		_butt.Location = _loca; 
 		
-		Mod.Centerize(_butt, _base, _loca.X < 1, _loca.Y < 1);
+		Mod.Centerize(_butt, _base, _loca.X < 0, _loca.Y < 0);
 
 		_butt.FlatAppearance.BorderSize = 0;
 		_butt.FlatStyle = FlatStyle.Flat;
@@ -289,7 +320,7 @@ namespace Lunarilicious
 
 	    catch (Exception e)
 	    {
-		// Error Handler
+		// Error Handler 
 	    };
 	}
     };

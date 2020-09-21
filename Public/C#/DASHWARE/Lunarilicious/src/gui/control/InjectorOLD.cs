@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using System;
 using System.Drawing;
 using System.Drawing.Text;
@@ -10,12 +10,10 @@ using System.Runtime.InteropServices;
 
 namespace Lunarilicious
 {
-    /*OLD*/
-    class Injector
     {
 	public static class Add
 	{
-	    public static void AButton(Control srf, Button obj, Size siz, Point loc, Color bcl, Color fcl, String tex, Int32 type, Int32 pts)
+	    public static void Button(Control srf, Button obj, Size siz, Point loc, Color bcl, Color fcl, String tex, Int32 type, Int32 pts)
 	    {
 		obj.Size = siz;
 		obj.MinimumSize = siz;
@@ -161,10 +159,10 @@ namespace Lunarilicious
 
 		    int radius = (border_radius) * 3;
 
-		    graphics_path.AddArc(rectum.X, rectum.Y, radius, radius, 170/*180*/, 90);
+		    graphics_path.AddArc(rectum.X, rectum.Y, radius, radius, 170, 90);
 		    graphics_path.AddArc((rectum.X + rectum.Width - radius), rectum.Y, radius, radius, 270, 90);
 		    graphics_path.AddArc((rectum.X + rectum.Width - radius), (rectum.Y + rectum.Height - radius), radius, radius, 0, 90);
-		    graphics_path.AddArc(rectum.X, (rectum.Y + rectum.Height - radius), radius, radius, 80/*90*/, 90);
+		    graphics_path.AddArc(rectum.X, (rectum.Y + rectum.Height - radius), radius, radius, 80, 90);
 
 		    Region reg = new Region(graphics_path);
 		    control.Region = reg;
@@ -279,3 +277,4 @@ namespace Lunarilicious
 	};
     }
 }
+*/
