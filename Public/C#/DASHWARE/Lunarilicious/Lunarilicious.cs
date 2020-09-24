@@ -28,8 +28,28 @@ namespace Lunarilicious
 	Crystal Crystal;
 	Entity Creature;
 
+	class SecondaryApp : Form
+	{
+	    PictureBox bar = new PictureBox();
+	    Label label = new Label();
+
+	    public SecondaryApp()
+	    {
+		Add.MenuBar(this, bar, Color.FromArgb(8, 8, 8), label, "Test Application", 1, 10, Color.White, _quit: true, _draggable: true, _border: true, _borderColor: Color.FromArgb(20, 20, 20)); ;
+	    }
+	}
+
 	public void Runtime()
 	{
+	    // TEST AREA
+
+	    SecondaryApp app = new SecondaryApp();
+	    app.ShowDialog();
+
+	    Environment.Exit(-1);
+
+	    // END;
+
 	    Creature = new Entity();
 	    Creature.LoadCharacters();
 

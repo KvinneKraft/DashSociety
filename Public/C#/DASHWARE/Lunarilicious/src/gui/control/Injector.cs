@@ -265,8 +265,6 @@ namespace Lunarilicious
 	    {
 		_labl.Location = _loca;
 
-		Mod.Centerize(_labl, _base, _loca.X < 0, _loca.Y < 0);
-
 		_labl.BorderStyle = BorderStyle.None;
 		_labl.FlatStyle = FlatStyle.Flat;
 		_labl.Font = GetFont(_font, _fozi);
@@ -275,6 +273,8 @@ namespace Lunarilicious
 
 		_labl.MinimumSize = _size;
 		_labl.MaximumSize = _size;
+
+		Mod.Centerize(_labl, _base, _loca.X < 0, _loca.Y < 0);
 
 		_labl.Text = _text;
 
@@ -323,5 +323,68 @@ namespace Lunarilicious
 		// Error Handler 
 	    };
 	}
+
+	static readonly Button MINIMIZE = new Button();
+	static readonly Button QUIT = new Button();
+
+	public static void MenuBar(Control _base, PictureBox _mbar, Color _bcol, Label _mtit, string _title, int _font, int _fsize, Color _fcol, [Optional] bool _border, [Optional] Color _borderColor, [Optional] bool _quit, [Optional] bool _minimize, [Optional] bool _draggable)
+	{
+	    try
+	    {
+		if (_base is Form)
+		{
+		    ((Form)_base).FormBorderStyle = FormBorderStyle.None;
+		    ((Form)_base).MinimizeBox = false;
+		    ((Form)_base).MaximizeBox = false;
+		};
+
+		PictureBox(_base, _mbar, null, new Size(_base.Size.Width - 2, 26), new Point(1, 1), _bcol);
+		Label(_mbar, _mtit, _title, _fsize, _font, Size.Empty, new Point(10, -1), _bcol, _fcol);
+
+		if (_draggable)
+		{
+		    Mod.Moveable(_mbar, _base);
+		    Mod.Moveable(_mtit, _base);
+		};
+
+		if (_quit)
+		{
+		    Button(_mbar, QUIT, "X", _fsize, _font, new Size(65, 26), new Point(_base.Width - 67, 0), _bcol, _fcol);
+		    QUIT.Click += (s, e) => Environment.Exit(-1);
+		};
+
+		if (_minimize)
+		{
+		    Point _loca = new Point(_base.Width - 67, 0);
+
+		    if (_base.Controls.Contains(QUIT))
+		    {
+			_loca.X = _base.Width - 132;
+		    };
+
+		    Button(_mbar, MINIMIZE, "-", _fsize, _font, new Size(65, 26), new Point(_base.Width - 67, 0), _bcol, _fcol);
+		    MINIMIZE.Click += (s, e) => Environment.Exit(-1);
+		};
+
+		if (_border)
+		{
+		    _base.Paint += (s, e) =>
+		    {
+			Mod.Rectangle(e, _borderColor, 2, new Size(_base.Width - 1, _base.Height - 1), Point.Empty);
+		    };
+		};
+
+		_base.Update();
+	    }
+
+	    catch (Exception e)
+	    {
+		// Error Handler
+	    };
+	}
+
+	// Menu Injector
+	// TextBox Injector
+	// LogBox Injector
     };
 }

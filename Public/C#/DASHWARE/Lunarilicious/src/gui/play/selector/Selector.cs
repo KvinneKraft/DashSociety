@@ -55,7 +55,7 @@ namespace Lunarilicious
 
 		GO.Click += (s, e) =>
 		{
-		    VisibilityManager.ShowComponent(Game.PLAY_GAME);
+		    //VisibilityManager.ShowComponent(Game.PLAY_GAME);
 		};
 
 		Add.Button(SELECTOR_MENU, BACK, "Back", Get.Font.NORMAL, 12, new Size(110, 28), new Point(-1, SELECTOR_MENU.Height - 38), StartMenu.START_MENU.BackColor, Color.White);
