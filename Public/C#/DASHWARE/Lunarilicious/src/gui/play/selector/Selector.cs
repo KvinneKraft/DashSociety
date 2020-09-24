@@ -16,8 +16,11 @@ namespace Lunarilicious
     class Selector
     {
 	//----Main Objects
+	public static readonly PictureBox BUTTON_CONTAINER = new PictureBox();
 	public static readonly PictureBox SELECTOR_MENU = new PictureBox();
+
 	public static readonly Button BACK = new Button();
+	public static readonly Button GO = new Button();
 
 	//---Character Objects
 	static readonly PictureBox CHARACTER_BASE_BASE = new PictureBox();
@@ -48,7 +51,14 @@ namespace Lunarilicious
 		    };
 		};
 
-		Add.Button(SELECTOR_MENU, BACK, "Back", Get.Font.NORMAL, 12, new Size(135, 28), new Point(-1, SELECTOR_MENU.Height - 38), StartMenu.START_MENU.BackColor, Color.FromArgb(255, 255, 255));
+		Add.Button(SELECTOR_MENU, GO, "GO!", Get.Font.NORMAL, 12, new Size(100, 28), new Point(0, SELECTOR_MENU.Height - 38), StartMenu.START_MENU.BackColor, Color.White);
+
+		GO.Click += (s, e) =>
+		{
+		    VisibilityManager.ShowComponent(Game.PLAY_GAME);
+		};
+
+		Add.Button(SELECTOR_MENU, BACK, "Back", Get.Font.NORMAL, 12, new Size(110, 28), new Point(-1, SELECTOR_MENU.Height - 38), StartMenu.START_MENU.BackColor, Color.White);
 
 		BACK.Click += (s, e) =>
 		{
