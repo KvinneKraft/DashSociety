@@ -31,11 +31,17 @@ namespace Lunarilicious
 	class SecondaryApp : Form
 	{
 	    PictureBox bar = new PictureBox();
+	    TextBox input = new TextBox();
 	    Label label = new Label();
 
 	    public SecondaryApp()
 	    {
-		Add.MenuBar(this, bar, Color.FromArgb(8, 8, 8), label, "Test Application", 1, 10, Color.White, _quit: true, _draggable: true, _border: true, _borderColor: Color.FromArgb(20, 20, 20)); ;
+		Size = new Size(500, 500);
+
+		Add.MenuBar(this, bar, Color.Black, label, "Some App", 1, 10, Color.White, _border:true, _borderColor:Color.Black, _quit:true, _minimize:true, _draggable:true);
+		//Add.SecondaryApp sap = new Add.SecondaryApp("Test App", Font, appSize:new Size(350, 350), appLocation:Point.Empty, appBorderStyle:FormBorderStyle.None, showInTaskBar: false, hasStartMenu:true);
+		
+		//sap.ShowDialog();
 	    }
 	}
 

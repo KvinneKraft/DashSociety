@@ -152,6 +152,8 @@ namespace Lunarilicious
 
 		_ctrl.MaximumSize = _size;
 		_ctrl.MinimumSize = _size;
+		_ctrl.Size = _size;
+
 		_ctrl.Update();
 
 		return true;
@@ -298,8 +300,7 @@ namespace Lunarilicious
 	{
 	    try
 	    {
-		_butt.MinimumSize = _size;
-		_butt.MaximumSize = _size;
+		Mod.Resize(_butt, _size);
 
 		_butt.Font = GetFont(_font, _fozi);
 		_butt.Text = $"{_text}";
@@ -308,8 +309,23 @@ namespace Lunarilicious
 		
 		Mod.Centerize(_butt, _base, _loca.X < 0, _loca.Y < 0);
 
+		_butt.FlatAppearance.BorderColor = _bcol;
 		_butt.FlatAppearance.BorderSize = 0;
 		_butt.FlatStyle = FlatStyle.Flat;
+
+		_butt.Click += (s, e) => 
+		{
+		    _butt.FlatAppearance.BorderColor = _bcol;
+		    _butt.FlatAppearance.BorderSize = 0;
+		    _butt.FlatStyle = FlatStyle.Flat;
+		};
+
+		_butt.MouseClick += (s, e) =>
+		{
+		    _butt.FlatAppearance.BorderColor = _bcol;
+		    _butt.FlatAppearance.BorderSize = 0;
+		    _butt.FlatStyle = FlatStyle.Flat;
+		};
 
 		_butt.BackColor = _bcol;
 		_butt.ForeColor = _fcol;
@@ -383,8 +399,93 @@ namespace Lunarilicious
 	    };
 	}
 
-	// Menu Injector
-	// TextBox Injector
-	// LogBox Injector
+	public static void InputBox(Control _base, TextBox _ibox, Size _size, Point _loca, string _text, int _fsize, int _font, Color _bcol, Color _fcol, [Optional] bool _readOnly, [Optional] bool _centerText, [Optional] bool _border, [Optional] Color _borderColor)
+	{
+	    try
+	    {
+		_ibox.BorderStyle = BorderStyle.None;
+		
+		_ibox.BackColor = _bcol;
+		_ibox.ForeColor = _fcol;
+
+		_ibox.Font = GetFont(_font, _fsize);
+		_ibox.Text = _text;
+
+		Mod.Resize(_ibox, _size);
+
+		_ibox.ReadOnly = _readOnly;
+		_ibox.Location = _loca;
+
+		Mod.Centerize(_ibox, _base, _loca.X < 0, _loca.Y < 0);
+
+		if (_centerText)
+		{
+		    MessageBox.Show("Work on the centering of the text!");
+		};
+
+		if (_border)
+		{
+		    _base.Paint += (s, e) =>
+		    {
+			_loca = _ibox.Location;
+			Mod.Rectangle(e, _borderColor, 1, new Size(_size.Width + 1, _size.Height + 1), new Point(_loca.X - 1, _loca.Y - 1));
+		    };
+		};
+
+		_base.Controls.Add(_ibox);
+		_base.Update();
+	    }
+
+	    catch (Exception e)
+	    {
+		// Error Handler
+	    };
+	}
+
+	public class SecondaryApp : Form
+	{
+	    public SecondaryApp(
+		[Optional] string appTitle, 
+		[Optional] Font appFont, 
+		[Optional] Icon appIcon, 
+		[Optional] Size appSize, 
+		[Optional] Point appLocation, 
+		[Optional] Color appBackColor, 
+		[Optional] FormBorderStyle appBorderStyle, 
+		[Optional] bool showInTaskBar,
+		[Optional] bool hasStartMenu 
+	    ){
+		try
+		{
+		    if (hasStartMenu)
+		    {
+			MenuBar(this, new System.Windows.Forms.PictureBox(), Color.FromArgb(8, 8, 8), new System.Windows.Forms.Label(), appTitle, 1, 10, Color.White, _border:true, _borderColor:appBackColor, _quit:true, _minimize:true, _draggable:true);
+		    };
+
+		    this.BackColor = appBackColor;
+		    this.Icon = appIcon;
+
+		    if (appLocation.IsEmpty)
+		    {
+			this.StartPosition = FormStartPosition.CenterScreen;
+		    };
+
+		    this.FormBorderStyle = appBorderStyle;
+		    this.ShowInTaskbar = showInTaskBar;
+
+		    this.MaximumSize = appSize;
+		    this.MinimumSize = appSize;
+		    this.Size = appSize;
+
+		    this.Text = appTitle;
+		    this.Font = appFont;
+		}
+
+		catch (Exception e)
+		{
+		    // Error Handler
+		};
+	    }
+	};
     };
 }
