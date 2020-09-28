@@ -15,7 +15,7 @@ using System.Security.Principal;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Lunarilicious
+namespace SimpleFlood
 {
     class Exceptions
     {
@@ -42,7 +42,7 @@ namespace Lunarilicious
 	{
 	    try
 	    {
-		Cursor cursor = new Cursor(CreateIconFromResource(_reso, (uint)_reso.Length, false, 0x00030000));
+		Cursor cursor = new Cursor(CreateIconFromResource(_reso, (uint) _reso.Length, false, 0x00030000));
 
 		_ctrl.Cursor = cursor;
 		_ctrl.Update();
@@ -105,7 +105,7 @@ namespace Lunarilicious
 
 		    using (GraphicsPath grapp = new GraphicsPath())
 		    {
-			Rectangle rect = new Rectangle(0, 0, _ctrl.Width, _ctrl.Height);
+		        Rectangle rect = new Rectangle(0, 0, _ctrl.Width, _ctrl.Height);
 
 			int _rad = (_rar) * 3;
 
@@ -177,7 +177,7 @@ namespace Lunarilicious
 
     class Add
     {
-	[DllImport("gdi32.dll")]
+	[DllImport("gdi32.dll")] 
 	private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
 	private static readonly PrivateFontCollection FontCollection = new PrivateFontCollection();
 
@@ -204,7 +204,7 @@ namespace Lunarilicious
 
 			uint _cache = 0;
 
-			AddFontMemResourceEx(_ptr, (uint)_fra.Length, IntPtr.Zero, ref _cache);
+			AddFontMemResourceEx(_ptr, (uint) _fra.Length, IntPtr.Zero, ref _cache);
 			FontCollection.AddMemoryFont(_ptr, _fra.Length);
 		    };
 		};
@@ -305,15 +305,15 @@ namespace Lunarilicious
 		_butt.Font = GetFont(_font, _fozi);
 		_butt.Text = $"{_text}";
 
-		_butt.Location = _loca;
-
+		_butt.Location = _loca; 
+		
 		Mod.Centerize(_butt, _base, _loca.X < 0, _loca.Y < 0);
 
 		_butt.FlatAppearance.BorderColor = _bcol;
 		_butt.FlatAppearance.BorderSize = 0;
 		_butt.FlatStyle = FlatStyle.Flat;
 
-		_butt.Click += (s, e) =>
+		_butt.Click += (s, e) => 
 		{
 		    _butt.FlatAppearance.BorderColor = _bcol;
 		    _butt.FlatAppearance.BorderSize = 0;
@@ -440,7 +440,7 @@ namespace Lunarilicious
 		    Mod.Centerize(_ibox, _cese, true, true);
 
 		    _cese.Controls.Add(_ibox);
-
+		    
 		    return;
 		};
 
@@ -472,22 +472,21 @@ namespace Lunarilicious
 	public class SecondaryApp : Form
 	{
 	    public SecondaryApp(
-		[Optional] string appTitle,
-		[Optional] Font appFont,
-		[Optional] Icon appIcon,
-		[Optional] Size appSize,
-		[Optional] Point appLocation,
-		[Optional] Color appBackColor,
-		[Optional] FormBorderStyle appBorderStyle,
+		[Optional] string appTitle, 
+		[Optional] Font appFont, 
+		[Optional] Icon appIcon, 
+		[Optional] Size appSize, 
+		[Optional] Point appLocation, 
+		[Optional] Color appBackColor, 
+		[Optional] FormBorderStyle appBorderStyle, 
 		[Optional] bool showInTaskBar,
-		[Optional] bool hasStartMenu
-	    )
-	    {
+		[Optional] bool hasStartMenu 
+	    ){
 		try
 		{
 		    if (hasStartMenu)
 		    {
-			MenuBar(this, new System.Windows.Forms.PictureBox(), Color.FromArgb(8, 8, 8), new System.Windows.Forms.Label(), appTitle, 1, 10, Color.White, _border: true, _borderColor: appBackColor, _quit: true, _minimize: true, _draggable: true);
+			MenuBar(this, new System.Windows.Forms.PictureBox(), Color.FromArgb(8, 8, 8), new System.Windows.Forms.Label(), appTitle, 1, 10, Color.White, _border:true, _borderColor:appBackColor, _quit:true, _minimize:true, _draggable:true);
 		    };
 
 		    this.BackColor = appBackColor;
