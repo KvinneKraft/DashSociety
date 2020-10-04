@@ -36,6 +36,17 @@ namespace SimpleFlood
 	    };
 	}
 
+	public static void Line(PaintEventArgs e, Color _color, float _width, Point a, Point b)
+	{
+	    Graphics graphics = e.Graphics;
+
+	    using (Pen pen = new Pen(_color, _width))
+	    {
+		graphics.SmoothingMode = SmoothingMode.AntiAlias;
+		graphics.DrawLine(pen, a, b);
+	    };
+	}
+
 	[DllImport("user32.dll")] static extern IntPtr CreateIconFromResource(byte[] presbits, uint dwResSize, bool fIcon, uint dwVer);
 
 	public static bool ResourceCursor(Control _ctrl, byte[] _reso)
@@ -113,6 +124,8 @@ namespace SimpleFlood
 			grapp.AddArc((rect.X + rect.Width - _rad), rect.Y, _rad, _rad, 270, 90);
 			grapp.AddArc((rect.X + rect.Width - _rad), (rect.Y + rect.Height - _rad), _rad, _rad, 0, 90);
 			grapp.AddArc(rect.X, (rect.Y + rect.Height - _rad), _rad, _rad, 80, 90);
+
+			grapp.Flatten();
 
 			_ctrl.Region = new Region(grapp);
 		    };
