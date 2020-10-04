@@ -52,6 +52,19 @@
   <ItemGroup>
     <Compile Include="Properties\Program.cs" />
     <Compile Include="src\control\Injector.cs" />
+    <Compile Include="src\parts\abt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\parts\abt.Designer.cs">
+      <DependentUpon>abt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\parts\mode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\parts\mode.Designer.cs">
+      <DependentUpon>mode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\parts\shr.cs" />
     <Compile Include="src\SimpleFlood.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +78,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="src\parts\abt.resx">
+      <DependentUpon>abt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\parts\mode.resx">
+      <DependentUpon>mode.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

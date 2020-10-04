@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
-using System.Security.Principal;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -399,7 +398,7 @@ namespace SimpleFlood
 		{
 		    _base.Paint += (s, e) =>
 		    {
-			Mod.Rectangle(e, _borderColor, 2, new Size(_base.Width - 1, _base.Height - 1), Point.Empty);
+			Mod.Rectangle(e, _borderColor, 1, new Size(_base.Width - 1, _base.Height - 1), Point.Empty);
 		    };
 		};
 

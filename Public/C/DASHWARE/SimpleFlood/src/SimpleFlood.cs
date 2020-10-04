@@ -46,6 +46,8 @@ namespace SimpleFlood
 	}
 
 	public static Form CTR;
+
+	readonly ABT ABOUT_FUNCTION = new ABT();
 	//</BLOCK>
 
 	//<BLOCK id="specification-controls">
@@ -106,7 +108,7 @@ namespace SimpleFlood
 
 		Add.PictureBox(SPECIFICATION_AREA, TOOL_AREA, null, new Size(buttonSize.Width, buttonSize.Height * 3 + 16), new Point(x, y), _bar.BackColor);
 
-		Color buttonColor = Color.FromArgb(16, 16, 16);
+		Color buttonColor = Color.MidnightBlue;
 
 		Add.Button(TOOL_AREA, Options, "Options", 12, 1, buttonSize, new Point(0, 0), buttonColor, Color.White);
 		Add.Button(TOOL_AREA, Modes, "Modes", 12, 1, buttonSize, new Point(0, 30), buttonColor, Color.White);
@@ -120,7 +122,11 @@ namespace SimpleFlood
 		    };
 		};
 
-
+		About.Click += (s, e) =>
+		{
+		    if (ABOUT_FUNCTION.Visible) ABOUT_FUNCTION.Hide();
+		    else ABOUT_FUNCTION.ShowDialog();
+		};
 	    }
 	    catch (Exception e)
 	    {
@@ -134,7 +140,7 @@ namespace SimpleFlood
 		Add.Button(SPECIFICATION_AREA, LAUNCHER, "Initiate", 11, 1, new Size(180, 26), new Point((SPECIFICATION_AREA.Width - 4 - 180) / 2, TOOL_AREA.Top + TOOL_AREA.Height + 21), Options.BackColor, Color.White);
 		Mod.Border(LAUNCHER, 4);
 
-		Add.InputBox(this, LAUNCH_LOGGER, new Size(Width - (SPECIFICATION_AREA.Width + 2), Height - (_bar.Height + 3)), new Point(SPECIFICATION_AREA.Left + SPECIFICATION_AREA.Width - 2, _bar.Height + 1), "sdogpfdjkgjkg", 10, 1, Color.FromArgb(17, 14, 94), Color.FromArgb(247, 255, 163), _readOnly:true, _centerText:false, _border:false, Color.Empty);
+		Add.InputBox(this, LAUNCH_LOGGER, new Size(Width - (SPECIFICATION_AREA.Width + 2), Height - (_bar.Height + 3)), new Point(SPECIFICATION_AREA.Left + SPECIFICATION_AREA.Width - 2, _bar.Height + 1), "sdogpfdjkgjkg", 10, 1, Color.MidnightBlue, Color.FromArgb(247, 255, 163), _readOnly:true, _centerText:false, _border:false, Color.Empty);
 
 		LAUNCH_LOGGER.ScrollBars = ScrollBars.Vertical;
 		LAUNCH_LOGGER.Multiline = true;
@@ -155,11 +161,11 @@ namespace SimpleFlood
 		int x = (SPECIFICATION_AREA.Width - 4 - w) / 2;
 		int y = TARGET_AREA.Top + TARGET_AREA.Height + 10;
 
-		Mod.Line(e, Color.White, 1, new Point(x, y), new Point(x + w, y));
+		Mod.Line(e, Color.MidnightBlue, 1, new Point(x, y), new Point(x + w, y));
 
 		y = TOOL_AREA.Top + TOOL_AREA.Height + 5;
 
-		Mod.Line(e, Color.White, 1, new Point(x, y), new Point(x + w, y));
+		Mod.Line(e, Color.MidnightBlue, 1, new Point(x, y), new Point(x + w, y));
 	    };
 	}
 	//</BLOCK>
@@ -180,7 +186,7 @@ namespace SimpleFlood
 		MaximumSize = size;
 		Size = size;
 
-		Add.MenuBar(this, _bar, Color.FromArgb(8, 8, 8), _title, $"Simple Flood 5.0", 1, 10, Color.White, _border: true, _borderColor: Color.FromArgb(8, 8, 8), _quit: true, _minimize: true, _draggable: true); _title.Left = 32;
+		Add.MenuBar(this, _bar, Color.FromArgb(8, 8, 8), _title, $"Simple Flood 5.0", 1, 10, Color.White, _border: true, _borderColor: Color.MidnightBlue, _quit: true, _minimize: true, _draggable: true); _title.Left = 32;
 
 		Icon = Properties.Resources.icon;
 		Text = "Simple Flood 5.0";
