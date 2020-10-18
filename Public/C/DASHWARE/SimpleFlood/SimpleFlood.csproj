@@ -37,6 +37,7 @@
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,19 +53,21 @@
   <ItemGroup>
     <Compile Include="Properties\Program.cs" />
     <Compile Include="src\control\Injector.cs" />
-    <Compile Include="src\parts\abt.cs">
+    <Compile Include="src\parts\fuc\DashOS.cs" />
+    <Compile Include="src\parts\fuc\HostUT.cs" />
+    <Compile Include="src\parts\gui\About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\parts\abt.Designer.cs">
-      <DependentUpon>abt.cs</DependentUpon>
+    <Compile Include="src\parts\gui\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\parts\mode.cs">
+    <Compile Include="src\parts\gui\Mode.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\parts\mode.Designer.cs">
-      <DependentUpon>mode.cs</DependentUpon>
+    <Compile Include="src\parts\gui\Mode.Designer.cs">
+      <DependentUpon>Mode.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\parts\shr.cs" />
+    <Compile Include="src\parts\fuc\Launch.cs" />
     <Compile Include="src\SimpleFlood.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,11 +81,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="src\parts\abt.resx">
-      <DependentUpon>abt.cs</DependentUpon>
+    <EmbeddedResource Include="src\parts\gui\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\parts\mode.resx">
-      <DependentUpon>mode.cs</DependentUpon>
+    <EmbeddedResource Include="src\parts\gui\Mode.resx">
+      <DependentUpon>Mode.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

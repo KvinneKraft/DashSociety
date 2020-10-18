@@ -426,10 +426,9 @@ namespace SimpleFlood
 
 		if (_centerText)
 		{
-		    PictureBox(_base, new System.Windows.Forms.PictureBox(), null, new Size(_size.Width - 4, _size.Height), _loca, _bcol);
+		    PictureBox(_base, new PictureBox(), null, _size, _loca, _bcol);
 
 		    PictureBox _cese = ((PictureBox)_base.Controls[_base.Controls.Count - 1]);
-
 		    Size size = _cese.Size;
 
 		    if (_border)
@@ -448,7 +447,7 @@ namespace SimpleFlood
 			_ibox.Select();
 		    };
 
-		    Mod.Resize(_ibox, new Size(_ibox.PreferredSize.Width - 10, _ibox.PreferredSize.Height - 5));
+		    Mod.Resize(_ibox, new Size(_size.Width - 4, _ibox.PreferredSize.Height - 4));
 		    Mod.Centerize(_ibox, _cese, true, true);
 
 		    _cese.Controls.Add(_ibox);
