@@ -1,0 +1,4 @@
+name: SChunk
+version: ${project.version}
+main: com.kvinnekraft.SChunk
+api-version: 1.16

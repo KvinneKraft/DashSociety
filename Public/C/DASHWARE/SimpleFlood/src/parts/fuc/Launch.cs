@@ -24,6 +24,8 @@ namespace SimpleFlood
 	    static int Workers = 4;
 	    // -----------
 
+	    //public static Dictionary<HostTypes, string> PacketData = new Dictionary<HostTypes, string>();
+
 	    public static void Start()
 	    {
 		main_thread = new Thread

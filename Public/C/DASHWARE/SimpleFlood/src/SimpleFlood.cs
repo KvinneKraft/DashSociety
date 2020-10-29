@@ -61,6 +61,7 @@ namespace SimpleFlood
 	public static readonly TextBox PortBox = new TextBox();
 
 	public static readonly Button LauncherButton = new Button();
+
 	readonly Button OptionsButton = new Button();
 	readonly Button ModesButton = new Button();
 	readonly Button AboutButton = new Button();
@@ -198,8 +199,9 @@ namespace SimpleFlood
 		    switch (e.KeyData)
 		    {
 			case Keys.Enter: LauncherButton.PerformClick();  break;
+			case Keys.O: /*Option Dialog*/ break;
 			case Keys.F1: /*Helper Dialog*/ break;
-			case Keys.F2: /*Copyright Dialog*/  break;
+			case Keys.F2: /*Copyright Dialog*/ break;
 			case Keys.F3: ResetLaunchLogger(); break;
 			case Keys.F4: MessageBox.Show("You like smashing your keyboard, huh?", "Simple Flooder", MessageBoxButtons.OK, MessageBoxIcon.Information); break;
 		    };
