@@ -31,17 +31,40 @@ public final class SChunk extends JavaPlugin
         private void PM(final Player p, final String m) { p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(m)); }
 
         private final List<Player> players = new ArrayList<>();
+        private final List<Player> oplayer = new ArrayList<>();
+
+        final void registerCooldownCooldown(final Player p)
+        {
+            oplayer.add(p);
+
+            new BukkitRunnable()
+            {
+                @Override public final void run()
+                {
+                    oplayer.remove(p);
+                }
+            }.runTaskLater(plugin, 500);
+        }
 
         @EventHandler public final void onPlayerInteract(final PlayerInteractEvent e)
         {
             final Player p = e.getPlayer();
 
-            if (players.contains(p))
+            if (!p.hasPermission(Config.PERMISSION))
             {
-                p.sendMessage(Config.COOLDOWN_MESSAGE);
+
             }
 
-            else if (p.hasPermission(Config.PERMISSION))
+            else if (players.contains(p))
+            {
+                if (!oplayer.contains(p))
+                {
+                    p.sendMessage(Config.COOLDOWN_MESSAGE);
+                    registerCooldownCooldown(p);
+                }
+            }
+
+            else
             {
                 final ItemStack i = e.getItem();
 
@@ -52,13 +75,16 @@ public final class SChunk extends JavaPlugin
                     if (l.getChunk().isSlimeChunk())
                     {
                         PM(p, Config.MESSAGES[0]);
+                        p.sendMessage(Config.MESSAGES[0]);
                     }
 
                     else
                     {
                         PM(p, Config.MESSAGES[1]);
+                        p.sendMessage(Config.MESSAGES[1]);
                     }
 
+                    registerCooldownCooldown(p);
                     players.add(p);
 
                     new BukkitRunnable()
@@ -102,12 +128,13 @@ public final class SChunk extends JavaPlugin
         Config.MESSAGES[1] = a2;
 
         final String a3 = config.getString("finder-permission");
-
         Config.PERMISSION = a3;
 
-        final Integer a4 = config.getInt("finder-delay") * 20;
-
+        final Integer a4 = config.getInt("finder-cooldown") * 20;
         Config.COOLDOWN = a4;
+
+        final String a5 = color(config.getString("finder-cooldown-message"));
+        Config.COOLDOWN_MESSAGE = a5;
     }
 
     @Override public final void onEnable()

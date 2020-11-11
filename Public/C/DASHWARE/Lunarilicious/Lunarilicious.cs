@@ -49,10 +49,10 @@ namespace Lunarilicious
 	{
 	    // TEST AREA
 
-	    SecondaryApp app = new SecondaryApp();
-	    app.ShowDialog();
+	    //SecondaryApp app = new SecondaryApp();
+	    //app.ShowDialog();
 
-	    Environment.Exit(-1);
+	    //Environment.Exit(-1);
 
 	    // END;
 

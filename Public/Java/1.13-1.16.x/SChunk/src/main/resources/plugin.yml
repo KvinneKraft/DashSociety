@@ -1,4 +1,5 @@
 name: SChunk
-version: ${project.version}
-main: com.kvinnekraft.SChunk
+author: [Dashie, KvinneKraft]
+version: 1.0
 api-version: 1.16
+main: com.kvinnekraft.SChunk
