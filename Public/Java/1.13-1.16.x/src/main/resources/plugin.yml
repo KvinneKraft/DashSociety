@@ -1,0 +1,3 @@
+name: BiggerFireballs
+version: ${project.version}
+main: com.kvinnekraft.BiggerFireballs
