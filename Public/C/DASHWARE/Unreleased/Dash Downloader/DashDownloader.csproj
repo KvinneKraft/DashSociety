@@ -97,5 +97,8 @@
   <ItemGroup>
     <None Include="Resources\Brand\ICON_PNG.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Brand\BANNER_GIF.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

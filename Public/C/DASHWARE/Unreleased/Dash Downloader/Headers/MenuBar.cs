@@ -9,7 +9,7 @@ namespace DashDownloader
 	readonly private DashControls CONTROL = new DashControls();
 	readonly private DashTools TOOL = new DashTools();
 
-	public class MENU_OBJECTS
+	public static class MENU_OBJECTS
 	{
 	    readonly public static PictureBox MENU_ICON = new PictureBox();
 	    readonly public static PictureBox MENU_BAR = new PictureBox();
@@ -22,7 +22,12 @@ namespace DashDownloader
 	    public static void SETUP_EVENTS(Control MASTER)
 	    {
 		MENU_CLOSE.Click += (s, e) =>
-		    Environment.Exit(-1);
+		{
+		    if (MASTER is Form)
+			((Form)MASTER).Close();
+		    else
+			MASTER.Hide();
+		};
 
 		MENU_MINIM.Click += (s, e) =>
 		{
@@ -39,7 +44,7 @@ namespace DashDownloader
 	{
 	    var MENUBAR_SIZE = new Size(CON.Width - 2, 26);
 	    var MENUBAR_LOCA = new Point(1, 1);
-	    var MENUBAR_COLA = Color.FromArgb(4, 4, 4);
+	    var MENUBAR_COLA = Color.FromArgb(8, 8, 8);
 
 	    CONTROL.Image(CON, MENU_OBJECTS.MENU_BAR, MENUBAR_SIZE, MENUBAR_LOCA, null, MENUBAR_COLA);
 
@@ -49,14 +54,18 @@ namespace DashDownloader
 
 	    CONTROL.Image(MENU_OBJECTS.MENU_BAR, MENU_OBJECTS.MENU_ICON, MENUICON_SIZE, MENUICON_LOCA, MENUICON, MENUBAR_COLA);
 
+	    TOOL.Interactive(MENU_OBJECTS.MENU_ICON, CON);
+
 	    var MENUTITLE_LOCA = TOOL.GetCenter(MENU_OBJECTS.MENU_BAR, MENU_OBJECTS.MENU_TITLE, new Point(MENUICON_LOCA.X + 35, -1));
 	    var MENUTITLE_FCOL = Color.White;
 
 	    CONTROL.Label(MENU_OBJECTS.MENU_BAR, MENU_OBJECTS.MENU_TITLE, Size.Empty, MENUTITLE_LOCA, MENUTITLE_FCOL, MENUBAR_COLA, 1, 9, $"Dash Downloader");
 
+	    TOOL.Interactive(MENU_OBJECTS.MENU_TITLE, CON);
+
 	    var BORDER_SIZE = new Size(CON.Width - 1, CON.Height - 1);
 	    var BORDER_LOCA = new Point(0, 0);
-	    var BORDER_COLA = Color.FromArgb(4, 4, 4);
+	    var BORDER_COLA = Color.FromArgb(8, 8, 8);
 
 	    TOOL.PaintRectangle(CON, 2, BORDER_SIZE, BORDER_LOCA, BORDER_COLA);
 

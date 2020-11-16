@@ -28,6 +28,7 @@ namespace DashDownloader
 	    OBJECT.ReadOnly = READONLY;
 	    OBJECT.Multiline = MULTILINE;
 
+	    OBJECT.BorderStyle = BorderStyle.None;
 	    OBJECT.TabStop = false;
 
 	    if (FIXEDSIZE)
