@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Headers\Custom\DStream.cs" />
     <Compile Include="Headers\Custom\SaveFileDialog.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -146,25 +146,23 @@ namespace DashDownloader
 	    {
 		ROF.PaintOwner(e);
 
-		using (GraphicsPath GRAP = new GraphicsPath())
-		{
-		    var RECT = new Rectangle(0, 0, CON.Width, CON.Height);
+	    	var GRAP = new GraphicsPath();
+		var RECT = new Rectangle(0, 0, CON.Width, CON.Height);
 
-		    int R = RAD * 3;
+		int R = RAD * 3;
 
-		    int H = RECT.Height;
-		    int W = RECT.Width;
+		int H = RECT.Height;
+		int W = RECT.Width;
 
-		    int X = RECT.X; // Perhaps use 0 instead?
-		    int Y = RECT.X; // Perhaps use 0 instead?
+		int X = RECT.X; // Perhaps use 0 instead?
+		int Y = RECT.X; // Perhaps use 0 instead?
 
-		    GRAP.AddArc(X, Y, R, R, 170, 90);
-		    GRAP.AddArc(X + W - R, Y, R, R, 270, 90);
-		    GRAP.AddArc(X + W - R, Y + H - R, R, R, 0, 90);
-		    GRAP.AddArc(X, Y + H - R, R, R, 80, 90);
+		GRAP.AddArc(X, Y, R, R, 170, 90);
+		GRAP.AddArc(X + W - R, Y, R, R, 270, 90);
+		GRAP.AddArc(X + W - R, Y + H - R, R, R, 0, 90);
+		GRAP.AddArc(X, Y + H - R, R, R, 80, 90);
 
-		    CON.Region = new Region(GRAP);
-		};
+		CON.Region = new Region(GRAP);
 	    };
 	}
 

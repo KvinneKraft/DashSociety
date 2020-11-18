@@ -35,12 +35,12 @@
 	    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 	    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 	    this.BackColor = System.Drawing.Color.Black;
-	    this.ClientSize = new System.Drawing.Size(400, 400);
+	    this.ClientSize = new System.Drawing.Size(400, 345);
 	    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 	    this.MaximizeBox = false;
-	    this.MaximumSize = new System.Drawing.Size(450, 400);
+	    this.MaximumSize = new System.Drawing.Size(400, 345);
 	    this.MinimizeBox = false;
-	    this.MinimumSize = new System.Drawing.Size(400, 400);
+	    this.MinimumSize = new System.Drawing.Size(400, 345);
 	    this.Name = "DashDownloader";
 	    this.Opacity = 0.99D;
 	    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

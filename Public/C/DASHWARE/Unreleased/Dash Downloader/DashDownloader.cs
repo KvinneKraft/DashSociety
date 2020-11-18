@@ -21,55 +21,76 @@ namespace DashDownloader
 
 	    try
 	    {
-		void SetupGUI()
+		try//MAIN GUI SETUP:
 		{
-		    var GUI_COLOR = Color.FromArgb(26, 26, 26);
+		    var GUI_COLOR = Color.FromArgb(48, 48, 48);
 		    BackColor = GUI_COLOR;
 
 		    var GUI_ICON = Resources.ICON_ICO;
 		    Icon = GUI_ICON;
+
+		    TOOL.Round(this, 6);
+
+		    Hide();
+		}
+
+		catch
+		{
+		    throw new Exception("ERROR WHILE LOADING CORE!");
 		};
 
-		SetupGUI();
+		try//CONTROL POTATOR:
+		{
+		    var BAR = new MenuBar();
+		    BAR.Initialize(this);
 
-		var MENU_BAR = new MenuBar();
-		MENU_BAR.Initialize(this);
+		    var URL_SECTION = new UrlSection();
+		    URL_SECTION.Initialize(this);
 
-		var URL_SECTION = new UrlSection();
-		URL_SECTION.Initialize(this);
+		    var OPTION_SECTION = new OptionSection();
+		    OPTION_SECTION.Initialize(this);
 
-		var OPTION_SECTION = new OptionSection();
-		OPTION_SECTION.Initialize(this);
+		    var STATUS_SECTION = new StatusSection();
+		    STATUS_SECTION.Initialize(this);
+		}
 
-		var TOP_CONTAINER_SIZE = new Size(380, UrlSection.URL_OBJECTS.URL_BOX.Height);
-		var TOP_CONTAINER_LOCA = new Point(13, MenuBar.MENU_OBJECTS.MENU_BAR.Height + 16 /*+1 for border*/);
-		var TOP_CONTAINER_COLA = BackColor;
+		catch (Exception e)
+		{
+		    throw new Exception($"ERROR WHILE LOADING LAYOUT FOR: {e.Message}!");
+		};
 
-		CONTROL.Image(this, TOP_CONTAINER, TOP_CONTAINER_SIZE, TOP_CONTAINER_LOCA, null, TOP_CONTAINER_COLA);
+		try//LAST TOUCHES:
+		{
+		    var TOP_CONTAINER_SIZE = new Size(384, UrlSection.ContainerHeight());
+		    var TOP_CONTAINER_LOCA = new Point(10, MenuBar.MENU_OBJECTS.BAR.Height + 9 /*+1 for border*/);
+		    var TOP_CONTAINER_COLA = BackColor;
 
-		var BORDER_SIZE = new Size(UrlSection.URL_OBJECTS.URL_BOX.Width + 4, UrlSection.URL_OBJECTS.URL_BOX.Height + 3);
-		var BORDER_LOCA = new Point(TOP_CONTAINER_LOCA.X - 2, TOP_CONTAINER_LOCA.Y - 2);
-		var BORDER_COLA = UrlSection.URL_OBJECTS.URL_BOX.BackColor;
+		    CONTROL.Image(this, TOP_CONTAINER, TOP_CONTAINER_SIZE, TOP_CONTAINER_LOCA, null, TOP_CONTAINER_COLA);
 
-		TOOL.PaintRectangle(this, 6, BORDER_SIZE, BORDER_LOCA, BORDER_COLA);
+		    PerformLayout();
+		    Update();
+		    Show();
+		}
 
-		var LINE_LOC1 = new Point(UrlSection.URL_OBJECTS.URL_BOX.Width + 3, 0);
-		var LINE_LOC2 = new Point(LINE_LOC1.X, UrlSection.URL_OBJECTS.URL_BOX.Height);
-
-		TOOL.PaintLine(TOP_CONTAINER, BORDER_COLA, 4, LINE_LOC1, LINE_LOC2);
-
-		/*
-		 Priorities:
-		 - MENU BAR
-		 - URL Section
-		 - Option Section
-		 - Status Section
-		 */
+		catch
+		{
+		    throw new Exception("ERROR WHILE PERFORMING LAST TOUCHES!");
+		};
 	    }
 
 	    catch (Exception e)
 	    {
-		// Handle Errors Here
+		var resu = MessageBox.Show($"An exception was thrown while you were making use of this application.\r\n\r\nThe error code is as follows: {e.Message}\r\n\r\nIf you want to help me fix this problem then you could send it to my email at KvinneKraft@protonmail.com.", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+
+		if (resu == DialogResult.Yes)
+		{
+		    Application.Restart();
+		}
+
+		else
+		{
+		    Application.Exit();
+		};
 	    }
 	}
     }
