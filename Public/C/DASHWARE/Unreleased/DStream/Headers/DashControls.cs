@@ -23,10 +23,11 @@ namespace DStream
 	    OBJECT.BackColor = BCOLOR;
 	    OBJECT.ForeColor = FCOLOR;
 
+	    OBJECT.BorderStyle = BorderStyle.None;
 	    OBJECT.Font = TOOL.GetFont(FTYPE, FSIZE);
 
-	    OBJECT.ReadOnly = READONLY;
 	    OBJECT.Multiline = MULTILINE;
+	    OBJECT.ReadOnly = READONLY;
 
 	    OBJECT.TabStop = false;
 

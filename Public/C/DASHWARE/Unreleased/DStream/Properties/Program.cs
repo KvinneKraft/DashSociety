@@ -8,15 +8,17 @@ namespace DStream
 {
     static class Program
     {
-	/// <summary>
-	/// The main entry point for the application.
-	/// </summary>
+	private static DStream App;
+
 	[STAThread]
 	static void Main()
 	{
 	    Application.EnableVisualStyles();
 	    Application.SetCompatibleTextRenderingDefault(false);
-	    Application.Run(new DStream());
+
+	    App = new DStream();
+
+	    Application.Run(App);
 	}
     }
 }

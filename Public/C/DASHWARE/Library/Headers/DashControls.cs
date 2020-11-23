@@ -10,6 +10,7 @@ using System.Windows.Forms;
 // - Add Save File Dialog replacement
 // - Add Open File Dialog replacement
 // - Add Message Box Dialog replacement
+// - FIX TEXTBOX BORDER STYLE
 
 namespace DStream
 {
