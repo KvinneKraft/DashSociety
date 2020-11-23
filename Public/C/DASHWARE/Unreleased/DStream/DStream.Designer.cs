@@ -1,6 +1,6 @@
 ﻿namespace DStream
 {
-    partial class Form1
+    partial class DStream
     {
 	/// <summary>
 	/// Required designer variable.
@@ -28,10 +28,25 @@
 	/// </summary>
 	private void InitializeComponent()
 	{
-	    this.components = new System.ComponentModel.Container();
+	    this.SuspendLayout();
+	    // 
+	    // DStream
+	    // 
+	    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 	    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-	    this.ClientSize = new System.Drawing.Size(800, 450);
-	    this.Text = "Form1";
+	    this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+	    this.ClientSize = new System.Drawing.Size(334, 211);
+	    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+	    this.MaximizeBox = false;
+	    this.MaximumSize = new System.Drawing.Size(350, 250);
+	    this.MinimizeBox = false;
+	    this.MinimumSize = new System.Drawing.Size(350, 250);
+	    this.Name = "DStream";
+	    this.Opacity = 0.99900000000000011D;
+	    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+	    this.Text = "Inspect Files";
+	    this.ResumeLayout(false);
+
 	}
 
 	#endregion
