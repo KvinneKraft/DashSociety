@@ -14,9 +14,79 @@ using System.Windows.Forms;
 
 namespace ThaDasher
 {
+    public static class MENUBAR
+    {
+	readonly public static PictureBox BAR = new PictureBox();
+	readonly public static PictureBox LOGO = new PictureBox();
+
+	readonly public static Label TITLE = new Label();
+
+	readonly public static Button CLOSE = new Button();
+	readonly public static Button MINIM = new Button();
+
+	enum STYLE
+	{
+	    THIN = 26,
+	    THIC = 28,
+	    GIAT = 36,
+	}
+    }
+
     public class DashControls
     {
 	readonly DashTools TOOL = new DashTools();
+
+	public void MenuBar(Form TOP, int STYLE, bool hasBorder, Color BAR_COLA, Color BOR_COLA)
+	{
+	    if (BAR_COLA.IsEmpty) BAR_COLA = Color.FromArgb(8, 8, 8);
+
+	    if (hasBorder)
+	    {
+		if (BOR_COLA.IsEmpty) BOR_COLA = Color.FromArgb(8, 8, 8);
+
+		var BOR_SIZE = new Size(TOP.Width - 2, TOP.Height - 2);
+		var BOR_LOCA = new Point(1, 1);
+
+		TOOL.PaintRectangle(TOP, 2, BOR_SIZE, BOR_LOCA, BOR_COLA);
+	    };
+
+	    var BAR_SIZE = new Size(TOP.Width - 2, STYLE);
+	    var BAR_LOCA = new Point(1, 1);
+
+	    Image(TOP, MENUBAR.BAR, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
+
+	    var LOGO_IMAG = Properties.Resources.ICON_PNG;
+	    var LOGO_SIZE = LOGO_IMAG.Size;
+	    var LOGO_LOCA = new Point(4, (BAR_SIZE.Height - LOGO_IMAG.Height) / 2);
+
+	    Image(MENUBAR.BAR, MENUBAR.LOGO, LOGO_SIZE, LOGO_LOCA, LOGO_IMAG, BAR_COLA);
+
+	    var TITLE_TEXT = TOP.Text;
+	    var TITLE_FONT = TOOL.GetFont(1, 8);
+	    var TITLE_SIZE = TextRenderer.MeasureText(TITLE_TEXT, TITLE_FONT);
+	    var TITLE_LOCA = new Point(LOGO_SIZE.Width + LOGO_LOCA.X + 25, (BAR_SIZE.Height - TITLE_SIZE.Height) / 2);
+	    var TITLE_FCOL = Color.White;
+
+	    Label(TOP, MENUBAR.TITLE, TITLE_SIZE, TITLE_LOCA, BAR_COLA, TITLE_FCOL, 1, 8, TITLE_TEXT);
+
+	    var BUTTON_SIZE = new Size(75, BAR_SIZE.Height);
+	    var BUTTON_LOCA = new Point(BAR_SIZE.Width - BUTTON_SIZE.Width, 0);
+	    var BUTTON_FCOL = Color.White;
+	    var BUTTON_TEXT = "X";
+
+	    Button(TOP, MENUBAR.CLOSE, BUTTON_SIZE, BUTTON_LOCA, BAR_COLA, BUTTON_FCOL, 1, 10, BUTTON_TEXT, Color.Empty);
+
+	    BUTTON_LOCA.Y -= BUTTON_SIZE.Width;
+	    BUTTON_TEXT = "-";
+
+	    MENUBAR.CLOSE.Click += (s, e) =>
+		TOP.Close();
+
+	    Button(TOP, MENUBAR.MINIM, BUTTON_SIZE, BUTTON_LOCA, BAR_COLA, BUTTON_FCOL, 1, 10, BUTTON_TEXT, Color.Empty);
+
+	    MENUBAR.MINIM.Click += (s, e) =>
+		TOP.SendToBack();
+	}
 
 	public void TextBox(Control CON, TextBox OBJECT, Size TSIZE, Point TLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, Color BORDERCOLOR, bool HASBORDER = false, int BORDERSIZE = 0, bool READONLY = false, bool MULTILINE = false, bool SCROLLBAR = false, bool FIXEDSIZE = true)
 	{
@@ -101,7 +171,7 @@ namespace ThaDasher
 	    CON.Controls.Add(OBJECT);
 	}
 
-	public void Label(Control CON, Label OBJECT, Size LSIZE, Point LLOCATION, Color FCOLOR, Color BCOLOR, int FTYPE, int FSIZE, string TEXT)
+	public void Label(Control CON, Label OBJECT, Size LSIZE, Point LLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, string TEXT)
 	{
 	    var FONT = TOOL.GetFont(FTYPE, FSIZE);
 
