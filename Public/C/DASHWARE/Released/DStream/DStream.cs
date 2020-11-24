@@ -239,7 +239,7 @@ namespace DStream
 	    }
 
 	    readonly public static Label FILEPATH = new Label() { Text = "Full Path:" };
-	    readonly public static Label FILENAME = new Label() { Text = "Name:" };
+	    readonly public static Label FILENAME = new Label() { Text = "File Name:" };
 	    readonly public static Label ORIGNAME = new Label() { Text = "Original Name:" };
 	    readonly public static Label PRODNAME = new Label() { Text = "Product Name:" };
 	    readonly public static Label INTENAME = new Label() { Text = "Internal Name:" };
@@ -255,7 +255,7 @@ namespace DStream
 
 	    readonly public static List<Label> LABELS = new List<Label>() { FILEPATH, FILENAME, ORIGNAME, PRODNAME, INTENAME, FILEEXTE, FILEDESC, FILEVERS, FILECOPY, FILECOMP, FILECOMM, FILECREA, FILEMODI, FILELAST };
 
-	    readonly public static TextBox FFILEPATH = new TextBox();
+	    readonly public static TextBox FFILEPATH = new TextBox() { ReadOnly = true };
 	    readonly public static TextBox FFILENAME = new TextBox();
 	    readonly public static TextBox OORIGNAME = new TextBox();
 	    readonly public static TextBox PPRODNAME = new TextBox();
@@ -296,6 +296,29 @@ namespace DStream
 		    CONTAINER.Controls[i].Text = v;
 		};
 	    }
+
+	    private static void SAVE_PROPERTIES()
+	    {
+		DSOFile.OleDocumentProperties dso = new DSOFile.OleDocumentProperties();
+
+		dso.Open(FILECONTAINER.FILE_BOX.Text, false, DSOFile.dsoFileOpenOptions.dsoOptionOpenReadOnlyIfNoWriteAccess);
+		
+		// Can add in properties for button ^
+	    }
+
+	    public static void REGISTER_EVENTS()
+	    {
+		for (int k = 0; k < DATA.Count; k += 1)
+		{
+		    DATA[k].KeyDown += (s, e) =>
+		    {
+			if (e.KeyCode == Keys.Enter)
+			{
+			    SAVE_PROPERTIES();
+			};
+		    };
+		};
+	    }
 	}
 
 	private void InitializeDetaCon()
@@ -331,6 +354,7 @@ namespace DStream
 		    DETAILCONTAINER.DATA[k].WordWrap = false;
 		};
 
+		//DETAILCONTAINER.REGISTER_EVENTS();
 		DETAILCONTAINER.UPDATE_DATA();
 	    }
 

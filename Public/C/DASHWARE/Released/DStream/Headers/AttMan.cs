@@ -2,7 +2,7 @@
 // Author: Dashie
 // Version: 1.0
 
-// A class for obtaining file information.
+// A class for obtaining file information.  Ugly Class BEHHH
 
 using System;
 using System.IO;
@@ -32,20 +32,13 @@ namespace DStream
 	    string raw = string.Empty;
 
 	    if (prop != Properties.NONE)
-	    {
 		raw = cache[(int)prop];
-	    }
 
-	    else
-	    if (attr != Attributes.NONE)
-	    {
+	    else if (attr != Attributes.NONE)
 		raw = cache[(int)attr];
-	    };
 
 	    if (raw.Length > raw.Split('~')[0].Length + 1)
-	    {
 		raw = raw.Remove(0, cache[(int)prop].LastIndexOf("~") + 2);
-	    };
 
 	    return raw;
 	}
@@ -56,9 +49,6 @@ namespace DStream
 
 	    try
 	    {
-		if (!File.Exists(file))
-		    return null;
-
 		var fvin = FileVersionInfo.GetVersionInfo(file);
 		var attr = File.GetAttributes(file);
 		var info = new FileInfo(file);

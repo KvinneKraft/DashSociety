@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{818F6E9C-65AB-44B7-B1DE-F1E794F718FE}</ProjectGuid>
+    <ProjectGuid>{475FE08C-BD62-4793-B93D-564802DBBFF7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Dasher</RootNamespace>
-    <AssemblyName>Dasher</AssemblyName>
+    <RootNamespace>DStream</RootNamespace>
+    <AssemblyName>DStream</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\ICON_ICO.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,17 +49,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Injector.cs" />
-    <Compile Include="UI.cs">
+    <Compile Include="DStream.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI.Designer.cs">
-      <DependentUpon>UI.cs</DependentUpon>
+    <Compile Include="DStream.Designer.cs">
+      <DependentUpon>DStream.cs</DependentUpon>
     </Compile>
+    <Compile Include="Headers\AttMan.cs" />
+    <Compile Include="Headers\DashControls.cs" />
+    <Compile Include="Headers\DashTools.cs" />
     <Compile Include="Properties\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="UI.resx">
-      <DependentUpon>UI.cs</DependentUpon>
+    <None Include="README.md" />
+    <None Include="Resources\cute.ttf" />
+    <EmbeddedResource Include="DStream.resx">
+      <DependentUpon>DStream.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -80,17 +84,27 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\cute.ttf" />
     <None Include="Resources\main.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Properties\App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icon.ico" />
+    <None Include="Resources\ICON_ICO.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logo.png" />
+    <None Include="Resources\ICON_PNG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="DSOFile">
+      <Guid>{58968145-CF00-4341-995F-2EE093F6ABA3}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

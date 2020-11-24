@@ -12,7 +12,7 @@ using System.Windows.Forms;
 // - Add Message Box Dialog replacement
 // - FIX TEXTBOX BORDER STYLE
 
-namespace DStream
+namespace ThaDasher
 {
     public class DashControls
     {

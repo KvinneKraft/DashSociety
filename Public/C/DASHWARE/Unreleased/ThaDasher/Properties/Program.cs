@@ -4,19 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Dasher
+namespace ThaDasher
 {
     static class Program
     {
-	/// <summary>
-	/// The main entry point for the application.
-	/// </summary>
+	private static Interface inern;
+
 	[STAThread]
 	static void Main()
 	{
 	    Application.EnableVisualStyles();
 	    Application.SetCompatibleTextRenderingDefault(false);
-	    Application.Run(new IDasher());
+
+	    inern = new Interface();
+
+	    Application.Run(inern);
 	}
     }
 }

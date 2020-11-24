@@ -10,9 +10,9 @@ using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using DStream.Properties;
+using ThaDasher.Properties;
 
-namespace DStream
+namespace ThaDasher
 {
     public class DashTools
     {

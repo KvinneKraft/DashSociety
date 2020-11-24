@@ -1,6 +1,6 @@
-﻿namespace Dasher
+﻿namespace ThaDasher
 {
-    partial class IDasher
+    partial class Interface
     {
 	/// <summary>
 	/// Required designer variable.
@@ -30,18 +30,19 @@
 	{
 	    this.SuspendLayout();
 	    // 
-	    // IDasher
+	    // Interface
 	    // 
 	    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 	    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-	    this.BackColor = System.Drawing.Color.DarkRed;
-	    this.ClientSize = new System.Drawing.Size(348, 375);
+	    this.ClientSize = new System.Drawing.Size(334, 361);
 	    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-	    this.MaximumSize = new System.Drawing.Size(348, 375);
-	    this.MinimumSize = new System.Drawing.Size(348, 375);
-	    this.Name = "IDasher";
-	    this.Opacity = 0.98D;
-	    this.Text = "Dasher";
+	    this.MaximumSize = new System.Drawing.Size(350, 400);
+	    this.MinimumSize = new System.Drawing.Size(350, 400);
+	    this.Name = "Interface";
+	    this.Opacity = 0.99D;
+	    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+	    this.Text = "ThaDasher";
+	    this.TopMost = true;
 	    this.ResumeLayout(false);
 
 	}

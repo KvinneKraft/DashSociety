@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Dasher")]
+[assembly: AssemblyTitle("ThaDasher")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Dasher")]
+[assembly: AssemblyProduct("ThaDasher")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("818f6e9c-65ab-44b7-b1de-f1e794f718fe")]
+[assembly: Guid("9f9df26d-0e48-4dca-83b1-a4dd07c3e69c")]
 
 // Version information for an assembly consists of the following four values:
 //

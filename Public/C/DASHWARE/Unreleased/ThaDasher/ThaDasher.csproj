@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{475FE08C-BD62-4793-B93D-564802DBBFF7}</ProjectGuid>
+    <ProjectGuid>{9F9DF26D-0E48-4DCA-83B1-A4DD07C3E69C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>DStream</RootNamespace>
-    <AssemblyName>DStream</AssemblyName>
+    <RootNamespace>ThaDasher</RootNamespace>
+    <AssemblyName>ThaDasher</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -27,13 +27,10 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>.\</OutputPath>
+    <OutputPath>Application\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\ICON_ICO.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,20 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DStream.cs">
+    <Compile Include="..\..\Library\Headers\DashControls.cs">
+      <Link>Headers\DashControls.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Library\Headers\DashTools.cs">
+      <Link>Headers\DashTools.cs</Link>
+    </Compile>
+    <Compile Include="Interface.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DStream.Designer.cs">
-      <DependentUpon>DStream.cs</DependentUpon>
+    <Compile Include="Interface.Designer.cs">
+      <DependentUpon>Interface.cs</DependentUpon>
     </Compile>
-    <Compile Include="Headers\AttMan.cs" />
-    <Compile Include="Headers\DashControls.cs" />
-    <Compile Include="Headers\DashTools.cs" />
     <Compile Include="Properties\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Resources\cute.ttf" />
-    <EmbeddedResource Include="DStream.resx">
-      <DependentUpon>DStream.cs</DependentUpon>
+    <EmbeddedResource Include="Interface.resx">
+      <DependentUpon>Interface.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -83,6 +82,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\cute.ttf" />
     <None Include="Resources\main.ttf" />
   </ItemGroup>
   <ItemGroup>
