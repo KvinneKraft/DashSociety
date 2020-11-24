@@ -4,12 +4,9 @@
 
 using System;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
-// -- MAKE ENTER SAVE CURRENT VALUE TO FILE
-// -- MAKE HORIZONTAL SCROLL BAR WORK
-// -- 
 
 namespace DStream
 {
@@ -26,7 +23,7 @@ namespace DStream
 	{
 	    try
 	    {
-		BackColor = Color.FromArgb(12, 12, 12);
+		BackColor = Color.FromArgb(32, 32, 32);
 		Icon = Properties.Resources.ICON_ICO;
 
 		TOOL.Interactive(this, this);
@@ -137,15 +134,15 @@ namespace DStream
 	    try
 	    {
 		var CONTAINER_SIZE = new Size(Width - 22, 28);
-		var CONTAINER_LOCA = new Point((Width - CONTAINER_SIZE.Width) / 2, MENUBAR.CONTAINER.Height + 10);
+		var CONTAINER_LOCA = new Point((Width - CONTAINER_SIZE.Width) / 2 - 1, MENUBAR.CONTAINER.Height + 10);
 		var CONTAINER_BCOL = BackColor;
 
 		CONTROL.Image(this, FILECONTAINER.CONTAINER, CONTAINER_SIZE, CONTAINER_LOCA, null, CONTAINER_BCOL);
 
 		var FILE_SIZE = new Size(CONTAINER_SIZE.Width - 90, CONTAINER_SIZE.Height - 4); // --OPEN-WIDTH=80 | --SEPA-WIDTH=10, 10 
 		var FILE_LOCA = new Point(2, 2);
-		var FILE_BCOL = Color.FromArgb(28, 28, 28);
-		var FILE_FCOL = Color.White;
+		var FILE_BCOL = Color.FromArgb(20, 20, 20);
+		var FILE_FCOL = Color.LightGray;
 
 		CONTROL.TextBox(FILECONTAINER.CONTAINER, FILECONTAINER.FILE_BOX, FILE_SIZE, FILE_LOCA, FILE_BCOL, FILE_FCOL, 1, 10, Color.Empty, FIXEDSIZE:true, READONLY:true);
 		TOOL.Resize(FILECONTAINER.FILE_BOX, new Size(FILECONTAINER.FILE_BOX.Width - 3, FILECONTAINER.FILE_BOX.Height));
@@ -161,38 +158,43 @@ namespace DStream
 
 		var OPEN_SIZE = new Size(80, CONTAINER_SIZE.Height - 4);
 		var OPEN_LOCA = new Point(FILE_SIZE.Width + 10, 2);
-		var OPEN_BCOL = FILE_BCOL;
-		var OPEN_FCOL = FILE_FCOL;
+		var OPEN_BCOL = Color.FromArgb(16, 16, 16);
+		var OPEN_FCOL = Color.White;
 
 		CONTROL.Button(FILECONTAINER.CONTAINER, FILECONTAINER.OPEN, OPEN_SIZE, OPEN_LOCA, OPEN_BCOL, OPEN_FCOL, 1, 10, "Open File", Color.Empty);
-		TOOL.Round(FILECONTAINER.OPEN, 8);
+		//TOOL.Round(FILECONTAINER.OPEN, 8);
 
 		FILECONTAINER.OPEN.Click += (s, e) =>
 		{
 		    using (var diag = new OpenFileDialog())
 		    {
-			diag.CheckFileExists = true;
-			diag.CheckPathExists = true;
-
-			diag.Filter = "Any File|*.*";
-			diag.Title = "Select File";
-			
-			switch (diag.ShowDialog())
+			new Thread(() =>
 			{
-			    case DialogResult.OK:
-				break;
+			    diag.CheckFileExists = true;
+			    diag.CheckPathExists = true;
 
-			    default:
+			    diag.Filter = "Any File|*.*";
+			    diag.Title = "Select File";
+
+			    switch (diag.ShowDialog())
 			    {
-				MessageBox.Show("F.Y.I: No files have been selected.\r\nPress OK to continue.", "Hey there!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				return;
+				case DialogResult.OK:
+				    break;
+
+				default:
+				{
+				    MessageBox.Show("F.Y.I: No files have been selected.\r\nPress OK to continue.", "Hey there!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				    return;
+				};
 			    };
-			};
 
-			MessageBox.Show($"F.Y.I: You have now selected:\r\n\"{diag.FileName}\"!\r\nPress OK to continue.", "Hey there!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			    MessageBox.Show($"F.Y.I: You have now selected:\r\n\"{diag.FileName}\"!\r\nPress OK to continue.", "Hey there!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-			FILECONTAINER.FILE_BOX.Text = diag.FileName;
-			DETAILCONTAINER.UPDATE_DATA();
+			    FILECONTAINER.FILE_BOX.Text = diag.FileName;
+			    DETAILCONTAINER.UPDATE_DATA();
+			})
+
+			{ IsBackground = true }.Start();
 		    };
 		};
 	    }
@@ -213,10 +215,13 @@ namespace DStream
 		CONTAINER.Location = new Point(10, MENUBAR.CONTAINER.Top + MENUBAR.CONTAINER.Height + 50);
 
 		CONTAINER.FormBorderStyle = FormBorderStyle.None;
-		CONTAINER.BackColor = Color.FromArgb(28, 28, 28);
+		CONTAINER.BackColor = Color.FromArgb(20, 20, 20);
 
 		CONTAINER.HorizontalScroll.Enabled = true;
 		CONTAINER.VerticalScroll.Enabled = true;
+
+		CONTAINER.HorizontalScroll.Visible = true;
+		CONTAINER.VerticalScroll.Visible = true;
 
 		CONTAINER.AutoScroll = true;
 		CONTAINER.TopLevel = false;
@@ -269,23 +274,26 @@ namespace DStream
 
 	    public static void UPDATE_DATA()
 	    {
-		var PROPERTIES = new List<ATTMAN.Properties>();
+		var ps = new List<ATTMAN.Properties>();
 
-		foreach (ATTMAN.Properties PROPERTY in Enum.GetValues(typeof(ATTMAN.Properties)))
-		    PROPERTIES.Add(PROPERTY);
+		foreach ( ATTMAN.Properties p in Enum.GetValues( typeof ( ATTMAN.Properties ) ) )
+		    ps.Add(p);
 
-		var VALUE = "";
+		var v = "";
 
-		for (int k = 0; k < PROPERTIES.Count - 1; k += 1)
+		for (int k = 0; k < ps.Count - 1; k += 1)
 		{
-		    VALUE = ATTMAN.GetRawValue(ATTMAN.GetProperties(FILECONTAINER.FILE_BOX.Text, true), prop:PROPERTIES[k]);
-		    
-		    if (VALUE.Length < 1)
-		    {
-			VALUE = "Not Available";
-		    };
+		    var s = ATTMAN.GetProperties(FILECONTAINER.FILE_BOX.Text, true);
+		    v = ATTMAN.GetRawValue(s, prop:ps[k]);
 
-		    CONTAINER.Controls[(LABELS.Count) + k].Text = VALUE;
+		    if (v.Length < 1)
+			v = "None";
+
+		    var l = TextRenderer.MeasureText(v, TOOL.GetFont(1, 10));
+		    var i = (LABELS.Count + k);
+
+		    TOOL.Resize(CONTAINER.Controls[i], new Size(l.Width, 20));
+		    CONTAINER.Controls[i].Text = v;
 		};
 	    }
 	}
@@ -299,17 +307,19 @@ namespace DStream
 		var LABEL_SIZE = new Size(0, 20);
 		var LABEL_LOCA = new Point(0, 0);
 		var LABEL_BCOL = DETAILCONTAINER.CONTAINER.BackColor;
-		var LABEL_FCOL = Color.White;
+		var LABEL_FCOL = Color.LightGray;
 
 		for (int k = 0; k < DETAILCONTAINER.LABELS.Count; LABEL_LOCA.Y += LABEL_SIZE.Height, k += 1)
 		{
-		    LABEL_SIZE.Width = TextRenderer.MeasureText(DETAILCONTAINER.LABELS[k].Text, TOOL.GetFont(1, 10)).Width;
+		    var LS = TextRenderer.MeasureText(DETAILCONTAINER.LABELS[k].Text, TOOL.GetFont(1, 10));
+
+		    LABEL_SIZE.Width = LS.Width;
 
 		    CONTROL.Label(DETAILCONTAINER.CONTAINER, DETAILCONTAINER.LABELS[k], LABEL_SIZE, LABEL_LOCA, LABEL_FCOL, LABEL_BCOL, 1, 10, DETAILCONTAINER.LABELS[k].Text);
 		};
 
 		var DATA_BCOL = DETAILCONTAINER.CONTAINER.BackColor;
-		var DATA_FCOL = Color.White;
+		var DATA_FCOL = Color.LightBlue;
 
 		for (int k = 0; k < DETAILCONTAINER.DATA.Count; k += 1)
 		{
