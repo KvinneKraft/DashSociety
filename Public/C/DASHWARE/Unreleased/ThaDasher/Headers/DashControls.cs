@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 // To-Do:
+// - Add MENU BAR utility
 // - Add Save File Dialog replacement
 // - Add Open File Dialog replacement
 // - Add Message Box Dialog replacement
@@ -43,8 +44,8 @@ namespace ThaDasher
 	    {
 		if (BOR_COLA.IsEmpty) BOR_COLA = Color.FromArgb(8, 8, 8);
 
-		var BOR_SIZE = new Size(TOP.Width - 1, TOP.Height - 1);
-		var BOR_LOCA = new Point(0, 0);
+		var BOR_SIZE = new Size(TOP.Width - 2, TOP.Height - 2);
+		var BOR_LOCA = new Point(1, 1);
 
 		TOOL.PaintRectangle(TOP, 2, BOR_SIZE, BOR_LOCA, BOR_COLA);
 	    };
@@ -88,13 +89,8 @@ namespace ThaDasher
 
 	    TOOL.Interactive(MENUBAR.BAR, TOP);
 
-	    foreach (Control con in MENUBAR.BAR.Controls)
-	    {
-		if (!(con is Button))
-		{
-		    TOOL.Interactive(con, TOP);
-		};
-	    };
+	    foreach (Control c in MENUBAR.BAR.Controls)
+		if (!(c is Button)) TOOL.Interactive(c, TOP);
 	}
 
 	public void TextBox(Control CON, TextBox OBJECT, Size TSIZE, Point TLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, Color BORDERCOLOR, bool HASBORDER = false, int BORDERSIZE = 0, bool READONLY = false, bool MULTILINE = false, bool SCROLLBAR = false, bool FIXEDSIZE = true)
@@ -105,10 +101,11 @@ namespace ThaDasher
 
 	    if (HASBORDER)
 		TOOL.PaintRectangle(CON, BORDERSIZE, TSIZE, TLOCATION, BORDERCOLOR);
-	    
+
 	    OBJECT.BackColor = BCOLOR;
 	    OBJECT.ForeColor = FCOLOR;
 
+	    OBJECT.BorderStyle = BorderStyle.None;
 	    OBJECT.Font = TOOL.GetFont(FTYPE, FSIZE);
 
 	    OBJECT.ReadOnly = READONLY;
@@ -205,7 +202,7 @@ namespace ThaDasher
 	    CON.Controls.Add(OBJECT);
 	}
 
-	public void RichTextBox(Control CON, RichTextBox OBJECT, Size RSIZE, Point RLOCATION, Color FCOLOR, Color BCOLOR, int FTYPE, int FSIZE, string TEXT)
+	public void RichTextBox(Control CON, RichTextBox OBJECT, Size RSIZE, Point RLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, string TEXT)
 	{
 	    var FONT = TOOL.GetFont(FTYPE, FSIZE);
 

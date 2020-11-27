@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\ICON_ICO.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,12 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Library\Headers\DashControls.cs">
-      <Link>Headers\DashControls.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Library\Headers\DashTools.cs">
-      <Link>Headers\DashTools.cs</Link>
-    </Compile>
+    <Compile Include="Headers\DashControls.cs" />
+    <Compile Include="Headers\DashTools.cs" />
     <Compile Include="Interface.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +92,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ICON_PNG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BRAND\PONY_GIF1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BRAND\PONY_GIF2.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

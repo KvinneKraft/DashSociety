@@ -34,15 +34,14 @@
 	    // 
 	    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 	    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-	    this.ClientSize = new System.Drawing.Size(334, 361);
+	    this.ClientSize = new System.Drawing.Size(450, 258);
 	    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-	    this.MaximumSize = new System.Drawing.Size(350, 400);
-	    this.MinimumSize = new System.Drawing.Size(350, 400);
+	    this.MaximumSize = new System.Drawing.Size(450, 258);
+	    this.MinimumSize = new System.Drawing.Size(450, 258);
 	    this.Name = "Interface";
 	    this.Opacity = 0.99D;
 	    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 	    this.Text = "ThaDasher";
-	    this.TopMost = true;
 	    this.ResumeLayout(false);
 
 	}
