@@ -26,12 +26,20 @@ namespace ThaDasher
 	    }
 	}
 
+	readonly static PictureBox OVERLAY = new PictureBox();
+
 	private void InitializeBody()
 	{
 	    try
 	    {
 		BackColor = Color.MidnightBlue;
-		Icon = Properties.Resources.ICON_ICO;
+
+		var OVERLAY_SIZE = Size;
+		var OVERLAY_LOCA = new Point(0, 0);
+		var OVERLAY_COLA = BackColor;
+
+		CONTROL.Image(this, OVERLAY, OVERLAY_SIZE, OVERLAY_LOCA, null, OVERLAY_COLA);
+
 		TOOL.Round(this, 6);
 	    }
 
@@ -504,17 +512,50 @@ namespace ThaDasher
 
 	    private static void InitializeMEU(Form TOP)
 	    {
+		var BAR_SIZE = new Size(TOP.Width, 28);
+		var BAR_LOCA = new Point(0, 0);
+		var BAR_COLA = Color.FromArgb(8, 8, 8);
 
+		CONTROL.Image(TOP, BAR_CONTAINER, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
+
+		var BUTTON_SIZE = new Size(48, BAR_SIZE.Height);
+		var BUTTON_LOCA = new Point(BAR_SIZE.Width - BUTTON_SIZE.Width, 0);
+		var BUTTON_BCOL = BAR_COLA;
+		var BUTTON_FCOL = Color.White;
+
+		CONTROL.Button(BAR_CONTAINER, CLOSE, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 10, "X", Color.Empty);
+
+		BUTTON_LOCA.X -= BUTTON_SIZE.Width;
+
+		CONTROL.Button(BAR_CONTAINER, MINIM, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 10, "-", Color.Empty);
+
+		CLOSE.Click += (s, e) => Application.Exit();
+		MINIM.Click += (s, e) => TOP.SendToBack();
+
+		var TITLE_TEXT = "Dash Authenticator";
+		var TITLE_SIZE = TextRenderer.MeasureText(TITLE_TEXT, TOOL.GetFont(1, 9));
+		var TITLE_LOCA = new Point((BAR_CONTAINER.Width - TITLE_SIZE.Width - (BUTTON_SIZE.Width * 2)) / 2, (BAR_CONTAINER.Height - TITLE_SIZE.Height) / 2);
+		var TITLE_BCOL = BAR_CONTAINER.BackColor;
+		var TITLE_FCOL = Color.White;
+
+		CONTROL.Label(BAR_CONTAINER, TITLE, TITLE_SIZE, TITLE_LOCA, TITLE_BCOL, TITLE_FCOL, 1, 9, TITLE_TEXT);
+
+		TOOL.Interactive(BAR_CONTAINER, TOP);
+
+		foreach (Control CON in BAR_CONTAINER.Controls)
+		{
+		    if (!(CON is Button))
+		    {
+			TOOL.Interactive(CON, TOP);
+		    }
+		}
 	    }
 
 	    public static void UndoChanges(Form TOP)
 	    {//Re-Do this<----
 		foreach (Control Control in TOP.Controls)
 		{
-		    Control.Visible = false;
-
 		    Control.Hide();
-		    Control.Dispose();
 		}
 
 		TOOL.Resize(TOP, new Size(450, 258));
@@ -529,6 +570,8 @@ namespace ThaDasher
 		TOP.StartPosition = FormStartPosition.CenterScreen;
 		TOP.BackColor = Color.FromArgb(18, 18, 18);
 
+		TOP.Icon = Properties.Resources.ICON_ICO;
+
 		var RECTANGLE_SIZE = new Size(TOP.Width - 1, TOP.Height - 1);
 		var RECTANGLE_LOCA = new Point(0, 0);
 		var RECTANGLE_COLA = Color.FromArgb(8,8,8);
@@ -536,8 +579,8 @@ namespace ThaDasher
 		TOOL.PaintRectangle(TOP, 2, RECTANGLE_SIZE, RECTANGLE_LOCA, RECTANGLE_COLA);
 	    }
 
-	    readonly static TextBox IUSERNAME = new TextBox();
-	    readonly static TextBox IPASSWORD = new TextBox();
+	    readonly static TextBox IUSERNAME = new TextBox() { TextAlign = HorizontalAlignment.Center };
+	    readonly static TextBox IPASSWORD = new TextBox() { TextAlign = HorizontalAlignment.Center, PasswordChar = 'O' };
 
 	    readonly static Label USERNAME = new Label();
 	    readonly static Label PASSWORD = new Label();
@@ -610,10 +653,18 @@ namespace ThaDasher
 
 	    public static void AuthenticatorInterf(Form TOP)
 	    {
-		InitializeMEU(TOP);
-		InitializeGUI(TOP);
-		InitializeCRE(TOP);
-		InitializeAUT(TOP);
+		try
+		{
+		    InitializeGUI(TOP);
+		    InitializeMEU(TOP);
+		    InitializeCRE(TOP);
+		    InitializeAUT(TOP);
+		}
+
+		catch
+		{
+		    throw new Exception("AuthenticatorInterf()");
+		}
 	    }
 	}
 
@@ -637,6 +688,8 @@ namespace ThaDasher
 		    SETTINGSCONTAINER.InitializeMCon(this);
 		    LOGCONTAINER.InitializeLCon(this);
 		    TASKBARCONTAINER.InitializeTCon(this);
+
+		    OVERLAY.SendToBack();
 		};
 	    }
 
