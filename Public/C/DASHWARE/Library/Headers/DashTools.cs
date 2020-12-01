@@ -25,6 +25,54 @@ namespace ThaDasher
 	    OBJECT.Size = SIZE;
 	}
 
+	public class MENUBAR
+	{
+	    readonly public PictureBox BAR = new PictureBox();
+	    readonly public PictureBox LOGO = new PictureBox();
+
+	    readonly public Button CLOSE = new Button();
+	    readonly public Button MINIM = new Button();
+
+	    readonly public Label TITLE = new Label();
+
+	    public enum STYLE
+	    {
+		THIN = 26,
+		THIC = 28,
+		GIAT = 36,
+	    }
+
+	    public void Setup(Form Master, bool Border = true)
+	    {
+		var con = new DashControls();
+
+		var BAR_COLA = Color.FromArgb(8, 8, 8);
+
+		con.MenuBar(Master, (int)STYLE.THIN, Border, BAR_COLA, BAR_COLA);
+	    }
+	}
+
+	readonly public static MENUBAR MenuBar = new MENUBAR();
+
+	public void InitializeStandardGUI(Form APP, Size SIZE)
+	{
+	    try
+	    {
+		MenuBar.Setup(APP);
+
+		APP.BackColor = Color.FromArgb(8, 8, 8);
+		APP.Icon = Resources.ICON_ICO;
+
+		Resize(APP, SIZE);
+		Round(APP, 6);
+	    }
+
+	    catch (Exception e)
+	    {
+		throw new Exception("InitializeStandadGUI()");
+	    };
+	}
+
 	public void PaintRectangle(Control CON, int THICKNESS, Size SIZE, Point LOCATION, Color COLOR)
 	{
 	    LOCATION = GetCenter(CON, LOCATION, SIZE);

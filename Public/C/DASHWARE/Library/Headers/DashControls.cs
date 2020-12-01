@@ -13,24 +13,6 @@ using System.Windows.Forms;
 
 namespace ThaDasher
 {
-    public static class MENUBAR
-    {
-	readonly public static PictureBox BAR = new PictureBox();
-	readonly public static PictureBox LOGO = new PictureBox();
-
-	readonly public static Label TITLE = new Label();
-
-	readonly public static Button CLOSE = new Button();
-	readonly public static Button MINIM = new Button();
-
-	public enum STYLE
-	{
-	    THIN = 26,
-	    THIC = 28,
-	    GIAT = 36,
-	}
-    }
-
     public class DashControls
     {
 	readonly DashTools TOOL = new DashTools();

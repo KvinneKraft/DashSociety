@@ -25,21 +25,18 @@ namespace ThaDasher
 		throw new Exception("InitializeMBar()");
 	    }
 	}
-
-	readonly static PictureBox OVERLAY = new PictureBox();
-
+	
 	private void InitializeBody()
 	{
 	    try
 	    {
 		BackColor = Color.MidnightBlue;
+		
+		var RECTANGLE_SIZE = new Size(220, 121);
+		var RECTANGLE_LOCA = new Point(4, 0);
+		var RECTANGLE_COLA = BackColor;
 
-		var OVERLAY_SIZE = Size;
-		var OVERLAY_LOCA = new Point(0, 0);
-		var OVERLAY_COLA = BackColor;
-
-		CONTROL.Image(this, OVERLAY, OVERLAY_SIZE, OVERLAY_LOCA, null, OVERLAY_COLA);
-
+		TOOL.PaintRectangle(this, 4, RECTANGLE_SIZE, RECTANGLE_LOCA, RECTANGLE_COLA);
 		TOOL.Round(this, 6);
 	    }
 
@@ -484,11 +481,9 @@ namespace ThaDasher
 		    var BUTTON_FCOL = Color.White;
 
 		    CONTROL.Button(BUTTON_CONTAINER, ABOUT, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 12, "About", Color.Empty);
-
 		    BUTTON_LOCA.X += BUTTON_SIZE.Width + 5;
 
 		    CONTROL.Button(BUTTON_CONTAINER, START, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 12, "Start", Color.Empty);
-
 		    BUTTON_LOCA.X += BUTTON_SIZE.Width + 5;
 
 		    CONTROL.Button(BUTTON_CONTAINER, PORTS, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 12, "Ports", Color.Empty);
@@ -552,7 +547,7 @@ namespace ThaDasher
 	    }
 
 	    public static void UndoChanges(Form TOP)
-	    {//Re-Do this<----
+	    {
 		foreach (Control Control in TOP.Controls)
 		{
 		    Control.Hide();
@@ -563,7 +558,7 @@ namespace ThaDasher
 
 	    private static void InitializeGUI(Form TOP)
 	    {
-		TOOL.Resize(TOP, new Size(225, 125));
+		TOOL.Resize(TOP, new Size(225, 122));
 		TOOL.Round(TOP, 6);
 
 		TOP.FormBorderStyle = FormBorderStyle.None;
@@ -580,7 +575,7 @@ namespace ThaDasher
 	    }
 
 	    readonly static TextBox IUSERNAME = new TextBox() { TextAlign = HorizontalAlignment.Center };
-	    readonly static TextBox IPASSWORD = new TextBox() { TextAlign = HorizontalAlignment.Center, PasswordChar = 'O' };
+	    readonly static TextBox IPASSWORD = new TextBox() { TextAlign = HorizontalAlignment.Center, PasswordChar = ' ' };
 
 	    readonly static Label USERNAME = new Label();
 	    readonly static Label PASSWORD = new Label();
@@ -602,17 +597,16 @@ namespace ThaDasher
 
 		var BOX_SIZE = new Size(GetLabelWidth(), 20);
 		var BOX_LOCA = new Point(GetLabelX(), LABEL_LOCA.Y + 1);
-		var BOX_BCOL = Color.MidnightBlue;
+		var BOX_BCOL = Color.FromArgb(8, 8, 8);
 		var BOX_FCOL = Color.White;
 
 		Control GetAnonControl()=>TOP.Controls[TOP.Controls.Count - 1];
 
 		CONTROL.TextBox(TOP, IUSERNAME, BOX_SIZE, BOX_LOCA, BOX_BCOL, BOX_FCOL, 1, 10, Color.Empty);
-
 		TOOL.Round(GetAnonControl(), 6);
 
 		LABEL_SIZE = GetPreferredSize("Password:", 12);
-		LABEL_LOCA.Y += LABEL_SIZE.Height + 10;
+		LABEL_LOCA.Y += LABEL_SIZE.Height + 5;
 
 		CONTROL.Label(TOP, PASSWORD, LABEL_SIZE, LABEL_LOCA, LABEL_BCOL, LABEL_FCOL, 1, 12, "Password:");
 
@@ -620,18 +614,17 @@ namespace ThaDasher
 		BOX_LOCA = new Point(GetLabelX(), LABEL_LOCA.Y + 1);
 
 		CONTROL.TextBox(TOP, IPASSWORD, BOX_SIZE, BOX_LOCA, BOX_BCOL, BOX_FCOL, 1, 10, Color.Empty);
-
 		TOOL.Round(GetAnonControl(), 6);
 	    }
 
 	    readonly static PictureBox BUTTON_CONTAINER = new PictureBox();
 
 	    readonly public static Button LOGIN = new Button();
-	    readonly static Button HELP = new Button();
+	    readonly public static Button HELP = new Button();
 
 	    private static void InitializeAUT(Form TOP)
 	    {
-		var CONTAINER_SIZE = new Size(210, 28);
+		var CONTAINER_SIZE = new Size(210, 26);
 		var CONTAINER_LOCA = new Point((TOP.Width - CONTAINER_SIZE.Width) / 2, TOP.Height - CONTAINER_SIZE.Height - 7);
 		var CONTAINER_COLA = TOP.BackColor;
 
@@ -639,7 +632,7 @@ namespace ThaDasher
 
 		var BUTTON_SIZE = new Size(CONTAINER_SIZE.Width / 2 - 5, CONTAINER_SIZE.Height);
 		var BUTTON_LOCA = new Point(0, 0);
-		var BUTTON_BCOL = Color.FromArgb(12, 12, 12);
+		var BUTTON_BCOL = Color.MidnightBlue;
 		var BUTTON_FCOL = Color.White;
 
 		CONTROL.Button(BUTTON_CONTAINER, LOGIN, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 11, "Login", Color.Empty);
@@ -657,7 +650,7 @@ namespace ThaDasher
 		{
 		    InitializeGUI(TOP);
 		    InitializeMEU(TOP);
-		    InitializeCRE(TOP);
+		    InitializeCRE(TOP);//Change METHOD DIalog color to fit back also email LARBI and get websites man for freelance
 		    InitializeAUT(TOP);
 		}
 
@@ -665,6 +658,16 @@ namespace ThaDasher
 		{
 		    throw new Exception("AuthenticatorInterf()");
 		}
+	    }
+	}
+
+	readonly HELPDIALOG HelpDialog = new HELPDIALOG();
+
+	public class HELPDIALOG : Form
+	{
+	    public HELPDIALOG()
+	    {
+
 	    }
 	}
 
@@ -688,8 +691,14 @@ namespace ThaDasher
 		    SETTINGSCONTAINER.InitializeMCon(this);
 		    LOGCONTAINER.InitializeLCon(this);
 		    TASKBARCONTAINER.InitializeTCon(this);
+		};
 
-		    OVERLAY.SendToBack();
+		LOGINDIALOG.HELP.Click += (s, e) =>
+		{
+		    if (!HelpDialog.Visible)
+		    {
+			HelpDialog.ShowDialog();
+		    };
 		};
 	    }
 
