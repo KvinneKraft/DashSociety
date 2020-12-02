@@ -30,7 +30,9 @@ namespace ThaDasher
 	{
 	    try
 	    {
-		BackColor = Color.MidnightBlue;
+		var GUI_COLOR = Color.MidnightBlue;
+
+		BackColor = GUI_COLOR;
 		
 		var RECTANGLE_SIZE = new Size(220, 121);
 		var RECTANGLE_LOCA = new Point(4, 0);
@@ -163,6 +165,8 @@ namespace ThaDasher
 		    TOOL.Round(DIALOG, 6);
 
 		    DIALOG.StartPosition = FormStartPosition.CenterParent;
+
+		    TOOL.PaintRectangle(DIALOG, 2, DIALOG.Size, new Point(0, 0), Color.FromArgb(8, 8, 8));
 		}
 
 		catch (Exception e)
@@ -183,7 +187,7 @@ namespace ThaDasher
 		{
 		    var BAR_SIZE = new Size(DIALOG.Width - 18, 26);
 		    var BAR_LOCA = new Point(1, 1);
-		    var BAR_COLA = Color.FromArgb(8, 8, 8);
+		    var BAR_COLA = Color.FromArgb(12, 12, 12);
 
 		    CONTROL.Image(DIALOG, BAR, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
 		    TOOL.Interactive(BAR, DIALOG);
@@ -258,9 +262,9 @@ namespace ThaDasher
 			"Overload", "Wavesss", "Go Ham", "Insta Flood",
 		    };
 
-		    var BUTTON_SIZE = new Size(DIALOG.Width - 18, 24);
-		    var BUTTON_LOCA = new Point(1, BAR.Height + 1);
-		    var BUTTON_BCOL = Color.DarkSlateBlue;
+		    var BUTTON_SIZE = new Size(DIALOG.Width - 19, 24);
+		    var BUTTON_LOCA = new Point(2, BAR.Height + 1);
+		    var BUTTON_BCOL = Color.FromArgb(150, Color.MidnightBlue.R, Color.MidnightBlue.G, Color.MidnightBlue.B);
 		    var BUTTON_FCOL = Color.White;
 
 		    int GetTitleHeight(string param) =>
@@ -509,7 +513,7 @@ namespace ThaDasher
 	    {
 		var BAR_SIZE = new Size(TOP.Width, 28);
 		var BAR_LOCA = new Point(0, 0);
-		var BAR_COLA = Color.FromArgb(8, 8, 8);
+		var BAR_COLA = Color.FromArgb(12, 12, 12);
 
 		CONTROL.Image(TOP, BAR_CONTAINER, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
 
@@ -528,7 +532,7 @@ namespace ThaDasher
 		MINIM.Click += (s, e) => TOP.SendToBack();
 
 		var TITLE_TEXT = "Dash Authenticator";
-		var TITLE_SIZE = TextRenderer.MeasureText(TITLE_TEXT, TOOL.GetFont(1, 9));
+		var TITLE_SIZE = TOOL.GetFontSize(TITLE_TEXT, 9);
 		var TITLE_LOCA = new Point((BAR_CONTAINER.Width - TITLE_SIZE.Width - (BUTTON_SIZE.Width * 2)) / 2, (BAR_CONTAINER.Height - TITLE_SIZE.Height) / 2);
 		var TITLE_BCOL = BAR_CONTAINER.BackColor;
 		var TITLE_FCOL = Color.White;
@@ -560,10 +564,12 @@ namespace ThaDasher
 	    {
 		TOOL.Resize(TOP, new Size(225, 122));
 		TOOL.Round(TOP, 6);
+		
+		TOP.BackgroundImage = null;
+		TOP.BackColor = Color.FromArgb(18, 18, 18);
 
 		TOP.FormBorderStyle = FormBorderStyle.None;
 		TOP.StartPosition = FormStartPosition.CenterScreen;
-		TOP.BackColor = Color.FromArgb(18, 18, 18);
 
 		TOP.Icon = Properties.Resources.ICON_ICO;
 
@@ -640,7 +646,7 @@ namespace ThaDasher
 
 		BUTTON_LOCA.X += BUTTON_SIZE.Width + 10;
 
-		CONTROL.Button(BUTTON_CONTAINER, HELP, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 11, "Help", Color.Empty);
+		CONTROL.Button(BUTTON_CONTAINER, HELP, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 11, "Info", Color.Empty);
 		TOOL.Round(HELP, 6);
 	    }
 
@@ -650,7 +656,7 @@ namespace ThaDasher
 		{
 		    InitializeGUI(TOP);
 		    InitializeMEU(TOP);
-		    InitializeCRE(TOP);//Change METHOD DIalog color to fit back also email LARBI and get websites man for freelance
+		    InitializeCRE(TOP);
 		    InitializeAUT(TOP);
 		}
 
@@ -661,13 +667,145 @@ namespace ThaDasher
 	    }
 	}
 
-	readonly HELPDIALOG HelpDialog = new HELPDIALOG();
+	readonly INFODIALOG HelpDialog = new INFODIALOG();
 
-	public class HELPDIALOG : Form
+	public class INFODIALOG : Form
 	{
-	    public HELPDIALOG()
+	    public class GUICONTAINER
 	    {
+		public static void InitializeGUI(Form TOP)
+		{
+		    try
+		    {
+			TOP.StartPosition = FormStartPosition.CenterParent;
+			TOP.FormBorderStyle = FormBorderStyle.None;
 
+			var GUI_BCOL = Color.FromArgb(24, 24, 24);
+
+			TOP.BackColor = GUI_BCOL;
+
+			var GUI_SIZE = new Size(200, 200);
+
+			TOOL.Resize(TOP, GUI_SIZE);
+			TOOL.Round(TOP, 6);
+		    }
+
+		    catch
+		    {
+			throw new Exception("Help Dialog Initialize GUI.");
+		    };
+		}
+	    }
+	
+	    public class MENUBARCONTAINER
+	    {
+		readonly static public PictureBox BAR = new PictureBox();
+
+		readonly static public Label TITLE = new Label();
+
+		readonly static public Button CLOSE = new Button();
+
+		public static void InitializeMEB(Form TOP)
+		{
+		    var BAR_SIZE = new Size(TOP.Width, 24);
+		    var BAR_LOCA = new Point(0, 0);
+		    var BAR_COLA = Color.FromArgb(12, 12, 12);
+
+		    CONTROL.Image(TOP, BAR, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
+
+		    var TITLE_TEXT = "Dash Information";
+		    var TITLE_SIZE = TOOL.GetFontSize(TITLE_TEXT, 10);
+		    var TITLE_LOCA = new Point(10, (BAR.Height - TITLE_SIZE.Height) / 2);
+		    var TITLE_BCOL = BAR_COLA;
+		    var TITLE_FCOL = Color.White;
+
+		    CONTROL.Label(BAR, TITLE, TITLE_SIZE, TITLE_LOCA, TITLE_BCOL, TITLE_FCOL, 1, 10, TITLE_TEXT);
+
+		    var CLOSE_SIZE = new Size(50, BAR.Height);
+		    var CLOSE_LOCA = new Point(BAR.Width - CLOSE_SIZE.Width, 0);
+		    var CLOSE_BCOL = BAR_COLA;
+		    var CLOSE_FCOL = TITLE_FCOL;
+
+		    CONTROL.Button(BAR, CLOSE, CLOSE_SIZE, CLOSE_LOCA, CLOSE_BCOL, CLOSE_FCOL, 1, 12, "X", Color.Empty);
+
+		    CLOSE.Click += (s, e) =>
+			TOP.Close();
+
+		    var BORDER_SIZE = new Size(TOP.Width - 2, TOP.Height - BAR.Height - 1);
+		    var BORDER_LOCA = new Point(1, BAR.Height);
+		    var BORDER_COLA = BAR_COLA;
+
+		    TOOL.PaintRectangle(TOP, 2, BORDER_SIZE, BORDER_LOCA, BORDER_COLA);
+		    TOOL.Interactive(BAR, TOP);
+
+		    foreach (Control CON in BAR.Controls)
+		    {
+			TOOL.Interactive(CON, TOP);
+		    };
+		}
+	    }
+
+	    public class MESSAGECONTAINER
+	    {
+		readonly static public TextBox INFOCONTAINER = new TextBox() { TextAlign = HorizontalAlignment.Center };
+
+		public static void InitializeMEG(Form TOP)
+		{
+		    var INFO_SIZE = new Size(TOP.Width - 4, TOP.Height - MENUBARCONTAINER.BAR.Height - 2);
+		    var INFO_LOCA = new Point(2, MENUBARCONTAINER.BAR.Height);
+		    var INFO_BCOL = Color.MidnightBlue;
+		    var INFO_FCOL = Color.White;
+
+		    CONTROL.TextBox(TOP, INFOCONTAINER, INFO_SIZE, INFO_LOCA, INFO_BCOL, INFO_FCOL, 1, 9, Color.Empty, FIXEDSIZE:false, READONLY:true, SCROLLBAR:true, MULTILINE:true);
+
+		    INFOCONTAINER.Text = (
+			"Hey there, I am Dashie also known as the Developer of this application.\r\n\r\nI am very high right now but I am still coding.\r\n\r\nNice!" +
+			"\r\n\r\n" +
+			"The intention of this application was to allow people like yourself to test the bandwidth of your server legally.\r\n\r\nThis tool will offer you the ability to pick any method from the list of available methods with just a click.\r\n\r\nThe configuration is not too complicated either, I have taken user-friendly interactivity into mind while coding this." +
+			"\r\n\r\n\r\n" +
+			"This all sounds nice and all but the application is not done yet.\r\n\r\nThis is just a preview of that what awaits you people, mwahaha!!\r\n\r\nExpect a lot of updates in the future." +
+			"\r\n\r\n" +
+			"If you do find any issues during the use of this application then please let me know at KvinneKraft@protonmail.com.\r\n\r\nAs I have said, I am still working on developing this application to the fullest extent.  You can also reach out to me if you have any suggestions." +
+			"\r\n\r\n" +
+			"That is me.....DASHIE" +
+			"\r\n\r\n" +
+			"Ssshhh, I am still here!\r\n\r\nI am actually going to put more information in the actual utility section. I am soo high.....bye."
+		    );
+		}
+	    }
+
+	    public INFODIALOG()
+	    {
+		GUICONTAINER.InitializeGUI(this);
+		MENUBARCONTAINER.InitializeMEB(this);
+		MESSAGECONTAINER.InitializeMEG(this);
+	    }
+	}
+
+	public class SPLASHSCREEN
+	{
+	    public static void SHOW(Form APP, int DURATION)
+	    {
+		APP.BackgroundImage = Properties.Resources.SPLASH_PNG;
+		APP.FormBorderStyle = FormBorderStyle.None;
+		APP.StartPosition = FormStartPosition.CenterScreen;
+
+		TOOL.Resize(APP, APP.BackgroundImage.Size);
+
+		APP.BackColor = Color.FromArgb(28, 28, 28);
+		APP.TransparencyKey = APP.BackColor;
+	
+		var timer = new System.Timers.Timer(DURATION * 1000);
+
+		timer.AutoReset = false;
+		timer.Enabled = true;
+
+		timer.Elapsed += (s, q) =>
+		{
+		    LOGINDIALOG.AuthenticatorInterf(APP);
+		};
+
+		timer.Start();
 	    }
 	}
 
@@ -676,7 +814,7 @@ namespace ThaDasher
 	    try
 	    {
 		LOGINDIALOG.AuthenticatorInterf(this);
-		
+
 		LOGINDIALOG.LOGIN.Click += (s, e) =>
 		{
 		    // Do-Login-Work
@@ -692,7 +830,7 @@ namespace ThaDasher
 		    LOGCONTAINER.InitializeLCon(this);
 		    TASKBARCONTAINER.InitializeTCon(this);
 		};
-
+		
 		LOGINDIALOG.HELP.Click += (s, e) =>
 		{
 		    if (!HelpDialog.Visible)
@@ -718,13 +856,20 @@ namespace ThaDasher
 		};
 	    };
 
-	    // Priorities:
-	    // - MENU BAR (ADD APPROPRIATE METHOD TO DASH CONTROL)
-	    // - MAIN GUI
-	    // - OPTION CONTAINER
-	    // - BOTTOM GIF
-	    // - STATUS LOG
-	    // - TOOL BAR
+	    /*
+	     Fix List:
+
+	    - Reformat the class names.
+	    - Reformat the method names.  They have to be logically named.
+	    - Reorganize some pieces of code.
+	    - Use DashTools.cs functionality where applicable.
+	     
+	     */
+	}
+
+	private void Interface_Load(object sender, EventArgs e)
+	{
+
 	}
     }
 }

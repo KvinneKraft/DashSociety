@@ -18,6 +18,9 @@ namespace ThaDasher
     {
 	public string GetErrorFormat(Exception e) => $"Hey there, I am unfortunate to say but DashBooks has stopped working!\r\n\r\nIf you want to help me out then please send the following to me at KvinneKraft@protonmail.com. \r\n\r\nSTACK TRACE:\r\n{e.StackTrace}\r\n\r\nRAW MESSAGE:\r\n{e.Message}\r\n\r\nThank you, regardless!\r\n-Dashie";
 
+	public Size GetFontSize(string TEXT, int SIZE) =>
+	    TextRenderer.MeasureText(TEXT, GetFont(1, SIZE));
+
 	public void Resize(Control OBJECT, Size SIZE)
 	{
 	    OBJECT.MaximumSize = SIZE;

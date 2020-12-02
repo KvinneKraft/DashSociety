@@ -1,0 +1,32 @@
+/* (c) All Rights Reserved, Dashies Beautiful Software Inc. */
+
+69 ICON "application icon.ico"
+1  VERSIONINFO
+
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+
+  FILESUBTYPE 0x0L {
+       BLOCK "StringFileInfo" {
+	      BLOCK "040904E4" {
+		     VALUE "Comments",         "A Windows Port Blocker"
+			 VALUE "CompanyName",      "DASHWARE"
+			 
+			 VALUE "FileDescription",  "Blocks Ports using Windows Firewall"
+			 VALUE "FileVersion",      "1.0.0.0"
+			 
+			 VALUE "InternalName",     "Port Blocker"
+			 VALUE "LegalCopyright",   "(c) All Rights Reserved, Dashies Software Inc."
+			 VALUE "OriginalFilename", "Port Blocker.exe"
+			 
+			 VALUE "ProductName",      "Windows Port Blocker"
+			 VALUE "ProductVersion",   "1.0.0.0"
+		  }
+       }
+       
+	   BLOCK "VarFileInfo" {
+	      VALUE "Translation", 0x409, 1252
+	   }
+  }
+
+/* ===== END ===== */

@@ -1,0 +1,36 @@
+/* --=== Modern Resource File ===-- */
+
+48 ICON "application_icon.ico"
+
+1 RT_MANIFEST "..\\README.md"
+
+1 VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+
+FILESUBTYPE 0x0L {
+   BLOCK "StringFileInfo" {
+      BLOCK "040904E4" {
+	     VALUE "Comments", "Pony MP3 Player"
+		 VALUE "CompanyName", "DASHIES SOFTWARE"
+		 
+		 VALUE "FileDescription", "Pony MP3 Player"
+		 VALUE "FileVersion", "1.0.0.0"
+		 
+		 VALUE "InternalName", "Pony MP3 Player"
+		 VALUE "OriginalFilename", "Dash_Player.exe"
+		 
+		 VALUE "LegalCopyright", "(c) All Rights Reserved, Dashies Software Inc." 
+		 
+		 VALUE "ProductName", "Pony Audio Player"
+		 VALUE "ProductVersion", "1.0.0.0" 
+	  }
+   }
+   
+   BLOCK "VarFileInfo" {
+	  VALUE "Translation", 0x409, 1252
+   }
+}
+
+
+/* --=== END ===-- */

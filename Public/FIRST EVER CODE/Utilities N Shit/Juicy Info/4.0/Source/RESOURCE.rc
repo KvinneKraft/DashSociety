@@ -1,0 +1,36 @@
+#include"VARIABLES.h"
+
+/////////////////////////////
+/* Beautiful Property File */
+/////////////////////////////
+
+    80 ICON "Application Icon (Cute Princess ;3).ico"
+    
+    1 VERSIONINFO
+    FILEVERSION 4,0,0,0
+    PRODUCTVERSION 4,0,0,0
+
+	   FILESUBTYPE 0x0L {
+	        BLOCK "StringFileInfo" {
+			   BLOCK "040904E4" {
+                    VALUE "Comments",    "Pony Tools c:"
+                    VALUE "CompanyName", "DASHWARE"
+                    
+                    VALUE "FileDescription",  "An early preview of our Pony Net."
+                    VALUE "FileVersion",      EX_VERSION
+                    VALUE "InternalName",     "My IP"
+                    VALUE "LegalCopyright",   "(c) All Rights Reserved, Dashies Software Inc."
+                    VALUE "OriginalFilename", "My IP.exe"
+                    VALUE "ProductName",      "My IP"
+                    VALUE "ProductVersion",   EX_VERSION
+			   }
+			}
+			BLOCK "VarFileInfo" {
+			     VALUE "Translation", 0x409, 1252
+			}
+	   } 
+
+/////////////////	   
+/* --- END --- */
+/////////////////
+

@@ -1,0 +1,31 @@
+
+/* --- (c) All Rights Reserved, Dashies Software Inc  --- */
+
+80 ICON "Application Icon.ico"
+
+1 VERSIONINFO 
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+
+  FILESUBTYPE 0x0L {
+     BLOCK "StringFileInfo" {
+	    BLOCK "040904E4" {
+		   VALUE "Comments", "Domain Name Service Tool"
+		   VALUE "CompanyName", "DASHWARE"
+		   
+		   VALUE "FileDescription", "Puuuny Spuuwfer 1.0 Ponyware"
+		   VALUE "FileVersion", "1.0.0.0"
+		   VALUE "InternalName", "Puuuny Spuuwfer"
+		   VALUE "LegalCopyright", "(c) All Rights Reserved, Dashies Software Inc."
+		   VALUE "OriginalFilename", "Puuuny Spuuuwfer"
+		   VALUE "ProductName", "Puuuny Spuuuwfer"
+		   VALUE "ProductVersion", "1.0.0.0"
+		}
+	 }
+	 
+	 BLOCK "VarFileInfo" {
+	    VALUE "Translation", 0x409, 1252
+	 }
+  }
+
+/* --- END --- */

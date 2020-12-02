@@ -99,5 +99,8 @@
   <ItemGroup>
     <None Include="Resources\BRAND\PONY_GIF2.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SPLASH_PNG.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

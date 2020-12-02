@@ -1,0 +1,81 @@
+[Project]
+FileName=Puuuny Spuuwfer.dev
+Name=Puuuny Spuuwfer
+Type=1
+Ver=2
+ObjFiles=
+Includes=
+Libs=
+PrivateResource=Puuuny_Spuuwfer_private.rc
+ResourceIncludes=
+MakeIncludes=
+Compiler=
+CppCompiler=
+Linker="../../../Pony Networking Utility/1.0/Lib/libwinmm.a"_@@_"../../../Pony Networking Utility/1.0/Lib/libwininet.a"_@@_"../../../Pony Networking Utility/1.0/Lib/libiphlpapi.a"_@@__@@_
+IsCpp=1
+Icon=
+ExeOutput=
+ObjectOutput=
+LogOutput=
+LogOutputEnabled=0
+OverrideOutput=0
+OverrideOutputName=Puuuny Spuuwfer.exe
+HostApplication=
+UseCustomMakefile=0
+CustomMakefile=
+CommandLine=
+Folders=
+IncludeVersionInfo=0
+SupportXPThemes=0
+CompilerSet=5
+CompilerSettings=0000000100000000100000000
+UnitCount=3
+
+[VersionInfo]
+Major=1
+Minor=0
+Release=0
+Build=0
+LanguageID=1033
+CharsetID=1252
+CompanyName=
+FileVersion=1.0.0.0
+FileDescription=Developed using the Dev-C++ IDE
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+AutoIncBuildNr=0
+SyncProduct=1
+
+[Unit1]
+FileName=dns spoofer.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit2]
+FileName=domain name system api.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit3]
+FileName=property.rc
+Folder=Resources
+Compile=1
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+

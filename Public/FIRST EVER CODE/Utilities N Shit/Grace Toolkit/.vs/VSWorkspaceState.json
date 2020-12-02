@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Core",
+    "\\Core\\Runtime",
+    "\\Core\\Runtime\\Modules",
+    "\\Core\\Runtime\\Modules\\Networking",
+    "\\Core\\Runtime\\Modules\\Networking\\dev_client",
+    "\\Core\\Runtime\\Modules\\Networking\\dev_client\\1.0",
+    "\\Core\\Runtime\\Modules\\Networking\\dev_client\\1.0\\src"
+  ],
+  "SelectedNode": "\\Core\\Runtime\\Modules\\Networking\\dev_client\\1.0\\src\\src.sln",
+  "PreviewInSolutionExplorer": false
+}

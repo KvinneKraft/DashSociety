@@ -42,6 +42,7 @@
 	    this.Opacity = 0.99D;
 	    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 	    this.Text = "ThaDasher";
+	    this.Load += new System.EventHandler(this.Interface_Load);
 	    this.ResumeLayout(false);
 
 	}
