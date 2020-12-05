@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ThaDasher
 {
     static class Program
     {
-	private static Interface inern;
+	private static Image splash_imag = Properties.Resources.SPLASH_PNG;
+	private static Splash splash_diag;
 
 	[STAThread]
 	static void Main()
@@ -16,9 +18,9 @@ namespace ThaDasher
 	    Application.EnableVisualStyles();
 	    Application.SetCompatibleTextRenderingDefault(false);
 
-	    inern = new Interface();
+	    splash_diag = new Splash(splash_imag);
 
-	    Application.Run(inern);
+	    Application.Run(splash_diag);
 	}
     }
 }

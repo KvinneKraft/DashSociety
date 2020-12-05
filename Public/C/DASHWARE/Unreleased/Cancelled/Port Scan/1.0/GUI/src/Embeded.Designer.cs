@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ThaDasher.Properties {
+namespace src {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace ThaDasher.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Embeded {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Embeded() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ThaDasher.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ThaDasher.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("src.Embeded", typeof(Embeded).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,19 +63,29 @@ namespace ThaDasher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] cute {
+        internal static byte[] cursor {
             get {
-                object obj = ResourceManager.GetObject("cute", resourceCulture);
+                object obj = ResourceManager.GetObject("cursor", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Idle {
+            get {
+                object obj = ResourceManager.GetObject("Idle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ICON_ICO {
+        internal static System.Drawing.Icon Logo {
             get {
-                object obj = ResourceManager.GetObject("ICON_ICO", resourceCulture);
+                object obj = ResourceManager.GetObject("Logo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -83,9 +93,9 @@ namespace ThaDasher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ICON_PNG {
+        internal static System.Drawing.Bitmap Logo1 {
             get {
-                object obj = ResourceManager.GetObject("ICON_PNG", resourceCulture);
+                object obj = ResourceManager.GetObject("Logo1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,49 +103,9 @@ namespace ThaDasher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ICON_PNG1 {
+        internal static System.Drawing.Bitmap Running {
             get {
-                object obj = ResourceManager.GetObject("ICON_PNG1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] main {
-            get {
-                object obj = ResourceManager.GetObject("main", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap PONY_GIF1 {
-            get {
-                object obj = ResourceManager.GetObject("PONY_GIF1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap PONY_GIF2 {
-            get {
-                object obj = ResourceManager.GetObject("PONY_GIF2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap SPLASH_PNG {
-            get {
-                object obj = ResourceManager.GetObject("SPLASH_PNG", resourceCulture);
+                object obj = ResourceManager.GetObject("Running", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

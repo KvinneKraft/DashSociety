@@ -40,9 +40,8 @@
 	    this.MinimumSize = new System.Drawing.Size(450, 258);
 	    this.Name = "Interface";
 	    this.Opacity = 0.99D;
-	    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+	    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 	    this.Text = "ThaDasher";
-	    this.Load += new System.EventHandler(this.Interface_Load);
 	    this.ResumeLayout(false);
 
 	}

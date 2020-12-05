@@ -824,7 +824,7 @@ namespace DashCore
 
                 Dashtolls.FluffyTextBoxy(container_storage[0], pHostI, true, textBoxFontSize, new string[] { "https://pugpawz.com@21" }, new Point(tTextBoxSX, tTextBoxSY), tTextBoxS, tTextBoxBC, tTextBoxFC);
                 Dashtolls.FluffyTextBoxy(container_storage[0], pUserI, true, textBoxFontSize, new string[] { "pugpawzc" }, new Point(tTextBoxSX, tTextBoxSY + tTextBoxH + tTextBoxSP), tTextBoxS, tTextBoxBC, tTextBoxFC);
-                Dashtolls.FluffyTextBoxy(container_storage[0], pPassI, true, textBoxFontSize, new string[] { "Ju3veit3:80" }, new Point(tTextBoxSX, tTextBoxSY + (tTextBoxH + tTextBoxSP) * 2), tTextBoxS, tTextBoxBC, tTextBoxFC);
+                Dashtolls.FluffyTextBoxy(container_storage[0], pPassI, true, textBoxFontSize, new string[] { "HAH" }, new Point(tTextBoxSX, tTextBoxSY + (tTextBoxH + tTextBoxSP) * 2), tTextBoxS, tTextBoxBC, tTextBoxFC);
 
                 pHostI.Text = pHostI.Text.Replace(" ", "");
                 pUserI.Text = pUserI.Text.Replace(" ", "");

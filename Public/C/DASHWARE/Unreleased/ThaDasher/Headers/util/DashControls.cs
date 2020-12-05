@@ -39,7 +39,7 @@ namespace ThaDasher
 	public void MenuBar(Form TOP, int STYLE, bool hasBorder, Color BAR_COLA, Color BOR_COLA)
 	{
 	    if (BAR_COLA.IsEmpty) BAR_COLA = Color.FromArgb(8, 8, 8);
-
+	    
 	    if (hasBorder)
 	    {
 		if (BOR_COLA.IsEmpty) BOR_COLA = Color.FromArgb(8, 8, 8);
