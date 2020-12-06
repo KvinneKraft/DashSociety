@@ -36,7 +36,7 @@ namespace ThaDasher
 		TOOL.PaintRectangle(DIALOG, 2, DIALOG.Size, new Point(0, 0), Color.FromArgb(8, 8, 8));
 	    }
 
-	    catch (Exception e)
+	    catch
 	    {
 		throw new Exception("Selector Container Initialization.");
 	    }
@@ -161,7 +161,7 @@ namespace ThaDasher
 		};
 	    }
 
-	    catch (Exception e)
+	    catch
 	    {
 		throw new Exception("Selector Container Method Dialog Initialization.");
 	    }

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Drawing;
 using System.Threading;
+using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -92,91 +93,353 @@ namespace ThaDasher
 
 	public class OPS
 	{
-	    readonly static RichTextBox PORT = new RichTextBox();
-	    readonly static RichTextBox LOGS = new RichTextBox();
+	    readonly public static RichTextBox PORT = new RichTextBox();
+	    readonly public static RichTextBox LOGS = new RichTextBox();
 
-	    readonly static PictureBox PORTCONTAINER = new PictureBox();
-	    readonly static PictureBox LOGSCONTAINER = new PictureBox();
-	    readonly static PictureBox CONTAINER = new PictureBox();
+	    readonly public static PictureBox PORTCONTAINER = new PictureBox();
+	    readonly public static PictureBox LOGSCONTAINER = new PictureBox();
+	    readonly public static PictureBox CONTAINER = new PictureBox();
 
-	    readonly static Button YES = new Button() { Enabled = false, Visible = false };
-	    readonly static Button NUU = new Button() { Enabled = false, Visible = false };
-	    readonly static Button TOGGLE = new Button();
+	    readonly public static Button YES = new Button();// { Visible = false };
+	    readonly public static Button NUU = new Button();// { Visible = false };
+	    readonly public static Button TOGGLE = new Button();
+
+	    public enum Type
+	    {
+		Info, Warning, Error, Success
+	    }
+
+	    public static void print(string m, Type type)
+	    {
+		string p = "(?)";
+
+		switch (type)
+		{
+		    case Type.Warning:
+			p = "(-)";
+			break;
+		    case Type.Error:
+			TOGGLE.Text = "Start Scan";
+			p = "(!)";
+			break;
+		    case Type.Success:
+			p = "(+)";
+			break;
+		}
+
+		LOGS.AppendText($"{p} {m}\r\n");
+	    }
+
+	    private static readonly List<int> closed = new List<int>();
+	    private static readonly List<int> opened = new List<int>();
+
+	    private static void ShowPorts(bool isOpen)
+	    {
+		string paw = "[Accessible Ports (TCP)]\r\n";
+
+		if (isOpen)
+		{
+		    foreach (var p in opened)
+		    {
+			paw += $"---: {p}\r\n";
+		    };
+		}
+
+		else
+		{
+		    paw = "[Inaccessible Ports (TCP)]\r\n";
+
+		    foreach (var p in closed)
+		    {
+			paw += $"---: {p}\r\n";
+		    };
+		};
+
+		LOGS.AppendText(paw);
+	    }
+
+	    public static Thread THREAD = null;
+
+	    private static void StartScanning()
+	    {
+		opened.Clear();
+		closed.Clear();
+
+		THREAD = new Thread(() =>
+		{
+		    var r_host = TargetContainer.IP_BOX.Text.ToLower();
+		    var host = string.Empty;
+
+		    if (!IPAddress.TryParse(r_host, out IPAddress ham))
+		    {
+			if (!r_host.Contains("http://") && !r_host.Contains("https://")) r_host = "https://" + r_host;
+
+			if (!Uri.TryCreate(r_host, UriKind.RelativeOrAbsolute, out Uri bacon))
+			{
+			    print("Missing IPv4 or Uri host value!", Type.Error);
+			    return;
+			};
+
+			try
+			{
+			    host = Dns.GetHostAddresses(bacon.Host)[0].ToString();
+			}
+
+			catch
+			{
+			    print("Invalid host value!", Type.Error);
+			    return;
+			};
+		    }
+
+		    else
+		    {
+			host = ham.ToString();
+
+			if (ham.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
+			{
+			    print("Invalid IPv4 host value!", Type.Error);
+			    return;
+			};
+		    };
+
+		    var s_texts = PORT.Text.Replace(" ", "");
+
+		    var s_ports = new List<string>();
+		    var ports = new List<int>();
+
+		    void HandleIntegerError() =>
+			print("You can not specify an incorrect integral value man.", Type.Error);
+
+		    int mode = 0;
+
+		    if (s_texts.Contains(","))
+			s_ports.AddRange(s_texts.Split(','));
+
+		    else if (s_texts.Contains("-"))
+		    {
+			var range = s_texts.Split('-');
+
+			int a = 0;
+			int b = 0;
+
+			try
+			{
+			    if (!int.TryParse(range[0], out a) || !int.TryParse(range[1], out b))
+			    {
+				HandleIntegerError();
+				return;
+			    };
+
+			    if (b < a)
+			    {
+				print("The lowest port in a range of ports can not be lower than the end of the range.", Type.Error);
+				return;
+			    };
+			    
+			    for (int k = a; k <= b; k += 1)
+			    {
+				ports.Add(k);
+			    };
+
+			    mode = 1;
+			}
+
+			catch (Exception e)
+			{
+			    print($"{e.Message} \r\n\r\nOne or more of your port values are invalid.", Type.Error);
+			    return;
+			};
+		    }
+
+		    else
+			s_ports.Add(s_texts);
+
+		    var c = 0;
+
+		    if (mode != 1)
+		    {
+			foreach (var k in s_ports)
+			{
+			    try
+			    {
+				if (!int.TryParse(k, out c))
+				{
+				    HandleIntegerError();
+				    return;
+				};
+
+				ports.Add(c);
+			    }
+
+			    catch
+			    {
+				HandleIntegerError();
+				return;
+			    };
+			};
+		    };
+
+		    print("Scan has been started.  Please be patient!", Type.Success);
+
+		    var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+		    foreach (var port in ports)
+		    {
+			try
+			{
+			    if (ports[ports.IndexOf(port)] == ports.Count / 2)
+			    {
+				print("Almost done!", Type.Info);
+			    };
+
+			    var result = sock.BeginConnect(host, port, null, null);
+			    var succes = result.AsyncWaitHandle.WaitOne(450, true);
+
+			    if (sock.Connected)
+			    {
+				opened.Add(port);
+			    }
+
+			    else
+			    {
+				closed.Add(port);
+			    };
+			}
+
+			catch
+			{
+			    closed.Add(port);
+			};
+
+			sock.Close();
+		    };
+
+		    print("The scan has ended successfully!", Type.Success);
+		    print("Press YES to see all open ports and NUU to see all closed ports.", Type.Info);
+
+		    CONTAINER.Show();
+		    
+		    TOGGLE.Text = "Start Scan";
+		})
+
+		{ IsBackground = true };
+
+		THREAD.Start();
+	    }
 
 	    public static void InitializeContainer(Form TOP)
 	    {
-		var TOGGLE_SIZE = new Size(145, 28);
-		var TOGGLE_LOCA = new Point((TOP.Width - TOGGLE_SIZE.Width) / 2, GUI.BAR.Height + 6);
-		var TOGGLE_BCOL = LogContainer.CLEAR.BackColor;  Color.FromArgb(12, 12, 12);
-		var TOGGLE_FCOL = Color.White;
+		try
+		{
+		    var TOGGLE_SIZE = new Size(145, 28);
+		    var TOGGLE_LOCA = new Point((TOP.Width - TOGGLE_SIZE.Width) / 2, GUI.BAR.Height + 6);
+		    var TOGGLE_BCOL = LogContainer.CLEAR.BackColor; Color.FromArgb(12, 12, 12);
+		    var TOGGLE_FCOL = Color.White;
 
-		CONTROL.Button(TOP, TOGGLE, TOGGLE_SIZE, TOGGLE_LOCA, TOGGLE_BCOL, TOGGLE_FCOL, 1, 12, "Start Scan", Color.Empty);
-		TOOL.Round(TOGGLE, 6);
-	    
-		var y = GUI.BAR.Height + 10 + TOGGLE.Height + 2;
+		    CONTROL.Button(TOP, TOGGLE, TOGGLE_SIZE, TOGGLE_LOCA, TOGGLE_BCOL, TOGGLE_FCOL, 1, 12, "Start Scan", Color.Empty);
 
-		var PORTCONTAINER_SIZE = new Size(TOP.Width - 20, 80);
-		var PORTCONTAINER_LOCA = new Point(10, y);
-		var PORTCONTAINER_BCOL = LogContainer.LOG.BackColor;
+		    TOGGLE.Click += (s, e) =>
+		    {
+			if (TOGGLE.Text != "Stop Scan")
+			{
+			    opened.Clear();
+			    closed.Clear();
 
-		CONTROL.Image(TOP, PORTCONTAINER, PORTCONTAINER_SIZE, PORTCONTAINER_LOCA, null, PORTCONTAINER_BCOL);
-		TOOL.Round(PORTCONTAINER, 6);
+			    CONTAINER.Hide();
 
-		var PORT_SIZE = new Size(PORTCONTAINER.Width - 10, PORTCONTAINER.Height - 10);
-		var PORT_LOCA = new Point(5, 5);
-		var PORT_BCOL = LogContainer.LOG.BackColor;
-		var PORT_FCOL = Color.White;
-		
-		CONTROL.RichTextBox(PORTCONTAINER, PORT, PORT_SIZE, PORT_LOCA, PORT_BCOL, PORT_FCOL, 1, 11, "80, 443, 8080, 53, 56, 21, 22, 22565");
+			    TOGGLE.Text = "Stop Scan";
 
-		PORT.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
+			    StartScanning();
+			}
 
-		var RECT_SIZE = new Size(PORTCONTAINER_SIZE.Width - 2, PORTCONTAINER_SIZE.Height - 2);
-		var RECT_LOCA = new Point(1, 1);
-		var RECT_COLA = GUI.BAR.BackColor;
+			else
+			{
+			    CONTAINER.Hide();
 
-		TOOL.PaintRectangle(PORTCONTAINER, 2, RECT_SIZE, RECT_LOCA, RECT_COLA);
+			    TOGGLE.Text = "Start Scan";
 
-		var LOGCONTAINER_SIZE = new Size(PORTCONTAINER_SIZE.Width, TOP.Height - PORTCONTAINER.Top - PORTCONTAINER.Height - 20);
-		var LOGCONTAINER_LOCA = new Point(PORTCONTAINER_LOCA.X, PORTCONTAINER.Top + PORTCONTAINER.Height + 10);
-		var LOGCONTAINER_BCOL = PORT_BCOL;
+			    THREAD.Abort();
+			};
 
-		CONTROL.Image(TOP, LOGSCONTAINER, LOGCONTAINER_SIZE, LOGCONTAINER_LOCA, null, LOGCONTAINER_BCOL);
-		TOOL.Round(LOGSCONTAINER, 6);
+			return;
+		    };
 
-		var LOG_SIZE = new Size(LOGCONTAINER_SIZE.Width - 10, LOGCONTAINER_SIZE.Height - 10);
-		var LOG_LOCA = new Point(5, 5);
-		var LOG_BCOL = PORT_BCOL;
-		var LOG_FCOL = PORT_FCOL;
+		    TOOL.Round(TOGGLE, 6);
 
-		CONTROL.RichTextBox(LOGSCONTAINER, LOGS, LOG_SIZE, LOG_LOCA, LOG_BCOL, LOG_FCOL, 1, 9, "(!) Waiting for you man ....\r\n");
-	
-		LOGS.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
-		LOGS.ReadOnly = true;
+		    var y = GUI.BAR.Height + 10 + TOGGLE.Height + 2;
 
-		RECT_SIZE = new Size(LOGCONTAINER_SIZE.Width - 2, LOGCONTAINER_SIZE.Height - 2);
+		    var PORTCONTAINER_SIZE = new Size(TOP.Width - 20, 80);
+		    var PORTCONTAINER_LOCA = new Point(10, y);
+		    var PORTCONTAINER_BCOL = LogContainer.LOG.BackColor;
 
-		TOOL.PaintRectangle(LOGSCONTAINER, 2, RECT_SIZE, RECT_LOCA, RECT_COLA);
+		    CONTROL.Image(TOP, PORTCONTAINER, PORTCONTAINER_SIZE, PORTCONTAINER_LOCA, null, PORTCONTAINER_BCOL);
+		    TOOL.Round(PORTCONTAINER, 6);
 
-		var CONTAINER_SIZE = new Size(160, 22);
-		var CONTAINER_LOCA = new Point((LOG_SIZE.Width - CONTAINER_SIZE.Width) / 2 - 10, LOG_SIZE.Height - CONTAINER_SIZE.Height - 5);
-		var CONTAINER_COLA = Color.Transparent;
+		    var PORT_SIZE = new Size(PORTCONTAINER.Width - 10, PORTCONTAINER.Height - 10);
+		    var PORT_LOCA = new Point(5, 5);
+		    var PORT_BCOL = LogContainer.LOG.BackColor;
+		    var PORT_FCOL = Color.White;
 
-		CONTROL.Image(LOGS, CONTAINER, CONTAINER_SIZE, CONTAINER_LOCA, null, CONTAINER_COLA);
-		
-		TOOL.Round(YES, 6);
-		TOOL.Round(NUU, 6);
+		    CONTROL.RichTextBox(PORTCONTAINER, PORT, PORT_SIZE, PORT_LOCA, PORT_BCOL, PORT_FCOL, 1, 11, "80, 443, 8080, 53, 56, 21, 22, 22565");
 
-		var OPTION_SIZE = new Size((CONTAINER_SIZE.Width - 10) / 2, CONTAINER_SIZE.Height);
-		var OPTION_LOCA = new Point(0, 0);
-		var OPTION_BCOL = Color.MidnightBlue;
-		var OPTION_FCOL = Color.White;
-		
-		CONTROL.Button(CONTAINER, YES, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, "Yes", Color.Empty);
-		
-		OPTION_LOCA.X += OPTION_SIZE.Width + 10;
+		    PORT.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
 
-		CONTROL.Button(CONTAINER, NUU, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, "Nuu", Color.Empty);
+		    var RECT_SIZE = new Size(PORTCONTAINER_SIZE.Width - 2, PORTCONTAINER_SIZE.Height - 2);
+		    var RECT_LOCA = new Point(1, 1);
+		    var RECT_COLA = GUI.BAR.BackColor;
+
+		    TOOL.PaintRectangle(PORTCONTAINER, 2, RECT_SIZE, RECT_LOCA, RECT_COLA);
+
+		    var LOGCONTAINER_SIZE = new Size(PORTCONTAINER_SIZE.Width, TOP.Height - PORTCONTAINER.Top - PORTCONTAINER.Height - 20);
+		    var LOGCONTAINER_LOCA = new Point(PORTCONTAINER_LOCA.X, PORTCONTAINER.Top + PORTCONTAINER.Height + 10);
+		    var LOGCONTAINER_BCOL = PORT_BCOL;
+
+		    CONTROL.Image(TOP, LOGSCONTAINER, LOGCONTAINER_SIZE, LOGCONTAINER_LOCA, null, LOGCONTAINER_BCOL);
+		    TOOL.Round(LOGSCONTAINER, 6);
+
+		    var LOG_SIZE = new Size(LOGCONTAINER_SIZE.Width - 10, LOGCONTAINER_SIZE.Height - 10);
+		    var LOG_LOCA = new Point(5, 5);
+		    var LOG_BCOL = PORT_BCOL;
+		    var LOG_FCOL = PORT_FCOL;
+
+		    CONTROL.RichTextBox(LOGSCONTAINER, LOGS, LOG_SIZE, LOG_LOCA, LOG_BCOL, LOG_FCOL, 1, 9, "(!) Waiting for you man ....\r\n");
+
+		    LOGS.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
+		    LOGS.ReadOnly = true;
+
+		    RECT_SIZE = new Size(LOGCONTAINER_SIZE.Width - 2, LOGCONTAINER_SIZE.Height - 2);
+
+		    TOOL.PaintRectangle(LOGSCONTAINER, 2, RECT_SIZE, RECT_LOCA, RECT_COLA);
+
+		    var CONTAINER_SIZE = new Size(105, 22);
+		    var CONTAINER_LOCA = new Point(LOGS.Width - CONTAINER_SIZE.Width - 25, LOG_SIZE.Height - CONTAINER_SIZE.Height - 5);
+		    var CONTAINER_COLA = Color.Transparent;
+
+		    CONTROL.Image(LOGS, CONTAINER, CONTAINER_SIZE, CONTAINER_LOCA, null, CONTAINER_COLA);
+
+		    TOOL.Round(YES, 6);
+		    TOOL.Round(NUU, 6);
+
+		    var OPTION_SIZE = new Size((CONTAINER_SIZE.Width - 5) / 2, CONTAINER_SIZE.Height);
+		    var OPTION_LOCA = new Point(0, 0);
+		    var OPTION_BCOL = Color.MidnightBlue;
+		    var OPTION_FCOL = Color.White;
+
+		    CONTROL.Button(CONTAINER, YES, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, "Yes", Color.Empty);
+
+		    OPTION_LOCA.X += OPTION_SIZE.Width + 5;
+
+		    CONTROL.Button(CONTAINER, NUU, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, "Nuu", Color.Empty);
+
+		    NUU.Click += (s, e) => ShowPorts(false);
+		    YES.Click += (s, e) => ShowPorts(true);
+		}
+
+		catch
+		{
+		    throw new Exception("OPSInitialize()");
+		};
 	    }
 	}
 
@@ -188,6 +451,8 @@ namespace ThaDasher
 	    {
 		GUI.InitializeGUI(this);
 		OPS.InitializeContainer(this);
+
+		//OPS.CONTAINER.Hide();
 
 		// Initialize Event Handlers
 		// -------------------------
@@ -214,6 +479,17 @@ namespace ThaDasher
 
 	    Name = "PortScanner";
 	    Text = "Port Scanner";
+
+	    Closing += (s, e) =>
+	    {
+		OPS.CONTAINER.Hide();
+		OPS.TOGGLE.Text = "Start Scan";
+	    };
+
+	    Shown += (s, e) =>
+	    {
+		OPS.CONTAINER.Hide();
+	    };
 
 	    ResumeLayout(false);
 	}
