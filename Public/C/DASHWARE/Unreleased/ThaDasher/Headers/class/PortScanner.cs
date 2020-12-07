@@ -106,7 +106,7 @@ namespace ThaDasher
 
 	    public enum Type
 	    {
-		Info, Warning, Error, Success
+		None, Info, Warning, Error, Success
 	    }
 
 	    public static void print(string m, Type type)
@@ -115,6 +115,10 @@ namespace ThaDasher
 
 		switch (type)
 		{
+		    case Type.None:
+			m = "\r" + m;
+			p = "";
+			break;
 		    case Type.Warning:
 			p = "(-)";
 			break;
@@ -403,7 +407,7 @@ namespace ThaDasher
 		    var LOG_BCOL = PORT_BCOL;
 		    var LOG_FCOL = PORT_FCOL;
 
-		    CONTROL.RichTextBox(LOGSCONTAINER, LOGS, LOG_SIZE, LOG_LOCA, LOG_BCOL, LOG_FCOL, 1, 9, "(!) Waiting for you man ....\r\n");
+		    CONTROL.RichTextBox(LOGSCONTAINER, LOGS, LOG_SIZE, LOG_LOCA, LOG_BCOL, LOG_FCOL, 1, 9, "(?) Press F1 for shortcut options.\r\n");
 
 		    LOGS.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
 		    LOGS.ReadOnly = true;
@@ -434,6 +438,55 @@ namespace ThaDasher
 
 		    NUU.Click += (s, e) => ShowPorts(false);
 		    YES.Click += (s, e) => ShowPorts(true);
+
+		    void SetupEvents(Control con)
+		    {
+			con.KeyDown += (s, e) =>
+			{
+			    MessageBox.Show("");
+			    switch (e.KeyData)
+			    {
+				case Keys.F1:
+				    print("[Key Shortcuts]", Type.None);
+				    print("--: F1  >  SHOW HELP MENU", Type.Info);
+				    print("--: F2  >  CLEAR TEXT LOG", Type.Info);
+				    print("--: F3  >  LOAD PORTS FROM FILE", Type.Info);
+				    print("--: F4  >  SAVE RESULTS TO FILE", Type.Info);
+				    print("--: F5  >  CLOSE PORT SCANNER", Type.Info);
+				    break;
+
+				case Keys.F2:
+				    LOGS.Clear();
+				    break;
+
+				case Keys.F3:
+				    // LoadFromFile();  only if the file exists and the format is supported.
+				    break;
+
+				case Keys.F4:
+				    // SaveToFile();  only if ports are in lists opened and closed.
+				    break;
+
+				case Keys.F5:
+				    TOP.Close();
+				    break;
+			    };
+			};
+		    };
+
+		    SetupEvents(TOP);
+		    
+		    for (int s = 0; s < TOP.Controls.Count; s += 1)
+		    {
+			Control con = TOP.Controls[s];
+
+			for (int k = 0; k < con.Controls.Count; k += 1)
+			{
+			    SetupEvents(con.Controls[k]);
+			};
+
+			SetupEvents(con);
+		    };
 		}
 
 		catch
