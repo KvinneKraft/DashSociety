@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9639FB7A-38EE-4160-9106-B8BAE4BC1F7E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>WalshPingy</RootNamespace>
-    <AssemblyName>WalshPingy</AssemblyName>
+    <RootNamespace>DashSocietyF</RootNamespace>
+    <AssemblyName>DashSocietyF</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,11 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Headers\CommandHandler.cs" />
+    <Compile Include="Headers\Extensions\Pinger.cs" />
+    <Compile Include="Headers\StartScreen.cs" />
+    <Compile Include="Headers\TerminalPak.cs" />
+    <Compile Include="Headers\Tool.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Properties\App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

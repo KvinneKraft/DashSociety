@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Drawing;
 using System.Threading;
@@ -111,56 +112,30 @@ namespace ThaDasher
 
 	    public static void print(string m, Type type)
 	    {
-		string p = "(?)";
+		string p = "(?) ";
 
 		switch (type)
 		{
 		    case Type.None:
-			m = "\r" + m;
 			p = "";
 			break;
 		    case Type.Warning:
-			p = "(-)";
+			p = "(-) ";
 			break;
 		    case Type.Error:
 			TOGGLE.Text = "Start Scan";
-			p = "(!)";
+			p = "(!) ";
 			break;
 		    case Type.Success:
-			p = "(+)";
+			p = "(+) ";
 			break;
 		}
 
-		LOGS.AppendText($"{p} {m}\r\n");
+		LOGS.AppendText($"{p}{m}\r\n");
 	    }
 
 	    private static readonly List<int> closed = new List<int>();
 	    private static readonly List<int> opened = new List<int>();
-
-	    private static void ShowPorts(bool isOpen)
-	    {
-		string paw = "[Accessible Ports (TCP)]\r\n";
-
-		if (isOpen)
-		{
-		    foreach (var p in opened)
-		    {
-			paw += $"---: {p}\r\n";
-		    };
-		}
-
-		else
-		{
-		    paw = "[Inaccessible Ports (TCP)]\r\n";
-
-		    foreach (var p in closed)
-		    {
-			paw += $"---: {p}\r\n";
-		    };
-		};
-
-		LOGS.AppendText(paw);
-	    }
 
 	    public static Thread THREAD = null;
 
@@ -284,12 +259,12 @@ namespace ThaDasher
 			};
 		    };
 
-		    print("Scan has been started.  Please be patient!", Type.Success);
-
-		    var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		    print($"Started scanning {host} !", Type.Success);
 
 		    foreach (var port in ports)
 		    {
+			var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
 			try
 			{
 			    if (ports[ports.IndexOf(port)] == ports.Count / 2)
@@ -298,10 +273,11 @@ namespace ThaDasher
 			    };
 
 			    var result = sock.BeginConnect(host, port, null, null);
-			    var succes = result.AsyncWaitHandle.WaitOne(450, true);
+			    var succes = result.AsyncWaitHandle.WaitOne(175, true);
 
 			    if (sock.Connected)
 			    {
+				print("Discovered an open port!", Type.Info);
 				opened.Add(port);
 			    }
 
@@ -311,7 +287,7 @@ namespace ThaDasher
 			    };
 			}
 
-			catch
+			catch (Exception e)
 			{
 			    closed.Add(port);
 			};
@@ -330,6 +306,115 @@ namespace ThaDasher
 		{ IsBackground = true };
 
 		THREAD.Start();
+	    }
+
+	    private static void SaveToFile()
+	    {
+		if (closed.Count < 1 && opened.Count < 1)
+		{
+		    print("You must first run a scan.", Type.Error);
+		    return;
+		};
+
+		using (var save = new SaveFileDialog())
+		{
+		    try
+		    {
+			save.RestoreDirectory = true;
+			save.CheckPathExists = true;
+			save.ValidateNames = true;
+
+			save.Filter = "Text File|*.txt";
+			save.Title = "Save Scan Results";
+
+			var resu = save.ShowDialog();
+
+			if (resu != DialogResult.OK)
+			{
+			    print("No file was specified.", Type.Warning);
+			    return;
+			};
+
+			var file = save.FileName;
+			var hand = File.Create(file);
+
+			if (hand == null)
+			{
+			    print("An error occurred while creating your file.", Type.Error);
+			    return;
+			};
+
+			hand.Close();
+
+			var format = new string[opened.Count + closed.Count];
+
+			for (int k = 0; k < opened.Count; k += 1)
+			{
+			    format[k] = $"-==: {opened[k]}";
+
+			    if (k == 0)
+			    {
+				format[k] = $"Scan Date: {DateTime.Now}\r\nHost: {TargetContainer.IP_BOX.Text}\r\n------------------\r\n[Open TCP Ports]\r\n" + format[k];
+			    };
+			};
+
+			for (int k = opened.Count; k < opened.Count + closed.Count - 1; k += 1)
+			{
+			    format[k] = $"-==: {closed[k - 1]}";
+
+			    if (k == opened.Count)
+			    {
+				format[k] = $"\r\n[Closed TCP Ports]\r\n" + format[k];
+			    };
+			};
+
+			File.WriteAllLines(file, format);
+
+			print($"Saved file to \"{file}\" !", Type.Info);
+		    }
+
+		    catch
+		    {
+			print("An unknown error has occurred while exporting your file.", Type.Error);
+		    };
+		};
+	    }
+
+	    private static void PrintPorts(bool isOpen)
+	    {
+		if (closed.Count < 1 && opened.Count < 1)
+		{
+		    print("You must first run a scan.", Type.Error);
+		    return;
+		};
+
+		string paw = "[Accessible Ports (TCP)]\r\n";
+
+		if (isOpen)
+		{
+		    foreach (var p in opened)
+		    {
+			paw += $"-==: {p}\r\n";
+		    };
+		}
+
+		else
+		{
+		    paw = "[Inaccessible Ports (TCP)]\r\n";
+
+		    foreach (var p in closed)
+		    {
+			paw += $"-==: {p}\r\n";
+		    };
+		};
+
+		if (!paw.Contains("-==:"))
+		{
+		    print("There are no ports to show.", Type.Error);
+		    return;
+		};
+
+		LOGS.AppendText(paw);
 	    }
 
 	    public static void InitializeContainer(Form TOP)
@@ -436,43 +521,34 @@ namespace ThaDasher
 
 		    CONTROL.Button(CONTAINER, NUU, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, "Nuu", Color.Empty);
 
-		    NUU.Click += (s, e) => ShowPorts(false);
-		    YES.Click += (s, e) => ShowPorts(true);
+		    NUU.Click += (s, e) => PrintPorts(false);
+		    YES.Click += (s, e) => PrintPorts(true);
 
 		    void SetupEvents(Control con)
 		    {
 			con.KeyDown += (s, e) =>
 			{
-			    MessageBox.Show("");
 			    switch (e.KeyData)
 			    {
 				case Keys.F1:
-				    print("[Key Shortcuts]", Type.None);
-				    print("--: F1  >  SHOW HELP MENU", Type.Info);
-				    print("--: F2  >  CLEAR TEXT LOG", Type.Info);
-				    print("--: F3  >  LOAD PORTS FROM FILE", Type.Info);
-				    print("--: F4  >  SAVE RESULTS TO FILE", Type.Info);
-				    print("--: F5  >  CLOSE PORT SCANNER", Type.Info);
+				    print("\r\n[Key Shortcuts]", Type.None);
+				    print("-==: F1   =  SHOW HELP MENU", Type.None);
+				    print("-==: F2  =  CLEAR TEXT LOG", Type.None);
+				    print("-==: F3  =  SAVE RESULTS TO FILE", Type.None);
+				    print("-==: F4  =  CLOSE PORT SCANNER\r\n", Type.None);
 				    break;
-
 				case Keys.F2:
 				    LOGS.Clear();
 				    break;
-
 				case Keys.F3:
-				    // LoadFromFile();  only if the file exists and the format is supported.
+				    SaveToFile();
 				    break;
-
 				case Keys.F4:
-				    // SaveToFile();  only if ports are in lists opened and closed.
-				    break;
-
-				case Keys.F5:
 				    TOP.Close();
 				    break;
 			    };
 			};
-		    };
+		    }
 
 		    SetupEvents(TOP);
 		    
@@ -530,7 +606,7 @@ namespace ThaDasher
 	    MaximizeBox = false;
 	    MinimizeBox = false;
 
-	    Name = "PortScanner";
+	    Name = "Port Scanner";
 	    Text = "Port Scanner";
 
 	    Closing += (s, e) =>
@@ -538,12 +614,7 @@ namespace ThaDasher
 		OPS.CONTAINER.Hide();
 		OPS.TOGGLE.Text = "Start Scan";
 	    };
-
-	    Shown += (s, e) =>
-	    {
-		OPS.CONTAINER.Hide();
-	    };
-
+	    
 	    ResumeLayout(false);
 	}
     }
