@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace DashSocietyF
 {
@@ -77,6 +78,25 @@ namespace DashSocietyF
 	    if (r)
 	    {
 		Console.ForegroundColor = t;
+	    };
+	}
+
+	static public bool isInteger(string v, [Optional] out int r)
+	{
+	    try
+	    {
+		if (!int.TryParse(v, out r))
+		{
+		    throw new Exception("!");
+		};
+		
+		return true;
+	    }
+
+	    catch
+	    {
+		r = -1;
+		return false;
 	    };
 	}
     }

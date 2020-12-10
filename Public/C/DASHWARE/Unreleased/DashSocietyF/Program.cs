@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using System.Net.Mail;
+
 namespace DashSocietyF
 {   
     public class Program
@@ -13,8 +15,9 @@ namespace DashSocietyF
 	{
 	    Console.Title = "( Dash Society Framework 1.0 )";
 
+	    DashAuth.Show();
 	    StartScreen.Show();
-	    TerminalPak.Show();
+	    Terminal.Show();
 
 	    Console.ReadKey();
 	}

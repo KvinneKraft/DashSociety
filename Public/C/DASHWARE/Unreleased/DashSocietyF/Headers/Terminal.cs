@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 namespace DashSocietyF
 {
-    public class TerminalPak
+    public class Terminal
     {
 	static void GetCommander()
 	{
-	    string creature = "&f(&c/&dusr&c/&dplot&c/&dDashSociety&f)>&c ";
+	    string creature = "&c--:(/&eusr&c/&eplot&c/&eDashSociety&c)>&a ";
 	    Tool.TranslateColors(creature, r: false);
 	}
 
@@ -19,7 +19,7 @@ namespace DashSocietyF
 	{
 	    if (data.Length < 1)
 	    {
-		Tool.TranslateColors("&8(&c-&8) &fYou must type something man.");
+		Tool.TranslateColors("&8(&c-&8) &fYou must type something man.\r\n");
 		return;
 	    };
 

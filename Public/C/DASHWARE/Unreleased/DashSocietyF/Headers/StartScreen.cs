@@ -22,13 +22,13 @@ namespace DashSocietyF
 
 	    var message = new List<string>()
 	    {
-		 "&c%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",
-		$"&c%                                        &c%",
-		$"&c% &f( Dash Society Framework 1.0 ) &c%",
-		$"&c%                                        &c%",
-		$"&c% &fType '!help' for help mah dude. &c%",
-		$"&c%                                        &c%",
-		 "&c%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n"
+		 "&3[########################################]",
+		$"&3|                                        &3|",
+		$"&3|      &f(Dash Society Framework 1.0)      &3|",
+		$"&3|                                        &3|",
+		$"&3|     &fType '!help' for help mah dude     &3|",
+		$"&3|                                        &3|",
+		 "&3[########################################]"
 	    };
 
 	    foreach (var m in message)

@@ -46,8 +46,9 @@
     <Compile Include="Headers\CommandHandler.cs" />
     <Compile Include="Headers\Extensions\Pinger.cs" />
     <Compile Include="Headers\StartScreen.cs" />
-    <Compile Include="Headers\TerminalPak.cs" />
-    <Compile Include="Headers\Tool.cs" />
+    <Compile Include="Headers\Terminal.cs" />
+    <Compile Include="Headers\Tools.cs" />
+    <Compile Include="Headers\DashAuth.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
