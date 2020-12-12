@@ -43,12 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Headers\CommandHandler.cs" />
+    <Compile Include="Headers\Core\CommandHandler.cs" />
+    <Compile Include="Headers\Extensions\Mailer.cs" />
     <Compile Include="Headers\Extensions\Pinger.cs" />
-    <Compile Include="Headers\StartScreen.cs" />
-    <Compile Include="Headers\Terminal.cs" />
-    <Compile Include="Headers\Tools.cs" />
-    <Compile Include="Headers\DashAuth.cs" />
+    <Compile Include="Headers\Core\StartScreen.cs" />
+    <Compile Include="Headers\Core\Terminal.cs" />
+    <Compile Include="Headers\Core\Tools.cs" />
+    <Compile Include="Headers\Core\DashAuth.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
