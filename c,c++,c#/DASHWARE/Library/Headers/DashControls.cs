@@ -15,289 +15,289 @@ namespace ThaDasher
 {
     public class DashControls
     {
-	readonly DashTools TOOL = new DashTools();
+		readonly DashTools TOOL = new DashTools();
 
-	private void SendError(string M)
-	{
-	    MessageBox.Show($"It appears an error has occurred while making use of the DashControls library.\r\n\r\nIf you would like to help me out you could perhaps send the following to KvinneKraft@protonmail.com:\r\n{M}\r\n\r\nYou may now press OK in order to exit this session.", "Oh No!", MessageBoxButtons.OK, MessageBoxIcons.ERROR);
-	    Application.Exit();
-	}
-
-	public class MENUBAR
-	{
-	    readonly public static PictureBox BAR = new PictureBox();
-	    readonly public static PictureBox LOGO = new PictureBox();
-
-	    readonly public static Label TITLE = new Label();
-
-	    readonly public static Button CLOSE = new Button();
-	    readonly public static Button MINIM = new Button();
-
-	    public enum STYLE
-	    {
-		THIN = 26,
-		THIC = 28,
-		GIAT = 36,
-	    }
-	}
-
-	public void MenuBar(MENUBAR INST, Form TOP, int STYLE, bool hasBorder, Color BAR_COLA, Color BOR_COLA)
-	{
-	    try
-	    {
-		if (BAR_COLA.IsEmpty) BAR_COLA = Color.FromArgb(8, 8, 8);
-
-		if (hasBorder)
+		private void SendError(string M)
 		{
-		    if (BOR_COLA.IsEmpty) BOR_COLA = Color.FromArgb(8, 8, 8);
+			MessageBox.Show($"It appears an error has occurred while making use of the DashControls library.\r\n\r\nIf you would like to help me out you could perhaps send the following to KvinneKraft@protonmail.com:\r\n{M}\r\n\r\nYou may now press OK in order to exit this session.", "Oh No!", MessageBoxButtons.OK, MessageBoxIcons.ERROR);
+			Application.Exit();
+		}
 
-		    var BOR_SIZE = new Size(TOP.Width - 1, TOP.Height - 1);
-		    var BOR_LOCA = new Point(0, 0);
-
-		    TOOL.PaintRectangle(TOP, 2, BOR_SIZE, BOR_LOCA, BOR_COLA);
-		};
-
-		var BAR_SIZE = new Size(TOP.Width - 2, STYLE);
-		var BAR_LOCA = new Point(1, 1);
-
-		Image(TOP, INST.BAR, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
-
-		var LOGO_IMAG = Properties.Resources.ICON_PNG;
-		var LOGO_SIZE = LOGO_IMAG.Size;
-		var LOGO_LOCA = new Point(4, (BAR_SIZE.Height - LOGO_IMAG.Height) / 2);
-
-		Image(INST.BAR, INST.LOGO, LOGO_SIZE, LOGO_LOCA, LOGO_IMAG, BAR_COLA);
-
-		var TITLE_TEXT = TOP.Text;
-		var TITLE_FONT = TOOL.GetFont(1, 8);
-		var TITLE_SIZE = TextRenderer.MeasureText(TITLE_TEXT, TITLE_FONT);
-		var TITLE_LOCA = new Point(LOGO_SIZE.Width + LOGO_LOCA.X + 25, (BAR_SIZE.Height - TITLE_SIZE.Height) / 2);
-		var TITLE_FCOL = Color.White;
-
-		Label(INST.BAR, INST.TITLE, TITLE_SIZE, TITLE_LOCA, BAR_COLA, TITLE_FCOL, 1, 8, TITLE_TEXT);
-
-		var BUTTON_SIZE = new Size(75, BAR_SIZE.Height);
-		var BUTTON_LOCA = new Point(BAR_SIZE.Width - BUTTON_SIZE.Width, 0);
-		var BUTTON_FCOL = Color.White;
-		var BUTTON_TEXT = "X";
-
-		Button(INST.BAR, INST.CLOSE, BUTTON_SIZE, BUTTON_LOCA, BAR_COLA, BUTTON_FCOL, 1, 10, BUTTON_TEXT, Color.Empty);
-
-		BUTTON_LOCA.X -= BUTTON_SIZE.Width;
-		BUTTON_TEXT = "-";
-
-		INST.CLOSE.Click += (s, e) =>
-		    TOP.Close();
-
-		Button(INST.BAR, INST.MINIM, BUTTON_SIZE, BUTTON_LOCA, BAR_COLA, BUTTON_FCOL, 1, 10, BUTTON_TEXT, Color.Empty);
-
-		INST.MINIM.Click += (s, e) =>
-		    TOP.SendToBack();
-
-		TOOL.Interactive(INST.BAR, TOP);
-
-		foreach (Control con in INST.BAR.Controls)
+		public class MENUBAR
 		{
-		    if (!(con is Button))
-		    {
-			TOOL.Interactive(con, TOP);
-		    };
-		};
-	    }
+			readonly public static PictureBox BAR = new PictureBox();
+			readonly public static PictureBox LOGO = new PictureBox();
 
-	    catch (Exception e)
-	    {
-		SendError(e.Message);
-	    }
-	}
+			readonly public static Label TITLE = new Label();
 
-	public void TextBox(Control CON, TextBox OBJECT, Size TSIZE, Point TLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, Color BORDERCOLOR, bool HASBORDER = false, int BORDERSIZE = 0, bool READONLY = false, bool MULTILINE = false, bool SCROLLBAR = false, bool FIXEDSIZE = true)
-	{
-	    try
-	    {
-		TOOL.Resize(OBJECT, TSIZE);
+			readonly public static Button CLOSE = new Button();
+			readonly public static Button MINIM = new Button();
 
-		OBJECT.Location = TOOL.GetCenter(CON, OBJECT, TLOCATION);
+			public enum STYLE
+			{
+			THIN = 26,
+			THIC = 28,
+			GIAT = 36,
+			}
+		}
 
-		if (HASBORDER)
-		    TOOL.PaintRectangle(CON, BORDERSIZE, TSIZE, TLOCATION, BORDERCOLOR);
-
-		OBJECT.BackColor = BCOLOR;
-		OBJECT.ForeColor = FCOLOR;
-
-		OBJECT.Font = TOOL.GetFont(FTYPE, FSIZE);
-
-		OBJECT.ReadOnly = READONLY;
-		OBJECT.Multiline = MULTILINE;
-
-		OBJECT.TabStop = false;
-
-		if (FIXEDSIZE)
+		public void MenuBar(MENUBAR INST, Form TOP, int STYLE, bool hasBorder, Color BAR_COLA, Color BOR_COLA)
 		{
-		    var FIXEDBOX = new PictureBox();
+			try
+			{
+			if (BAR_COLA.IsEmpty) BAR_COLA = Color.FromArgb(8, 8, 8);
 
-		    Image(CON, FIXEDBOX, TSIZE, TLOCATION, null, BCOLOR);
+			if (hasBorder)
+			{
+				if (BOR_COLA.IsEmpty) BOR_COLA = Color.FromArgb(8, 8, 8);
 
-		    TOOL.Resize(OBJECT, new Size(TSIZE.Width - 4, OBJECT.PreferredHeight - 4));
-		    OBJECT.Location = TOOL.GetCenter(FIXEDBOX, OBJECT, new Point(-1, -1));
+				var BOR_SIZE = new Size(TOP.Width - 1, TOP.Height - 1);
+				var BOR_LOCA = new Point(0, 0);
 
-		    FIXEDBOX.Click += (s, e) => OBJECT.Select();
+				TOOL.PaintRectangle(TOP, 2, BOR_SIZE, BOR_LOCA, BOR_COLA);
+			};
 
-		    CON = FIXEDBOX;
-		};
+			var BAR_SIZE = new Size(TOP.Width - 2, STYLE);
+			var BAR_LOCA = new Point(1, 1);
 
-		if (SCROLLBAR)
-		    OBJECT.ScrollBars = ScrollBars.Vertical;
+			Image(TOP, INST.BAR, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
 
-		CON.Controls.Add(OBJECT);
-	    }
+			var LOGO_IMAG = Properties.Resources.ICON_PNG;
+			var LOGO_SIZE = LOGO_IMAG.Size;
+			var LOGO_LOCA = new Point(4, (BAR_SIZE.Height - LOGO_IMAG.Height) / 2);
 
-	    catch (Exception e)
-	    {
-		SendError(e.Message);
-	    }
-	}
+			Image(INST.BAR, INST.LOGO, LOGO_SIZE, LOGO_LOCA, LOGO_IMAG, BAR_COLA);
 
-	public void Button(Control CON, Button OBJECT, Size BSIZE, Point BLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, string TEXT, Color BORDERCOLOR, bool HASBORDER = false, int BORDERSIZE = 0)
-	{
-	    try
-	    {
-		TOOL.Resize(OBJECT, BSIZE);
+			var TITLE_TEXT = TOP.Text;
+			var TITLE_FONT = TOOL.GetFont(1, 8);
+			var TITLE_SIZE = TextRenderer.MeasureText(TITLE_TEXT, TITLE_FONT);
+			var TITLE_LOCA = new Point(LOGO_SIZE.Width + LOGO_LOCA.X + 25, (BAR_SIZE.Height - TITLE_SIZE.Height) / 2);
+			var TITLE_FCOL = Color.White;
 
-		OBJECT.Location = TOOL.GetCenter(CON, OBJECT, BLOCATION);
+			Label(INST.BAR, INST.TITLE, TITLE_SIZE, TITLE_LOCA, BAR_COLA, TITLE_FCOL, 1, 8, TITLE_TEXT);
 
-		if (HASBORDER)
+			var BUTTON_SIZE = new Size(75, BAR_SIZE.Height);
+			var BUTTON_LOCA = new Point(BAR_SIZE.Width - BUTTON_SIZE.Width, 0);
+			var BUTTON_FCOL = Color.White;
+			var BUTTON_TEXT = "X";
+
+			Button(INST.BAR, INST.CLOSE, BUTTON_SIZE, BUTTON_LOCA, BAR_COLA, BUTTON_FCOL, 1, 10, BUTTON_TEXT, Color.Empty);
+
+			BUTTON_LOCA.X -= BUTTON_SIZE.Width;
+			BUTTON_TEXT = "-";
+
+			INST.CLOSE.Click += (s, e) =>
+				TOP.Close();
+
+			Button(INST.BAR, INST.MINIM, BUTTON_SIZE, BUTTON_LOCA, BAR_COLA, BUTTON_FCOL, 1, 10, BUTTON_TEXT, Color.Empty);
+
+			INST.MINIM.Click += (s, e) =>
+				TOP.SendToBack();
+
+			TOOL.Interactive(INST.BAR, TOP);
+
+			foreach (Control con in INST.BAR.Controls)
+			{
+				if (!(con is Button))
+				{
+				TOOL.Interactive(con, TOP);
+				};
+			};
+			}
+
+			catch (Exception e)
+			{
+			SendError(e.Message);
+			}
+		}
+
+		public void TextBox(Control CON, TextBox OBJECT, Size TSIZE, Point TLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, Color BORDERCOLOR, bool HASBORDER = false, int BORDERSIZE = 0, bool READONLY = false, bool MULTILINE = false, bool SCROLLBAR = false, bool FIXEDSIZE = true)
 		{
-		    TOOL.PaintRectangle(CON, BORDERSIZE, BSIZE, BLOCATION, BORDERCOLOR);
-		};
+			try
+			{
+			TOOL.Resize(OBJECT, TSIZE);
 
-		OBJECT.FlatAppearance.BorderColor = BCOLOR;
-		OBJECT.FlatAppearance.BorderSize = 0;
+			OBJECT.Location = TOOL.GetCenter(CON, OBJECT, TLOCATION);
 
-		OBJECT.FlatStyle = FlatStyle.Flat;
-		OBJECT.TabStop = false;
+			if (HASBORDER)
+				TOOL.PaintRectangle(CON, BORDERSIZE, TSIZE, TLOCATION, BORDERCOLOR);
 
-		OBJECT.BackColor = BCOLOR;
-		OBJECT.ForeColor = FCOLOR;
+			OBJECT.BackColor = BCOLOR;
+			OBJECT.ForeColor = FCOLOR;
 
-		OBJECT.Font = TOOL.GetFont(FTYPE, FSIZE);
-		OBJECT.Text = TEXT;
+			OBJECT.Font = TOOL.GetFont(FTYPE, FSIZE);
 
-		CON.Controls.Add(OBJECT);
-	    }
+			OBJECT.ReadOnly = READONLY;
+			OBJECT.Multiline = MULTILINE;
 
-	    catch (Exception e)
-	    {
-		SendError(e.Message);
-	    }
-	}
+			OBJECT.TabStop = false;
 
-	public void Image(Control CON, PictureBox OBJECT, Size ISIZE, Point ILOCATION, Image IMAGE, Color BCOLOR)
-	{
-	    try
-	    {
-		TOOL.Resize(OBJECT, ISIZE);
+			if (FIXEDSIZE)
+			{
+				var FIXEDBOX = new PictureBox();
 
-		OBJECT.Location = TOOL.GetCenter(CON, OBJECT, ILOCATION);
+				Image(CON, FIXEDBOX, TSIZE, TLOCATION, null, BCOLOR);
 
-		OBJECT.BorderStyle = BorderStyle.None;
-		OBJECT.TabStop = false;
+				TOOL.Resize(OBJECT, new Size(TSIZE.Width - 4, OBJECT.PreferredHeight - 4));
+				OBJECT.Location = TOOL.GetCenter(FIXEDBOX, OBJECT, new Point(-1, -1));
 
-		if (BCOLOR == Color.Empty)
-		    BCOLOR = Color.Transparent;
+				FIXEDBOX.Click += (s, e) => OBJECT.Select();
 
-		OBJECT.BackColor = BCOLOR;
-		OBJECT.Image = IMAGE;
+				CON = FIXEDBOX;
+			};
 
-		CON.Controls.Add(OBJECT);
-	    }
+			if (SCROLLBAR)
+				OBJECT.ScrollBars = ScrollBars.Vertical;
 
-	    catch (Exception e)
-	    {
-		SendError(e.Message);
-	    }
-	}
+			CON.Controls.Add(OBJECT);
+			}
 
-	public void Label(Control CON, Label OBJECT, Size LSIZE, Point LLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, string TEXT)
-	{
-	    try
-	    {
-		var FONT = TOOL.GetFont(FTYPE, FSIZE);
+			catch (Exception e)
+			{
+			SendError(e.Message);
+			}
+		}
 
-		if (LSIZE == Size.Empty)
-		    LSIZE = TextRenderer.MeasureText(TEXT, FONT);
+		public void Button(Control CON, Button OBJECT, Size BSIZE, Point BLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, string TEXT, Color BORDERCOLOR, bool HASBORDER = false, int BORDERSIZE = 0)
+		{
+			try
+			{
+			TOOL.Resize(OBJECT, BSIZE);
 
-		TOOL.Resize(OBJECT, LSIZE);
+			OBJECT.Location = TOOL.GetCenter(CON, OBJECT, BLOCATION);
 
-		OBJECT.Location = TOOL.GetCenter(CON, OBJECT, LLOCATION);
+			if (HASBORDER)
+			{
+				TOOL.PaintRectangle(CON, BORDERSIZE, BSIZE, BLOCATION, BORDERCOLOR);
+			};
 
-		OBJECT.BorderStyle = BorderStyle.None;
-		OBJECT.FlatStyle = FlatStyle.Flat;
+			OBJECT.FlatAppearance.BorderColor = BCOLOR;
+			OBJECT.FlatAppearance.BorderSize = 0;
 
-		OBJECT.TabStop = false;
+			OBJECT.FlatStyle = FlatStyle.Flat;
+			OBJECT.TabStop = false;
 
-		OBJECT.ForeColor = FCOLOR;
-		OBJECT.BackColor = BCOLOR;
+			OBJECT.BackColor = BCOLOR;
+			OBJECT.ForeColor = FCOLOR;
 
-		OBJECT.Font = FONT;
-		OBJECT.Text = TEXT;
+			OBJECT.Font = TOOL.GetFont(FTYPE, FSIZE);
+			OBJECT.Text = TEXT;
 
-		CON.Controls.Add(OBJECT);
-	    }
+			CON.Controls.Add(OBJECT);
+			}
 
-	    catch (Exception e)
-	    {
-		SendError(e.Message);
-	    }
-	}
+			catch (Exception e)
+			{
+			SendError(e.Message);
+			}
+		}
 
-	public void RichTextBox(Control CON, RichTextBox OBJECT, Size RSIZE, Point RLOCATION, Color FCOLOR, Color BCOLOR, int FTYPE, int FSIZE, string TEXT)
-	{
-	    try
-	    {
-		var FONT = TOOL.GetFont(FTYPE, FSIZE);
+		public void Image(Control CON, PictureBox OBJECT, Size ISIZE, Point ILOCATION, Image IMAGE, Color BCOLOR)
+		{
+			try
+			{
+			TOOL.Resize(OBJECT, ISIZE);
 
-		if (RSIZE == Size.Empty)
-		    RSIZE = TextRenderer.MeasureText(TEXT, FONT);
+			OBJECT.Location = TOOL.GetCenter(CON, OBJECT, ILOCATION);
 
-		TOOL.Resize(OBJECT, RSIZE);
+			OBJECT.BorderStyle = BorderStyle.None;
+			OBJECT.TabStop = false;
 
-		OBJECT.BorderStyle = BorderStyle.None;
-		OBJECT.TabStop = false;
+			if (BCOLOR == Color.Empty)
+				BCOLOR = Color.Transparent;
 
-		OBJECT.Location = TOOL.GetCenter(CON, OBJECT, RLOCATION);
+			OBJECT.BackColor = BCOLOR;
+			OBJECT.Image = IMAGE;
 
-		OBJECT.BackColor = BCOLOR;
-		OBJECT.ForeColor = FCOLOR;
+			CON.Controls.Add(OBJECT);
+			}
 
-		OBJECT.Font = FONT;
-		OBJECT.Text = TEXT;
+			catch (Exception e)
+			{
+			SendError(e.Message);
+			}
+		}
 
-		CON.Controls.Add(OBJECT);
-	    }
+		public void Label(Control CON, Label OBJECT, Size LSIZE, Point LLOCATION, Color BCOLOR, Color FCOLOR, int FTYPE, int FSIZE, string TEXT)
+		{
+			try
+			{
+			var FONT = TOOL.GetFont(FTYPE, FSIZE);
 
-	    catch (Exception e)
-	    {
-		SendError(e.Message);
-	    }
-	}
+			if (LSIZE == Size.Empty)
+				LSIZE = TextRenderer.MeasureText(TEXT, FONT);
 
-	public void ScrollBar(Control CON, PictureBox CONT1, Color COLA1, PictureBox CONT2, Color COLA2, Size SIZE, Point LOCA)
-	{
-	    try
-	    {
-		Image(CON, CONT1, SIZE, LOCA, null, COLA1);
+			TOOL.Resize(OBJECT, LSIZE);
 
-		var BAR_SIZE = new Size(SIZE.Width - 10, SIZE.Height - 10);
-		var BAR_LOCA = new Point(5, 5);
+			OBJECT.Location = TOOL.GetCenter(CON, OBJECT, LLOCATION);
 
-		Image(CONT1, CONT2, BAR_SIZE, BAR_LOCA, null, COLA2);
-	    }
+			OBJECT.BorderStyle = BorderStyle.None;
+			OBJECT.FlatStyle = FlatStyle.Flat;
 
-	    catch (Exception e)
-	    {
-		SendError(e.Message);
-	    }
-	}
+			OBJECT.TabStop = false;
+
+			OBJECT.ForeColor = FCOLOR;
+			OBJECT.BackColor = BCOLOR;
+
+			OBJECT.Font = FONT;
+			OBJECT.Text = TEXT;
+
+			CON.Controls.Add(OBJECT);
+			}
+
+			catch (Exception e)
+			{
+			SendError(e.Message);
+			}
+		}
+
+		public void RichTextBox(Control CON, RichTextBox OBJECT, Size RSIZE, Point RLOCATION, Color FCOLOR, Color BCOLOR, int FTYPE, int FSIZE, string TEXT)
+		{
+			try
+			{
+			var FONT = TOOL.GetFont(FTYPE, FSIZE);
+
+			if (RSIZE == Size.Empty)
+				RSIZE = TextRenderer.MeasureText(TEXT, FONT);
+
+			TOOL.Resize(OBJECT, RSIZE);
+
+			OBJECT.BorderStyle = BorderStyle.None;
+			OBJECT.TabStop = false;
+
+			OBJECT.Location = TOOL.GetCenter(CON, OBJECT, RLOCATION);
+
+			OBJECT.BackColor = BCOLOR;
+			OBJECT.ForeColor = FCOLOR;
+
+			OBJECT.Font = FONT;
+			OBJECT.Text = TEXT;
+
+			CON.Controls.Add(OBJECT);
+			}
+
+			catch (Exception e)
+			{
+			SendError(e.Message);
+			}
+		}
+
+		public void ScrollBar(Control CON, PictureBox CONT1, Color COLA1, PictureBox CONT2, Color COLA2, Size SIZE, Point LOCA)
+		{
+			try
+			{
+			Image(CON, CONT1, SIZE, LOCA, null, COLA1);
+
+			var BAR_SIZE = new Size(SIZE.Width - 10, SIZE.Height - 10);
+			var BAR_LOCA = new Point(5, 5);
+
+			Image(CONT1, CONT2, BAR_SIZE, BAR_LOCA, null, COLA2);
+			}
+
+			catch (Exception e)
+			{
+			SendError(e.Message);
+			}
+		}
     }
 }

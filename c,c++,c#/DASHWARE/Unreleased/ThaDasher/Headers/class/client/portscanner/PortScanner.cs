@@ -287,7 +287,7 @@ namespace ThaDasher
 			    };
 			}
 
-			catch (Exception e)
+			catch
 			{
 			    closed.Add(port);
 			};

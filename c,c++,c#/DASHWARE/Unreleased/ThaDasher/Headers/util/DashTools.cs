@@ -94,7 +94,7 @@ namespace ThaDasher
 		LOCATION.Y = (CON.Height - OBJECT.Height) / 2;
 
 	    if (LOCATION.X < 0)
-		LOCATION.X = (CON.Height - OBJECT.Height) / 2;
+		LOCATION.X = (CON.Width - OBJECT.Width) / 2;
 
 	    return LOCATION;
 	}

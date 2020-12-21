@@ -1,16 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Net.Mail;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace DashSocietyF
 {
     public class Mailer
     {
-	private static void HandleMailError() =>
-	    Tool.TranslateColors("&8(&c-&8) &fYou may not use this functionality.  You lack requirements.");
-	
 	private static bool IsEmail(string address)
 	{
 	    try
@@ -28,6 +27,44 @@ namespace DashSocietyF
 		return false;
 	    };
 	}
+
+	private static void MailHelp()
+	{
+	    string message = 
+	    (
+		"\r\n" +
+		"\r\n" +
+		"\r\n" +
+		"\r\n" +
+		"\r\n"
+	    );
+
+	    Tool.TranslateColors(message);
+	}
+
+	public static void Run(string[] args)
+	{
+	    // !mail --TARGET person@gmail.com 
+	    if (args.Length <= 1)
+	    {
+		MailHelp();
+		return;
+	    };
+
+	    var para = args.ToList();
+
+	    para.RemoveAt(0);
+
+	    for (int k = 0; k < para.Count; k += 1)
+		para[k] = para[k].ToLower();
+
+	    string Get(string a) =>
+		para[para.IndexOf(a) + 1].ToLower();
+	    
+	}
+
+	private static void HandleMailError() =>
+	    Tool.TranslateColors("&8(&c-&8) &fYou may not use this functionality.  You lack requirements.");
 
 	public static void Show()
 	{
@@ -63,17 +100,15 @@ namespace DashSocietyF
 
 		    var host = File.ReadAllText(@"data\mail\host.txt");
 
-		    for (var k = 0; k < emails.Count; k += 250)
+		    for (var k = 0; k < emails.Count; k += 1)
 		    {
 			using (var client = new SmtpClient(host))
 			{
 			    var password = File.ReadAllText(@"data\mail\password.txt");
 			    var username = File.ReadAllText(@"data\mail\username.txt");
 
-			    Console.WriteLine(password + "!" + username);
-
 			    client.Credentials = new NetworkCredential(username, password);
-			    client.EnableSsl = true;
+			    client.EnableSsl = false;
 
 			    using (var message = new MailMessage())
 			    {
@@ -85,24 +120,15 @@ namespace DashSocietyF
 
 				message.IsBodyHtml = true;
 				message.Body = html_body;
-
-				message.To.Add($"yes{new Random().Next(1000, 5000)}@gmail.com");
-
-				var recipients = new List<string>();
+				
 				var recips = "";
 
-				for (int s = k; s < 250; s += 1)
-				{
-				    if (IsEmail(emails[s]))
-				    {
-					message.To.Add(emails[s]);
-					recips += $"{emails[s]};";
-				    };
-				};
-
+				message.To.Add(emails[k]);
+				recips += $"{emails[k]};";
+				
 				client.Send(message);
 				
-				Tool.TranslateColors($"&8(&a+&8) &fEmail sent to: {recips} | {message.CC.Count} | {message.To.Count}\r\n");
+				Tool.TranslateColors($"&8(&a+&8) &fEmail sent to: {recips}\r\n");
 			    };
 			};
 		    };
@@ -115,11 +141,10 @@ namespace DashSocietyF
 
 	    catch (Exception e)
 	    {
-		Console.WriteLine(e.Message);
 		Tool.TranslateColors($"&8(&6!&8) &fOn cooldown, waiting....");
-		System.Threading.Thread.Sleep(60000);
+		Thread.Sleep(60000);
+
 		goto redo;
-		//HandleMailError();
 	    };
 	}
     }

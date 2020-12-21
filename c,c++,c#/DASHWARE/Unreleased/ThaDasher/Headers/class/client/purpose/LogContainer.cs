@@ -52,7 +52,7 @@ namespace ThaDasher
 		{
 		    var TEXT =
 		    (
-			"Waiting for you to do something....\r\n"
+			"-= Press F1 for shortcut keys =-\r\n"
 		    );
 
 		    return TEXT;

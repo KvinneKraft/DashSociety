@@ -49,22 +49,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Headers\class\LogContainer.cs" />
-    <Compile Include="Headers\class\LoginDialog.cs" />
-    <Compile Include="Headers\class\MenuBar.cs" />
-    <Compile Include="Headers\class\PortScanner.cs">
+    <Compile Include="Headers\class\network\DashNet.cs" />
+    <Compile Include="Headers\class\client\purpose\LogContainer.cs" />
+    <Compile Include="Headers\class\client\authy\LoginDialog.cs" />
+    <Compile Include="Headers\class\client\purpose\MenuBar.cs" />
+    <Compile Include="Headers\class\network\methods\http\Dashloris4.cs" />
+    <Compile Include="Headers\class\network\methods\http\HFlood.cs" />
+    <Compile Include="Headers\class\network\methods\http\PutPostGet.cs" />
+    <Compile Include="Headers\class\network\methods\http\Slowloris2.cs" />
+    <Compile Include="Headers\class\network\methods\MethodConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Headers\class\SettingsContainer.cs" />
-    <Compile Include="Headers\class\Splash.cs">
+    <Compile Include="Headers\class\client\portscanner\PortScanner.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Headers\class\StartInfoDialog.cs">
+    <Compile Include="Headers\class\client\purpose\SettingsContainer.cs" />
+    <Compile Include="Headers\class\client\splash\Splash.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Headers\class\TargetContainer.cs" />
-    <Compile Include="Headers\class\TaskbarContainer.cs" />
-    <Compile Include="Headers\class\UtilInfoDialog.cs" />
+    <Compile Include="Headers\class\client\authy\StartInfoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Headers\class\client\purpose\TargetContainer.cs" />
+    <Compile Include="Headers\class\client\purpose\TaskbarContainer.cs" />
+    <Compile Include="Headers\class\client\purpose\UtilInfoDialog.cs" />
+    <Compile Include="Headers\class\network\methods\tcp\LongSocks.cs" />
     <Compile Include="Headers\util\DashControls.cs" />
     <Compile Include="Headers\util\DashTools.cs" />
     <Compile Include="Interface.cs">
@@ -75,11 +84,14 @@
     </Compile>
     <Compile Include="Properties\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Headers\class\PortScanner.resx">
+    <EmbeddedResource Include="Headers\class\client\portscanner\PortScanner.resx">
       <DependentUpon>PortScanner.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Headers\class\Splash.resx">
+    <EmbeddedResource Include="Headers\class\client\splash\Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Headers\class\network\methods\MethodConfig.resx">
+      <DependentUpon>MethodConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Interface.resx">
       <DependentUpon>Interface.cs</DependentUpon>
@@ -126,6 +138,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\PORTSCANNER\ICON_PNG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Headers\class\client\pinger\" />
+    <Folder Include="Headers\class\network\methods\udp\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

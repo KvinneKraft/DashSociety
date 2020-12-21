@@ -37,6 +37,11 @@
 	    else if (a == "!ping")
 	    {
 		Pinger.Run(args);
+	    }
+
+	    else if (a == "!mail")
+	    {
+		Mailer.Run(args);
 	    };
 	}
     }

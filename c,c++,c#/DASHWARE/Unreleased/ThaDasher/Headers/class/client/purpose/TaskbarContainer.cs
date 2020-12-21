@@ -15,16 +15,52 @@ namespace ThaDasher
 	readonly public static PictureBox BUTTON_CONTAINER = new PictureBox();
 	readonly public static PictureBox CONTAINER = new PictureBox();
 
+	readonly public static Button START = new Button();
 	readonly static Button ABOUT = new Button();
-	readonly static Button START = new Button();
 	readonly static Button PORTS = new Button();
 
-	private static void SendError(string s) =>
-	    LogContainer.LOG.AppendText($"(!) {s}\r\n");
+	private static void SendError(string s)
+	{
+	    void print() =>
+    		LogContainer.LOG.AppendText($"(!) {s}\r\n");
 
-	private static void SendMessage(string s) =>
-	    LogContainer.LOG.AppendText($"(+) {s}\r\n");
+	    if (LogContainer.LOG.InvokeRequired)
+	    {
+		LogContainer.LOG.Invoke(new MethodInvoker(
+		    delegate () {
+			print();
+		    }
+		));
+	    }
 
+	    else
+	    {
+		print();
+	    }
+	}
+
+	private static void SendMessage(string s)
+	{
+	    void print() =>
+		LogContainer.LOG.AppendText($"(+) {s}\r\n");
+
+	    if (LogContainer.LOG.InvokeRequired)
+	    {
+		LogContainer.LOG.Invoke(new MethodInvoker(
+		    delegate () {
+			print();
+		    }
+		));
+	    }
+
+	    else
+	    {
+		print();
+	    }
+	}
+
+	readonly static DashNet DNet = new DashNet();
+	
 	private static void HandleStartEvent()
 	{
 	    try
@@ -98,14 +134,25 @@ namespace ThaDasher
 
 		SendMessage($"Configuration:\r\n    - Host={TargetContainer.IP_BOX.Text}\r\n    - Port={port}\r\n    - Duration={dura}s\r\n");
 
-		// Split method up into multiple methods and perhaps create a class for this.
-		// LAUNCH ATTACK!!
+		DNet.SendAttack(host, port, dura);
 	    }
 
-	    catch (Exception e)
+	    catch
 	    {
-		MessageBox.Show(e.Message + "\r\n\r\n" + e.StackTrace);
 		throw new Exception("HandleStartEvent()");
+	    }
+	}
+
+	private static void HandleStopEvent()
+	{
+	    try
+	    {
+		DNet.StopWorkers();
+	    }
+
+	    catch
+	    {
+		throw new Exception("HandleStopEvent()");
 	    }
 	}
 
@@ -144,15 +191,17 @@ namespace ThaDasher
 		    {
 			START.Text = "Stop";
 
-			new Thread(() => HandleStartEvent())
+			new Thread(() =>
+			{
+			    HandleStartEvent();
+			})
+
 			{ IsBackground = true }.Start();
 		    }
 
 		    else
 		    {
-			// stop attack
-			// remove this later
-			START.Text = "Start";
+			HandleStopEvent();
 		    };
 		};
 

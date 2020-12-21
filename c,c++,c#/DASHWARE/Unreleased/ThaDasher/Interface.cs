@@ -1,4 +1,16 @@
-﻿using System;
+﻿
+//
+// Author: Dashie
+// Version: 1.0
+//
+// All the code associated with this project belongs to me, I wrote it.
+//
+// You are allowed to redistribute my software, feel free to donate at 
+// KvinneKraft@protonmail.com at Paypal if you want to help a lil Dashie
+// out, ahaha.
+//
+
+using System;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;

@@ -26,7 +26,7 @@ namespace DashSocietyF
 	    Tool.TranslateColors(message);
 	}
 
-	static string IPIsValid(string r_host)
+	public static string IPIsValid(string r_host)
 	{
 	    try
 	    {
@@ -120,7 +120,7 @@ namespace DashSocietyF
 				Tool.TranslateColors("&8(&6!&8) &fYou have specified more than 800 bytes!  Are you sure you want to do this &7(Y/n)&f? ");
 
 				switch (Console.ReadLine().ToString().ToLower())
-				{
+				{ 
 				    case "y":
 					break;
 

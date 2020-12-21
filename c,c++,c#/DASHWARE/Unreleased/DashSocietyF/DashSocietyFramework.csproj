@@ -50,6 +50,7 @@
     <Compile Include="Headers\Core\Terminal.cs" />
     <Compile Include="Headers\Core\Tools.cs" />
     <Compile Include="Headers\Core\DashAuth.cs" />
+    <Compile Include="Headers\Extensions\PortScanner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

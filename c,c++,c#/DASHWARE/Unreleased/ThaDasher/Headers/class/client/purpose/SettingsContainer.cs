@@ -111,6 +111,43 @@ namespace ThaDasher
 	readonly static Button UDP_WAVES = new Button();
 	readonly static Button UDP_HAM = new Button();
 
+	static public string CURRENT_METHOD = "Dashloris 4.0"; 
+
+	private static void UpdateMethodsButton(string m)
+	{
+	    string p = "NONE";
+
+	    switch (m.ToLower())
+	    {
+		case "dashloris 4.0":
+		case "slowloris 1.0":
+		case "put head":
+		case "post head":
+		case "get head":
+		case "h-flood":
+		    p = "HTTP";
+		    break;
+
+		case "long socks":
+		case "multi flood":
+		case "multi socks":
+		case "wavesss":
+		    p = "TCP";
+		    break;
+
+		case "overload":
+		case "wavy baby":
+		case "go ham":
+		case "insta flood":
+		    p = "UDP";
+		    break;
+	    };
+
+	    METHODS.Text = $"{p} -- {m}";
+
+	    DIALOG.Close();
+	}
+
 	private static void InitializeOptions()
 	{
 	    try
@@ -126,7 +163,7 @@ namespace ThaDasher
 		{
 		    "Dashloris 4.0", "Slowloris 1.0", "PUT Head", "POST Head", "GET Head", "H-Flood",
 		    "Long Socks", "Multi Flood", "Multi Socks", "Wavesss",
-		    "Overload", "Wavesss", "Go Ham", "Insta Flood",
+		    "Overload", "Wavy Baby", "Go Ham", "Insta Flood",
 		};
 
 		var BUTTON_SIZE = new Size(DIALOG.Width - 19, 24);
@@ -147,17 +184,28 @@ namespace ThaDasher
 
 		for (int i = 0, k = 0; i < OPTION_TEXT.Count; i += 1)
 		{
-		    if (i == 0 || i == httpcount - 1 || i == httpcount + tcpcount - 1)
+		    if (i == 0 || i == httpcount || i == httpcount + tcpcount)
 		    {
 			var TITLE_LOCA = new Point(1, BUTTON_LOCA.Y);
 
 			CONTROL.Label(DIALOG, TITLE_CONTR[k], TITLE_SIZE, TITLE_LOCA, TITLE_BCOL, TITLE_FCOL, 1, 12, TITLE_CONTR[k].Text);
-
 			BUTTON_LOCA.Y += TITLE_SIZE.Height; k += 1;
 		    }
 
 		    CONTROL.Button(DIALOG, OPTIO_CONTR[i], BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 10, OPTION_TEXT[i], Color.Empty);
 		    BUTTON_LOCA.Y += BUTTON_SIZE.Height;
+
+		    var r = i;
+
+		    OPTIO_CONTR[i].Click += (s, e) =>
+		    {
+			if (CURRENT_METHOD != OPTION_TEXT[r])
+			{
+			    CURRENT_METHOD = OPTION_TEXT[r];
+
+			    UpdateMethodsButton(OPTION_TEXT[r]);
+			};
+		    };
 		};
 	    }
 
