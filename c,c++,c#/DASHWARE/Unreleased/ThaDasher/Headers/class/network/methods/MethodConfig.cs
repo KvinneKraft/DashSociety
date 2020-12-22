@@ -118,74 +118,188 @@ namespace ThaDasher
 
 	public class HTTP
 	{
-	    public static TextBox BYTES = new TextBox();
-	    public static TextBox RANDOM_USER_AGENT = new TextBox();
-
 	    public static class DASHLORIS4
 	    {
-		public static PictureBox DASHLORIS4_CONTAINER = new PictureBox();
+		public static PictureBox DASHLORIS4_CONTAINER = new PictureBox() { Visible = false };
 
-		public static TextBox CONNECTION_BURST_DELAY = new TextBox();
-		public static TextBox CYCLE_CONNECTION_COUNT = new TextBox();
-		public static TextBox CONNECTION_LIVE_TIME = new TextBox();
+		public static TextBox CONNECTION_BURST_DELAY = new TextBox() { Text = "5000" };
+		public static TextBox CYCLE_CONNECTION_COUNT = new TextBox() { Text = "32" };
+		public static TextBox CONNECTION_LIVE_TIME = new TextBox() { Text = "5000" };
+		public static TextBox RANDOM_USER_AGENT = new TextBox() { Text = "True" };
+		public static TextBox BYTES = new TextBox() { Text = "1000" };
+
+		public static TextBox LABEL_1 = new TextBox() { Text = "C.B.D > (Connection Burst Delay)" };
+		public static TextBox LABEL_2 = new TextBox() { Text = "C.C.C > (Cycle Connection Count)" };
+		public static TextBox LABEL_3 = new TextBox() { Text = "C.L.T > (Connection Live Time)" };
+		public static TextBox LABEL_4 = new TextBox() { Text = "R.U.A > (Random User-Agent[true/false])" };
+		public static TextBox LABEL_5 = new TextBox() { Text = "BYTES > (Header Size Basically)" };
+
+		public static Button IAMDONE = new Button();
 	    }
 
 	    public static class SLOWLORIS2
 	    {
-		public static PictureBox SLOWLORIS2_CONTAINER = new PictureBox();
+		public static PictureBox SLOWLORIS2_CONTAINER = new PictureBox() { Visible = false };
 
-		public static TextBox CONNECTION_BURST_DELAY = new TextBox();
-		public static TextBox CONNECTION_LIVE_TIME = new TextBox();
+		public static TextBox CONNECTION_BURST_DELAY = new TextBox() { Text = "3500" };
+		public static TextBox CONNECTION_LIVE_TIME = new TextBox() { Text = "3500" };
+		public static TextBox RANDOM_USER_AGENT = new TextBox() { Text = "True" };
+		public static TextBox HEADER = new TextBox() { Text = "Click Me To Change" };
+		public static TextBox BYTES = new TextBox() { Text = "1000" };
+
+		public static TextBox LABEL_1 = new TextBox() { Text = "C.B.D > (Connection Burst Delay)" };
+		public static TextBox LABEL_2 = new TextBox() { Text = "C.L.T > (Connection Live Time)" };
+		public static TextBox LABEL_3 = new TextBox() { Text = "R.U.A > (Random User-Agent[true/false])" };
+		public static TextBox LABEL_4 = new TextBox() { Text = "H.T.S > (Header To Send)" };
+		public static TextBox LABEL_5 = new TextBox() { Text = "BYTES > (Header Size Basically)" };
+
+		public static Button IAMDONE = new Button();
 	    }
 
 	    public static class PUTPOSTGET
 	    {
-		public static PictureBox PUTPOSTGET_CONTAINER = new PictureBox();
+		public static PictureBox PUTPOSTGET_CONTAINER = new PictureBox() { Visible = false };
 
-		public static TextBox CONNECTION_TIMEOUT = new TextBox();
-		public static TextBox CORE_WORKERS = new TextBox();
-		public static TextBox WORKERS = new TextBox();
-		public static TextBox HEADER = new TextBox();
+		public static TextBox CONNECTION_TIMEOUT = new TextBox() { Text = "500" };
+		public static TextBox RANDOM_USER_AGENT = new TextBox() { Text = "True" };
+		public static TextBox CORE_WORKERS = new TextBox() { Text = "4" };
+		public static TextBox WORKERS = new TextBox() { Text = "16" };
+		public static TextBox HEADER = new TextBox() { Text = "Click Me To Change" };
+		public static TextBox BYTES = new TextBox() { Text = "1000" };
+
+		public static TextBox LABEL_1 = new TextBox() { Text = "C.T.. > (Connection Timeout)" };
+		public static TextBox LABEL_2 = new TextBox() { Text = "R.U.A > (Random User-Agent[true/false])" };
+		public static TextBox LABEL_3 = new TextBox() { Text = "C.C.W > (Core Connection Workers)" };
+		public static TextBox LABEL_4 = new TextBox() { Text = "W.... > (Workers)" };
+		public static TextBox LABEL_5 = new TextBox() { Text = "H.T.S > (Header To Send)" };
+		public static TextBox LABEL_6 = new TextBox() { Text = "BYTES > (Header Size Basically)" };
+
+		public static Button IAMDONE = new Button();
 	    }
 
 	    public static class HFLOOD
 	    {
-		public static PictureBox HFLOOD_CONTAINER = new PictureBox();
+		public static PictureBox HFLOOD_CONTAINER = new PictureBox() { Visible = false };
 
-		public static TextBox CONNECTIONS_PER_THREAD = new TextBox();
-		public static TextBox THREADS = new TextBox();
-		public static TextBox HEADER = new TextBox();
+		public static TextBox CONNECTIONS_PER_THREAD = new TextBox() { Text = "32" };
+		public static TextBox RANDOM_USER_AGENT = new TextBox() { Text = "True" };
+		public static TextBox WORKERS = new TextBox() { Text = "32" };
+		public static TextBox HEADER = new TextBox() { Text = "Click Me To Change" };
+		public static TextBox BYTES = new TextBox() { Text = "1000" };
+
+		public static TextBox LABEL_1 = new TextBox() { Text = "C.P.T > (Connections Per Thread)" };
+		public static TextBox LABEL_2 = new TextBox() { Text = "R.U.A > (Random User-Agent[true/false])" };
+		public static TextBox LABEL_3 = new TextBox() { Text = "W.... > (Workers)" };
+		public static TextBox LABEL_4 = new TextBox() { Text = "H.T.S > (Header To Send)" };
+		public static TextBox LABEL_5 = new TextBox() { Text = "BYTES > (Header Size Basically)" };
+
+		public static Button IAMDONE = new Button();
+	    }
+
+	    public void InitializeHTTPConfiguration()
+	    {
+		//
+		// Add HTTP Options to Containers. Start with Dashloris
+		// 
+		//
+		// Dictionary<string[TYPE_METHOD], List<string[VALUES]>>
+		// Since we know the method, we also know what values to extract.
+		//
+	
+		var CONTAINER_SIZE = new Size(CONTAINER.Width - 20, CONTAINER.Height);
+		var CONTAINER_LOCA = new Point(0, 0);
+		var CONTAINER_COLA = Color.FromArgb(64, 25, 112);
+
+		var OPTION_SIZE = new Size(CONTAINER_SIZE.Width - 165, 26);
+		var OPTION_LOCA = new Point(165, 0);
+		var OPTION_BCOL = Color.FromArgb(64, 13, 53);//112, 25, 45);
+		var OPTION_FCOL = Color.White;
+
+		var LABEL_SIZE = new Size(OPTION_LOCA.X, OPTION_SIZE.Height);
+		var LABEL_LOCA = new Point(0, 0);
+		var LABEL_BCOL = Color.FromArgb(40, 13, 64);//64, 13, 25);
+		var LABEL_FCOL = Color.White;
+
+		void UpdateY(PictureBox container)
+		{
+		    OPTION_LOCA.Y = container.Controls[container.Controls.Count - 1].Height + container.Controls[container.Controls.Count - 1].Top;
+		    LABEL_LOCA.Y = OPTION_LOCA.Y;
+		};
+
+		try
+		{
+		    CONTROL.Image(CONTAINER, DASHLORIS4.DASHLORIS4_CONTAINER, CONTAINER_SIZE, CONTAINER_LOCA, null, CONTAINER_COLA);
+
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.LABEL_1, LABEL_SIZE, LABEL_LOCA, LABEL_BCOL, LABEL_FCOL, 1, 10, Color.Empty);
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.CYCLE_CONNECTION_COUNT, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, Color.Empty);
+
+		    UpdateY(DASHLORIS4.DASHLORIS4_CONTAINER);
+
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.LABEL_2, LABEL_SIZE, LABEL_LOCA, LABEL_BCOL, LABEL_FCOL, 1, 10, Color.Empty);
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.CONNECTION_BURST_DELAY, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, Color.Empty);
+
+		    UpdateY(DASHLORIS4.DASHLORIS4_CONTAINER);
+
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.LABEL_3, LABEL_SIZE, LABEL_LOCA, LABEL_BCOL, LABEL_FCOL, 1, 10, Color.Empty);
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.CONNECTION_LIVE_TIME, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, Color.Empty);
+
+		    UpdateY(DASHLORIS4.DASHLORIS4_CONTAINER);
+
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.LABEL_4, LABEL_SIZE, LABEL_LOCA, LABEL_BCOL, LABEL_FCOL, 1, 10, Color.Empty);
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.RANDOM_USER_AGENT, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, Color.Empty);
+
+		    UpdateY(DASHLORIS4.DASHLORIS4_CONTAINER);
+
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.LABEL_5, LABEL_SIZE, LABEL_LOCA, LABEL_BCOL, LABEL_FCOL, 1, 10, Color.Empty);
+		    CONTROL.TextBox(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.BYTES, OPTION_SIZE, OPTION_LOCA, OPTION_BCOL, OPTION_FCOL, 1, 10, Color.Empty);
+
+		    var BUTTON_SIZE = new Size(DASHLORIS4.DASHLORIS4_CONTAINER.Width, 26);
+		    var BUTTON_LOCA = new Point(0, OPTION_LOCA.Y + OPTION_SIZE.Height);
+		    var BUTTON_BCOL = Color.FromArgb(13, 64, 30);
+		    var BUTTON_FCOL = Color.White;
+
+		    CONTROL.Button(DASHLORIS4.DASHLORIS4_CONTAINER, DASHLORIS4.IAMDONE,  BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 10, "I am done mate.", Color.Empty);
+
+		    DASHLORIS4.IAMDONE.Click += (s, e) =>
+		    {
+			// Handle finish event.
+		    };
+
+		    DASHLORIS4.DASHLORIS4_CONTAINER.Visible = true;
+		}
+
+		catch
+		{
+		    throw new Exception("DASHLORIS4");
+		};
 	    }
 	}
 
-	private void InitializeHTTPConfiguration()
-	{
-
-	}
+	public static readonly HTTP http = new HTTP();
 
 	public static readonly Dictionary<string, Dictionary<string, string>> TCP_CONFIGURATION = new Dictionary<string, Dictionary<string, string>>();
 
 	public class TCP
 	{
-	    // Yet to design
-	}
-	
-	private void InitializeTCPConfiguration()
-	{
+	    public void InitializeTCPConfiguration()
+	    {
 
+	    }
 	}
+
+	public static readonly TCP tcp = new TCP();
 
 	public static readonly Dictionary<string, Dictionary<string, string>> UDP_CONFIGURATION = new Dictionary<string, Dictionary<string, string>>();
 
 	public class UDP
 	{
-	    // Yet to design
-	}
-	
-	private void InitializeUDPConfiguration()
-	{
+	    public void InitializeUDPConfiguration()
+	    {
 
+	    }
 	}
+
+	public static readonly UDP udp = new UDP();
 
 	private void InitializeConfCon()
 	{
@@ -193,7 +307,7 @@ namespace ThaDasher
 	    {
 		var CONT_SIZE = new Size(Width - 20, Height - BAR.Height - 20);
 		var CONT_LOCA = new Point(-1, -1);
-		var CONT_BCOL = Color.FromArgb(255, 229, 153); //255, 229, 153);
+		var CONT_BCOL = BAR.BackColor;
 
 		MultiForm(this, CONTAINER, CONT_SIZE, CONT_LOCA, CONT_BCOL);
 		
@@ -202,7 +316,7 @@ namespace ThaDasher
 
 		var RECT_SIZE = new Size(CONT_SIZE.Width + 1, CONT_SIZE.Height + 1);
 		var RECT_LOCA = new Point(CONTAINER.Left - 1, CONTAINER.Top - 1);
-		var RECT_COLA = Color.Navy; //BAR.BackColor;
+		var RECT_COLA = BAR.BackColor;
 
 		TOOL.PaintRectangle(this, 2, RECT_SIZE, RECT_LOCA, RECT_COLA);
 	    }
@@ -214,38 +328,51 @@ namespace ThaDasher
 
 	    /*Configuration*/ try
 	    {
-		// Dictionary<string[TYPE_METHOD], List<string[VALUES]>>
-		// Since we know the method, we also know what values to extract.
-		//
-		
 		try
 		{
-		    InitializeHTTPConfiguration();
+		    http.InitializeHTTPConfiguration();
 		}
 
-		catch
+		catch (Exception e)
 		{
-		    throw new Exception("HTTP_MODULE");
+		    throw new Exception($"HTTP_MODULE -> {e.Message}");
 		};
 
 		try
 		{
-		    InitializeTCPConfiguration();
+		    tcp.InitializeTCPConfiguration();
 		}
 
-		catch
+		catch (Exception e)
 		{
-		    throw new Exception("TCP_MODULE");
+		    throw new Exception($"TCP_MODULE -> {e.Message}");
 		};
 
 		try
 		{
-		    InitializeUDPConfiguration();
+		    udp.InitializeUDPConfiguration();
 		}
 
-		catch
+		catch (Exception e)
 		{
-		    throw new Exception("UDP_MODULE");
+		    throw new Exception($"UDP_MODULE -> {e.Message}");
+		};
+
+		foreach (Control control in CONTAINER.Controls)
+		{
+		    foreach (Control scontrol in control.Controls)
+		    {
+			foreach (Control sscontrol in scontrol.Controls)
+			{
+			    if (sscontrol is TextBox)
+			    {
+				if (!sscontrol.Text.Contains(")"))
+				{
+				    ((TextBox)sscontrol).TextAlign = HorizontalAlignment.Center;
+				};
+			    };
+			};
+		    };
 		};
 	    }
 
@@ -267,20 +394,18 @@ namespace ThaDasher
 	    {
 		InitializeMenuBar();
 		InitializeConfCon();
-
-		// Add all Controls per Method
-		// Hide all.
-		// Show the selected one.
 	    }
 
 	    catch (Exception e)
 	    {
-		throw new Exception($"MethodCnfig -> {e.Message}()");
+		throw new Exception($"MethodConfig -> {e.Message}()");
 	    };
 	}
 
 	new public static void Show()
 	{
+	    // When called check method and show container based off of that:
+	    // Also make sure to resize the configurator dialog to the fit size.
 	    APP.Show();
 	}
     }

@@ -168,7 +168,7 @@ namespace ThaDasher
 
 		var BUTTON_SIZE = new Size(DIALOG.Width - 19, 24);
 		var BUTTON_LOCA = new Point(2, BAR.Height + 1);
-		var BUTTON_BCOL = Color.FromArgb(150, Color.MidnightBlue.R, Color.MidnightBlue.G, Color.MidnightBlue.B);
+		var BUTTON_BCOL = Color.FromArgb(64, 25, 112);//150, Color.MidnightBlue.R, Color.MidnightBlue.G, Color.MidnightBlue.B);
 		var BUTTON_FCOL = Color.White;
 
 		int GetTitleHeight(string param) => TOOL.GetFontSize(param, 24).Height;//TextRenderer.MeasureText(param, TOOL.GetFont(1, 24)).Height;

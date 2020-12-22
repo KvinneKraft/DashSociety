@@ -15,11 +15,9 @@ namespace ThaDasher
 	[STAThread]
 	static void Main()
 	{
-	    //MethodConfig methconf = new MethodConfig();
-	    //methconf.ShowDialog();
-
-	    //Console.ReadKey();
-
+	    MethodConfig methconf = new MethodConfig();
+	    methconf.ShowDialog();
+	    
 	    Application.EnableVisualStyles();
 	    Application.SetCompatibleTextRenderingDefault(false);
 

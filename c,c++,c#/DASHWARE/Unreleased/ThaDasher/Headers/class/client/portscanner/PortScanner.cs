@@ -423,7 +423,7 @@ namespace ThaDasher
 		{
 		    var TOGGLE_SIZE = new Size(145, 28);
 		    var TOGGLE_LOCA = new Point((TOP.Width - TOGGLE_SIZE.Width) / 2, GUI.BAR.Height + 6);
-		    var TOGGLE_BCOL = LogContainer.CLEAR.BackColor; Color.FromArgb(12, 12, 12);
+		    var TOGGLE_BCOL = Color.FromArgb(12, 12, 12);
 		    var TOGGLE_FCOL = Color.White;
 
 		    CONTROL.Button(TOP, TOGGLE, TOGGLE_SIZE, TOGGLE_LOCA, TOGGLE_BCOL, TOGGLE_FCOL, 1, 12, "Start Scan", Color.Empty);
@@ -460,14 +460,14 @@ namespace ThaDasher
 
 		    var PORTCONTAINER_SIZE = new Size(TOP.Width - 20, 80);
 		    var PORTCONTAINER_LOCA = new Point(10, y);
-		    var PORTCONTAINER_BCOL = LogContainer.LOG.BackColor;
+		    var PORTCONTAINER_BCOL = Color.FromArgb(64, 25, 112);//LogContainer.LOG.BackColor;
 
 		    CONTROL.Image(TOP, PORTCONTAINER, PORTCONTAINER_SIZE, PORTCONTAINER_LOCA, null, PORTCONTAINER_BCOL);
 		    TOOL.Round(PORTCONTAINER, 6);
 
 		    var PORT_SIZE = new Size(PORTCONTAINER.Width - 10, PORTCONTAINER.Height - 10);
 		    var PORT_LOCA = new Point(5, 5);
-		    var PORT_BCOL = LogContainer.LOG.BackColor;
+		    var PORT_BCOL = Color.FromArgb(64, 25, 112);
 		    var PORT_FCOL = Color.White;
 
 		    CONTROL.RichTextBox(PORTCONTAINER, PORT, PORT_SIZE, PORT_LOCA, PORT_BCOL, PORT_FCOL, 1, 11, "80, 443, 8080, 53, 56, 21, 22, 22565");
@@ -582,10 +582,6 @@ namespace ThaDasher
 		OPS.InitializeContainer(this);
 
 		//OPS.CONTAINER.Hide();
-
-		// Initialize Event Handlers
-		// -------------------------
-		// Recognize 1,2 1-2 and 80.
 	    }
 
 	    catch (Exception e)
