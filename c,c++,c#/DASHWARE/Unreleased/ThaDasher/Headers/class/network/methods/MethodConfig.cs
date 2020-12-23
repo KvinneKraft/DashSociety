@@ -262,7 +262,7 @@ namespace ThaDasher
 
 		    DASHLORIS4.IAMDONE.Click += (s, e) =>
 		    {
-			// Handle finish event.
+
 		    };
 
 		    DASHLORIS4.DASHLORIS4_CONTAINER.Visible = true;
