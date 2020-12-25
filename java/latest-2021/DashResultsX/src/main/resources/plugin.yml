@@ -1,0 +1,12 @@
+name: DashResultsX
+version: 1.0
+main: com.kvinnekraft.DashResultsX
+api-version: 1.16
+authors: [Dashie, KvinneKraft, ME]
+description: Block results man, ya man.
+website: https://github.com/KvinneKraft
+
+commands:
+  dashresultsx:
+    aliases: [drx, dashresultx, dashresults, dashresult, dresult, dresults, dresultx, dresultsx]
+    description: You should know man.

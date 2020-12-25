@@ -1,0 +1,38 @@
+# Author: Dashie
+# Version: 1.0
+properties:
+  auto-reload: true
+  reload-interval: 5
+  ops-bypass: true
+#IDS: https://minecraftitemids.com/types/potion  
+brewing-stand:
+  disable-brewing-stand: false
+  prevent:
+    - '373:8193'
+    - '373:8193'
+    - '373:8193'
+crafting-table:
+  disable-crafting-table: false
+  prevent:
+    - 'IRON_BLOCK'
+    - 'HOPPER'
+    - 'DIAMOND_CHESTPLATE'
+#IDS: https://www.digminecraft.com/lists/enchantment_list_pc.php
+enchantment-table:
+  disable-enchantment-table: false
+  prevent:
+    - 'BINDING_CURSE:1'
+    - 'DEPTH_STRIDER:3'
+    - 'FIRE_ASPECT:2'    
+anvil-rename:
+  disable-anvil: false
+  prevent:
+    - 'Who am I?'
+    - 'A title.'
+    - 'Change me.'
+furnace-output:
+  disable-furnace: false
+  prevent:
+    - 'IRON_INGOT'
+    - 'GOLDEN_INGOT'
+    - 'CHARCOAL'
