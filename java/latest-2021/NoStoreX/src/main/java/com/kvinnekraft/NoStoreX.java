@@ -41,9 +41,7 @@ public class NoStoreX extends JavaPlugin
                 names.add(material.toString());
             }
 
-            plugin.reloadConfig();
-
-            getConfig().set("core-tweaks" + type + ".blacklist", names);
+            getConfig().set("core-tweaks." + type.toLowerCase().replace("_", "-") + ".blacklist", names);
 
             plugin.saveConfig();
         }
@@ -224,11 +222,12 @@ public class NoStoreX extends JavaPlugin
     private void loadSettings()
     {
         saveDefaultConfig();
+
         plugin.reloadConfig();
 
         try
         {
-            final FileConfiguration config = getConfig();
+            final FileConfiguration config = plugin.getConfig();
 
             for (final String section : new String[] { "ender-chest", "chest", "dispenser", "dropper", "player", "workbench", "barrel", "anvil", "beacon", "blast-furnace", "brewing", "cartography", "carfting", "enchanting", "hopper", "grindstone", "lectern", "merchant", "shulker-box", "smithing", "smoker", "stonecutter" })
             {
