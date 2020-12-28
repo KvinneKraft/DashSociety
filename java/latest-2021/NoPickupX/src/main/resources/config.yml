@@ -15,14 +15,6 @@ core-tweaks:
   # if you fail to understand what is going on, listen
   # up, the item:IRON_INGOT part basically specifies
   # the material name that should be blocked.
-  #
-  # The name:&aANY_NAME_WITH_COLORS specifies the name
-  # the item must have in order to be seen as not allowed.
-  # 
-  # The same story with the lore, except, you can add multi
-  # lines to it by using the '~' within the lore.
-  # 
-  # You can have up to three separate lines!
   blacklisted-items:
     - 'item:IRON_INGOT'
   notifications:
