@@ -23,10 +23,11 @@ namespace ThaDasher
 {
     public class DashNet
     {
+	readonly MethodConfig MethodConfig = new MethodConfig();
+
 	private static void SendMessage(string s)
 	{
-	    void print() =>
-		LogContainer.LOG.AppendText($"(+) {s}\r\n");
+	    void print() => LogContainer.LOG.AppendText($"(+) {s}\r\n");
 
 	    if (LogContainer.LOG.InvokeRequired)
 	    {
@@ -47,28 +48,18 @@ namespace ThaDasher
 
 	public void SendAttack(string shost, int sport, int sdura)
 	{
-	    var m = SettingsContainer.CURRENT_METHOD.ToLower();
+	    MethodConfig.Show();
 
 	    target_info.Add("host", $"{shost}");
 	    target_info.Add("port", $"{sport}");
 	    target_info.Add("dura", $"{sdura}");
 
-	    // Link this one up with the method selector.
-
-	    // Add all option controls individually to dialog and display only the ones that are accepted
-	    // by the current method.
-	    //
-	    // For example, dashloris 4.0 would only show:
-	    // connection_delay, connection_live_time, cycle_connection_count and random_user_agent;
-	    //
-	    // First work on the configuration manager for the methods.  It should be shown right after
-	    // the user clicks the attack button. 
-	    //
+	    var m = SettingsContainer.CURRENT_METHOD.ToLower();
 
 	    switch (m)
 	    {
-		case "dashloris 4.0": break;
-		case "slowloris 1.0": break;
+		case "dashloris 4.0": DASHLORIS4.Launch(); break;
+		case "slowloris 2.0": break;
 		case "put head": break;
 		case "post head":  break;
 		case "get head": break;

@@ -45,10 +45,15 @@ core-tweaks:
         enchantments:
           - 'SHARPNESS 5'
       consumption:
-        permission: 'default'
-        message: '&aWow, a custom message!'          
+#check permission in list, if none skip check.
+#also if op.
+        permission: 'none'
+        message: 'none'          
         effects:
           - 'SPEED 1 20'
         commands:
-          - '/msg %p% &aYou ate a stick!'
+#check async list.get(id).split(" ")[0] == 
+#e.getCommand()
+          - '/kit pvp'
+          - '~msg %p% &aYou ate a stick!'
   

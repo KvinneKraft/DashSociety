@@ -120,7 +120,7 @@ namespace ThaDasher
 	    switch (m.ToLower())
 	    {
 		case "dashloris 4.0":
-		case "slowloris 1.0":
+		case "slowloris 2.0":
 		case "put head":
 		case "post head":
 		case "get head":
@@ -161,7 +161,7 @@ namespace ThaDasher
 
 		var OPTION_TEXT = new List<string>()
 		{
-		    "Dashloris 4.0", "Slowloris 1.0", "PUT Head", "POST Head", "GET Head", "H-Flood",
+		    "Dashloris 4.0", "Slowloris 2.0", "PUT Head", "POST Head", "GET Head", "H-Flood",
 		    "Long Socks", "Multi Flood", "Multi Socks", "Wavesss",
 		    "Overload", "Wavy Baby", "Go Ham", "Insta Flood",
 		};

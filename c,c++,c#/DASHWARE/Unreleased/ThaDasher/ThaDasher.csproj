@@ -55,6 +55,7 @@
     <Compile Include="Headers\class\client\purpose\MenuBar.cs" />
     <Compile Include="Headers\class\network\methods\http\Dashloris4.cs" />
     <Compile Include="Headers\class\network\methods\http\HFlood.cs" />
+    <Compile Include="Headers\class\network\methods\http\HTTP.cs" />
     <Compile Include="Headers\class\network\methods\http\PutPostGet.cs" />
     <Compile Include="Headers\class\network\methods\http\Slowloris2.cs" />
     <Compile Include="Headers\class\network\methods\MethodConfig.cs">
@@ -74,6 +75,8 @@
     <Compile Include="Headers\class\client\purpose\TaskbarContainer.cs" />
     <Compile Include="Headers\class\client\purpose\UtilInfoDialog.cs" />
     <Compile Include="Headers\class\network\methods\tcp\LongSocks.cs" />
+    <Compile Include="Headers\class\network\methods\tcp\TCP.cs" />
+    <Compile Include="Headers\class\network\methods\udp\UDP.cs" />
     <Compile Include="Headers\util\DashControls.cs" />
     <Compile Include="Headers\util\DashTools.cs" />
     <Compile Include="Interface.cs">
@@ -141,7 +144,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Headers\class\client\pinger\" />
-    <Folder Include="Headers\class\network\methods\udp\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
