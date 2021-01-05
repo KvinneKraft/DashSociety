@@ -6,6 +6,9 @@ package com.kvinnekraft;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -24,69 +27,6 @@ import java.util.List;
 
 public final class PotionObtainablesX extends JavaPlugin
 {
-    class EventListener implements Listener
-    {
-        @EventHandler
-        final void onItemInteract(final PlayerInteractEvent e)
-        {
-            final Player p = e.getPlayer();
-
-            if (e.getItem() != null && items.contains(e.getItem()))
-            {
-                final int index = items.indexOf(e.getItem());
-
-                if (!permissions.get(index).equalsIgnoreCase("none"))
-                {
-                    if (!p.hasPermission(permissions.get(index)))
-                    {
-                        return;
-                    }
-                }
-
-                if (!messages.get(index).equalsIgnoreCase("none"))
-                {
-                    p.sendMessage(messages.get(index));
-                }
-
-                if (effects.get(index).size() > 0)
-                {
-                    p.addPotionEffects(effects.get(index));
-                }
-
-                if (commands.get(index).size() > 0)
-                {
-                    getServer().getScheduler().runTaskAsynchronously
-                    (
-                        plugin,
-
-                        () ->
-                        {
-                            for (String command : commands.get(index))
-                            {
-                                if (command.length() > 1)
-                                {
-                                    command = command.replace("%p%", p.getName());
-
-                                    if (command.charAt(0) == '/')
-                                    {
-                                        command = command.substring(1);
-                                        p.performCommand(command);
-                                    }
-
-                                    else if (command.charAt(0) == '~')
-                                    {
-                                        command = command.substring(1);
-                                        getServer().dispatchCommand(getServer().getConsoleSender(), command);
-                                    }
-                                }
-                            }
-                        }
-                    );
-                }
-            }
-        }
-    }
-
     private PotionEffectType getPotionEffectType(final String data)
     {
         return (PotionEffectType.getByName(data));
@@ -122,6 +62,7 @@ public final class PotionObtainablesX extends JavaPlugin
     private void loadSettings()
     {
         saveDefaultConfig();
+        reloadConfig();
 
         try
         {
@@ -146,11 +87,15 @@ public final class PotionObtainablesX extends JavaPlugin
                     {
                         try
                         {
-                            final ItemStack item = new ItemStack(Material.AIR, 1);
-                            final ItemMeta meta = item.getItemMeta();
+                            final ItemStack item = new ItemStack(Material.STICK, 1);
+                            ItemMeta meta = item.getItemMeta();
 
                             try
                             {
+                                item.setType(Material.valueOf(config.getString(node + ".item.type").toUpperCase().replace(" ", "_")));
+
+                                meta = item.getItemMeta();
+
                                 final String name = color(config.getString(node + ".item.name"));
                                 names.add(ChatColor.stripColor(name.toLowerCase()));
 
@@ -164,8 +109,6 @@ public final class PotionObtainablesX extends JavaPlugin
                                 }
 
                                 meta.setLore(lore);
-
-                                item.setType(Material.valueOf(config.getString(node + ".item.type").toUpperCase().replace(" ", "_")));
                             }
 
                             catch (final Exception e)
@@ -173,13 +116,20 @@ public final class PotionObtainablesX extends JavaPlugin
                                 throw new Exception("type || name || lore");
                             }
 
+                            item.setItemMeta(meta);
+
                             try
                             {//add in another try-catch to allow the correct enchantments to be added regardless.
                                 for (final String line : config.getStringList(node + ".item.enchantments"))
                                 {
                                     final String[] enchantmentData = line.split(" ");
 
-                                    final Enchantment enchantment = getEnchantment(enchantmentData[0]);
+                                    if (enchantmentData.length < 2)
+                                    {
+                                        throw new Exception("!");
+                                    }
+
+                                    final Enchantment enchantment = getEnchantment(enchantmentData[0].toLowerCase());
                                     final Integer level = getInteger(enchantmentData[1]);
 
                                     if (level < 1 || enchantment == null)
@@ -195,8 +145,6 @@ public final class PotionObtainablesX extends JavaPlugin
                             {
                                 throw new Exception("enchantments");
                             }
-
-                            item.setItemMeta(meta);
 
                             items.add(item);
                         }
@@ -218,6 +166,11 @@ public final class PotionObtainablesX extends JavaPlugin
                                 for (final String line : config.getStringList(node + ".consumption.effects"))
                                 {
                                     final String[] effectData = line.split(" ");
+
+                                    if (effectData.length < 3)
+                                    {
+                                        throw new Exception("!");
+                                    }
 
                                     final PotionEffectType effect = getPotionEffectType(effectData[0]);
                                     final Integer amplifier = getInteger(effectData[1]);
@@ -271,8 +224,7 @@ public final class PotionObtainablesX extends JavaPlugin
     boolean autoReload = true;
     int reloadInterval = 5;
 
-    @Override
-    public final void onEnable()
+    @Override public final void onEnable()
     {
         try
         {
@@ -296,6 +248,9 @@ public final class PotionObtainablesX extends JavaPlugin
             }
 
             loadSettings();
+
+            getServer().getPluginManager().registerEvents(new EventListener(), plugin);
+            getCommand("potionobtainablesx").setExecutor(new CommandListener());
         }
 
         catch (final Exception e)
@@ -309,14 +264,153 @@ public final class PotionObtainablesX extends JavaPlugin
         print("Email: KvinneKraft@protonmail.com");
     }
 
+    private class EventListener implements Listener
+    {
+        @EventHandler final void onItemInteract(final PlayerInteractEvent e)
+        {
+            final Player p = e.getPlayer();
+
+            if (e.getItem() != null && items.contains(e.getItem()))
+            {
+                final int index = items.indexOf(e.getItem());
+
+                if (!permissions.get(index).equalsIgnoreCase("none"))
+                {
+                    if (!p.hasPermission(permissions.get(index)))
+                    {
+                        return;
+                    }
+                }
+
+                if (!messages.get(index).equalsIgnoreCase("none"))
+                {
+                    p.sendMessage(messages.get(index));
+                }
+
+                if (effects.get(index).size() > 0)
+                {
+                    p.addPotionEffects(effects.get(index));
+                }
+
+                if (commands.get(index).size() > 0)
+                {
+                    getServer().getScheduler().runTaskAsynchronously
+                    (
+                        plugin,
+
+                        () ->
+                        {
+                            for (String command : commands.get(index))
+                            {
+                                if (command.length() > 1)
+                                {
+                                    command = command.replace("%p%", p.getName());
+
+                                    if (command.charAt(0) == '/')
+                                    {
+                                        final String c1 = command.substring(1);
+
+                                        getServer().getScheduler().runTask(plugin, () -> p.performCommand(c1));
+                                    }
+
+                                    else if (command.charAt(0) == '~')
+                                    {
+                                        final String c1 = command.substring(1);
+
+                                        getServer().getScheduler().runTask
+                                        (
+                                            plugin, () -> getServer().dispatchCommand(getServer().getConsoleSender(), c1)
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+        }
+    }
+
+    private class CommandListener implements CommandExecutor
+    {
+        @Override public boolean onCommand(final CommandSender s, final Command c, final String a, final String[] as)
+        {
+            if (!(s instanceof Player))
+            {
+                print("You must be a player when using this command!");
+                return false;
+            }
+
+            final Player p = (Player) s;
+
+            if (p.isOp())
+            {
+                if (as.length >= 2)
+                {
+                    if (as[0].equalsIgnoreCase("get"))
+                    {
+                        final String name = as[1].toLowerCase();
+
+                        if (!names.contains(name))
+                        {
+                            p.sendMessage(color("&7That name was not recognized.  Loading valid name(s) ...."));
+
+                            getServer().getScheduler().runTaskAsynchronously
+                            (
+                                plugin,
+
+                                () ->
+                                {
+                                    String collection = "&7names: ";
+
+                                    for (final String neme : names)
+                                    {
+                                        collection += "&a" + neme + " ";
+                                    }
+
+                                    if (collection.equalsIgnoreCase("&7names: "))
+                                    {
+                                        collection = color("&cNo names were found.");
+                                    }
+
+                                    else
+                                    {
+                                        collection = color(collection);
+                                    }
+
+                                    p.sendMessage(collection);
+                                }
+                            );
+
+                            return false;
+                        }
+
+                        p.getInventory().addItem(items.get(names.indexOf(name)));
+                        p.sendMessage(color("&aYou have given yourself a &e" + name + "&a!"));
+
+                        return true;
+                    }
+                }
+
+                p.sendMessage(color("&cOh, that is not correct.  Did you perhaps mean &7/potionox get [NAME] &c?"));
+                return false;
+            }
+
+            p.sendMessage(color("&6>>> &aAuthor: Dashie"));
+            p.sendMessage(color("&6>>> &aVersion: 1.0"));
+            p.sendMessage(color("&6>>> &aGithub: https://github.com/KvinneKraft"));
+
+            return false;
+        }
+    }
+
     private void shutdownPlugin(final String reason)
     {
         print(reason);
         getServer().getPluginManager().disablePlugin(plugin);
     }
 
-    @Override
-    public final void onDisable()
+    @Override public final void onDisable()
     {
         getServer().getScheduler().cancelTasks(plugin);
         print("I am dead!");

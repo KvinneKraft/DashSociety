@@ -2,7 +2,7 @@
 # Version: 1.0
 startup-tweaks:
   auto-reload: true
-  reload-interval: 5
+  reload-interval: 20
 #
 # (Potion Obtainables X Format Documentation)
 #
@@ -26,14 +26,14 @@ startup-tweaks:
 # the console to execute it you should put a '~' in front
 # of the command.
 #
-# If you need some help finding enchantment names that are
-# recognized by my code see some documentation here. (Use the names all caps)
-# ENCHANTMENT NAMES 1.16x: https://www.digminecraft.com/lists/enchantment_list_pc.php
+# Enchantment names should be the same as in-game but instead
+# of spaces underscores.  
 #
 # And if you need some help finding potion effect names then
 # you can find them here. (Use the names all caps)
 # POTION EFFECT NAMES 1.16x: https://mcreator.net/wiki/potion-effect-ids
 #
+# NOTE: Specify 'none' if you do not want to use certain functionality.
 core-tweaks:
   potion-items:
     1:
@@ -43,17 +43,33 @@ core-tweaks:
         lore:
           - '&5I am lore.'
         enchantments:
-          - 'SHARPNESS 5'
+          - 'ShArPnEsS 5'
+          - 'fire_aspect 1'
       consumption:
-#check permission in list, if none skip check.
-#also if op.
         permission: 'none'
         message: 'none'          
         effects:
           - 'SPEED 1 20'
         commands:
-#check async list.get(id).split(" ")[0] == 
-#e.getCommand()
           - '/kit pvp'
           - '~msg %p% &aYou ate a stick!'
-  
+    2:
+      item:
+        type: APPLE
+        name: '&cEpplet'
+        lore:
+          - '&5I am lore.'
+        enchantments:
+          - 'protection 5'
+          - 'luck_of_the_sea 1'
+      consumption:
+      #remove on use? Let me know.
+        permission: 'none'
+        message: 'none'          
+        effects:
+          - 'SPEED 1 20'
+        commands:
+          - '/kit pvp'
+          - '~msg %p% &aYou ate a stick!'       
+# If you have any suggestions then please reach out to me
+# at KvinneKraft@protonmail.com.  Thank you.
