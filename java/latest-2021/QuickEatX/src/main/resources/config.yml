@@ -1,0 +1,15 @@
+# Author: Dashie
+# Version: 1.0
+startup-properties:
+  auto-reload: true
+  reload-interval: 10
+plugin-properties:
+  quick-consumables:
+    1:
+      item:
+        type: STICK
+        cooldown: 5
+        permission: none
+      effects:
+        - 'SPEED 1 10'
+        - 'STRENGTH 1 10'

@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class PremiumCosmeticsGUI extends JavaPlugin
+public final class QuickEatX extends JavaPlugin
 {
     private void loadSettings()
     {
@@ -35,6 +35,7 @@ public final class PremiumCosmeticsGUI extends JavaPlugin
 
             // Insta Drink
             // Insta Eat
+            // Next up: Dash Captcha
 
             loadSettings();
         }
