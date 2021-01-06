@@ -2,7 +2,7 @@
 # Version: 1.0
 name: QuickEatX
 version: 1.0
-main: com.kvinnekraft.quickeatx.QuickEatX
+main: com.kvinnekraft.QuickEatX
 api-version: 1.16
 authors: [Dashie, KvinneKraft, ME]
 description: Yes.
