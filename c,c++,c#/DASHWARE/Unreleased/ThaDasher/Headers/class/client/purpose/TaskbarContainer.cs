@@ -169,7 +169,9 @@ namespace ThaDasher
 	}
 
 	readonly static System.Timers.Timer timer = new System.Timers.Timer() { Enabled = true, AutoReset = false };
+
 	readonly static PortScanner PORTSCANNER = new PortScanner();
+	readonly static AboutDialog ABOUTDIALOG = new AboutDialog();
 
 	public static void InitializeTCon(Form TOP)
 	{
@@ -194,6 +196,11 @@ namespace ThaDasher
 
 		CONTROL.Button(BUTTON_CONTAINER, ABOUT, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 12, "About", Color.Empty);
 		BUTTON_LOCA.X += BUTTON_SIZE.Width + 5;
+
+		ABOUT.Click += (s, e) =>
+		{
+		    ABOUTDIALOG.ShowDialog();
+		};
 
 		CONTROL.Button(BUTTON_CONTAINER, START, BUTTON_SIZE, BUTTON_LOCA, BUTTON_BCOL, BUTTON_FCOL, 1, 12, "Start", Color.Empty);
 		BUTTON_LOCA.X += BUTTON_SIZE.Width + 5;

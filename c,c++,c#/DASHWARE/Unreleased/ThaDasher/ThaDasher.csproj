@@ -52,6 +52,9 @@
     <Compile Include="Headers\class\client\authy\ToS.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Headers\class\client\purpose\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Headers\class\network\DashNet.cs" />
     <Compile Include="Headers\class\client\purpose\LogContainer.cs" />
     <Compile Include="Headers\class\client\authy\LoginDialog.cs" />

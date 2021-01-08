@@ -68,6 +68,12 @@ namespace ThaDasher
 	    CONTROL.Label(B, T, TITLE_SIZE, TITLE_LOCA, TITLE_BCOL, TITLE_FCOL, 1, 8, TITLE_TEXT);
 
 	    TOOL.Interactive(B, this);
+
+	    var RECT_SIZE = new Size(Width - 1, Height - B.Height - 1);
+	    var RECT_LOCA = new Point(1, B.Height);
+	    var RECT_BCOL = B.BackColor;
+
+	    TOOL.PaintRectangle(this, 2, RECT_SIZE, RECT_LOCA, RECT_BCOL);
 	}
 
 	readonly private TextBox L = new TextBox();
@@ -109,12 +115,6 @@ namespace ThaDasher
 	    };
 
 	    TOOL.Round(A, 6);
-
-	    var RECT_SIZE = new Size(Width - 1, Height - B.Height - 1);
-	    var RECT_LOCA = new Point(1, B.Height);
-	    var RECT_BCOL = B.BackColor;
-
-	    TOOL.PaintRectangle(this, 2, RECT_SIZE, RECT_LOCA, RECT_BCOL);
 	}
 
 	public ToS()
