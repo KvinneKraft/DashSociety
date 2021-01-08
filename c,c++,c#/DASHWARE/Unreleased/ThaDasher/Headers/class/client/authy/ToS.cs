@@ -1,6 +1,9 @@
-﻿
+﻿//
+// Finally some decent code :smh:
+//
 // Author: Dashie
 // Version: 1.0
+//
 
 using System;
 using System.Drawing;
@@ -26,6 +29,9 @@ namespace ThaDasher
 
 	    MinimizeBox = false;
 	    MaximizeBox = false;
+
+	    TOOL.Resize(this, new Size(250, 250));
+	    TOOL.Round(this, 6);
 	}
 
 	readonly private PictureBox B = new PictureBox();
@@ -34,7 +40,7 @@ namespace ThaDasher
 
 	private void LoadMenuBar()
 	{
-	    var BAR_SIZE = new Size(Width - 2, 26);
+	    var BAR_SIZE = new Size(Width - 1, 26);
 	    var BAR_LOCA = new Point(1, 0);
 	    var BAR_BCOL = Color.FromArgb(8, 8, 8);
 
@@ -60,6 +66,55 @@ namespace ThaDasher
 	    var TITLE_FCOL = Color.White;
 
 	    CONTROL.Label(B, T, TITLE_SIZE, TITLE_LOCA, TITLE_BCOL, TITLE_FCOL, 1, 8, TITLE_TEXT);
+
+	    TOOL.Interactive(B, this);
+	}
+
+	readonly private TextBox L = new TextBox();
+	readonly private Button A = new Button();
+	
+	private string TermsOfService()
+	{
+	    return string.Format
+	    (
+		"(1) When using this application you automatically agree with the Terms of Services.\r\n\r\n" +
+		"(2) When using this application you automatically confirm you claim responsibility for any use if any.\r\n\r\n" +
+		"(3) When using this application you automatically confirm you are aware of the impact this application can have when used wrongly.\r\n\r\n" +
+		"(4) When using this application you automatically confirm you are aware of the laws corresponding to DDoS/DoS/Flood attacks in your country.\r\n\r\n" +
+		"(5) When using this application you automatically confirm I Dashie am not responsible for any harm inflicted upon any using this application or any of its sub-components.\r\n\r\n"
+	    );
+	}
+
+	private void LoadToS()
+	{
+	    var LOG_SIZE = new Size(Width - 4, Height - B.Height - 2);
+	    var LOG_LOCA = new Point(2, B.Height + 1);
+	    var LOG_BCOL = Color.MidnightBlue;
+	    var LOG_FCOL = Color.White;
+
+	    CONTROL.TextBox(this, L, LOG_SIZE, LOG_LOCA, LOG_BCOL, LOG_FCOL, 1, 9, Color.Empty, READONLY: true, FIXEDSIZE:false, SCROLLBAR:true, MULTILINE:true);
+
+	    L.Text = TermsOfService();
+
+	    var AGREE_SIZE = new Size(100, 26);
+	    var AGREE_LOCA = new Point((L.Width - AGREE_SIZE.Width) / 2, L.Height - AGREE_SIZE.Height - 8);
+	    var AGREE_BCOL = Color.FromArgb(16, 16, 16);
+	    var AGREE_FCOL = Color.White;
+
+	    CONTROL.Button(L, A, AGREE_SIZE, AGREE_LOCA, AGREE_BCOL, AGREE_FCOL, 1, 10, "Agree", Color.Empty);
+
+	    A.Click += (s, e) =>
+	    {
+		Close();
+	    };
+
+	    TOOL.Round(A, 6);
+
+	    var RECT_SIZE = new Size(Width - 1, Height - B.Height - 1);
+	    var RECT_LOCA = new Point(1, B.Height);
+	    var RECT_BCOL = B.BackColor;
+
+	    TOOL.PaintRectangle(this, 2, RECT_SIZE, RECT_LOCA, RECT_BCOL);
 	}
 
 	public ToS()
@@ -68,6 +123,7 @@ namespace ThaDasher
 	    {
 		LoadGUILayout();
 		LoadMenuBar();
+		LoadToS();
 	    }
 
 	    catch

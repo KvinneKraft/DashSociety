@@ -22,7 +22,7 @@ namespace ThaDasher
 	{
 	    var BAR_SIZE = new Size(TOP.Width, 28);
 	    var BAR_LOCA = new Point(0, 0);
-	    var BAR_COLA = Color.FromArgb(12, 12, 12);
+	    var BAR_COLA = Color.FromArgb(8, 8, 8);
 
 	    CONTROL.Image(TOP, BAR_CONTAINER, BAR_SIZE, BAR_LOCA, null, BAR_COLA);
 
