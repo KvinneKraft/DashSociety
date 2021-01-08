@@ -26,11 +26,16 @@ namespace ThaDasher
 
 	    if (LogContainer.LOG.InvokeRequired)
 	    {
-		LogContainer.LOG.Invoke(new MethodInvoker(
-		    delegate () {
-			print();
-		    }
-		));
+		LogContainer.LOG.Invoke
+		(
+		    new MethodInvoker
+		    (
+			delegate() 
+			{
+			    print();
+			}
+		    )
+		);
 	    }
 
 	    else
@@ -138,7 +143,7 @@ namespace ThaDasher
 		DNet.SendAttack(host, port, dura);
 	    }
 
-	    catch (Exception e)
+	    catch
 	    {
 		throw new Exception("HandleStartEvent()");
 	    }

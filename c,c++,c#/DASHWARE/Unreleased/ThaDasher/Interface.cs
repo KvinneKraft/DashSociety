@@ -9,8 +9,12 @@
 // KvinneKraft@protonmail.com at Paypal if you want to help a lil Dashie
 // out, ahaha.
 //
+// I think it is important for me to mention that this application will 
+// be completely refurbished when I am done working on it, the code is
+// horrific as of now, oh my Goddess.  8TH of 2021 January thing.
 
 using System;
+using System.IO;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -52,18 +56,55 @@ namespace ThaDasher
 	    LogContainer.LOG.AppendText($"{mes}\r\n");
 	}
 
+	private void SaveLog()
+	{
+	    using (var dialog = new SaveFileDialog())
+	    {
+		dialog.Title = "";
+
+		dialog.CheckFileExists = false;
+		dialog.CheckPathExists = true;
+
+		var result = dialog.ShowDialog();
+
+		if (result != DialogResult.OK)
+		{
+		    SendMessage("No file specified!");
+		    return;
+		}
+
+		var file = dialog.FileName;
+
+		File.Create(file).Close();
+
+		if (!File.Exists(file))
+		{
+		    SendMessage("Unable to create file!");
+		    return;
+		}
+
+		File.WriteAllLines(file, LogContainer.LOG.Lines);
+
+		SendMessage($"Log file has been saved to: {dialog.FileName} !");
+	    }
+	}
+
 	private void HandleKeys(KeyEventArgs e)
 	{
 	    switch (e.KeyCode)
 	    {
 		case Keys.F1:
-		    
+		    SendMessage("-=====================-");
+		    SendMessage("-=>  F1  >  this text.");
+		    SendMessage("-=>  F2  >  save log.");
+		    SendMessage("-=>  F3  >  clear log.");
+		    SendMessage("-=====================-");
 		    break;
 		case Keys.F2:
+		    SaveLog();
 		    break;
 		case Keys.F3:
-		    break;
-		case Keys.F4:
+		    LogContainer.CLEAR.PerformClick();
 		    break;
 	    }
 	}
@@ -74,8 +115,10 @@ namespace ThaDasher
 	{
 	    LoginDialog.AuthenticatorInterf(this);
 	    
-	    LoginDialog.LOGIN.Click += (c, d) =>
+	    LoginDialog.LOGIN.Click += (c, d) =>//SQL Integration here man.
 	    {
+		new ToS().ShowDialog();
+
 		LoginDialog.UndoChanges(this);
 
 		InitializeComponent();
@@ -93,11 +136,24 @@ namespace ThaDasher
 		{
 		    foreach (Control c2 in c1.Controls)
 		    {
-			MouseDown += (s, q) =>
+			foreach (Control c3 in c2.Controls)
+			{
+			    c3.KeyDown += (s, q) =>
+			    {
+				HandleKeys(q);
+			    };
+			}
+
+			c2.KeyDown += (s, q) =>
 			{
 			    HandleKeys(q);
 			};
 		    }
+
+		    c1.KeyDown += (s, q) =>
+		    {
+			HandleKeys(q);
+		    };
 		}
 	    };
 	}

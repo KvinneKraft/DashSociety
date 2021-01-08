@@ -34,6 +34,7 @@ namespace ThaDasher
 		TOP.Icon = Properties.Resources.ICON_ICO;
 
 		TOP.FormBorderStyle = FormBorderStyle.None;
+		TOP.ShowInTaskbar = false;
 
 		try
 		{

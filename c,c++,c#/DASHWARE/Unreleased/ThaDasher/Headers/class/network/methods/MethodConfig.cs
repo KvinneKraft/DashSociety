@@ -25,6 +25,8 @@ namespace ThaDasher
 
 	    FormBorderStyle = FormBorderStyle.None;
 	    StartPosition = FormStartPosition.CenterScreen;
+
+	    ShowInTaskbar = false;
 	    BackColor = Color.MidnightBlue;
 
 	    TOOL.Resize(this, new Size(250, 300));
