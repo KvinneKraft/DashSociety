@@ -75,8 +75,15 @@
     <Compile Include="Headers\class\client\purpose\TaskbarContainer.cs" />
     <Compile Include="Headers\class\client\purpose\UtilInfoDialog.cs" />
     <Compile Include="Headers\class\network\methods\tcp\LongSocks.cs" />
+    <Compile Include="Headers\class\network\methods\tcp\MultiFlood.cs" />
+    <Compile Include="Headers\class\network\methods\tcp\MultiSocks.cs" />
     <Compile Include="Headers\class\network\methods\tcp\TCP.cs" />
+    <Compile Include="Headers\class\network\methods\tcp\Wavesss.cs" />
+    <Compile Include="Headers\class\network\methods\udp\GoHam.cs" />
+    <Compile Include="Headers\class\network\methods\udp\InstaFlood.cs" />
+    <Compile Include="Headers\class\network\methods\udp\Overload.cs" />
     <Compile Include="Headers\class\network\methods\udp\UDP.cs" />
+    <Compile Include="Headers\class\network\methods\udp\WavyBaby.cs" />
     <Compile Include="Headers\util\DashControls.cs" />
     <Compile Include="Headers\util\DashTools.cs" />
     <Compile Include="Interface.cs">

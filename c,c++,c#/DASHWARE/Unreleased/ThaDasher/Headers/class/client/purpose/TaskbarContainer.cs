@@ -132,12 +132,13 @@ namespace ThaDasher
 		if (dura > 360)
 		    SendMessage("You have set your duration above 360 seconds which is not recommended.");
 
-		SendMessage($"Configuration:\r\n    - Host={TargetContainer.IP_BOX.Text}\r\n    - Port={port}\r\n    - Duration={dura}s\r\n");
+		//SendMessage($"Configuration:\r\n    - Host={TargetContainer.IP_BOX.Text}\r\n    - Port={port}\r\n    - Duration={dura}s\r\n");
 
+		DNet.MethodConfig.Show();
 		DNet.SendAttack(host, port, dura);
 	    }
 
-	    catch
+	    catch (Exception e)
 	    {
 		throw new Exception("HandleStartEvent()");
 	    }
@@ -147,7 +148,13 @@ namespace ThaDasher
 	{
 	    try
 	    {
+		if (timer.Enabled)
+		{
+		    timer.Stop();
+		}
+
 		DNet.StopWorkers();
+		DNet.MethodConfig.Hide();
 	    }
 
 	    catch
@@ -156,6 +163,7 @@ namespace ThaDasher
 	    }
 	}
 
+	readonly static System.Timers.Timer timer = new System.Timers.Timer() { Enabled = true, AutoReset = false };
 	readonly static PortScanner PORTSCANNER = new PortScanner();
 
 	public static void InitializeTCon(Form TOP)
@@ -187,16 +195,26 @@ namespace ThaDasher
 
 		START.Click += (s, e) =>
 		{
-		    if (START.Text != "Stop")
+		    if (START.Text != "Stop")// && (!DNet.MethodConfig.Visible))
 		    {
-			START.Text = "Stop";
-
-			new Thread(() =>
+			if (!DNet.MethodConfig.Visible)
 			{
-			    HandleStartEvent();
-			})
+			    new Thread(() =>
+			    {
+				HandleStartEvent();
 
-			{ IsBackground = true }.Start();
+				timer.Interval = int.Parse(TargetContainer.DR_BOX.Text) * 1000;
+
+				timer.Elapsed += (r, t) =>
+				{
+				    HandleStopEvent();
+				};
+
+				timer.Start();
+			    })
+
+			    { IsBackground = true }.Start();
+			}
 		    }
 
 		    else

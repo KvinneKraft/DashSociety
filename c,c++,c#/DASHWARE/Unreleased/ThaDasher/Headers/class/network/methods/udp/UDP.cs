@@ -53,7 +53,7 @@ namespace ThaDasher
 
 	    public static TextBox BYTES_PER_PACKET = new TextBox() { Text = "5000" };
 
-	    public static TextBox LABEL_1 = new TextBox() { Text = "B.P.P > ()" };
+	    public static TextBox LABEL_1 = new TextBox() { Text = "B.P.P > (Bytes Per Packet)" };
 	}
 
 	public static class INSTAFLOOD

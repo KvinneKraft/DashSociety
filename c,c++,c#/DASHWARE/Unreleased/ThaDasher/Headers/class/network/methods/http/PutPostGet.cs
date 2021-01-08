@@ -18,13 +18,21 @@ namespace ThaDasher
     {
 	public enum HeaderType
 	{
-	    PUT, POST, GET
+	    PUT = 1, POST = 2, GET = 3
 	};
 
 	/*type=Header Type; h=Custom Header; rua=Random User-Agent; w=Workers; cw=Core-Workers;*/
-	public static void Launch(HeaderType type, string h, bool rua, int w, int cw)
+	public static void Launch(int type)
 	{
-
+	    switch ((HeaderType) type)
+	    {
+		case HeaderType.PUT:
+		    break;
+		case HeaderType.POST:
+		    break;
+		case HeaderType.GET:
+		    break;
+	    }
 	}
     }
 }

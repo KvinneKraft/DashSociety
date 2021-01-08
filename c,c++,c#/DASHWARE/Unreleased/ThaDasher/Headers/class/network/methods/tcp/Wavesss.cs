@@ -14,12 +14,12 @@ using System.Collections.Generic;
 
 namespace ThaDasher
 {
-    public class SLOWLORIS2
+    public class WAVESSS
     {
-	/*cd=Connection Delay; clt=Connection Live Time;*/
 	public static void Launch()
 	{
 
+	    //^^^
 	}
     }
 }

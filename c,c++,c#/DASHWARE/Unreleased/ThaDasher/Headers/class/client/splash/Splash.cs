@@ -15,7 +15,7 @@ namespace ThaDasher
 	{
 	    var timer = new System.Windows.Forms.Timer()
 	    {
-		Interval = 2500,
+		Interval = 100, //2500,
 		Enabled = true,
 	    };
 

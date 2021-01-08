@@ -47,6 +47,27 @@ namespace ThaDasher
 	    }
 	}
 
+	private void SendMessage(string mes)
+	{
+	    LogContainer.LOG.AppendText($"{mes}\r\n");
+	}
+
+	private void HandleKeys(KeyEventArgs e)
+	{
+	    switch (e.KeyCode)
+	    {
+		case Keys.F1:
+		    
+		    break;
+		case Keys.F2:
+		    break;
+		case Keys.F3:
+		    break;
+		case Keys.F4:
+		    break;
+	    }
+	}
+
 	readonly static public InfoDialog HelpDialog = new InfoDialog();
 
 	private void Initialization()
@@ -67,6 +88,17 @@ namespace ThaDasher
 		SettingsContainer.InitializeMCon(this);
 		LogContainer.InitializeLCon(this);
 		TaskbarContainer.InitializeTCon(this);
+
+		foreach (Control c1 in Controls)
+		{
+		    foreach (Control c2 in c1.Controls)
+		    {
+			MouseDown += (s, q) =>
+			{
+			    HandleKeys(q);
+			};
+		    }
+		}
 	    };
 	}
 

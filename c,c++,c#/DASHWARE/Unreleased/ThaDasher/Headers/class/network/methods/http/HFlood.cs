@@ -17,7 +17,7 @@ namespace ThaDasher
     public class HFLOOD
     {
 	/*delay=connection delay; live=connect live time; ccc=cycle connection count; rua=random user-agent;*/
-	public static void Launch(int delay, int live, int ccc, bool rua)
+	public static void Launch()
 	{
 
 	}

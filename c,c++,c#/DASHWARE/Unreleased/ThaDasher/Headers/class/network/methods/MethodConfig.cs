@@ -1,4 +1,4 @@
-﻿
+﻿//man ye has to fix dis u shit.
 //
 // Author: Dashie
 // Version: 1.0
@@ -36,7 +36,10 @@ namespace ThaDasher
 	}
 
 	readonly static PictureBox BAR = new PictureBox();
+
+	readonly static Button SELECT = new Button();
 	readonly static Button CLOSE = new Button();
+
 	readonly static Label TITLE = new Label();
 
 	private void InitializeMenuBar()
@@ -56,7 +59,7 @@ namespace ThaDasher
 		var CLOSE_FCOL = Color.White;
 
 		CONTROL.Button(BAR, CLOSE, CLOSE_SIZE, CLOSE_LOCA, CLOSE_BCOL, CLOSE_FCOL, 1, 10, "X", Color.Empty);
-		CLOSE.Click += (s, e) => Close();
+		CLOSE.Click += (s, e) => Hide();
 
 		var TITLE_SIZE = TOOL.GetFontSize(Text, 9);
 		var TITLE_LOCA = new Point(10, (BAR_SIZE.Height - TITLE_SIZE.Height) / 2);
@@ -64,6 +67,17 @@ namespace ThaDasher
 		var TITLE_FCOL = Color.White;
 
 		CONTROL.Label(BAR, TITLE, TITLE_SIZE, TITLE_LOCA, TITLE_BCOL, TITLE_FCOL, 1, 9, Text);
+
+		var SELECT_SIZE = new Size(100, 26);
+		var SELECT_LOCA = new Point((Width - SELECT_SIZE.Width) / 2, 0);
+		var SELECT_BCOL = Color.FromArgb(10, 10, 10);
+		var SELECT_FCOL = Color.White;
+
+		CONTROL.Button(this, SELECT, SELECT_SIZE, SELECT_LOCA, SELECT_BCOL, SELECT_FCOL, 1, 11, "Select", Color.Empty);
+
+		SELECT.Click += (s, q) => Hide();
+
+		TOOL.Round(SELECT, 6);
 
 		foreach (Control control in BAR.Controls)
 		{
@@ -211,20 +225,6 @@ namespace ThaDasher
 	    {
 		InitializeMenuBar();
 		InitializeConfCon();
-
-		FormClosing += (s, e) =>
-		{
-		    foreach (Control c1 in CONTAINER.Controls)
-		    {
-			foreach (Control c2 in c1.Controls)
-			{
-			    if (c2.Visible && c2 is PictureBox)
-			    {
-				c2.Visible = false;
-			    }
-			}
-		    }
-		};
 	    }
 
 	    catch (Exception e)
@@ -235,76 +235,84 @@ namespace ThaDasher
 
 	new public void Show()
 	{
-	    var CLIENT_SIZE = new Size(Width, BAR.Height + 20);
-	    var m = SettingsContainer.CURRENT_METHOD.ToLower();
+	    Control container = null;
 
-	    MessageBox.Show(m);
+	    for (int k = 0; k < CONTAINER.Controls.Count; k += 1)
+	    {
+		container = CONTAINER.Controls[k];
+		
+		if (container is PictureBox)
+		{
+		    Application.DoEvents();
+		    container.Visible = false;
+		}
+	    }
+	    
+	    var CLIENT_SIZE = new Size(Width, BAR.Height + 20 + SELECT.Height + 10);
+	    var m = SettingsContainer.CURRENT_METHOD.ToLower();
 
 	    switch (m)
 	    {
 		case "dashloris 4.0":
 		    CLIENT_SIZE.Height += HTTP.DASHLORIS4.LABEL_1.Height * HTTP.DASHLORIS4.CONTAINER.Controls.Count;
-		    HTTP.DASHLORIS4.CONTAINER.Show();
+		    HTTP.DASHLORIS4.CONTAINER.Visible = true;
 	        break;
 		case "slowloris 2.0":
 		    CLIENT_SIZE.Height += HTTP.SLOWLORIS2.LABEL_1.Height * HTTP.SLOWLORIS2.CONTAINER.Controls.Count;
-		    HTTP.SLOWLORIS2.CONTAINER.Show();
-	        break;
+		    HTTP.SLOWLORIS2.CONTAINER.Visible = true;
+		    break;
 		case "put head": case "post head": case "get head":
 		    CLIENT_SIZE.Height += HTTP.PUTPOSTGET.LABEL_1.Height * HTTP.PUTPOSTGET.CONTAINER.Controls.Count;
-		    HTTP.PUTPOSTGET.CONTAINER.Show();
-	        break;
+		    HTTP.PUTPOSTGET.CONTAINER.Visible = true;
+		    break;
 		case "h-flood":
 		    CLIENT_SIZE.Height += HTTP.HFLOOD.LABEL_1.Height * HTTP.HFLOOD.CONTAINER.Controls.Count;
-		    HTTP.HFLOOD.CONTAINER.Show();
-	        break;
+		    HTTP.HFLOOD.CONTAINER.Visible = true;
+		    break;
 		case "long socks":
 		    CLIENT_SIZE.Height += TCP.LONGSOCKS.LABEL_1.Height * TCP.LONGSOCKS.CONTAINER.Controls.Count;
-		    TCP.LONGSOCKS.CONTAINER.Show();
-	        break;
+		    TCP.LONGSOCKS.CONTAINER.Visible = true;
+		    break;
 		case "multi flood":
 		    CLIENT_SIZE.Height += TCP.MULTIFLOOD.LABEL_1.Height * TCP.MULTIFLOOD.CONTAINER.Controls.Count;
-		    TCP.MULTIFLOOD.CONTAINER.Show();
-	        break;
+		    TCP.MULTIFLOOD.CONTAINER.Visible = true;
+		    break;
 		case "multi socks":
 		    CLIENT_SIZE.Height += TCP.MULTISOCKS.LABEL_1.Height * TCP.MULTISOCKS.CONTAINER.Controls.Count;
-		    TCP.MULTISOCKS.CONTAINER.Show();
-	        break;
+		    TCP.MULTISOCKS.CONTAINER.Visible = true;
+		    break;
 		case "wavesss":
 		    CLIENT_SIZE.Height += TCP.WAVESSS.LABEL_1.Height * TCP.WAVESSS.CONTAINER.Controls.Count;
-		    TCP.WAVESSS.CONTAINER.Show();
-	        break;
+		    TCP.WAVESSS.CONTAINER.Visible = true;
+		    break;
 		case "overload":
 		    CLIENT_SIZE.Height += UDP.OVERLOAD.LABEL_1.Height * UDP.OVERLOAD.CONTAINER.Controls.Count;
-		    UDP.OVERLOAD.CONTAINER.Show();
-	        break;
+		    UDP.OVERLOAD.CONTAINER.Visible = true;
+		    break;
 		case "wavy baby":
 		    CLIENT_SIZE.Height += UDP.WAVYBABY.LABEL_1.Height * UDP.WAVYBABY.CONTAINER.Controls.Count;
-		    UDP.WAVYBABY.CONTAINER.Show();
-	        break;
+		    UDP.WAVYBABY.CONTAINER.Visible = true;
+		    break;
 		case "go ham":
 		    CLIENT_SIZE.Height += UDP.GOHAM.LABEL_1.Height * UDP.GOHAM.CONTAINER.Controls.Count;
-		    UDP.GOHAM.CONTAINER.Show();
-	        break;
+		    UDP.GOHAM.CONTAINER.Visible = true;
+		    break;
 		case "insta flood":
 		    CLIENT_SIZE.Height += UDP.INSTAFLOOD.LABEL_1.Height * UDP.INSTAFLOOD.CONTAINER.Controls.Count;
-		    UDP.INSTAFLOOD.CONTAINER.Show();
-	        break;
-
-		default:
-		    Hide();
-		break;
-	    };
+		    UDP.INSTAFLOOD.CONTAINER.Visible = true;
+		    break;
+	    }
 
 	    TOOL.Resize(this, CLIENT_SIZE);
 
-	    var CONTAINER_SIZE = new Size(CONTAINER.Width, CLIENT_SIZE.Height - BAR.Height - 20);
-
+	    var CONTAINER_SIZE = new Size(CONTAINER.Width, CLIENT_SIZE.Height - BAR.Height - 20 - SELECT.Height - 10);
 	    TOOL.Resize(CONTAINER, CONTAINER_SIZE);
 
-	    var RECTUM_SIZE = new Size(CONTAINER_SIZE.Width + 2, CONTAINER_SIZE.Height + 2);
-
+	    var RECTUM_SIZE = new Size(CONTAINER_SIZE.Width + 2, CONTAINER_SIZE.Height + 2); 
 	    TOOL.Resize(RECTUM, RECTUM_SIZE);
+
+	    var SELECT_LOCA = new Point(SELECT.Left, Height - SELECT.Height - 10);
+	    SELECT.Location = SELECT_LOCA;
 
 	    ShowDialog();
 	}

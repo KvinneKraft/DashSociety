@@ -7,7 +7,7 @@
 // abuse but rather for the right use.  This entire application started off as  
 // a small project but turned into something next level.
 //
-// All methods are meant for stress-testing networks.  You are responsible for that
+// All methods are meant for stress-testing networks.  You are responsible for
 // what you do with this, so use this code wisely.
 //
 
@@ -23,19 +23,24 @@ namespace ThaDasher
 {
     public class DashNet
     {
-	readonly MethodConfig MethodConfig = new MethodConfig();
-
+	readonly public MethodConfig MethodConfig = new MethodConfig();
+	
 	private static void SendMessage(string s)
 	{
 	    void print() => LogContainer.LOG.AppendText($"(+) {s}\r\n");
 
 	    if (LogContainer.LOG.InvokeRequired)
 	    {
-		LogContainer.LOG.Invoke(new MethodInvoker(
-		    delegate () {
-			print();
-		    }
-		));
+		LogContainer.LOG.Invoke
+		(
+		    new MethodInvoker
+		    (
+			delegate () 
+			{
+			    print();
+			}
+		    )
+		);
 	    }
 
 	    else
@@ -48,7 +53,7 @@ namespace ThaDasher
 
 	public void SendAttack(string shost, int sport, int sdura)
 	{
-	    MethodConfig.Show();
+	    target_info.Clear();
 
 	    target_info.Add("host", $"{shost}");
 	    target_info.Add("port", $"{sport}");
@@ -59,21 +64,21 @@ namespace ThaDasher
 	    switch (m)
 	    {
 		case "dashloris 4.0": DASHLORIS4.Launch(); break;
-		case "slowloris 2.0": break;
-		case "put head": break;
-		case "post head":  break;
-		case "get head": break;
-		case "h-flood": break;
+		case "slowloris 2.0": SLOWLORIS2.Launch();  break;
+		case "put head": PUTPOSTGET.Launch(1); break;
+		case "post head": PUTPOSTGET.Launch(2);  break;
+		case "get head": PUTPOSTGET.Launch(3); break;
+		case "h-flood": HFLOOD.Launch(); break;
 
-		case "long socks": break;
-		case "multi flood": break;
-		case "multi socks": break;
-		case "wavesss": break;
+		case "long socks": LONGSOCKS.Launch(); break;
+		case "multi flood": MULTIFLOOD.Launch(); break;
+		case "multi socks": MULTISOCKS.Launch(); break;
+		case "wavesss": WAVESSS.Launch(); break;
 
-		case "overload": break;
-		case "wavy baby": break;
-		case "go ham": break;
-		case "insta flood": break;
+		case "overload": OVERLOAD.Launch(); break;
+		case "wavy baby": WAVYBABY.Launch(); break;
+		case "go ham": GOHAM.Launch(); break;
+		case "insta flood": INSTAFLOOD.Launch(); break;
 	    };
 
 	    // Change dis
@@ -88,6 +93,8 @@ namespace ThaDasher
 	    {
 		worker.Start();
 	    };
+
+	    TaskbarContainer.START.Text = "Stop";
 	}
 
 	public void StopWorkers()
