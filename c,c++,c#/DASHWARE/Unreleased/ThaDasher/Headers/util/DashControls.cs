@@ -119,8 +119,8 @@ namespace ThaDasher
 
 		Image(CON, FIXEDBOX, TSIZE, TLOCATION, null, BCOLOR);
 
-		TOOL.Resize(OBJECT, new Size(TSIZE.Width - 4, OBJECT.PreferredHeight - 4));
-		OBJECT.Location = TOOL.GetCenter(FIXEDBOX, OBJECT, new Point(-1, -1));
+		TOOL.Resize(OBJECT, new Size(TSIZE.Width - 6, OBJECT.PreferredHeight));
+		OBJECT.Location = TOOL.GetCenter(FIXEDBOX, OBJECT, new Point(3, 3));
 
 		FIXEDBOX.Click += (s, e) => OBJECT.Select();
 

@@ -170,7 +170,7 @@ namespace ThaDasher
 
 	readonly static System.Timers.Timer timer = new System.Timers.Timer() { Enabled = true, AutoReset = false };
 
-	readonly static PortScanner PORTSCANNER = new PortScanner();
+	readonly static ScanSelector SCANSELECTOR = new ScanSelector();
 	readonly static AboutDialog ABOUTDIALOG = new AboutDialog();
 
 	public static void InitializeTCon(Form TOP)
@@ -239,10 +239,10 @@ namespace ThaDasher
 
 		PORTS.Click += (s, e) =>
 		{
-		    if (!PORTSCANNER.Visible)
+		    if (!SCANSELECTOR.Visible)
 		    {
-			PORTSCANNER.ShowDialog();
-		    };
+			SCANSELECTOR.ShowDialog();
+		    }
 		};
 	    }
 

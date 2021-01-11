@@ -598,7 +598,7 @@ namespace ThaDasher
 	    MaximumSize = new Size(300, 300);
 	    MinimumSize = new Size(300, 300);
 
-	    StartPosition = FormStartPosition.CenterParent;
+	    StartPosition = FormStartPosition.CenterScreen;
 
 	    MaximizeBox = false;
 	    MinimizeBox = false;

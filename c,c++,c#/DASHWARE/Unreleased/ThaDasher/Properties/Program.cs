@@ -18,6 +18,9 @@ namespace ThaDasher
 	    Application.EnableVisualStyles();
 	    Application.SetCompatibleTextRenderingDefault(false);
 
+	    new PortScanner2().ShowDialog();
+	    Environment.Exit(-1);
+
 	    splash_diag = new Splash(splash_imag);
 
 	    Application.Run(splash_diag);
