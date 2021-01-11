@@ -283,7 +283,7 @@ namespace DNSChanger
 	{
 	    MessageBox.Show("Renable Administrator Check");
 
-            if(mon.isAdministrator())
+            if(!mon.isAdministrator())
             {
                 MessageBox.Show($"It has got to me that I do not have the rights to access your network devices. \r\n\r\nPlease restart this application as an administrator, it may just solve ye issue {Environment.UserName}!", "Dash DNS Spoofer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(-1);

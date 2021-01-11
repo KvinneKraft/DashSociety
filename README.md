@@ -1,9 +1,12 @@
 ```cs
-// Hey there, here you can find several folders filled with code.
 //
-// Keep in mind that all of these codes are for personal use and were put together for such use only.
+// (Unorganized Domain)
 //
-// You are the one that is responsible for that what you do with that what I offer. 
+// Keep in mind that this is not supposed to be a portfolio but
+// rather a collection of code, a pile of randomness.
+//
+// Head over to my other repository called portfolio if that is
+// what you are out for. 
 //
 // README.md:
 
