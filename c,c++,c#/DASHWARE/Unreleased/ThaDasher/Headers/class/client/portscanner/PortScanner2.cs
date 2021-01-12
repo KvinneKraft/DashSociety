@@ -2,6 +2,7 @@
 using System.Net;
 using System.Drawing;
 using System.Threading;
+using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -105,6 +106,75 @@ namespace ThaDasher
 	readonly Button OPT_1 = new Button();
 	readonly Button OPT_2 = new Button();
 	readonly Button OPT_3 = new Button();
+
+	private string host = string.Empty;
+	private int port = 80;
+
+	bool SetHostPort()
+	{
+	    var r_host = HOST_T.Text.ToLower();
+
+	    host = string.Empty;
+
+	    if (!IPAddress.TryParse(r_host, out IPAddress ham))
+	    {
+		if (!r_host.Contains("http://") && !r_host.Contains("https://")) r_host = "https://" + r_host;
+
+		if (!Uri.TryCreate(r_host, UriKind.RelativeOrAbsolute, out Uri bacon))
+		{
+		    MessageBox.Show("Invalid URL specified.  Retry!", "Host Address Parse Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		    return false;
+		};
+
+		try
+		{
+		    host = Dns.GetHostAddresses(bacon.Host)[0].ToString();
+		}
+
+		catch
+		{
+		    MessageBox.Show("Invalid host specified.  Retry!", "Host Address Parse Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		    return false;
+		}
+	    }
+
+	    else
+	    {
+		host = ham.ToString();
+
+		if (ham.AddressFamily != AddressFamily.InterNetwork)
+		{
+		    MessageBox.Show("Invalid IPv4 address specified.  Retry!", "Host Address Parse Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		    return false;
+		}
+	    }
+
+	    if (host.Length < 7 || host == string.Empty)
+	    {
+		MessageBox.Show("No host was specified.  Retry!", "Host Address Parse Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		return false;
+	    }
+
+	    return true;
+	}
+
+	bool IsOnline()
+	{
+	    var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+	    try
+	    {
+		var result = sock.BeginConnect(host, port, null, null);
+		var succes = result.AsyncWaitHandle.WaitOne(500, true);
+		
+		return sock.Connected;
+	    }
+
+	    catch
+	    {
+		return false;
+	    }
+	}
 
 	private void LoadScanner()
 	{
@@ -274,14 +344,17 @@ namespace ThaDasher
 
 			OPT_1.Click += (s, e) =>
 			{
-			    if (IsOnline())
+			    if (SetHostPort())
 			    {
-				MessageBox.Show("", "");
-			    }
+				if (IsOnline())
+				{
+				    MessageBox.Show("It turns out the host is reachable.", "Host Reachability", MessageBoxButtons.OK, MessageBoxIcon.Question);
+				}
 
-			    else
-			    {
-				MessageBox.Show("", "");
+				else
+				{
+				    MessageBox.Show("It turns out the host is unreachable.", "Host Reachability", MessageBoxButtons.OK, MessageBoxIcon.Question);
+				}
 			    }
 			};
 

@@ -68,7 +68,7 @@ namespace ThaDasher
 
 		    CLOSE.Click += (s, e) =>
 			TOP.Close();
-		   
+
 		    var RECT_SIZE = new Size(TOP.Width, TOP.Height - BAR_SIZE.Height + 1);
 		    var RECT_LOCA = new Point(0, BAR_SIZE.Height - 2);
 		    var RECT_COLA = BAR_COLA;
@@ -80,7 +80,7 @@ namespace ThaDasher
 
 		    foreach (Control CON in BAR.Controls)
 			TOOL.Interactive(CON, TOP);
-		    
+
 		    TOOL.Interactive(TOP, TOP);
 		}
 
@@ -216,7 +216,7 @@ namespace ThaDasher
 				print("The lowest port in a range of ports can not be lower than the end of the range.", Type.Error);
 				return;
 			    };
-			    
+
 			    for (int k = a; k <= b; k += 1)
 			    {
 				ports.Add(k);
@@ -300,7 +300,7 @@ namespace ThaDasher
 		    print("Press YES to see all open ports and NUU to see all closed ports.", Type.Info);
 
 		    CONTAINER.Show();
-		    
+
 		    TOGGLE.Text = "Start Scan";
 		})
 
@@ -552,7 +552,7 @@ namespace ThaDasher
 		    }
 
 		    SetupEvents(TOP);
-		    
+
 		    for (int s = 0; s < TOP.Controls.Count; s += 1)
 		    {
 			Control con = TOP.Controls[s];
@@ -611,7 +611,7 @@ namespace ThaDasher
 		OPS.CONTAINER.Hide();
 		OPS.TOGGLE.Text = "Start Scan";
 	    };
-	    
+
 	    ResumeLayout(false);
 	}
     }
