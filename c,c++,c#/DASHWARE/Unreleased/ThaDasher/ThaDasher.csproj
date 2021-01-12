@@ -52,7 +52,10 @@
     <Compile Include="Headers\class\client\authy\ToS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Headers\class\client\portscanner\PortScanner2.cs">
+    <Compile Include="Headers\class\client\portscanner\2.0\PortScanner.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Headers\class\client\portscanner\2.0\ScanProgress.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Headers\class\client\portscanner\ScanSelector.cs">
@@ -73,7 +76,7 @@
     <Compile Include="Headers\class\network\methods\MethodConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Headers\class\client\portscanner\PortScanner.cs">
+    <Compile Include="Headers\class\client\portscanner\1.0\PortScanner.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Headers\class\client\purpose\SettingsContainer.cs" />
@@ -106,7 +109,7 @@
     </Compile>
     <Compile Include="Properties\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Headers\class\client\portscanner\PortScanner.resx">
+    <EmbeddedResource Include="Headers\class\client\portscanner\1.0\PortScanner.resx">
       <DependentUpon>PortScanner.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Headers\class\client\splash\Splash.resx">

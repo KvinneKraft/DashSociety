@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+// Author: Dashie
+// Version: 1.0
+
+using System;
 using System.Net;
 using System.Drawing;
 using System.Threading;
@@ -100,6 +104,8 @@ namespace ThaDasher
 	readonly Color DISABLED = Color.FromArgb(14, 14, 14);
 	readonly Color ENABLED = Color.DarkGreen;
 
+	readonly ScanProgress SCAN_PROGRESS = new ScanProgress();
+
 	readonly PictureBox INNER_SELECT_CONTAINER = new PictureBox();
 	readonly PictureBox SELECT_CONTAINER = new PictureBox();
 
@@ -107,10 +113,134 @@ namespace ThaDasher
 	readonly Button OPT_2 = new Button();
 	readonly Button OPT_3 = new Button();
 
-	private string host = string.Empty;
-	private int port = 80;
+	public static string host = string.Empty;
+	readonly public int port = 80;
 
-	bool SetHostPort()
+	public class ScanProgress : Form
+	{
+	    readonly DashControls CONTROL = new DashControls();
+	    readonly DashTools TOOL = new DashTools();
+
+	    private void LoadGLayout()
+	    {
+		SuspendLayout();
+
+		MaximumSize = new Size(250, 250);
+		MinimumSize = new Size(250, 250);
+
+		StartPosition = FormStartPosition.CenterScreen;
+		FormBorderStyle = FormBorderStyle.None;
+
+		ShowInTaskbar = false;
+		BackColor = Color.MidnightBlue;
+
+		MaximizeBox = false;
+		MinimizeBox = false;
+
+		Name = "Scan Progress";
+		Text = "Scan Progress";
+
+		TOOL.Round(this, 6);
+		ResumeLayout(false);
+	    }
+
+	    readonly PictureBox BAR = new PictureBox();
+	    readonly Button CLOSE = new Button();
+	    readonly Label TITLE = new Label();
+
+	    private void LoadMenuBar()
+	    {
+		var BAR_SIZE = new Size(Width, 26);
+		var BAR_LOCA = new Point(0, 0);
+		var BAR_BCOL = Color.FromArgb(8, 8, 8);
+
+		CONTROL.Image(this, BAR, BAR_SIZE, BAR_LOCA, null, BAR_BCOL);
+
+		var CLOSE_SIZE = new Size(65, BAR.Height);
+		var CLOSE_LOCA = new Point(BAR.Width - CLOSE_SIZE.Width, 0);
+		var CLOSE_BCOL = BAR.BackColor;
+		var CLOSE_FCOL = Color.White;
+
+		CONTROL.Button(BAR, CLOSE, CLOSE_SIZE, CLOSE_LOCA, CLOSE_BCOL, CLOSE_FCOL, 1, 10, "X", Color.Empty);
+
+		CLOSE.Click += (s, e) =>
+		{
+		    Hide();
+		};
+
+		var TITLE_TEXT = "Scan Progress";
+		var TITLE_SIZE = TOOL.GetFontSize(TITLE_TEXT, 8);
+		var TITLE_LOCA = new Point(10, (BAR.Height - TITLE_SIZE.Height) / 2);
+		var TITLE_BCOL = BAR_BCOL;
+		var TITLE_FCOL = Color.White;
+
+		CONTROL.Label(BAR, TITLE, TITLE_SIZE, TITLE_LOCA, TITLE_BCOL, TITLE_FCOL, 1, 8, TITLE_TEXT);
+
+		TOOL.Interactive(TITLE, this);
+		TOOL.Interactive(BAR, this);
+
+		var RECT_SIZE = new Size(Width - 2, Height - BAR.Height);
+		var RECT_LOCA = new Point(1, BAR.Height - 1);
+		var RECT_BCOL = BAR.BackColor;
+
+		TOOL.PaintRectangle(this, 2, RECT_SIZE, RECT_LOCA, RECT_BCOL);
+	    }
+
+	    readonly PictureBox LOG_CONTAINER = new PictureBox();
+	    readonly TextBox PROGRESS_LOG = new TextBox() { Text = "Dashie is me" };
+
+	    private void LoadPogress()
+	    {
+		var LOGC_SIZE = new Size(Width - 20, Height - BAR.Height - 22);
+		var LOGC_LOCA = new Point(10, BAR.Height + 10);
+		var LOGC_BCOL = Color.White; //Color.MidnightBlue;
+
+		CONTROL.Image(this, LOG_CONTAINER, LOGC_SIZE, LOGC_LOCA, null, LOGC_BCOL);
+
+		var PLOG_SIZE = new Size(LOGC_SIZE.Width - 3, LOGC_SIZE.Height - 3);
+		var PLOG_LOCA = new Point(2, 2);
+		var PLOG_BCOL = Color.FromArgb(14, 14, 14);
+		var PLOG_FCOL = Color.White;
+
+		CONTROL.TextBox(LOG_CONTAINER, PROGRESS_LOG, PLOG_SIZE, PLOG_LOCA, PLOG_BCOL, PLOG_FCOL, 1, 8, Color.Empty, READONLY: true, MULTILINE: true, SCROLLBAR: true, FIXEDSIZE: false);
+
+		var RECT_SIZE = new Size(LOGC_SIZE.Width, LOGC_SIZE.Height);
+		var RECT_LOCA = new Point(0, 0);
+		var RECT_BCOL = BAR.BackColor;
+
+		TOOL.PaintRectangle(LOG_CONTAINER, 4, RECT_SIZE, RECT_LOCA, RECT_BCOL);
+		TOOL.Round(LOG_CONTAINER, 8);
+	    }
+
+	    private void StartScan()
+	    {
+		string ip = host;
+
+
+	    }
+
+	    public ScanProgress()
+	    {
+		try
+		{
+		    LoadGLayout();
+		    LoadMenuBar();
+		    LoadPogress();
+
+		    VisibleChanged += (s, e) =>
+		    {
+			StartScan();
+		    };
+		}
+
+		catch
+		{
+		    Environment.Exit(-1);
+		}
+	    }
+	}
+
+	public bool SetHostPort()
 	{
 	    var r_host = HOST_T.Text.ToLower();
 
@@ -364,7 +494,18 @@ namespace ThaDasher
 
 			OPT_2.Click += (s, e) =>
 			{
-			    // Separate Dialog with Log Progress
+			    if (!SCAN_PROGRESS.Visible)
+			    {
+				if (SetHostPort())
+				{
+				    SCAN_PROGRESS.Show();
+				}
+			    }
+
+			    else
+			    {
+				SCAN_PROGRESS.Hide();
+			    }
 			};
 
 			PRESS_LOCA.X += PRESS_SIZE.Width + 5;
