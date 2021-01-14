@@ -390,10 +390,25 @@ namespace src
                                     Send = ($"{subMethod} / {subHTTPVersion}\r\n");
                                 }
                                 
+                                // Method: GET, POST, PUT
+                                // HTTP Version: (HTTP/) 1.0, 1.1, 1.2                                
+                                // Host: <url>
+                                // Cache Type: no-store, no-cache, none
+                                // Connection Type: keep-alive, close
+                                // Pragma: no-cache
+                                // Upgrade-Insecure-Requests: 1, 0
+                                // User-Agent: <any>
+                                // Cookie: <any>
+                                // Accept: text/html, text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+                                // Accept-Encoding: gzip, deflate
+                                // Origin: <url>
+                                // Accept-Language: tr-TR,tr
+                                // Connection: Close, Open        
+
                                 if(Method == "GET_SPAM")
                                 {
                                     subMethod = "GET";
-                                    Send = ($"{subMethod} / {subHTTPVersion}\r\n") +
+                                    Send = ($"GET / HTTP/1.0\r\n") +
                                            ($"Host: {Host}\r\n") +
                                            ($"{subConnection}") +
                                            ("\r\nUpgrade-Insecure-Requests: 1\r\n") +
