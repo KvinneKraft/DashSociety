@@ -6,8 +6,8 @@ namespace DashSocietyF
     {
 	static public void Main(string[] args)
 	{
-	    Mailer.Show();//Implement command
-	    Console.ReadLine();
+	    //Mailer.Show();//Implement command
+	    //Console.ReadLine();
 
 	    Console.Title = "( Dash Society Framework 1.0 )";
 
