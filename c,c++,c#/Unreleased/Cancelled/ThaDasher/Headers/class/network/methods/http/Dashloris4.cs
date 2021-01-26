@@ -34,7 +34,7 @@ namespace ThaDasher
 	// Connection: Close, Open
 	// Content-Length: <any>
 	private static string header_template = (
-	    /*HEAD*/ "POST / HTTP/1.1\r\n" +
+	    /*HEAD*/ "POST /index.html HTTP/1.1\r\n" +
 	    "Host: %host%\r\n" +
 	    //"Connection: Close\r\n" +
 	    //"Connection-Type: Close\r\n" +
