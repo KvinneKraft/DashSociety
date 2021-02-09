@@ -82,6 +82,8 @@ namespace DashSocietyF
 		html_body += $"{line}\r\n";
 	    };
 
+	    int o = 0;
+
 	redo:
 
 	    try
@@ -100,7 +102,7 @@ namespace DashSocietyF
 
 		    var host = File.ReadAllText(@"data\mail\host.txt");
 
-		    for (var k = 0; k < emails.Count; k += 1)
+		    for (var k = o; k < emails.Count; o = k, k += 1)
 		    {
 			using (var client = new SmtpClient(host))
 			{
@@ -116,7 +118,7 @@ namespace DashSocietyF
 				message.From = new MailAddress($"{username}");
 
 				message.Priority = MailPriority.High;
-				message.Subject = "Hey there, I am Dashie!";
+				message.Subject = "Pugpawz - Press Release";
 
 				message.IsBodyHtml = true;
 				message.Body = html_body;
@@ -141,7 +143,7 @@ namespace DashSocietyF
 
 	    catch (Exception e)
 	    {
-		Tool.TranslateColors($"&8(&6!&8) &fOn cooldown, waiting....");
+		Tool.TranslateColors($"&8(&6!&8) &fOn cooldown, waiting [{e.Message}]....");
 		Thread.Sleep(60000);
 
 		goto redo;

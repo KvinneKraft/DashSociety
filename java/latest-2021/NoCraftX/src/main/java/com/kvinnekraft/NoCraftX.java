@@ -129,7 +129,7 @@ public class NoCraftX extends JavaPlugin
     {
         @EventHandler public final void onPlayerCraft(final CraftItemEvent e)
         {
-            if (!(e.getViewers().get(0) instanceof Player))
+            if ((e.getViewers().size() > 0) || (!(e.getViewers().get(0) instanceof Player)))
             {
                 return;
             }
