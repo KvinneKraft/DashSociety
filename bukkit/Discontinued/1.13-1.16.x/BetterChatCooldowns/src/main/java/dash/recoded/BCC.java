@@ -163,7 +163,9 @@ public class BCC extends JavaPlugin implements Listener, CommandExecutor
             {
                 if (waitress.containsKey(p))
                 {
-                    waitress.put(p, waitress.get(p) - 1);
+                    final int val = waitress.get(p);
+
+                    waitress.put(p, val - (val > 0 ? 1 : 0));
 
                     if (waitress.get(p) <= 0)
                     {
